@@ -138,7 +138,7 @@ const rows = [
 
 export default function CollapsibleTable() {
   return (
-    <TableContainer component={Paper} sx={{ maxHeight: '70vh', overflowY: 'auto'}}>
+    <TableContainer component={Paper} sx={{ maxHeight: '60vh', overflowY: 'auto'}}>
       <Table
       aria-label="collapsible table"
       stickyHeader

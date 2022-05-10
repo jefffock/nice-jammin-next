@@ -6,12 +6,12 @@ export default function ComboBox(props) {
   const [value, setValue] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [loaded, setLoaded] = useState(false)
-  const [formattedLabels, setFormattedLabels] = useState([{ label: 'All Artists' }])
+  const [formattedLabels, setFormattedLabels] = useState([{ label:  `${props.default}` }])
 
   useEffect(() => {
     if (!loaded) {
       if (props.options) {
-        let formattedArtists = [{ label: 'All Artists' }]
+        let formattedArtists = [{ label: `${props.default}` }]
         for (var i = 0; i < props.options.length; i++) {
           formattedArtists.push({ label: props.options[i].artist})
         } setFormattedLabels(formattedArtists)

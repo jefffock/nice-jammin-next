@@ -23,6 +23,7 @@ export default function DateRangeSlider() {
 
   return (
     <Box sx={{ width: 300 }}>
+      <h4>Date Range</h4>
       <Slider
         getAriaLabel={() => 'Date range'}
         value={val}
