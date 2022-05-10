@@ -7,6 +7,9 @@ import Account from '../components/Account'
 import DiscoverContributeSwitch from '../components/DiscContSwitch'
 import Table from '@mui/material/Table';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CollapsibleTable from '../components/JamsTableCollapsible'
+import DateRangeSlider from '../components/DateRangeSlider'
+
 
 const darkTheme = createTheme({
   palette: {
@@ -73,9 +76,20 @@ function Home() {
   return (
     <ThemeProvider theme={darkTheme}>
       <h1 className="text-3xl">Nice Jammin</h1>
-      <ComboBox options={artists} label={'Artist'} setState={setArtist}/>
       <DiscoverContributeSwitch />
-      <JamsTable songs={songs}/>
+      <CollapsibleTable songs={songs} />
+      <h2>Want to narrow things down a bit?</h2>
+      <ComboBox options={artists} label={'Artist'} setState={setArtist}/>
+      {/* {artist &&
+      <ComboBox options={artists} label={'Song'} setState={setArtist}/>
+      } */}
+      {/* <ComboBox options={artists} label={'Vibes'} setState={setArtist}/> */}
+      <DateRangeSlider />
+      <h1>Gratitude</h1>
+      <h1>Values/Philosophy/Hope</h1>
+      <h1>Top Contributors</h1>
+      <h1>Ideas</h1>
+      {/* <JamsTable songs={songs}/> */}
     </ThemeProvider>
   )
 }

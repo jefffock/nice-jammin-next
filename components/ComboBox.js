@@ -6,7 +6,7 @@ export default function ComboBox(props) {
   const [value, setValue] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [loaded, setLoaded] = useState(false)
-  const [formattedLabels, setFormattedLabels] = useState([{ label: 'Loading Artists' }])
+  const [formattedLabels, setFormattedLabels] = useState([{ label: 'All Artists' }])
 
   useEffect(() => {
     if (!loaded) {

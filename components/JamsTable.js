@@ -128,7 +128,7 @@ export default function JamsTable(props) {
       <Paper>
         <TableContainer>
           <Table
-            sx={{ minWidth: '50%' }}
+            sx={{ minWidth: '50%', maxHeight: '80%' }}
             aria-labelledby="tableTitle"
           >
             <JamsTableHead
