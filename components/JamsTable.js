@@ -99,6 +99,7 @@ export default function JamsTable(props) {
   const [order, setOrder] = useState('desc')
   const [orderBy, setOrderBy] = useState('rating')
   const [songsToShow, setSongsToShow] = useState([])
+  
 
   useEffect(() => {
     if (!songsToShow) {
