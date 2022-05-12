@@ -19,8 +19,9 @@ const darkTheme = createTheme({
   },
 });
 
-export default function Home({ jams }) {
+export default function Home({ jams, artistName, songId, songName2 }) {
   const [artists, setArtists] = useState(null)
+  const [songName, setSongName] = useState(null)
   const [artist, setArtist] = useState(null)
   const [songs, setSongs] = useState(null)
   const [song, setSong] = useState(null)
@@ -35,6 +36,12 @@ export default function Home({ jams }) {
       setSession(session)
     })
   }, [])
+
+  // useEffect(() => {
+  //   if (jams && songId && !songName) {
+  //     setSongName(jams[0].song_name)
+  //   }
+  // }, [jams, songId, songName])
 
   async function fetchArtists() {
     const { data, error } = await supabase
@@ -57,34 +64,29 @@ export default function Home({ jams }) {
   return (
     <>
     <Head>
-      {!artist && !song &&
+      {!artistName && !songName &&
       <>
       <title>Discover Great Jams by All Jam Bands</title>
       <meta name="keywords" content="best jam jams phish grateful dead sci goose umphreys tab jrad jgb"></meta>
       <meta name="description" content="Discover and Rate Great Jams By Phish, Grateful Dead, Goose, String Cheese Incident, Umphrey's McGee, Widespread Panic, Billy Strings, JRAD, and many more!"></meta>
       </>
       }
-      {artist && !song &&
+      {artistName &&
       <>
-      <title>{artist} Best Jams - NiceJammin.com</title>
+      <title>{artistName} Best Jams - NiceJammin.com</title>
       <meta name="keywords" content="best jam jams {artist}"></meta>
       </>
       }
-      {song && !artist &&
+      {songName2 &&
       <>
-      <title>{song} Best Jams - NiceJammin.com</title>
-      </>
-      }
-      {artist && song &&
-      <>
-      <title>{artist} {song} Best Jams - NiceJammin.com</title>
+      <title>{songName2} Best Jams - NiceJammin.com</title>
       </>
       }
     </Head>
     <ThemeProvider theme={darkTheme}>
       <h1 className="text-3xl">Nice Jammin</h1>
       <DiscoverContributeSwitch />
-      <TableTitle artist={artist} song={song} />
+      <TableTitle artist={artist} song={song} artistName={artistName} songName={songName2}/>
       <CollapsibleTable songs={jams} />
       <h2>Want to narrow things down a bit?</h2>
       {/* <ComboBox options={artists} label={'Vibes'} setState={setArtist}/> */}
@@ -123,7 +125,7 @@ export async function getServerSideProps(context) {
     'umphreys-mcgee': 'Umphrey\'s McGee',
     'widespread-panic': 'Widespread Panic'
   }
-  let artistSlug, songId, artistName
+  let artistSlug, songId, artistName, songName2
   //if it's a number, it's a song, else, it's an artist
   isNaN(context.query.artistOrSong) ? artistSlug = context.query.artistOrSong : songId = context.query.artistOrSong
   let jams
@@ -142,10 +144,38 @@ export async function getServerSideProps(context) {
     } else if (data) {
       jams = data
     }
+  } if (songId) {
+    //get song name
+    const { data, error } = await supabase
+    .from('versions')
+    .select('*')
+    .eq('song_id', `${songId}`)
+    .limit(100)
+    .order('avg_rating', { ascending: false })
+    .order('num_ratings', { ascending: false })
+    if (error) {
+      console.error(error)
+    } else if (data) {
+      songName2 = data[0].song_name
+      jams = data
+    }
+    //query db for versions with that song name
   }
-return {
-  props: {
-    jams: jams
+  console.log('jams', jams)
+  if (artistSlug) {
+    return {
+      props: {
+        jams,
+        artistName,
+      }
+    }
+  } if (songId) {
+    return {
+      props: {
+        jams,
+        songId,
+        songName2
+      }
+    }
   }
-}
 }

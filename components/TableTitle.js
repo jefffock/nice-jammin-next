@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
 
-export default function TableTitle({ artist, song }) {
+export default function TableTitle({ artist, song, artistName, songName }) {
 
   return (
     <>
-    {!artist &&
-      <h1>Great jams by all bands</h1>
+    {!artistName && !songName &&
+      <h1>Great Jams by All Bands</h1>
     }
-    {artist && !song &&
-      <h1>Great jams by {artist}</h1>
+    {artistName && !song &&
+      <h1>Great Jams by {artistName}</h1>
     }
-    {song && artist &&
-      <h1>Great {song} jams by {artist}</h1>
+    {songName && !artistName &&
+      <h1>Great {songName} Jams</h1>
     }
   </>
   )
