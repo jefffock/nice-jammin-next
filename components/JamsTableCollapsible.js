@@ -169,8 +169,8 @@ function Row(props) {
       allTags += 'Type II, '
     } if (row.unusual) {
       allTags += 'Unusual, '
-    }
-    setTags(allTags)
+    } let trimmed = allTags.length > 2 ? allTags.slice(0, allTags.length - 2) : ''
+    setTags(trimmed)
   }, [row])
 
   return (
@@ -186,12 +186,12 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">
-          {row.id}
+          {row.song_name}
         </TableCell>
-        <TableCell align="right">{row.artist}</TableCell>
-        <TableCell align="right">{row.date}</TableCell>
-        <TableCell align="right">{row.listen_link ? <a href={row.listen_link}>Listen Here</a> : ""}</TableCell>
-        <TableCell align="right">{row.protein}</TableCell>
+        <TableCell>{row.artist}</TableCell>
+        <TableCell>{row.date}</TableCell>
+        <TableCell>{row.listen_link ? <a href={row.listen_link}>Listen Here</a> : ""}</TableCell>
+        <TableCell align="right">{row.avg_rating}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -202,7 +202,7 @@ function Row(props) {
               </Typography>
               <Typography>{tags}</Typography>
               <Typography>Location: {row.location}</Typography>
-              <Typography># of ratings: {1}</Typography>
+              <Typography># of ratings: {row.num_ratings}</Typography>
               <Typography>Submitted by: {row.submitter_name}</Typography>
             </Box>
           </Collapse>
@@ -248,9 +248,10 @@ export default function CollapsibleTable({ songs }) {
           <TableRow>
             <TableCell />
             <TableCell>Song</TableCell>
-            <TableCell align="right">Band</TableCell>
-            <TableCell align="right">Date</TableCell>
-            <TableCell align="right">Listen</TableCell>
+            <TableCell>Band</TableCell>
+            <TableCell>Date</TableCell>
+            <TableCell>Listen</TableCell>
+            <TableCell align="right">Rating</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
