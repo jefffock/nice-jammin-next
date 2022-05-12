@@ -13,7 +13,10 @@ export default function ComboBox(props) {
       if (props.options) {
         let formattedArtists = [{ label: `${props.default}` }]
         for (var i = 0; i < props.options.length; i++) {
-          formattedArtists.push({ label: props.options[i].artist})
+          formattedArtists.push({
+            label: props.options[i].artist,
+            slug: props.options[i].url
+          })
         } setFormattedLabels(formattedArtists)
         setLoaded(true)
       }
@@ -31,7 +34,7 @@ export default function ComboBox(props) {
       value={value ? value : props.default}
         onChange={(event, newValue) => {
           setValue(newValue);
-          props.setState(newValue? newValue.label : '');
+          props.setState(newValue ? newValue : '');
         }}
         inputValue={inputValue}
         onInputChange={(event, newInputValue) => {
@@ -43,8 +46,3 @@ export default function ComboBox(props) {
     />
   );
 }
-
-const artists = [
-  { label: 'Phish' },
-  { label: 'Goose'}
-];

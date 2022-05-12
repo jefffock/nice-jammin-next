@@ -11,7 +11,7 @@ import CollapsibleTable from '../components/JamsTableCollapsible'
 import DateRangeSlider from '../components/DateRangeSlider'
 import { useRouter } from 'next/router'
 import TableTitle from '../components/TableTitle'
-
+import Head from 'next/head'
 
 const darkTheme = createTheme({
   palette: {
@@ -19,7 +19,7 @@ const darkTheme = createTheme({
   },
 });
 
-function Home() {
+export default function Home({ jams }) {
   const [artists, setArtists] = useState(null)
   const [artist, setArtist] = useState(null)
   const [songs, setSongs] = useState(null)
@@ -35,31 +35,6 @@ function Home() {
     })
   }, [])
 
-  async function fetchTopJams(artist, song, dateRange, tags) {
-    if (!artist && !dateRange && !tags) {
-      const { data, error } = await supabase
-      .from('versions')
-      .select('*')
-      .gt('avg_rating', 0)
-      .limit(100)
-      .order('avg_rating', { ascending: false })
-      .order('num_ratings', { ascending: false })
-      if (error) {
-        console.error(error)
-      } else if (data) {
-        setSongs(data)
-      }
-    } if (artist) {
-      if (song) {
-        if (tags) {
-
-        } if (!tags) {
-
-        }
-      }
-    }
-  }
-
   async function fetchArtists() {
     const { data, error } = await supabase
       .from('artists')
@@ -74,33 +49,43 @@ function Home() {
   }
 
   useEffect(() => {
-    if (!songs) {
-      fetchTopJams()
-    }
-  }, [songs])
-
-  useEffect(() => {
     if (!artists) {
       fetchArtists()
     }
   }, [artists])
 
-  useEffect(() => {
-    if (artist !== router.query.artist && artist !== null) {
-      router.push(`/?artist=${artist}`)
-    }
-  }, [artist, router])
-
-  function handleArtistSelect(e) {
-    console.log(e.target.value)
-  };
-
   return (
+    <>
+    <Head>
+      {!artist && !song &&
+      <>
+      <title>Discover Great Jams by All Jam Bands</title>
+      <meta name="keywords" content="best jam jams phish grateful dead sci goose umphreys tab jrad jgb"></meta>
+      <meta name="description" content="Discover and Rate Great Jams By Phish, Grateful Dead, Goose, String Cheese Incident, Umphrey's McGee, Widespread Panic, Billy Strings, JRAD, and many more!"></meta>
+      </>
+      }
+      {artist && !song &&
+      <>
+      <title>{artist} Best Jams - NiceJammin.com</title>
+      <meta name="keywords" content="best jam jams {artist}"></meta>
+      </>
+      }
+      {song && !artist &&
+      <>
+      <title>{song} Best Jams - NiceJammin.com</title>
+      </>
+      }
+      {artist && song &&
+      <>
+      <title>{artist} {song} Best Jams - NiceJammin.com</title>
+      </>
+      }
+    </Head>
     <ThemeProvider theme={darkTheme}>
       <h1 className="text-3xl">Nice Jammin</h1>
       <DiscoverContributeSwitch />
       <TableTitle artist={artist} song={song} />
-      <CollapsibleTable songs={songs} />
+      <CollapsibleTable songs={jams} />
       <h2>Want to narrow things down a bit?</h2>
       {/* <ComboBox options={artists} label={'Vibes'} setState={setArtist}/> */}
       <ComboBox options={artists} label={'Artist'} setState={setArtist} default={'All Bands'}/>
@@ -110,9 +95,27 @@ function Home() {
       <h1>Values/Philosophy/Hope</h1>
       <h1>Top Contributors</h1>
       <h1>Ideas</h1>
-      {/* <JamsTable songs={songs}/> */}
     </ThemeProvider>
+    </>
   )
 }
 
-export default Home
+export async function getServerSideProps() {
+  const { data, error } = await supabase
+    .from('versions')
+    .select('*')
+    .gt('avg_rating', 0)
+    .limit(100)
+    .order('avg_rating', { ascending: false })
+    .order('num_ratings', { ascending: false })
+  if (error) {
+    console.error(error)
+  } else if (data) {
+    console.log('jams', data)
+  }
+  return {
+    props: {
+      jams: data
+    }
+  }
+}
