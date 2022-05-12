@@ -43,6 +43,7 @@ function Home() {
       .gt('avg_rating', 0)
       .limit(100)
       .order('avg_rating', { ascending: false })
+      .order('num_ratings', { ascending: false })
       if (error) {
         console.error(error)
       } else if (data) {
@@ -101,11 +102,9 @@ function Home() {
       <TableTitle artist={artist} song={song} />
       <CollapsibleTable songs={songs} />
       <h2>Want to narrow things down a bit?</h2>
-      <ComboBox options={artists} label={'Artist'} setState={setArtist} default={'All Bands'}/>
-      {artist &&
-      <ComboBox options={artists} label={'Song'} setState={setArtist} default={'All Songs'}/>
-      }
       {/* <ComboBox options={artists} label={'Vibes'} setState={setArtist}/> */}
+      <ComboBox options={artists} label={'Artist'} setState={setArtist} default={'All Bands'}/>
+      <ComboBox options={artists} label={'Song'} setState={setArtist} default={'All Songs'}/>
       <DateRangeSlider />
       <h1>Gratitude</h1>
       <h1>Values/Philosophy/Hope</h1>

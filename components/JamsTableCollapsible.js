@@ -200,7 +200,9 @@ function Row(props) {
               <Typography variant="h6" gutterBottom component="div">
                 Details
               </Typography>
+              {tags &&
               <Typography>{tags}</Typography>
+              }
               <Typography>Location: {row.location}</Typography>
               <Typography># of ratings: {row.num_ratings}</Typography>
               <Typography>Submitted by: {row.submitter_name}</Typography>

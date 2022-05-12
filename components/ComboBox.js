@@ -28,7 +28,7 @@ export default function ComboBox(props) {
     <Autocomplete
       disablePortal
       id="combo-box"
-      value={value ? value : 'All Artists'}
+      value={value ? value : props.default}
         onChange={(event, newValue) => {
           setValue(newValue);
           props.setState(newValue? newValue.label : '');
