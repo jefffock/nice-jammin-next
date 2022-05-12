@@ -89,7 +89,7 @@ export default function Home({ jams }) {
       <h2>Want to narrow things down a bit?</h2>
       {/* <ComboBox options={artists} label={'Vibes'} setState={setArtist}/> */}
       <ComboBox options={artists} label={'Artist'} setState={setArtist} default={'All Bands'}/>
-      <ComboBox options={artists} label={'Song'} setState={setArtist} default={'All Songs'}/>
+      {/* <ComboBox options={artists} label={'Song'} setState={setArtist} default={'All Songs'}/> */}
       <DateRangeSlider />
       <h1>Gratitude</h1>
       <h1>Values/Philosophy/Hope</h1>
