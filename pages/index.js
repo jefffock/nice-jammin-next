@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import ComboBox from '../components/ComboBox'
+import ArtistPicker from '../components/ArtistPicker'
 import JamsTable from '../components/JamsTable'
 import { supabase } from '../utils/supabaseClient'
 import Auth from '../components/Auth'
@@ -83,12 +83,12 @@ export default function Home({ jams }) {
     </Head>
     <ThemeProvider theme={darkTheme}>
       <h1 className="text-3xl">Nice Jammin</h1>
-      <DiscoverContributeSwitch />
+      {/* <DiscoverContributeSwitch /> */}
       <TableTitle artist={artist} song={song} />
       <CollapsibleTable songs={jams} />
       <h2>Want to narrow things down a bit?</h2>
       {/* <ComboBox options={artists} label={'Vibes'} setState={setArtist}/> */}
-      <ComboBox options={artists} label={'Artist'} setState={setArtist} default={'All Bands'}/>
+      <ArtistPicker options={artists} label={'Artist'} setState={setArtist} default={'All Bands'}/>
       {/* <ComboBox options={artists} label={'Song'} setState={setArtist} default={'All Songs'}/> */}
       <DateRangeSlider />
       <h1>Gratitude</h1>

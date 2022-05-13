@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import ComboBox from '../components/ComboBox'
+import ArtistPicker from '../components/ArtistPicker'
 import JamsTable from '../components/JamsTable'
 import { supabase } from '../utils/supabaseClient'
 import Auth from '../components/Auth'
@@ -20,7 +20,6 @@ const darkTheme = createTheme({
 });
 
 export default function Home({ jams, artistName, songId, songName2 }) {
-  const [artists, setArtists] = useState(null)
   const [songName, setSongName] = useState(null)
   const [artist, setArtist] = useState(null)
   const [songs, setSongs] = useState(null)
@@ -43,23 +42,23 @@ export default function Home({ jams, artistName, songId, songName2 }) {
   //   }
   // }, [jams, songId, songName])
 
-  async function fetchArtists() {
-    const { data, error } = await supabase
-      .from('artists')
-      .select('*')
-      .order('ratings', { ascending: false })
-    if (error) {
-      console.error(error)
-    } else {
-      setArtists(data)
-    }
-  }
+  // async function fetchArtists() {
+  //   const { data, error } = await supabase
+  //     .from('artists')
+  //     .select('*')
+  //     .order('ratings', { ascending: false })
+  //   if (error) {
+  //     console.error(error)
+  //   } else {
+  //     setArtists(data)
+  //   }
+  // }
 
-  useEffect(() => {
-    if (!artists) {
-      fetchArtists()
-    }
-  }, [artists])
+  // useEffect(() => {
+  //   if (!artists) {
+  //     fetchArtists()
+  //   }
+  // }, [artists])
 
   return (
     <>
@@ -85,13 +84,13 @@ export default function Home({ jams, artistName, songId, songName2 }) {
     </Head>
     <ThemeProvider theme={darkTheme}>
       <h1 className="text-3xl">Nice Jammin</h1>
-      <DiscoverContributeSwitch />
+      {/* <DiscoverContributeSwitch /> */}
       <TableTitle artist={artist} song={song} artistName={artistName} songName={songName2}/>
       <CollapsibleTable songs={jams} />
       <h2>Want to narrow things down a bit?</h2>
+      <ArtistPicker default={artistName ? artistName : 'All Bands'}/>
       {/* <ComboBox options={artists} label={'Vibes'} setState={setArtist}/> */}
-      <ComboBox options={artists} label={'Artist'} setState={setArtist} default={'All Bands'}/>
-      <ComboBox options={artists} label={'Song'} setState={setArtist} default={'All Songs'}/>
+      {/* <ComboBox options={artists} label={'Song'} setState={setArtist} default={'All Songs'}/> */}
       <DateRangeSlider />
       <h1>Gratitude</h1>
       <h1>Values/Philosophy/Hope</h1>
@@ -128,9 +127,10 @@ export async function getServerSideProps(context) {
   let artistSlug, songId, artistName, songName2
   //if it's a number, it's a song, else, it's an artist
   isNaN(context.query.artistOrSong) ? artistSlug = context.query.artistOrSong : songId = context.query.artistOrSong
-  let jams
+  let jams = []
   if (artistSlug) {
     artistName = artistSlugs[artistSlug]
+    console.log('artistName', artistName)
     //for artist slug
     const { data, error } = await supabase
     .from('versions')
@@ -159,9 +159,7 @@ export async function getServerSideProps(context) {
       songName2 = data[0].song_name
       jams = data
     }
-    //query db for versions with that song name
   }
-  console.log('jams', jams)
   if (artistSlug) {
     return {
       props: {
