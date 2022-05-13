@@ -165,15 +165,17 @@ export async function getServerSideProps(context) {
       props: {
         jams,
         artistName,
+        key: artistSlug
       }
     }
   } if (songId) {
     return {
       props: {
-        jams,
-        songId,
-        songName2
-      }
+          jams,
+          songId,
+          songName2,
+          key: songId
+      },
     }
   }
 }
