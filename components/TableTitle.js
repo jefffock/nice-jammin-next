@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react'
+import Typography from '@mui/material/Typography';
 
 export default function TableTitle({ artist, song, artistName, songName }) {
 
   return (
     <>
-    {!artistName && !songName &&
-      <h1>Great Jams by All Bands</h1>
-    }
+    {/* {!artistName && !songName &&
+      <Typography>Great Jams by All Bands</Typography>
+    } */}
     {artistName && !song &&
-      <h1>Great Jams by {artistName}</h1>
+      <Typography>Great Jams by {artistName}</Typography>
     }
     {songName && !artistName &&
-      <h1>Great {songName} Jams</h1>
+      <Typography>Great {songName} Jams</Typography>
     }
   </>
   )
