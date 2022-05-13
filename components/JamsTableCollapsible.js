@@ -13,85 +13,81 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-
-// function createData(name, calories, fat, carbs, protein, price) {
-//   return {
-//     name,
-//     calories,
-//     fat,
-//     carbs,
-//     protein,
-//     price,
-//     history: [
-//       {
-//         date: '2020-01-05',
-//         customerId: '11091700',
-//         amount: 3,
-//       },
-//       {
-//         date: '2020-01-02',
-//         customerId: 'Anonymous',
-//         amount: 1,
-//       },
-//     ],
-//   };
-// }
-
-
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-const headCells = [
-  {
-    id: 'name',
-    numeric: false,
-    disablePadding: false,
-    label: 'Name'
-  },
-  {
-    id: 'date',
-    numeric: false,
-    disablePadding: false,
-    label: 'Date'
-  },
-  {
-    id: 'artist',
-    numeric: false,
-    disablePadding: false,
-    label: 'Artist'
-  },
-  {
-    id: 'rating',
-    numeric: true,
-    disablePadding: false,
-    label: 'Rating'
-  },
-  {
-    id: 'link',
-    numeric: false,
-    disablePadding: false,
-    label: 'Listen'
-  },
-]
+import TableSortLabel from '@mui/material/TableSortLabel';
+import { visuallyHidden } from '@mui/utils';
 
 function JamsTableHead(props) {
   const { order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
 };
+
+const headCells = [
+  {
+    id: 'arrow',
+    numeric: false,
+    disablePadding: true,
+    label: ''
+  },
+  {
+    id: 'song_name',
+    numeric: false,
+    disablePadding: false,
+    label: 'Song'
+  },
+  {
+    id: 'artist',
+    numeric: false,
+    disablePadding: false,
+    label: 'Band'
+  },
+  {
+    id: 'date',
+    numeric: true,
+    disablePadding: false,
+    label: 'Date'
+  },
+  {
+    id: 'listen_link',
+    numeric: false,
+    disablePadding: false,
+    label: 'Listen'
+  },
+  {
+    id: 'avg_rating',
+    numeric: true,
+    disablePadding: false,
+    label: 'Rating'
+  },
+]
+
+return (
+  <TableHead>
+    <TableRow>
+      {headCells.map((headCell) => (
+        <TableCell
+          key={headCell.id}
+          align={headCell.numeric ? 'right' : 'left'}
+          padding={headCell.disablePadding ? 'none' : 'normal'}
+          sortDirection={orderBy === headCell.id ? order : false}
+        >
+          <TableSortLabel
+            active={orderBy === headCell.id}
+            direction={orderBy === headCell.id ? order : 'asc'}
+            onClick={createSortHandler(headCell.id)}
+          >
+            {headCell.label}
+            {orderBy === headCell.id ? (
+              <Box component="span" sx={visuallyHidden}>
+                {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+              </Box>
+            ) : null}
+          </TableSortLabel>
+        </TableCell>
+      ))}
+    </TableRow>
+  </TableHead>
+);
 }
 
 function Row(props) {
@@ -233,6 +229,14 @@ function Row(props) {
 // };
 
 export default function CollapsibleTable({ songs }) {
+  const [order, setOrder] = useState('desc');
+  const [orderBy, setOrderBy] = useState('rating');
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
 
   useEffect(() => {
     if (songs) {
@@ -240,13 +244,40 @@ export default function CollapsibleTable({ songs }) {
     }
   })
 
+  useEffect(() => {
+    console.log('order', order)
+    console.log('orderBy', orderBy)
+  }, [order, orderBy])
+
+  function descendingComparator(a, b, orderBy) {
+    if (b[orderBy] < a[orderBy]) {
+      return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1;
+    }
+    return 0;
+  }
+
+  function getComparator(order, orderBy) {
+    console.log('in get comparator', order, orderBy)
+    return order === 'desc'
+      ? (a, b) => descendingComparator(a, b, orderBy)
+      : (a, b) => -descendingComparator(a, b, orderBy);
+  }
+
   return (
     <TableContainer component={Paper} sx={{ maxHeight: '60vh', overflowY: 'auto'}}>
       <Table
       aria-label="collapsible table"
       stickyHeader
       >
-        <TableHead>
+        <JamsTableHead
+              order={order}
+              orderBy={orderBy}
+              onRequestSort={handleRequestSort}
+            />
+        {/* <TableHead>
           <TableRow>
             <TableCell />
             <TableCell>Song</TableCell>
@@ -255,11 +286,15 @@ export default function CollapsibleTable({ songs }) {
             <TableCell>Listen</TableCell>
             <TableCell align="right">Rating</TableCell>
           </TableRow>
-        </TableHead>
+        </TableHead> */}
         <TableBody>
-          {songs && songs.map((song) => (
-            <Row key={song.song_id} row={song} />
-            ))}
+          {songs &&
+          songs
+            .slice()
+            .sort(getComparator(order, orderBy))
+            .map((song) => (
+              <Row key={song.song_id} row={song} />
+              ))}
         </TableBody>
       </Table>
     </TableContainer>

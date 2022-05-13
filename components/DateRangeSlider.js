@@ -6,13 +6,13 @@ function valuetext(value) {
   return `${value}`;
 }
 
-export default function DateRangeSlider() {
+export default function DateRangeSlider({ setDates }) {
   const [val, setVal] = useState([1965, 2022]);
   const [currentYear, setCurrentYear] = useState(2022)
 
   const handleChange = (event, newValue) => {
-    console.log('new value', newValue)
     setVal(newValue);
+    setDates(newValue);
   };
 
   useEffect(() => {
