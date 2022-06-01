@@ -12,6 +12,7 @@ import DateRangeSlider from './DateRangeSlider'
 import { useRouter } from 'next/router'
 import TableTitle from './TableTitle'
 import Head from 'next/head'
+import JamsDataGrid from './JamsDataGrid'
 
 const darkTheme = createTheme({
   palette: {
@@ -27,6 +28,9 @@ export default function App({ jams, artistName, songId, songName2 }) {
   const [session, setSession] = useState(null)
   const [dates, setDates] = useState(null)
   const [filteredSongs, setFilteredSongs] = useState(null)
+  const [sortedSongs, setSortedSongs] = useState(jams)
+  const [order, setOrder] = useState('desc');
+  const [orderBy, setOrderBy] = useState('avg_rating');
 
   const router = useRouter()
 
@@ -46,6 +50,10 @@ export default function App({ jams, artistName, songId, songName2 }) {
     }
   }, [dates, jams])
 
+  useEffect(() => {
+    sortSongs(order, orderBy)
+  }, [order, orderBy])
+
   function filterSongs() {
     console.log('dates in filterSongs', dates)
     //filter by date
@@ -60,6 +68,30 @@ export default function App({ jams, artistName, songId, songName2 }) {
         }
       }
     setFilteredSongs(filteredSongs)
+  }
+
+  function descendingComparator(a, b, orderBy) {
+    if (b[orderBy] < a[orderBy]) {
+      return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1;
+    }
+    return 0;
+  }
+
+  function getComparator(order, orderBy) {
+    console.log('in get comparator main', order, orderBy)
+    // if (orderBy === 'avg_rating') {
+      return order === 'desc'
+        ? (a, b) => descendingComparator(a, b, orderBy)
+        : (a, b) => -descendingComparator(a, b, orderBy);
+    }
+
+  function sortSongs(order, orderBy) {
+    let newSortedSongs = jams.slice().sort(getComparator(order, orderBy))
+    console.log('newSortedSongs', newSortedSongs)
+    setSortedSongs(newSortedSongs)
   }
 
   // }
@@ -114,7 +146,8 @@ export default function App({ jams, artistName, songId, songName2 }) {
       <h1 className="text-3xl">Nice Jammin</h1>
       {/* <DiscoverContributeSwitch /> */}
       <TableTitle artist={artist} song={song} artistName={artistName} songName={songName2}/>
-      <CollapsibleTable songs={filteredSongs ? filteredSongs : jams}/>
+      <br /><br />
+      <CollapsibleTable songs={jams} sortedSongs={sortedSongs} sortSongs={sortSongs} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy}/>
       <h2>Filters</h2>
       {/* <ComboBox options={artists} label={'Vibes'} setState={setArtist}/> */}
       <ArtistPicker default={artistName ? artistName : 'All Bands'}/>

@@ -99,14 +99,14 @@ export default function JamsTable(props) {
   const [order, setOrder] = useState('desc')
   const [orderBy, setOrderBy] = useState('rating')
   const [songsToShow, setSongsToShow] = useState([])
-  
+
 
   useEffect(() => {
     if (!songsToShow) {
       console.log('props.songs', props.songs)
       setSongsToShow(props.songs)
     }
-  })
+  }, [songsToShow, props])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -117,10 +117,6 @@ export default function JamsTable(props) {
   const handleClick = (event, name) => {
     console.log('clicked', name)
   }
-
-  useEffect(() => {
-    console.log('songs to show', songsToShow)
-  })
 
   return (
     //  <Box sx={{ width: '100%' }}>

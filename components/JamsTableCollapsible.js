@@ -43,7 +43,7 @@ const headCells = [
   },
   {
     id: 'date',
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: 'Date'
   },
@@ -210,44 +210,32 @@ function Row(props) {
   );
 }
 
-// Row.propTypes = {
-//   row: PropTypes.shape({
-//     calories: PropTypes.number.isRequired,
-//     carbs: PropTypes.number.isRequired,
-//     fat: PropTypes.number.isRequired,
-//     history: PropTypes.arrayOf(
-//       PropTypes.shape({
-//         amount: PropTypes.number.isRequired,
-//         customerId: PropTypes.string.isRequired,
-//         date: PropTypes.string.isRequired,
-//       }),
-//     ).isRequired,
-//     name: PropTypes.string.isRequired,
-//     price: PropTypes.number.isRequired,
-//     protein: PropTypes.number.isRequired,
-//   }).isRequired,
-// };
-
-export default function CollapsibleTable({ songs }) {
-  const [order, setOrder] = useState('desc');
-  const [orderBy, setOrderBy] = useState('rating');
+export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order, orderBy, setOrder, setOrderBy }) {
+  // const [order, setOrder] = useState('desc');
+  // const [orderBy, setOrderBy] = useState('avg_rating');
+  const [orderedSongs, setOrderedSongs] = useState(null)
 
   const handleRequestSort = (event, property) => {
+    console.log('property', property)
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
-  useEffect(() => {
-    if (songs) {
-      console.log('songs', songs)
-    }
-  })
+  // useEffect(() => {
+  //   console.log('order', order)
+  //   console.log('orderBy', orderBy)
+  //   console.log('songs', songs)
+  //   let newOrder = songs.slice().sort(getComparator(order, orderBy))
+  //   console.log('newOrder', newOrder)
+  //   setOrderedSongs(newOrder)
+  // }, [order, orderBy])
 
   useEffect(() => {
-    console.log('order', order)
-    console.log('orderBy', orderBy)
-  }, [order, orderBy])
+    if (!sortedSongs) {
+      sortSongs(order, orderBy)
+    }
+  })
 
   function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -261,39 +249,41 @@ export default function CollapsibleTable({ songs }) {
 
   function getComparator(order, orderBy) {
     console.log('in get comparator', order, orderBy)
-    return order === 'desc'
-      ? (a, b) => descendingComparator(a, b, orderBy)
-      : (a, b) => -descendingComparator(a, b, orderBy);
+    // if (orderBy === 'avg_rating') {
+      return order === 'desc'
+        ? (a, b) => descendingComparator(a, b, orderBy)
+        : (a, b) => -descendingComparator(a, b, orderBy);
+    // }
+    // else {
+    //   console.log('in the else block of getComparator')
+    //   return order === 'asc'
+    //     ? (a, b) => a[orderBy] - b[orderBy]
+    //     : (a, b) => b[orderBy] - a[orderBy]
+
+    // }
   }
 
   return (
-    <TableContainer component={Paper} sx={{ maxHeight: '60vh', overflowY: 'auto'}}>
+    <TableContainer component={Paper} sx={{ maxHeight: '60vh', overflowY: 'auto', maxWidth: '900px'}}>
       <Table
       aria-label="collapsible table"
       stickyHeader
       >
         <JamsTableHead
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-            />
-        {/* <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Song</TableCell>
-            <TableCell>Band</TableCell>
-            <TableCell>Date</TableCell>
-            <TableCell>Listen</TableCell>
-            <TableCell align="right">Rating</TableCell>
-          </TableRow>
-        </TableHead> */}
+          order={order}
+          orderBy={orderBy}
+          onRequestSort={handleRequestSort}
+        />
         <TableBody>
-          {songs &&
-          songs
-            .slice()
-            .sort(getComparator(order, orderBy))
+          {/* {songs &&
+          songs.slice().sort(getComparator(order, orderBy))
             .map((song) => (
               <Row key={song.song_id} row={song} />
+              ))} */}
+          {sortedSongs &&
+          sortedSongs
+            .map((jam) => (
+              <Row key={jam.id} row={jam} />
               ))}
         </TableBody>
       </Table>
