@@ -217,8 +217,12 @@ export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order,
 
   const handleRequestSort = (event, property) => {
     console.log('property', property)
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    if (property === 'avg_rating' && orderBy !== 'avg_rating') {
+      setOrder('desc')
+    } else {
+      const isAsc = orderBy === property && order === 'asc';
+      setOrder(isAsc ? 'desc' : 'asc');
+    }
     setOrderBy(property);
   };
 
@@ -278,7 +282,7 @@ export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order,
           {/* {songs &&
           songs.slice().sort(getComparator(order, orderBy))
             .map((song) => (
-              <Row key={song.song_id} row={song} />
+              <Row key={song.id} row={song} />
               ))} */}
           {sortedSongs &&
           sortedSongs
