@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import ArtistPicker from './ArtistPicker'
 import JamsTable from './JamsTable'
 import { supabase } from '../utils/supabaseClient'
 import Auth from './Auth'
@@ -8,11 +7,11 @@ import DiscoverContributeSwitch from './DiscContSwitch'
 import Table from '@mui/material/Table';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CollapsibleTable from './JamsTableCollapsible'
-import DateRangeSlider from './DateRangeSlider'
 import { useRouter } from 'next/router'
 import TableTitle from './TableTitle'
 import Head from 'next/head'
 import JamsDataGrid from './JamsDataGrid'
+import FilterBar from './FilterBar'
 
 const darkTheme = createTheme({
   palette: {
@@ -26,11 +25,11 @@ export default function App({ jams, artistName, songId, songName2 }) {
   const [songs, setSongs] = useState(null)
   const [song, setSong] = useState(null)
   const [session, setSession] = useState(null)
-  const [dates, setDates] = useState(null)
   const [filteredSongs, setFilteredSongs] = useState(null)
   const [sortedSongs, setSortedSongs] = useState(jams)
   const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState('avg_rating');
+  const [dates, setDates] = useState(null)
 
   const router = useRouter()
 
@@ -147,12 +146,11 @@ export default function App({ jams, artistName, songId, songName2 }) {
       {/* <DiscoverContributeSwitch /> */}
       <TableTitle artist={artist} song={song} artistName={artistName} songName={songName2}/>
       <br /><br />
+      <FilterBar setDates={setDates} artistName={artistName} />
       <CollapsibleTable songs={jams} sortedSongs={sortedSongs} sortSongs={sortSongs} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy}/>
       <h2>Filters</h2>
       {/* <ComboBox options={artists} label={'Vibes'} setState={setArtist}/> */}
-      <ArtistPicker default={artistName ? artistName : 'All Bands'}/>
       {/* <ComboBox options={artists} label={'Song'} setState={setArtist} default={'All Songs'}/> */}
-      <DateRangeSlider setDates={setDates}/>
       <h1>Gratitude</h1>
       <h1>Values/Philosophy/Hope</h1>
       <h1>Top Contributors</h1>
