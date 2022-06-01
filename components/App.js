@@ -12,6 +12,7 @@ import TableTitle from './TableTitle'
 import Head from 'next/head'
 import JamsDataGrid from './JamsDataGrid'
 import FilterBar from './FilterBar'
+import FilterList from './FilterList'
 
 const darkTheme = createTheme({
   palette: {
@@ -25,7 +26,7 @@ export default function App({ jams, artistName, songId, songName2 }) {
   const [songs, setSongs] = useState(null)
   const [song, setSong] = useState(null)
   const [session, setSession] = useState(null)
-  const [filteredSongs, setFilteredSongs] = useState(null)
+  const [filteredSongs, setFilteredSongs] = useState(jams)
   const [sortedSongs, setSortedSongs] = useState(jams)
   const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState('avg_rating');
@@ -42,16 +43,12 @@ export default function App({ jams, artistName, songId, songName2 }) {
 
   useEffect(() => {
     console.log('dates', dates)
-    if (jams.length < 100) {
-      filterSongs()
-    } else {
-      //new db call
-    }
+    filterSongs()
   }, [dates, jams])
 
   useEffect(() => {
     sortSongs(order, orderBy)
-  }, [order, orderBy])
+  }, [order, orderBy, filteredSongs])
 
   function filterSongs() {
     console.log('dates in filterSongs', dates)
@@ -88,7 +85,7 @@ export default function App({ jams, artistName, songId, songName2 }) {
     }
 
   function sortSongs(order, orderBy) {
-    let newSortedSongs = jams.slice().sort(getComparator(order, orderBy))
+    let newSortedSongs = filteredSongs.slice().sort(getComparator(order, orderBy))
     console.log('newSortedSongs', newSortedSongs)
     setSortedSongs(newSortedSongs)
   }
@@ -147,6 +144,7 @@ export default function App({ jams, artistName, songId, songName2 }) {
       <TableTitle artist={artist} song={song} artistName={artistName} songName={songName2}/>
       <br /><br />
       <FilterBar setDates={setDates} artistName={artistName} />
+      <FilterList />
       <CollapsibleTable songs={jams} sortedSongs={sortedSongs} sortSongs={sortSongs} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy}/>
       <h2>Filters</h2>
       {/* <ComboBox options={artists} label={'Vibes'} setState={setArtist}/> */}

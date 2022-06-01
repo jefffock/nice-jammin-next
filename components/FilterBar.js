@@ -7,7 +7,7 @@ export default function FilterBar({ setDates, artistName }) {
   return(
     <>
       <h1>FilterBar</h1>
-      {/* <DateRangeSlider setDates={setDates}/> */}
+      <DateRangeSlider setDates={setDates}/>
       <ArtistPicker default={artistName ? artistName : 'All Bands'}/>
     </>
   )
