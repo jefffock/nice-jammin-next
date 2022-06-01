@@ -22,7 +22,7 @@ const darkTheme = createTheme({
 
 export default function App({ jams, artistName, songId, songName2 }) {
   const [artists, setArtists] = useState(null)
-  const [artist, setArtist] = useState(null)
+  const [artist, setArtist] = useState('All Bands')
   const [songs, setSongs] = useState(null)
   const [song, setSong] = useState(null)
   const [session, setSession] = useState(null)
@@ -42,29 +42,52 @@ export default function App({ jams, artistName, songId, songName2 }) {
   }, [])
 
   useEffect(() => {
-    console.log('dates', dates)
-    filterSongs()
-  }, [dates, jams])
+    console.log('artist', artist)
+    let newFilteredSongs = jams.filter(filterFunc)
+    setFilteredSongs(newFilteredSongs)
+  }, [artist])
+
+  // useEffect(() => {
+  //   console.log('dates', dates)
+  //   filterSongs()
+  // }, [dates, jams])
 
   useEffect(() => {
-    sortSongs(order, orderBy)
+    sortSongs()
   }, [order, orderBy, filteredSongs])
 
   function filterSongs() {
-    console.log('dates in filterSongs', dates)
+    // console.log('dates in filterSongs', dates)
+
     //filter by date
-    let filteredSongs = []
-    for (var i = 0; i < jams.length; i++) {
-      let passesFilters = true
-        let year = parseInt(jams[i].date.slice(0,4))
-        if ( (dates && year < dates[0]) || (dates && year > dates[1])) {
-          passesFilters = false
-        } if (passesFilters) {
-          filteredSongs.push(jams[i])
-        }
-      }
-    setFilteredSongs(filteredSongs)
+    // let filteredSongs = []
+    // for (var i = 0; i < jams.length; i++) {
+    //   let passesFilters = true
+    //     let year = parseInt(jams[i].date.slice(0,4))
+    //     if ( (dates && year < dates[0]) || (dates && year > dates[1])) {
+    //       passesFilters = false
+    //     } if (passesFilters) {
+    //       filteredSongs.push(jams[i])
+    //     }
+    //   }
+    // setFilteredSongs(filteredSongs)
   }
+
+  useEffect(() => {
+    sortSongs()
+  }, [filteredSongs, order, orderBy])
+
+
+
+  function filterFunc(item) {
+    if (artist !== undefined && artist !== 'All Bands' && item.artist !== artist) {
+      return false
+    }
+    return true
+  }
+
+
+
 
   function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -84,7 +107,7 @@ export default function App({ jams, artistName, songId, songName2 }) {
         : (a, b) => -descendingComparator(a, b, orderBy);
     }
 
-  function sortSongs(order, orderBy) {
+  function sortSongs() {
     let newSortedSongs = filteredSongs.slice().sort(getComparator(order, orderBy))
     console.log('newSortedSongs', newSortedSongs)
     setSortedSongs(newSortedSongs)
@@ -143,7 +166,7 @@ export default function App({ jams, artistName, songId, songName2 }) {
       {/* <DiscoverContributeSwitch /> */}
       <TableTitle artist={artist} song={song} artistName={artistName} songName={songName2}/>
       <br /><br />
-      <FilterBar setDates={setDates} artistName={artistName} />
+      <FilterBar setDates={setDates} setArtist={setArtist} artist={artist}/>
       <FilterList />
       <CollapsibleTable songs={jams} sortedSongs={sortedSongs} sortSongs={sortSongs} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy}/>
       <h2>Filters</h2>

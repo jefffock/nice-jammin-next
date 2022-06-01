@@ -110,8 +110,8 @@ export async function getServerSideProps() {
   const { data, error } = await supabase
     .from('versions')
     .select('*')
-    .gt('avg_rating', 0)
-    .limit(100)
+    // .gt('avg_rating', 0)
+    // .limit(100)
     .order('avg_rating', { ascending: false })
     .order('num_ratings', { ascending: false })
   if (error) {

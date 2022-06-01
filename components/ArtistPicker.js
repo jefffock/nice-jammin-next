@@ -4,11 +4,9 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { useRouter } from 'next/router'
 import Link from 'next/link';
 
-export default function ArtistPicker(props) {
+export default function ArtistPicker({ start, setArtist }) {
   const [value, setValue] = useState('');
   const [inputValue, setInputValue] = useState('');
-  const [loaded, setLoaded] = useState(false)
-  const [formattedLabels, setFormattedLabels] = useState([{ label:  `${props.default}` }])
   const router = useRouter()
 
   let artists = [
@@ -50,7 +48,7 @@ export default function ArtistPicker(props) {
     },
     {
       url: 'joe-russos-almost-dead',
-      label: 'Joe Russo\'s Almost Dead'
+      label: "Joe Russo's Almost Dead"
     },
     {
       url: 'lettuce',
@@ -90,7 +88,7 @@ export default function ArtistPicker(props) {
     },
     {
       url: 'umphreys-mcgee',
-      label: 'Umphrey\'s McGee'
+      label: "Umphrey's McGee"
     },
     {
       url: 'widespread-panic',
@@ -102,8 +100,8 @@ export default function ArtistPicker(props) {
 
   useEffect(() => {
     console.log('value', value)
-    if (value?.url) {
-      router.push(value.url)
+    if (value !== 'All Bands' && value.label !== 'All Bands') {
+      setArtist(value.label)
     }
   }, [value])
 
@@ -111,7 +109,7 @@ export default function ArtistPicker(props) {
     <Autocomplete
       disablePortal
       id="combo-box"
-      value={value ? value : props.default}
+      value={value ? value : 'All Bands'}
         onChange={(event, newValue) => {
           setValue(newValue);
         }}
