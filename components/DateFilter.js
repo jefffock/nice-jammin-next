@@ -9,7 +9,7 @@ export default function DateFilter({ before, beforeDate, setBeforeDate, afterDat
 
   useEffect(() => {
     let fullDates = []
-    let currentYear = 2022
+    let currentYear = new Date().getFullYear()
     for (var i = 1965; i <= currentYear; i++) {
       fullDates.push(i)
     } setDates(fullDates)

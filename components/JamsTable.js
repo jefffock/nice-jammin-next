@@ -103,7 +103,6 @@ export default function JamsTable(props) {
 
   useEffect(() => {
     if (!songsToShow) {
-      console.log('props.songs', props.songs)
       setSongsToShow(props.songs)
     }
   }, [songsToShow, props])

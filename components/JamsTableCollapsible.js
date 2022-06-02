@@ -216,7 +216,6 @@ export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order,
   const [orderedSongs, setOrderedSongs] = useState(null)
 
   const handleRequestSort = (event, property) => {
-    console.log('property', property)
     if (property === 'avg_rating' && orderBy !== 'avg_rating') {
       setOrder('desc')
     } else {
@@ -225,15 +224,6 @@ export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order,
     }
     setOrderBy(property);
   };
-
-  // useEffect(() => {
-  //   console.log('order', order)
-  //   console.log('orderBy', orderBy)
-  //   console.log('songs', songs)
-  //   let newOrder = songs.slice().sort(getComparator(order, orderBy))
-  //   console.log('newOrder', newOrder)
-  //   setOrderedSongs(newOrder)
-  // }, [order, orderBy])
 
   useEffect(() => {
     if (!sortedSongs) {
@@ -252,19 +242,9 @@ export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order,
   }
 
   function getComparator(order, orderBy) {
-    console.log('in get comparator', order, orderBy)
-    // if (orderBy === 'avg_rating') {
-      return order === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
-    // }
-    // else {
-    //   console.log('in the else block of getComparator')
-    //   return order === 'asc'
-    //     ? (a, b) => a[orderBy] - b[orderBy]
-    //     : (a, b) => b[orderBy] - a[orderBy]
-
-    // }
+    return order === 'desc'
+      ? (a, b) => descendingComparator(a, b, orderBy)
+      : (a, b) => -descendingComparator(a, b, orderBy);
   }
 
   return (

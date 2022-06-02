@@ -136,7 +136,6 @@ export async function getServerSideProps(context) {
   let jams = []
   if (artistSlug) {
     artistName = artistSlugs[artistSlug]
-    console.log('artistName', artistName)
     //for artist slug
     const { data, error } = await supabase
     .from('versions')
