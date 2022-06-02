@@ -22,7 +22,7 @@ const darkTheme = createTheme({
 
 export default function App({ jams, artistName, songId, songName2 }) {
   const [artists, setArtists] = useState(null)
-  const [artist, setArtist] = useState('All Bands')
+  const [artist, setArtist] = useState(null)
   const [songs, setSongs] = useState(null)
   const [song, setSong] = useState(null)
   const [session, setSession] = useState(null)
@@ -31,6 +31,18 @@ export default function App({ jams, artistName, songId, songName2 }) {
   const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState('avg_rating');
   const [dates, setDates] = useState(null)
+  const [tagsSelected, setTagsSelected] = useState([])
+
+  /*
+  selecting a tag from dropdown
+    if it isnt in tag filters
+      add it to tag filters
+    else
+      remove it from tag filters
+  when tag filters change
+    re-filter
+    re-sort
+  */
 
   const router = useRouter()
 
@@ -46,6 +58,10 @@ export default function App({ jams, artistName, songId, songName2 }) {
     let newFilteredSongs = jams.filter(filterFunc)
     setFilteredSongs(newFilteredSongs)
   }, [artist])
+
+  useEffect(() => {
+    console.log('tagsSelected', tagsSelected)
+  }, [tagsSelected])
 
   // useEffect(() => {
   //   console.log('dates', dates)
@@ -80,8 +96,10 @@ export default function App({ jams, artistName, songId, songName2 }) {
 
 
   function filterFunc(item) {
-    if (artist !== undefined && artist !== 'All Bands' && item.artist !== artist) {
+    if (artist && artist !== 'All Bands' && item.artist !== artist) {
       return false
+    } if (tagsSelected) {
+      //
     }
     return true
   }
@@ -100,16 +118,13 @@ export default function App({ jams, artistName, songId, songName2 }) {
   }
 
   function getComparator(order, orderBy) {
-    console.log('in get comparator main', order, orderBy)
-    // if (orderBy === 'avg_rating') {
-      return order === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
-    }
+    return order === 'desc'
+      ? (a, b) => descendingComparator(a, b, orderBy)
+      : (a, b) => -descendingComparator(a, b, orderBy);
+  }
 
   function sortSongs() {
     let newSortedSongs = filteredSongs.slice().sort(getComparator(order, orderBy))
-    console.log('newSortedSongs', newSortedSongs)
     setSortedSongs(newSortedSongs)
   }
 
@@ -166,8 +181,8 @@ export default function App({ jams, artistName, songId, songName2 }) {
       {/* <DiscoverContributeSwitch /> */}
       <TableTitle artist={artist} song={song} artistName={artistName} songName={songName2}/>
       <br /><br />
-      <FilterBar setDates={setDates} setArtist={setArtist} artist={artist}/>
-      <FilterList />
+      <FilterBar setDates={setDates} setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected}/>
+      <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected}/>
       <CollapsibleTable songs={jams} sortedSongs={sortedSongs} sortSongs={sortSongs} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy}/>
       <h2>Filters</h2>
       {/* <ComboBox options={artists} label={'Vibes'} setState={setArtist}/> */}
