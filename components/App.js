@@ -57,7 +57,7 @@ export default function App({ jams, artistName, songId, songName2 }) {
     console.log('artist', artist)
     let newFilteredSongs = jams.filter(filterFunc)
     setFilteredSongs(newFilteredSongs)
-  }, [artist])
+  }, [artist, tagsSelected])
 
   useEffect(() => {
     console.log('tagsSelected', tagsSelected)
@@ -89,9 +89,6 @@ export default function App({ jams, artistName, songId, songName2 }) {
     // setFilteredSongs(filteredSongs)
   }
 
-  useEffect(() => {
-    sortSongs()
-  }, [filteredSongs, order, orderBy])
 
 
 
@@ -99,13 +96,14 @@ export default function App({ jams, artistName, songId, songName2 }) {
     if (artist && artist !== 'All Bands' && item.artist !== artist) {
       return false
     } if (tagsSelected) {
-      //
+      for (var i = 0; i < tagsSelected.length; i++) {
+        if (!item[tagsSelected[i]]) {
+          return false
+        }
+      }
     }
     return true
   }
-
-
-
 
   function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -126,6 +124,16 @@ export default function App({ jams, artistName, songId, songName2 }) {
   function sortSongs() {
     let newSortedSongs = filteredSongs.slice().sort(getComparator(order, orderBy))
     setSortedSongs(newSortedSongs)
+  }
+
+  function removeTag(tag) {
+    console.log('tag to remove', tag)
+    console.log('prev tags', tagsSelected)
+    let index = tagsSelected.indexOf(tag)
+    let updatedTags = tagsSelected.slice(0, index).concat(tagsSelected.slice(index + 1))
+    console.log('updatedTags', updatedTags)
+
+    setTagsSelected(updatedTags)
   }
 
   // }
@@ -182,7 +190,7 @@ export default function App({ jams, artistName, songId, songName2 }) {
       <TableTitle artist={artist} song={song} artistName={artistName} songName={songName2}/>
       <br /><br />
       <FilterBar setDates={setDates} setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected}/>
-      <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected}/>
+      <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} removeTag={removeTag}/>
       <CollapsibleTable songs={jams} sortedSongs={sortedSongs} sortSongs={sortSongs} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy}/>
       <h2>Filters</h2>
       {/* <ComboBox options={artists} label={'Vibes'} setState={setArtist}/> */}

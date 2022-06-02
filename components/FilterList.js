@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react'
 import Chip from '@mui/material/Chip';
+import FilterChip from './FilterChip'
 
-export default function FilterList({ artist, setArtist, tagsSelected, setTagsSelected }) {
+export default function FilterList({ artist, setArtist, tagsSelected, removeTag }) {
 
   return (
-    <>
-    <h1>Filter List</h1>
-    <h1>{artist}</h1>
+    <div className="filter-list-wrapper">
+    {artist && artist !== 'All Bands' &&
+    <FilterChip artist={artist} setArtist={setArtist}></FilterChip>}
     {tagsSelected &&
     tagsSelected.map((tag) => (
-      <p key={tag}>{tag}</p>
-      // <h1 key={tag}>{tag}</h1>
+      <FilterChip key={tag} tag={tag} removeTag={removeTag}></FilterChip>
     ))}
-    </>
+    </div>
   )
 }
