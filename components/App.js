@@ -30,7 +30,8 @@ export default function App({ jams, artistName, songId, songName2 }) {
   const [sortedSongs, setSortedSongs] = useState(jams)
   const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState('avg_rating');
-  const [dates, setDates] = useState(null)
+  const [beforeDate, setBeforeDate] = useState(null)
+  const [afterDate, setAfterDate] = useState(null)
   const [tagsSelected, setTagsSelected] = useState([])
 
   /*
@@ -54,42 +55,13 @@ export default function App({ jams, artistName, songId, songName2 }) {
   }, [])
 
   useEffect(() => {
-    console.log('artist', artist)
     let newFilteredSongs = jams.filter(filterFunc)
     setFilteredSongs(newFilteredSongs)
-  }, [artist, tagsSelected])
-
-  useEffect(() => {
-    console.log('tagsSelected', tagsSelected)
-  }, [tagsSelected])
-
-  // useEffect(() => {
-  //   console.log('dates', dates)
-  //   filterSongs()
-  // }, [dates, jams])
+  }, [artist, tagsSelected, beforeDate, afterDate])
 
   useEffect(() => {
     sortSongs()
   }, [order, orderBy, filteredSongs])
-
-  function filterSongs() {
-    // console.log('dates in filterSongs', dates)
-
-    //filter by date
-    // let filteredSongs = []
-    // for (var i = 0; i < jams.length; i++) {
-    //   let passesFilters = true
-    //     let year = parseInt(jams[i].date.slice(0,4))
-    //     if ( (dates && year < dates[0]) || (dates && year > dates[1])) {
-    //       passesFilters = false
-    //     } if (passesFilters) {
-    //       filteredSongs.push(jams[i])
-    //     }
-    //   }
-    // setFilteredSongs(filteredSongs)
-  }
-
-
 
 
   function filterFunc(item) {
@@ -101,8 +73,24 @@ export default function App({ jams, artistName, songId, songName2 }) {
           return false
         }
       }
+    } let itemDate = parseInt(item.date.slice(0,4))
+    if (beforeDate && beforeDate < itemDate) {
+      return false
+    } if (afterDate && afterDate > itemDate) {
+      return false
     }
     return true
+  }
+
+  function sortSongs() {
+    let newSortedSongs = filteredSongs.slice().sort(getComparator(order, orderBy))
+    setSortedSongs(newSortedSongs)
+  }
+
+  function getComparator(order, orderBy) {
+    return order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
   }
 
   function descendingComparator(a, b, orderBy) {
@@ -115,26 +103,15 @@ export default function App({ jams, artistName, songId, songName2 }) {
     return 0;
   }
 
-  function getComparator(order, orderBy) {
-    return order === 'desc'
-      ? (a, b) => descendingComparator(a, b, orderBy)
-      : (a, b) => -descendingComparator(a, b, orderBy);
-  }
+  // function removeTag(tag) {
+  //   console.log('tag to remove', tag)
+  //   console.log('prev tags', tagsSelected)
+  //   let index = tagsSelected.indexOf(tag)
+  //   let updatedTags = tagsSelected.slice(0, index).concat(tagsSelected.slice(index + 1))
+  //   console.log('updatedTags', updatedTags)
 
-  function sortSongs() {
-    let newSortedSongs = filteredSongs.slice().sort(getComparator(order, orderBy))
-    setSortedSongs(newSortedSongs)
-  }
-
-  function removeTag(tag) {
-    console.log('tag to remove', tag)
-    console.log('prev tags', tagsSelected)
-    let index = tagsSelected.indexOf(tag)
-    let updatedTags = tagsSelected.slice(0, index).concat(tagsSelected.slice(index + 1))
-    console.log('updatedTags', updatedTags)
-
-    setTagsSelected(updatedTags)
-  }
+  //   setTagsSelected(updatedTags)
+  // }
 
   // }
 
@@ -189,8 +166,8 @@ export default function App({ jams, artistName, songId, songName2 }) {
       {/* <DiscoverContributeSwitch /> */}
       <TableTitle artist={artist} song={song} artistName={artistName} songName={songName2}/>
       <br /><br />
-      <FilterBar setDates={setDates} setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected}/>
-      <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} removeTag={removeTag}/>
+      <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate}/>
+      <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} afterDate={afterDate} setBeforeDate={setBeforeDate} setAfterDate={setAfterDate}/>
       <CollapsibleTable songs={jams} sortedSongs={sortedSongs} sortSongs={sortSongs} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy}/>
       <h2>Filters</h2>
       {/* <ComboBox options={artists} label={'Vibes'} setState={setArtist}/> */}

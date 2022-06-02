@@ -40,7 +40,7 @@ const tags = {
   'unusual': 'Unusual',
 }
 
-export default function FilterChip({ tag, artist, setArtist, removeTag }) {
+export default function FilterChip({ tag, artist, setArtist, tagsSelected, setTagsSelected, beforeDate, setBeforeDate, afterDate, setAfterDate }) {
   const [label, setLabel] = useState('')
 
   useEffect(() => {
@@ -48,14 +48,32 @@ export default function FilterChip({ tag, artist, setArtist, removeTag }) {
       setLabel(artist)
     } if (tag) {
       setLabel(tags[tag])
+    } if (beforeDate) {
+      setLabel(`Jams Before ${beforeDate}`)
+    } if (afterDate) {
+      setLabel(`Jams After ${afterDate}`)
     }
   }, [])
+
+  function removeTag(tag) {
+    console.log('tag to remove', tag)
+    console.log('prev tags', tagsSelected)
+    let index = tagsSelected.indexOf(tag)
+    let updatedTags = tagsSelected.slice(0, index).concat(tagsSelected.slice(index + 1))
+    console.log('updatedTags', updatedTags)
+
+    setTagsSelected(updatedTags)
+  }
 
   const handleDelete = () => {
     if (artist) {
       setArtist('All Bands')
     } if (tag) {
       removeTag(tag)
+    } if (beforeDate) {
+      setBeforeDate(null)
+    } if (afterDate) {
+      setAfterDate(null)
     }
   };
 
