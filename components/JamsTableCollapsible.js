@@ -259,11 +259,6 @@ export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order,
           onRequestSort={handleRequestSort}
         />
         <TableBody>
-          {/* {songs &&
-          songs.slice().sort(getComparator(order, orderBy))
-            .map((song) => (
-              <Row key={song.id} row={song} />
-              ))} */}
           {sortedSongs &&
           sortedSongs
             .map((jam) => (

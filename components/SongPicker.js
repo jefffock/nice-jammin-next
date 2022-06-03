@@ -16,16 +16,18 @@ export default function SongPicker({ songs, song, setSong }) {
 
   useEffect(() => {
     let titlesOnly = new Set()
-    for (var i = 0; i < songs.length; i++) {
-      titlesOnly.add(songs[i].song)
-    }
-    let formattedSongs = []
-    titlesOnly.forEach(song => {
-      formattedSongs.push({
-        label: song
+    if (songs) {
+      for (var i = 0; i < songs.length; i++) {
+        titlesOnly.add(songs[i].song)
+      }
+      let formattedSongs = []
+      titlesOnly.forEach(song => {
+        formattedSongs.push({
+          label: song
+        })
       })
-    })
-    setUniqueSongs(formattedSongs)
+      setUniqueSongs(formattedSongs)
+    }
   }, [])
 
   useEffect(() => {
@@ -57,7 +59,7 @@ export default function SongPicker({ songs, song, setSong }) {
         setInputValue(newInputValue);
       }}
       id="song-picker"
-      options={uniqueSongs ? uniqueSongs : { label: 'Song' }}
+      options={uniqueSongs ? uniqueSongs : [{ label: 'Song' }]}
       sx={{ m:1, width: 240 }}
       size='small'
       renderInput={(params) => <TextField {...params} label="Song" />}

@@ -43,7 +43,7 @@ export default function App({ jams, songs }) {
   }, [])
 
   useEffect(() => {
-    let newFilteredSongs = jams.filter(filterFunc)
+    let newFilteredSongs = jams?.filter(filterFunc)
     setFilteredSongs(newFilteredSongs)
   }, [artist, tagsSelected, beforeDate, afterDate, song])
 
