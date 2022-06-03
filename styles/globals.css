@@ -17,7 +17,3 @@ a {
 * {
   box-sizing: border-box;
 }
-
-.filter-bar-wrapper, .filter-list-wrapper {
-  display: flex;
-}

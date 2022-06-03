@@ -101,6 +101,7 @@ export default function App({ jams, songs }) {
       <title>Discover Great Jams by All Jam Bands</title>
       <meta name="keywords" content="best jam jams phish grateful dead sci goose umphreys tab jrad jgb"></meta>
       <meta name="description" content="Discover and Rate Great Jams By Phish, Grateful Dead, Goose, String Cheese Incident, Umphrey's McGee, Widespread Panic, Billy Strings, JRAD, and many more!"></meta>
+      <meta name="viewport" content="initial-scale=1, width=device-width" />
       </>
       }
       {artist && !song &&

@@ -181,9 +181,7 @@ function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
-          {row.song_name}
-        </TableCell>
+        <TableCell>{row.song_name}</TableCell>
         <TableCell>{row.artist}</TableCell>
         <TableCell>{row.date}</TableCell>
         <TableCell>{row.listen_link ? <a href={row.listen_link}>Listen Here</a> : ""}</TableCell>
@@ -250,8 +248,10 @@ export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order,
   return (
     <TableContainer component={Paper} sx={{ maxHeight: '60vh', overflowY: 'auto', maxWidth: '900px'}}>
       <Table
-      aria-label="collapsible table"
+      aria-label="jams table"
       stickyHeader
+      size="normal"
+      // padding="none"
       >
         <JamsTableHead
           order={order}
