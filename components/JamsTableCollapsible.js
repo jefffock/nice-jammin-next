@@ -210,8 +210,6 @@ function Row(props) {
 }
 
 export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order, orderBy, setOrder, setOrderBy }) {
-  // const [order, setOrder] = useState('desc');
-  // const [orderBy, setOrderBy] = useState('avg_rating');
   const [orderedSongs, setOrderedSongs] = useState(null)
 
   const handleRequestSort = (event, property) => {
@@ -247,12 +245,10 @@ export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order,
   }
 
   return (
-    <TableContainer component={Paper} sx={{ maxHeight: '75vh', overflowY: 'auto', maxWidth: '900px'}}>
+    <TableContainer component={Paper} sx={{ maxHeight: '55vh', overflowY: 'auto', maxWidth: '900px'}}>
       <Table
       aria-label="jams table"
       stickyHeader
-      // size="small"
-      // padding="none"
       >
         <JamsTableHead
           order={order}

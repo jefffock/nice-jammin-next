@@ -10,14 +10,19 @@ import Stack from '@mui/material/Stack';
 export default function FilterBar({ setDates, setArtist, tagsSelected, setTagsSelected, artist, beforeDate, setBeforeDate, afterDate, setAfterDate, song, setSong, songs }) {
 
   return(
-    // <div className="filter-bar-wrapper">
-    <Stack direction="row" spacing={1}>
+    <>
+    <Stack direction="row" spacing={1} sx={{ mb: 1}}>
       <ArtistPicker setArtist={setArtist} artist={artist}/>
       <SongPicker songs={songs} setSong={setSong} song={song}></SongPicker>
-      <TagPicker tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} />
+    </Stack>
+    <Stack direction="row" spacing={1} sx={{ mb: 1}}>
       <DateFilter before={false} afterDate={afterDate} setAfterDate={setAfterDate}></DateFilter>
       <DateFilter before={true} beforeDate={beforeDate} setBeforeDate={setBeforeDate}></DateFilter>
-      </Stack>
+    </Stack>
+    <Stack direction="row" spacing={1} sx={{ mb: 1}}>
+      <TagPicker tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} />
+    </Stack>
+    </>
     // </div>
   )
 }

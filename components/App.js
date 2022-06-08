@@ -124,8 +124,7 @@ export default function App({ jams, songs }) {
     <ThemeProvider theme={darkTheme}>
       <h1 className="text-3xl">Nice Jammin</h1>
       {/* <DiscoverContributeSwitch /> */}
-      <TableTitle artist={artist} song={song} />
-      <br /><br />
+      {/* <TableTitle artist={artist} song={song} /> */}
       <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate} songs={songs} song={song} setSong={setSong}/>
       <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} afterDate={afterDate} setBeforeDate={setBeforeDate} setAfterDate={setAfterDate} song={song} setSong={setSong}/>
       <CollapsibleTable songs={jams} sortedSongs={sortedSongs} sortSongs={sortSongs} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy}/>

@@ -81,6 +81,6 @@ export default function FilterChip({ tag, artist, setArtist, tagsSelected, setTa
 
 
   return (
-      <Chip label={label} onDelete={handleDelete} />
+      <Chip sx={{ mb: 1, mr: 1 }} label={label} onDelete={handleDelete} />
   );
 }

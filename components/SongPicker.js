@@ -60,7 +60,7 @@ export default function SongPicker({ songs, song, setSong }) {
       }}
       id="song-picker"
       options={uniqueSongs ? uniqueSongs : [{ label: 'Song' }]}
-      sx={{ m:1, width: 240 }}
+      sx={{ m:1, width: 120 }}
       size='small'
       renderInput={(params) => <TextField {...params} label="Song" />}
     />
