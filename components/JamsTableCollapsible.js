@@ -13,6 +13,8 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import StarRateIcon from '@mui/icons-material/StarRate';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
 
@@ -24,22 +26,10 @@ function JamsTableHead(props) {
 
 const headCells = [
   {
-    id: 'arrow',
-    numeric: false,
-    disablePadding: true,
-    label: ''
-  },
-  {
     id: 'song_name',
     numeric: false,
     disablePadding: false,
     label: 'Song'
-  },
-  {
-    id: 'artist',
-    numeric: false,
-    disablePadding: false,
-    label: 'Band'
   },
   {
     id: 'date',
@@ -48,17 +38,23 @@ const headCells = [
     label: 'Date'
   },
   {
-    id: 'listen_link',
-    numeric: false,
-    disablePadding: false,
-    label: 'Listen'
-  },
-  {
     id: 'avg_rating',
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: 'Rating'
   },
+  {
+    id: 'artist',
+    numeric: false,
+    disablePadding: false,
+    label: 'Band'
+  },
+  {
+    id: 'arrow',
+    numeric: false,
+    disablePadding: true,
+    label: ''
+  }
 ]
 
 return (
@@ -67,7 +63,7 @@ return (
       {headCells.map((headCell) => (
         <TableCell
           key={headCell.id}
-          align={headCell.numeric ? 'right' : 'left'}
+          align={headCell.numeric ? 'center' : 'left'}
           padding={headCell.disablePadding ? 'none' : 'normal'}
           sortDirection={orderBy === headCell.id ? order : false}
         >
@@ -76,7 +72,11 @@ return (
             direction={orderBy === headCell.id ? order : 'asc'}
             onClick={createSortHandler(headCell.id)}
           >
-            {headCell.label}
+            {headCell.label === 'Rating' ?
+            <StarRateIcon /> :
+            headCell.label === 'Date' ?
+            <CalendarMonthIcon /> :
+            headCell.label}
             {orderBy === headCell.id ? (
               <Box component="span" sx={visuallyHidden}>
                 {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
@@ -171,7 +171,12 @@ function Row(props) {
 
   return (
     <React.Fragment>
-      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}
+      onClick={() => setOpen(!open)}>
+        <TableCell>{row.song_name}</TableCell>
+        <TableCell>{row.date}</TableCell>
+        <TableCell>{row.avg_rating}</TableCell>
+        <TableCell>{row.artist}</TableCell>
         <TableCell>
           <IconButton
             aria-label="expand row"
@@ -181,11 +186,6 @@ function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell>{row.song_name}</TableCell>
-        <TableCell>{row.artist}</TableCell>
-        <TableCell>{row.date}</TableCell>
-        <TableCell>{row.listen_link ? <a href={row.listen_link}>Listen Here</a> : ""}</TableCell>
-        <TableCell align="right">{row.avg_rating}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -200,6 +200,7 @@ function Row(props) {
               <Typography>Location: {row.location}</Typography>
               <Typography># of ratings: {row.num_ratings}</Typography>
               <Typography>Submitted by: {row.submitter_name}</Typography>
+              <Typography>{row.listen_link ? <a href={row.listen_link}>Listen Here</a> : ""}</Typography>
             </Box>
           </Collapse>
         </TableCell>
@@ -246,11 +247,11 @@ export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order,
   }
 
   return (
-    <TableContainer component={Paper} sx={{ maxHeight: '60vh', overflowY: 'auto', maxWidth: '900px'}}>
+    <TableContainer component={Paper} sx={{ maxHeight: '75vh', overflowY: 'auto', maxWidth: '900px'}}>
       <Table
       aria-label="jams table"
       stickyHeader
-      size="normal"
+      // size="small"
       // padding="none"
       >
         <JamsTableHead
@@ -262,7 +263,10 @@ export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order,
           {sortedSongs &&
           sortedSongs
             .map((jam) => (
-              <Row key={jam.id} row={jam} />
+              <Row
+              key={jam.id}
+              row={jam}
+              />
               ))}
         </TableBody>
       </Table>
