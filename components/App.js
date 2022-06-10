@@ -13,6 +13,8 @@ import Head from 'next/head'
 import JamsDataGrid from './JamsDataGrid'
 import FilterBar from './FilterBar'
 import FilterList from './FilterList'
+import AddVersion from './AddVersion'
+import Typography from '@mui/material/Typography';
 
 const darkTheme = createTheme({
   palette: {
@@ -128,10 +130,12 @@ export default function App({ jams, songs }) {
       <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate} songs={songs} song={song} setSong={setSong}/>
       <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} afterDate={afterDate} setBeforeDate={setBeforeDate} setAfterDate={setAfterDate} song={song} setSong={setSong}/>
       <CollapsibleTable songs={jams} sortedSongs={sortedSongs} sortSongs={sortSongs} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy}/>
-      <h1>Gratitude</h1>
-      <h1>Values/Philosophy/Hope</h1>
-      <h1>Top Contributors</h1>
-      <h1>Ideas</h1>
+      <br></br>
+      <AddVersion songs={songs} jams={jams}/>
+      <Typography>Gratitude</Typography>
+      <Typography>Values/Philosophy/Hope</Typography>
+      <Typography>Top Contributors</Typography>
+      <Typography>Ideas</Typography>
     </ThemeProvider>
     </>
   )

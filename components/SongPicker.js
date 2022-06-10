@@ -8,7 +8,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import Autocomplete from '@mui/material/Autocomplete';
 
-export default function SongPicker({ songs, song, setSong }) {
+export default function SongPicker({ songs, song, setSong, wide }) {
   const [value, setValue] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [uniqueSongs, setUniqueSongs] = useState(null)
@@ -46,9 +46,28 @@ export default function SongPicker({ songs, song, setSong }) {
     }
   }, [song])
 
-
-  return (
-    <Autocomplete
+  if (!wide) {
+    return (
+      <Autocomplete
+        disablePortal
+        value={value}
+        onChange={(event, newValue) => {
+          setValue(newValue);
+        }}
+        inputValue={inputValue}
+        onInputChange={(event, newInputValue) => {
+          setInputValue(newInputValue);
+        }}
+        id="song-picker"
+        options={uniqueSongs ? uniqueSongs : [{ label: 'Song' }]}
+        sx={{ mb:1, width: 120 }}
+        size='small'
+        renderInput={(params) => <TextField {...params} label="Song" />}
+      />
+    );
+  } if (wide) {
+    return (
+      <Autocomplete
       disablePortal
       value={value}
       onChange={(event, newValue) => {
@@ -60,9 +79,10 @@ export default function SongPicker({ songs, song, setSong }) {
       }}
       id="song-picker"
       options={uniqueSongs ? uniqueSongs : [{ label: 'Song' }]}
-      sx={{ m:1, width: 120 }}
+      sx={{ mb:1, width: 240 }}
       size='small'
       renderInput={(params) => <TextField {...params} label="Song" />}
     />
-  );
+    )
+  }
 }

@@ -17,6 +17,7 @@ import StarRateIcon from '@mui/icons-material/StarRate';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
+import RateVersion from './RateVersion'
 
 function JamsTableHead(props) {
   const { order, orderBy, onRequestSort } = props;
@@ -194,13 +195,17 @@ function Row(props) {
               <Typography variant="h6" gutterBottom component="div">
                 Details
               </Typography>
+              {row.listen_link &&
+              <Typography sx={{ 'text-decoration': 'underline' }}>{<a href={row.listen_link}>Listen</a>}</Typography>
+              }
               {tags &&
               <Typography>{tags}</Typography>
               }
-              <Typography>Location: {row.location}</Typography>
-              <Typography># of ratings: {row.num_ratings}</Typography>
-              <Typography>Submitted by: {row.submitter_name}</Typography>
-              <Typography>{row.listen_link ? <a href={row.listen_link}>Listen Here</a> : ""}</Typography>
+              <Typography>{row.location}</Typography>
+              <Typography>{row.num_ratings} ratings</Typography>
+              <Typography>Added by {row.submitter_name}</Typography>
+              {/* <Typography sx={{ 'text-decoration': 'underline' }}>Rate this Version</Typography> */}
+              <RateVersion song={row.song_name} date={row.date} tags={tags}/>
             </Box>
           </Collapse>
         </TableCell>

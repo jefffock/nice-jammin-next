@@ -11,15 +11,15 @@ export default function FilterBar({ setDates, setArtist, tagsSelected, setTagsSe
 
   return(
     <>
-    <Stack direction="row" spacing={1} sx={{ mb: 1}}>
+    <Stack direction="row" spacing={1}>
       <ArtistPicker setArtist={setArtist} artist={artist}/>
       <SongPicker songs={songs} setSong={setSong} song={song}></SongPicker>
     </Stack>
-    <Stack direction="row" spacing={1} sx={{ mb: 1}}>
+    <Stack direction="row" spacing={1}>
       <DateFilter before={false} afterDate={afterDate} setAfterDate={setAfterDate}></DateFilter>
       <DateFilter before={true} beforeDate={beforeDate} setBeforeDate={setBeforeDate}></DateFilter>
     </Stack>
-    <Stack direction="row" spacing={1} sx={{ mb: 1}}>
+    <Stack direction="row" spacing={1}>
       <TagPicker tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} />
     </Stack>
     </>

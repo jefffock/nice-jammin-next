@@ -53,7 +53,7 @@ export default function FilterChip({ tag, artist, setArtist, tagsSelected, setTa
     } if (afterDate) {
       setLabel(`Jams After ${afterDate}`)
     } if (song) {
-      setLabel(`Title contains '${song}'`)
+      setLabel(`Title contains "${song}"`)
     }
   }, [])
 
