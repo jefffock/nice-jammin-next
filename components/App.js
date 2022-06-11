@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, createContext, useContext, useMemo } from 'react'
 import JamsTable from './JamsTable'
 import { supabase } from '../utils/supabaseClient'
 import Auth from './Auth'
 import Account from './Account'
 import DiscoverContributeSwitch from './DiscContSwitch'
 import Table from '@mui/material/Table';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider, createTheme, useTheme } from '@mui/material/styles';
 import CollapsibleTable from './JamsTableCollapsible'
 import { useRouter } from 'next/router'
 import TableTitle from './TableTitle'
@@ -15,6 +15,10 @@ import FilterBar from './FilterBar'
 import FilterList from './FilterList'
 import AddVersion from './AddVersion'
 import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+
 
 const darkTheme = createTheme({
   palette: {
@@ -22,7 +26,9 @@ const darkTheme = createTheme({
   },
 });
 
-export default function App({ jams, songs }) {
+const ColorModeContext = createContext({ toggleColorMode: () => {} });
+
+function App({ jams, songs }) {
   const [artists, setArtists] = useState(null)
   const [artist, setArtist] = useState(null)
   const [song, setSong] = useState(null)
@@ -34,8 +40,10 @@ export default function App({ jams, songs }) {
   const [beforeDate, setBeforeDate] = useState('')
   const [afterDate, setAfterDate] = useState('')
   const [tagsSelected, setTagsSelected] = useState([])
-
   const router = useRouter()
+
+  const theme = useTheme();
+  const colorMode = useContext(ColorModeContext);
 
   useEffect(() => {
     setSession(supabase.auth.session())
@@ -123,8 +131,12 @@ export default function App({ jams, songs }) {
       </>
       }
     </Head>
-    <ThemeProvider theme={darkTheme}>
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
       <h1 className="text-3xl">Nice Jammin</h1>
+      <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+      </IconButton>
       {/* <DiscoverContributeSwitch /> */}
       {/* <TableTitle artist={artist} song={song} /> */}
       <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate} songs={songs} song={song} setSong={setSong}/>
@@ -136,7 +148,38 @@ export default function App({ jams, songs }) {
       <Typography>Values/Philosophy/Hope</Typography>
       <Typography>Top Contributors</Typography>
       <Typography>Ideas</Typography>
-    </ThemeProvider>
+      </ThemeProvider>
+    </ColorModeContext.Provider>
     </>
   )
+}
+
+export default function AppWithTheme({ jams, songs }) {
+  const [mode, setMode] = useState('light');
+  const colorMode = useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+      },
+    }),
+    [],
+  );
+
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode],
+  );
+
+  return (
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <App jams={jams} songs={songs}/>
+      </ThemeProvider>
+    </ColorModeContext.Provider>
+  );
 }

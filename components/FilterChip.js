@@ -71,14 +71,11 @@ export default function FilterChip({ tag, artist, setArtist, tagsSelected, setTa
     }
   };
 
-
   function removeTag(tag) {
     let index = tagsSelected.indexOf(tag)
     let updatedTags = tagsSelected.slice(0, index).concat(tagsSelected.slice(index + 1))
     setTagsSelected(updatedTags)
   }
-
-
 
   return (
       <Chip sx={{ mb: 1, mr: 1 }} label={label} onDelete={handleDelete} />
