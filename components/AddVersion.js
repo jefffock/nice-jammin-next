@@ -19,6 +19,7 @@ export default function AddVersion({ songs, jams }) {
   const [artist, setArtist] = useState(null);
   const [tags, setTags] = useState([])
   const [date, setDate] = useState(null)
+  const [year, setYear] = useState(null)
   const [location, setLocation] = useState(null)
   const [tagsText, setTagsText] = useState('')
   const [funky, setFunky] = useState(false)
@@ -57,6 +58,15 @@ export default function AddVersion({ songs, jams }) {
   const [long, setLong] = useState(false)
   const [thatYearsStyle, setThatYearsStyle] = useState(false)
 
+  useEffect(() => {
+    if (date) {
+      let yearString = date.slice(0,4)
+      setYear(parseInt(yearString))
+    } else {
+      setYear(null)
+    }
+  }, [date])
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -71,6 +81,43 @@ export default function AddVersion({ songs, jams }) {
   };
 
   useEffect(() => {
+    const tagsList = {
+      'acoustic': 'Acoustic',
+      'ambient': 'Ambient/Space',
+      'bliss': 'Bliss',
+      'bluesy': 'Bluesy',
+      'chaotic': 'Chaotic',
+      'crunchy': 'Crunchy',
+      'dark': 'Dark',
+      'dissonant': 'Dissonant',
+      'fast': 'Fast',
+      'funky': 'Funky',
+      'groovy': 'Groovy',
+      'guest': 'Guest',
+      'happy': 'Happy',
+      'heavy': 'Heavy',
+      'jazzy': 'Jazzy',
+      'long': 'Long',
+      'multi_part': 'Multi-part',
+      'official_release': 'Official Release',
+      'peaks': 'Peaks',
+      'reggae': 'Reggae',
+      'seque': 'Segue',
+      'shred': 'Shred',
+      'silly': 'Silly',
+      'sloppy': 'Sloppy',
+      'slow': 'Slow',
+      'sludgy': 'Sludgy',
+      'soaring': 'Soaring',
+      'soulful': 'Soulful',
+      'stop_start': 'Stop-start',
+      'synthy': 'Synthy',
+      'teases': 'Teases',
+      'that_years_style': "That Year's Style",
+      'trippy': 'Trippy',
+      'type2': 'Type II',
+      'unusual': 'Unusual',
+    }
     let newTagsText = ''
     for (var i = 0; i < tags.length; i++) {
       newTagsText += tagsList[tags[i]] + ', '
@@ -79,82 +126,46 @@ export default function AddVersion({ songs, jams }) {
     tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
     tags.indexOf('ambient') !== -1 ? setAmbient(true) : setAmbient(false)
     tags.indexOf('bliss') !== -1 ? setBliss(true) : setBliss(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
-    tags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
+    tags.indexOf('bluesy') !== -1 ? setBluesy(true) : setBluesy(false)
+    tags.indexOf('chaotic') !== -1 ? setChaotic(true) : setChaotic(false)
+    tags.indexOf('crunchy') !== -1 ? setCrunchy(true) : setCrunchy(false)
+    tags.indexOf('dark') !== -1 ? setDark(true) : setDark(false)
+    tags.indexOf('dissonant') !== -1 ? setDissonant(true) : setDissonant(false)
+    tags.indexOf('fast') !== -1 ? setFast(true) : setFast(false)
+    tags.indexOf('funky') !== -1 ? setFunky(true) : setFunky(false)
+    tags.indexOf('groovy') !== -1 ? setGroovy(true) : setGroovy(false)
+    tags.indexOf('guest') !== -1 ? setGuest(true) : setGuest(false)
+    tags.indexOf('happy') !== -1 ? setHappy(true) : setHappy(false)
+    tags.indexOf('jazzy') !== -1 ? setJazzy(true) : setJazzy(false)
+    tags.indexOf('long') !== -1 ? setLong(true) : setLong(false)
+    tags.indexOf('multi_part') !== -1 ? setMultiPart(true) : setMultiPart(false)
+    tags.indexOf('official_release') !== -1 ? setOfficialRelease(true) : setOfficialRelease(false)
+    tags.indexOf('peaks') !== -1 ? setPeaks(true) : setPeaks(false)
+    tags.indexOf('reggae') !== -1 ? setReggae(true) : setReggae(false)
+    tags.indexOf('segue') !== -1 ? setSegue(true) : setSegue(false)
+    tags.indexOf('shred') !== -1 ? setShred(true) : setShred(false)
+    tags.indexOf('silly') !== -1 ? setSilly(true) : setSilly(false)
+    tags.indexOf('sloppy') !== -1 ? setSloppy(true) : setSloppy(false)
+    tags.indexOf('slow') !== -1 ? setSlow(true) : setSlow(false)
+    tags.indexOf('sludgy') !== -1 ? setSludgy(true) : setSludgy(false)
+    tags.indexOf('soaring') !== -1 ? setSoaring(true) : setSoaring(false)
+    tags.indexOf('soulful') !== -1 ? setSoulful(true) : setSoulful(false)
+    tags.indexOf('stop_start') !== -1 ? setStopStart(true) : setStopStart(false)
+    tags.indexOf('synthy') !== -1 ? setSynthy(true) : setSynthy(false)
+    tags.indexOf('tease') !== -1 ? setTease(true) : setTease(false)
+    tags.indexOf('that_years_style') !== -1 ? setThatYearsStyle(true) : setThatYearsStyle(false)
+    tags.indexOf('trippy') !== -1 ? setTrippy(true) : setTrippy(false)
+    tags.indexOf('type2') !== -1 ? setType2(true) : setType2(false)
+    tags.indexOf('Unusual') !== -1 ? setUnusual(true) : setUnusual(false)
   }, [tags])
 
-  const tagsList = {
-    'acoustic': 'Acoustic',
-    'ambient': 'Ambient/Space',
-    'bliss': 'Bliss',
-    'bluesy': 'Bluesy',
-    'chaotic': 'Chaotic',
-    'crunchy': 'Crunchy',
-    'dark': 'Dark',
-    'dissonant': 'Dissonant',
-    'fast': 'Fast',
-    'funky': 'Funky',
-    'groovy': 'Groovy',
-    'guest': 'Guest',
-    'happy': 'Happy',
-    'heavy': 'Heavy',
-    'jazzy': 'Jazzy',
-    'long': 'Long',
-    'multi_part': 'Multi-part',
-    'official_release': 'Official Release',
-    'peaks': 'Peaks',
-    'reggae': 'Reggae',
-    'seque': 'Segue',
-    'shred': 'Shred',
-    'silly': 'Silly',
-    'sloppy': 'Sloppy',
-    'slow': 'Slow',
-    'sludgy': 'Sludgy',
-    'soaring': 'Soaring',
-    'soulful': 'Soulful',
-    'stop_start': 'Stop-start',
-    'synthy': 'Synthy',
-    'teases': 'Teases',
-    'that_years_style': "That Year's Style",
-    'trippy': 'Trippy',
-    'type2': 'Type II',
-    'unusual': 'Unusual',
-  }
 
   return (
     <div>
       <Button variant="outlined" onClick={handleClickOpen}>
         Add Version
       </Button>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} sx={{ minHeight: '50%' }}>
         <DialogTitle>Add a Version</DialogTitle>
         <DialogContent>
           <br></br>
@@ -203,7 +214,7 @@ export default function AddVersion({ songs, jams }) {
             <Typography>{artist}</Typography>
             <Typography>{date}</Typography>
             <Typography>{location}</Typography> */}
-            <Typography>Tags: {tagsText}</Typography>
+            <Typography>Year: {year} {typeof year} Tags: {tagsText}</Typography>
           </>
           }
         </DialogContent>

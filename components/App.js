@@ -18,13 +18,43 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { amber, deepOrange, grey } from '@mui/material/colors';
+// import theme from '../styles/themes'
 
+// export const themeOptions: ThemeOptions = {
+//   palette: {
+//     type: 'dark',
+//     primary: {
+//       main: '#3c2fa8',
+//     },
+//     secondary: {
+//       main: '#1b6945',
+//     },
+//   },
+// };
 
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
 });
+
+
+const theme = createTheme({
+  palette: {
+    type: 'dark',
+    primary: {
+      main: '#3c2fa8',
+    },
+    secondary: {
+      main: '#1b6945',
+    },
+    contrastThreshold: 3,
+    tonalOffset: 0.2,
+  },
+});
+
+
 
 const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
@@ -131,8 +161,8 @@ function App({ jams, songs }) {
       </>
       }
     </Head>
-    <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>
+    {/* <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}> */}
       <h1 className="text-3xl">Nice Jammin</h1>
       <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
         {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
@@ -148,14 +178,15 @@ function App({ jams, songs }) {
       <Typography>Values/Philosophy/Hope</Typography>
       <Typography>Top Contributors</Typography>
       <Typography>Ideas</Typography>
-      </ThemeProvider>
-    </ColorModeContext.Provider>
+      {/* </ThemeProvider>
+    </ColorModeContext.Provider> */}
     </>
   )
 }
 
 export default function AppWithTheme({ jams, songs }) {
   const [mode, setMode] = useState('light');
+
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {
@@ -165,21 +196,42 @@ export default function AppWithTheme({ jams, songs }) {
     [],
   );
 
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode,
-        },
-      }),
-    [mode],
-  );
+  // const getDesignTokens = (mode: PaletteMode) => ({
+  //   palette: {
+  //     mode,
+  //     ...(mode === 'light'
+  //       ? {
+  //           // palette values for light mode
+  //           primary: amber,
+  //           divider: amber[200],
+  //           text: {
+  //             primary: grey[900],
+  //             secondary: grey[800],
+  //           },
+  //         }
+  //       : {
+  //           // palette values for dark mode
+  //           primary: deepOrange,
+  //           divider: deepOrange[700],
+  //           background: {
+  //             default: deepOrange[900],
+  //             paper: deepOrange[900],
+  //           },
+  //           text: {
+  //             primary: '#fff',
+  //             secondary: grey[500],
+  //           },
+  //         }),
+  //   },
+  // });
+
+  // const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
 
   return (
-    <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>
+    // <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={darkTheme}>
         <App jams={jams} songs={songs}/>
       </ThemeProvider>
-    </ColorModeContext.Provider>
+    // </ColorModeContext.Provider>
   );
 }
