@@ -20,6 +20,8 @@ import IconButton from '@mui/material/IconButton';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { amber, deepOrange, grey } from '@mui/material/colors';
+import TopContributors from './TopContributors'
+import fetchLeaders from '../utils/fetchLeaders'
 // import theme from '../styles/themes'
 
 // export const themeOptions: ThemeOptions = {
@@ -88,7 +90,6 @@ export default function App({ jams, songs }) {
   useEffect(() => {
     sortSongs()
   }, [order, orderBy, filteredSongs])
-
 
   function filterFunc(item) {
     if (artist && artist !== 'All Bands' && item.artist !== artist) {
@@ -161,7 +162,7 @@ export default function App({ jams, songs }) {
     </Head>
     {/* <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}> */}
-      <Box sx={{ bgcolor: 'primary.graybg', minHeight: '100vh' }}>
+      <Box sx={{ bgcolor: 'primary.graybg', minHeight: '100vh', maxWidth: '100vw', overflow: 'hidden'}}>
 
       <Typography variant="h4" sx={{ mb: '.2em', ml: '.2em', color: 'primary.main'}}>Nice Jammin</Typography>
       {/* <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
@@ -175,16 +176,14 @@ export default function App({ jams, songs }) {
       <br></br>
       <AddVersion songs={songs} jams={jams}/>
       <Box sx={{ bgcolor:'primary.main' }}>
-        <Typography variant="h4">Top Contributors</Typography>
-      </Box>
-      <Box sx={{ bgcolor:'primary.main' }}>
         <Typography variant="h4">Gratitude</Typography>
       </Box>
       <Box sx={{ bgcolor:'primary.graybg' }}>
       <Typography variant="h4">Values/Philosophy/Hope</Typography>
       </Box>
-      <Box sx={{ bgcolor:'primary.graybg' }}>
-        <Typography variant="h4">Ideas</Typography>
+      <Box sx={{ bgcolor:'primary.main' }}>
+        <Typography variant="h4">Top Contributors</Typography>
+        <TopContributors />
       </Box>
       </Box>
       {/* </ThemeProvider>

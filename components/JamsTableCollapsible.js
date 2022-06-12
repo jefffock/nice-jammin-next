@@ -192,7 +192,7 @@ function Row(props) {
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ m: '0.2em' }}>
+            <Box sx={{ m: '0.2em', maxWidth: '90vw' }}>
               {/* <Typography variant="h6" gutterBottom component="div">
                 More
               </Typography> */}
@@ -202,7 +202,7 @@ function Row(props) {
               }
               <Typography>{row.location}</Typography>
               <Typography>{row.num_ratings} ratings</Typography>
-              <Typography>Added by {row.submitter_name}</Typography>
+              <Typography>Added by {row.submitter_name}. Thank you!</Typography>
               {row.listen_link &&
               <Typography sx={{ 'text-decoration': 'underline', color: 'primary.main' }}>{<a href={row.listen_link}>Listen</a>}</Typography>
               }
@@ -251,7 +251,7 @@ export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order,
   }
 
   return (
-    <TableContainer component={Paper} sx={{ maxHeight: '55vh', overflowY: 'auto', maxWidth: '900px', bgcolor: 'primary.bg'}}>
+    <TableContainer component={Paper} sx={{ height: '55vh', overflowY: 'auto', maxWidth: '96vw', bgcolor: 'primary.bg', mx: "auto" }}>
       <Table
       aria-label="jams table"
       stickyHeader
