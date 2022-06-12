@@ -59,10 +59,11 @@ const headCells = [
 ]
 
 return (
-  <TableHead>
+  <TableHead sx={{ color: 'primary.main' }}>
     <TableRow>
       {headCells.map((headCell) => (
         <TableCell
+        sx={{ bgcolor: 'primary.main' }}
           key={headCell.id}
           align={headCell.numeric ? 'center' : 'left'}
           padding={headCell.disablePadding ? 'none' : 'normal'}
@@ -191,21 +192,21 @@ function Row(props) {
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                Details
-              </Typography>
-              {row.listen_link &&
-              <Typography sx={{ 'text-decoration': 'underline' }}>{<a href={row.listen_link}>Listen</a>}</Typography>
-              }
+            <Box sx={{ m: '0.2em' }}>
+              {/* <Typography variant="h6" gutterBottom component="div">
+                More
+              </Typography> */}
+              <RateVersion song={row.song_name} date={row.date} tags={tags}/>
               {tags &&
               <Typography>{tags}</Typography>
               }
               <Typography>{row.location}</Typography>
               <Typography>{row.num_ratings} ratings</Typography>
               <Typography>Added by {row.submitter_name}</Typography>
+              {row.listen_link &&
+              <Typography sx={{ 'text-decoration': 'underline', color: 'primary.main' }}>{<a href={row.listen_link}>Listen</a>}</Typography>
+              }
               {/* <Typography sx={{ 'text-decoration': 'underline' }}>Rate this Version</Typography> */}
-              <RateVersion song={row.song_name} date={row.date} tags={tags}/>
             </Box>
           </Collapse>
         </TableCell>
@@ -250,7 +251,7 @@ export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order,
   }
 
   return (
-    <TableContainer component={Paper} sx={{ maxHeight: '55vh', overflowY: 'auto', maxWidth: '900px'}}>
+    <TableContainer component={Paper} sx={{ maxHeight: '55vh', overflowY: 'auto', maxWidth: '900px', bgcolor: 'primary.bg'}}>
       <Table
       aria-label="jams table"
       stickyHeader

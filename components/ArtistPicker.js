@@ -36,13 +36,14 @@ export default function ArtistPicker({ artist, setArtist}) {
   };
 
   return (
-    <FormControl sx={{ mb:1, minWidth: 120 }} size="small">
+    <FormControl sx={{ minWidth: 120 }} size="small">
       <InputLabel id="artist-select">Band</InputLabel>
       <Select
         labelId="artist-select"
         value={artist ? artist : ''}
         label="Band"
         onChange={handleChange}
+        // sx={{ bgcolor: 'primary.main' }}
       >
         {artists.map((artist) => (
           <MenuItem key={artist} value={artist}>{artist}</MenuItem>

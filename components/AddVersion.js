@@ -11,6 +11,7 @@ import ArtistPicker from './ArtistPicker'
 import TagPicker from './TagPicker'
 import DatePicker from './DatePicker'
 import Typography from '@mui/material/Typography';
+import Alert from '@mui/material/Alert';
 
 
 export default function AddVersion({ songs, jams }) {
@@ -66,6 +67,50 @@ export default function AddVersion({ songs, jams }) {
       setYear(null)
     }
   }, [date])
+
+  // const handleSubmit = () => {
+  //   if (verifyData()) {
+  //     console.log(true)
+  //   }
+  // }
+
+  // const verifyData = () => {
+  //   let locationValid = true
+  //   let dateValid = true
+  //   let currentDate = new Date()
+  //   if (currentDate < Date.parse(date)) {
+  //     dateValid = false
+  //     alert(`Hello, time traveller! Thanks for trying to add this version of ${song.song}.\n\nUnfortunately, that would create a few paradoxes.\n\nIf the jam is great again in this timeline, feel free to come back and add it. Thank you, and safe travels!`)
+  //   }
+  //   if (!canWrite) {
+  //     locationValid = false;
+  //     dateValid = false;
+  //   }
+  //   if ((artist.start_year && year < artist.start_year) ||
+  //   (artist.end_year && year > artist.end_year)) {
+  //       dateValid = false
+  //       alert(`I don't think ${artist.artist} played in ${year}. Imagine if they did, though!`)
+  //   }
+  //   if (location === '') {
+  //     alert('Please enter a location')
+  //     locationValid = false
+  //   } if (location.length > 60) {
+  //     locationValid = false
+  //     alert('Please make the location shorter (60 characters max.)')
+  //   }
+  //   if (date === '') {
+  //     dateValid = false
+  //     alert('Please enter a date')
+  //   } if (dateValid && locationValid) {
+
+
+  //       insertVersion(date)
+  //     } else {
+  //       setShowAlreadyExistsMessage(true)
+  //     }
+  //     setLoading(false)
+  //   }
+  // }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -162,7 +207,10 @@ export default function AddVersion({ songs, jams }) {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button
+        variant="contained"
+        onClick={handleClickOpen}
+        sx={{ borderRadius: '50px' }}>
         Add Version
       </Button>
       <Dialog open={open} onClose={handleClose} sx={{ minHeight: '50%' }}>
@@ -171,6 +219,9 @@ export default function AddVersion({ songs, jams }) {
           <br></br>
           <SongPicker songs={songs} song={song} setSong={setSong} wide={true}/>
           <br></br>
+          <Alert severity="error">This is an error alert — check it out!</Alert>
+          <Alert severity="warning">This is a warning alert — check it out!</Alert>
+          <Alert severity="success">This is a success alert — check it out!</Alert>
           {song &&
           <ArtistPicker artist={artist} setArtist={setArtist}/>
           }

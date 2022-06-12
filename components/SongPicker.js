@@ -7,6 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import Autocomplete from '@mui/material/Autocomplete';
+import Box from '@mui/material/Box'
 
 export default function SongPicker({ songs, song, setSong, wide }) {
   const [value, setValue] = useState('');
@@ -46,43 +47,26 @@ export default function SongPicker({ songs, song, setSong, wide }) {
     }
   }, [song])
 
-  if (!wide) {
     return (
-      <Autocomplete
-        disablePortal
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-        inputValue={inputValue}
-        onInputChange={(event, newInputValue) => {
-          setInputValue(newInputValue);
-        }}
-        id="song-picker"
-        options={uniqueSongs ? uniqueSongs : [{ label: 'Song' }]}
-        sx={{ mb:1, width: 120 }}
-        size='small'
-        renderInput={(params) => <TextField {...params} label="Song" />}
-      />
+      <Box sx={{ minWidth: 120 }}>
+        <Autocomplete
+          disablePortal
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+          }}
+          inputValue={inputValue}
+          onInputChange={(event, newInputValue) => {
+            setInputValue(newInputValue);
+          }}
+          id="song-picker"
+          options={uniqueSongs ? uniqueSongs : [{ label: 'Song' }]}
+          // sx={{ minWidth: 120, bgcolor: 'primary.main', borderRadius: '5px' }}
+          // sx={{ minWidth: 120 }}
+
+          size='small'
+          renderInput={(params) => <TextField {...params} label="Song"/>}
+        />
+      </Box>
     );
-  } if (wide) {
-    return (
-      <Autocomplete
-      disablePortal
-      value={value}
-      onChange={(event, newValue) => {
-        setValue(newValue);
-      }}
-      inputValue={inputValue}
-      onInputChange={(event, newInputValue) => {
-        setInputValue(newInputValue);
-      }}
-      id="song-picker"
-      options={uniqueSongs ? uniqueSongs : [{ label: 'Song' }]}
-      sx={{ mb:1, width: 240 }}
-      size='small'
-      renderInput={(params) => <TextField {...params} label="Song" />}
-    />
-    )
   }
-}

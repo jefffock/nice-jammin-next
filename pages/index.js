@@ -12,11 +12,15 @@ import DateRangeSlider from '../components/DateRangeSlider'
 import { useRouter } from 'next/router'
 import TableTitle from '../components/TableTitle'
 import Head from 'next/head'
-import AppWithTheme from '../components/App.js'
+// import AppWithTheme from '../components/App.js'
+import App from '../components/App.js'
+import theme from '../styles/themes'
 
 export default function Home({ jams, songs }) {
   return (
-    <AppWithTheme jams={jams} songs={songs}/>
+    <ThemeProvider theme={theme}>
+      <App jams={jams} songs={songs} />
+    </ThemeProvider>
   )
 }
 

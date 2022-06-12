@@ -9,20 +9,31 @@ import Stack from '@mui/material/Stack';
 
 export default function FilterBar({ setDates, setArtist, tagsSelected, setTagsSelected, artist, beforeDate, setBeforeDate, afterDate, setAfterDate, song, setSong, songs }) {
 
+  // return(
+  //   <Box>
+  //     <Stack direction="row" spacing={'.4em'} sx={{ m: '0.4em' }}>
+  //       <ArtistPicker setArtist={setArtist} artist={artist}/>
+  //       <SongPicker songs={songs} setSong={setSong} song={song}></SongPicker>
+  //     </Stack>
+  //     <Stack direction="row" spacing={'.4em'} sx={{ m: '0.4em'}}>
+  //       <DateFilter before={false} afterDate={afterDate} setAfterDate={setAfterDate}></DateFilter>
+  //       <DateFilter before={true} beforeDate={beforeDate} setBeforeDate={setBeforeDate}></DateFilter>
+  //     </Stack>
+  //     <Stack direction="row" spacing={'.4em'} sx={{ m: '0.4em' }}>
+  //       <TagPicker tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} />
+  //     </Stack>
+  //   </Box>
+  // )
+
   return(
-    <>
-    <Stack direction="row" spacing={1}>
-      <ArtistPicker setArtist={setArtist} artist={artist}/>
-      <SongPicker songs={songs} setSong={setSong} song={song}></SongPicker>
-    </Stack>
-    <Stack direction="row" spacing={1}>
-      <DateFilter before={false} afterDate={afterDate} setAfterDate={setAfterDate}></DateFilter>
-      <DateFilter before={true} beforeDate={beforeDate} setBeforeDate={setBeforeDate}></DateFilter>
-    </Stack>
-    <Stack direction="row" spacing={1}>
-      <TagPicker tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} />
-    </Stack>
-    </>
-    // </div>
+    <Box>
+      <Stack direction="row" overflow="scroll" spacing={'.4em'} sx={{ m: '0.4em' }}>
+        <ArtistPicker setArtist={setArtist} artist={artist}/>
+        <SongPicker songs={songs} setSong={setSong} song={song}></SongPicker>
+        <TagPicker tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} />
+        <DateFilter before={false} afterDate={afterDate} setAfterDate={setAfterDate}></DateFilter>
+        <DateFilter before={true} beforeDate={beforeDate} setBeforeDate={setBeforeDate}></DateFilter>
+      </Stack>
+    </Box>
   )
 }

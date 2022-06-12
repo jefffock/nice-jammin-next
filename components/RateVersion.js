@@ -129,8 +129,12 @@ export default function RateVersion({ song, date, tags }) {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Rate this {song}
+      <Button
+        variant="contained"
+        onClick={handleClickOpen}
+        sx={{ borderRadius: '50px' }}
+      >
+        Rate
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Rate &quot;{song}&quot; from {date}</DialogTitle>

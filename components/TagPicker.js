@@ -105,12 +105,13 @@ export default function TagPicker({ tagsSelected, setTagsSelected }) {
 
   return (
     <div>
-      <FormControl sx={{ mb:1, minWidth: 120 }} size="small">
+      <FormControl sx={{ minWidth: 120 }} size="small">
         <InputLabel id="tag-filter-select-label">Tags</InputLabel>
         <Select
           labelId="tag-filter-select-label"
           id="tag-filter-select-checkbox"
           multiple
+          // sx={{ bgcolor: 'primary.main' }}
           value={tagsSelected}
           onChange={handleChange}
           input={<OutlinedInput label="Tag" />}

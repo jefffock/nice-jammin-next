@@ -10,7 +10,7 @@ export default function DateFilter({ before, beforeDate, setBeforeDate, afterDat
   useEffect(() => {
     let fullDates = []
     let currentYear = new Date().getFullYear()
-    for (var i = 1965; i <= currentYear; i++) {
+    for (var i = currentYear; i > 1964; i--) {
       fullDates.push(i)
     } setDates(fullDates)
   })
@@ -22,13 +22,14 @@ export default function DateFilter({ before, beforeDate, setBeforeDate, afterDat
 
   return (
     <>
-    <FormControl sx={{ mb:1, minWidth: 120 }} size="small">
+    <FormControl sx={{ minWidth: 120 }} size="small">
     <InputLabel id="before-select">{before ? 'Before' : 'After'}</InputLabel>
     <Select
       labelId="before-select"
       value={before ? beforeDate : afterDate}
       label={before ? 'Before' : 'After'}
       onChange={handleChange}
+      // sx={{ bgcolor: 'primary.main' }}
       >
       {dates.map((date) => (
         <MenuItem key={date} value={date}>{date}</MenuItem>

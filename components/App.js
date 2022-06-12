@@ -5,6 +5,7 @@ import Auth from './Auth'
 import Account from './Account'
 import DiscoverContributeSwitch from './DiscContSwitch'
 import Table from '@mui/material/Table';
+import Box from '@mui/material/Box'
 import { ThemeProvider, createTheme, useTheme } from '@mui/material/styles';
 import CollapsibleTable from './JamsTableCollapsible'
 import { useRouter } from 'next/router'
@@ -39,7 +40,6 @@ const darkTheme = createTheme({
   },
 });
 
-
 const theme = createTheme({
   palette: {
     type: 'dark',
@@ -54,11 +54,9 @@ const theme = createTheme({
   },
 });
 
-
-
 const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
-function App({ jams, songs }) {
+export default function App({ jams, songs }) {
   const [artists, setArtists] = useState(null)
   const [artist, setArtist] = useState(null)
   const [song, setSong] = useState(null)
@@ -163,10 +161,12 @@ function App({ jams, songs }) {
     </Head>
     {/* <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}> */}
-      <h1 className="text-3xl">Nice Jammin</h1>
-      <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+      <Box sx={{ bgcolor: 'primary.graybg', minHeight: '100vh' }}>
+
+      <Typography variant="h4" sx={{ mb: '.2em', ml: '.2em', color: 'primary.main'}}>Nice Jammin</Typography>
+      {/* <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
         {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-      </IconButton>
+      </IconButton> */}
       {/* <DiscoverContributeSwitch /> */}
       {/* <TableTitle artist={artist} song={song} /> */}
       <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate} songs={songs} song={song} setSong={setSong}/>
@@ -174,17 +174,26 @@ function App({ jams, songs }) {
       <CollapsibleTable songs={jams} sortedSongs={sortedSongs} sortSongs={sortSongs} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy}/>
       <br></br>
       <AddVersion songs={songs} jams={jams}/>
-      <Typography>Gratitude</Typography>
-      <Typography>Values/Philosophy/Hope</Typography>
-      <Typography>Top Contributors</Typography>
-      <Typography>Ideas</Typography>
+      <Box sx={{ bgcolor:'primary.main' }}>
+        <Typography variant="h4">Top Contributors</Typography>
+      </Box>
+      <Box sx={{ bgcolor:'primary.main' }}>
+        <Typography variant="h4">Gratitude</Typography>
+      </Box>
+      <Box sx={{ bgcolor:'primary.graybg' }}>
+      <Typography variant="h4">Values/Philosophy/Hope</Typography>
+      </Box>
+      <Box sx={{ bgcolor:'primary.graybg' }}>
+        <Typography variant="h4">Ideas</Typography>
+      </Box>
+      </Box>
       {/* </ThemeProvider>
     </ColorModeContext.Provider> */}
     </>
   )
 }
 
-export default function AppWithTheme({ jams, songs }) {
+function AppWithTheme({ jams, songs }) {
   const [mode, setMode] = useState('light');
 
   const colorMode = useMemo(
