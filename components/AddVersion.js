@@ -12,6 +12,7 @@ import TagPicker from './TagPicker'
 import DatePicker from './DatePicker'
 import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
 
 
 export default function AddVersion({ songs, jams }) {
@@ -206,11 +207,11 @@ export default function AddVersion({ songs, jams }) {
 
 
   return (
-    <div>
+    <Box display="flex" justifyContent="center">
       <Button
         variant="contained"
         onClick={handleClickOpen}
-        sx={{ borderRadius: '50px' }}>
+        sx={{ borderRadius: '50px', bgcolor: 'third.main', mx: 'auto' }}>
         Add Version
       </Button>
       <Dialog open={open} onClose={handleClose} sx={{ minHeight: '50%' }}>
@@ -276,6 +277,6 @@ export default function AddVersion({ songs, jams }) {
           }
         </DialogActions>
       </Dialog>
-    </div>
+    </Box>
   );
 }

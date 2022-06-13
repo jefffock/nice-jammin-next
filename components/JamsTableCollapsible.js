@@ -175,10 +175,10 @@ function Row(props) {
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}
       onClick={() => setOpen(!open)}>
-        <TableCell>{row.song_name}</TableCell>
-        <TableCell>{row.date}</TableCell>
-        <TableCell>{row.avg_rating}</TableCell>
-        <TableCell>{row.artist}</TableCell>
+        <TableCell sx={{ maxWidth: '10px'}}>{row.song_name}</TableCell>
+        <TableCell sx={{ maxWidth: '10px'}}>{row.date}</TableCell>
+        <TableCell sx={{ maxWidth: '10px'}}>{row.avg_rating}</TableCell>
+        <TableCell sx={{ maxWidth: '10px'}}>{row.artist}</TableCell>
         <TableCell>
           <IconButton
             aria-label="expand row"
@@ -251,7 +251,7 @@ export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order,
   }
 
   return (
-    <TableContainer component={Paper} sx={{ height: '55vh', overflowY: 'auto', maxWidth: '96vw', bgcolor: 'primary.bg', mx: "auto" }}>
+    <TableContainer component={Paper} sx={{ height: '55vh', overflowY: 'auto', width: '96vw', maxWidth: '900px', bgcolor: 'primary.bg', mx: "auto" }}>
       <Table
       aria-label="jams table"
       stickyHeader

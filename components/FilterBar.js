@@ -26,7 +26,7 @@ export default function FilterBar({ setDates, setArtist, tagsSelected, setTagsSe
   // )
 
   return (
-    <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'top' }}>
+    <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'top', mx: 'auto', justifyContent: 'center' }}>
       <ArtistPicker setArtist={setArtist} artist={artist} />
       <SongPicker songs={songs} setSong={setSong} song={song} />
       <TagPicker tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} />

@@ -18,6 +18,9 @@ const theme = createTheme({
       main: '#4caf50',
       //main: '#4e368a',
     },
+    third: {
+      main: '#50F2AB'
+    }
     // primary: {
     //   main: '#3c2fa8',
     //   light: '#42a5f5',
