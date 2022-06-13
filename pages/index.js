@@ -1,18 +1,5 @@
-import { useState, useEffect } from 'react'
-import ArtistPicker from '../components/ArtistPicker'
-import JamsTable from '../components/JamsTable'
 import { supabase } from '../utils/supabaseClient'
-import Auth from '../components/Auth'
-import Account from '../components/Account'
-import DiscoverContributeSwitch from '../components/DiscContSwitch'
-import Table from '@mui/material/Table';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CollapsibleTable from '../components/JamsTableCollapsible'
-import DateRangeSlider from '../components/DateRangeSlider'
-import { useRouter } from 'next/router'
-import TableTitle from '../components/TableTitle'
-import Head from 'next/head'
-// import AppWithTheme from '../components/App.js'
+import { ThemeProvider } from '@mui/material/styles';
 import App from '../components/App.js'
 import theme from '../styles/themes'
 

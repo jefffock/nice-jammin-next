@@ -6,7 +6,6 @@ import Account from './Account'
 import DiscoverContributeSwitch from './DiscContSwitch'
 import Table from '@mui/material/Table';
 import Box from '@mui/material/Box'
-import { ThemeProvider, createTheme, useTheme } from '@mui/material/styles';
 import CollapsibleTable from './JamsTableCollapsible'
 import { useRouter } from 'next/router'
 import TableTitle from './TableTitle'
@@ -20,41 +19,9 @@ import IconButton from '@mui/material/IconButton';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { amber, deepOrange, grey } from '@mui/material/colors';
-import TopContributors from './TopContributors'
-import fetchLeaders from '../utils/fetchLeaders'
-// import theme from '../styles/themes'
-
-// export const themeOptions: ThemeOptions = {
-//   palette: {
-//     type: 'dark',
-//     primary: {
-//       main: '#3c2fa8',
-//     },
-//     secondary: {
-//       main: '#1b6945',
-//     },
-//   },
-// };
-
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
-
-const theme = createTheme({
-  palette: {
-    type: 'dark',
-    primary: {
-      main: '#3c2fa8',
-    },
-    secondary: {
-      main: '#1b6945',
-    },
-    contrastThreshold: 3,
-    tonalOffset: 0.2,
-  },
-});
+import TopContributors from './TopContributors';
+import fetchLeaders from '../utils/fetchLeaders';
+import NavBar from './AppBar'
 
 const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
@@ -72,7 +39,6 @@ export default function App({ jams, songs }) {
   const [tagsSelected, setTagsSelected] = useState([])
   const router = useRouter()
 
-  const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
 
   useEffect(() => {
@@ -163,13 +129,16 @@ export default function App({ jams, songs }) {
     {/* <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}> */}
       <Box sx={{ bgcolor: 'primary.graybg', minHeight: '100vh', maxWidth: '100vw', overflow: 'hidden'}}>
+        <NavBar />
 
-      <Typography variant="h4" sx={{ mb: '.2em', ml: '.2em', color: 'primary.main'}}>Nice Jammin</Typography>
+      {/* <Typography variant="h4" sx={{ mb: '.2em', ml: '.2em', color: 'primary.main'}}>Nice Jammin</Typography> */}
       {/* <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
         {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
       </IconButton> */}
       {/* <DiscoverContributeSwitch /> */}
-      {/* <TableTitle artist={artist} song={song} /> */}
+      <Box sx={{ height:'10vh' }}>
+
+      </Box>
       <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate} songs={songs} song={song} setSong={setSong}/>
       <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} afterDate={afterDate} setBeforeDate={setBeforeDate} setAfterDate={setAfterDate} song={song} setSong={setSong}/>
       <CollapsibleTable songs={jams} sortedSongs={sortedSongs} sortSongs={sortSongs} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy}/>
@@ -190,56 +159,4 @@ export default function App({ jams, songs }) {
     </ColorModeContext.Provider> */}
     </>
   )
-}
-
-function AppWithTheme({ jams, songs }) {
-  const [mode, setMode] = useState('light');
-
-  const colorMode = useMemo(
-    () => ({
-      toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
-      },
-    }),
-    [],
-  );
-
-  // const getDesignTokens = (mode: PaletteMode) => ({
-  //   palette: {
-  //     mode,
-  //     ...(mode === 'light'
-  //       ? {
-  //           // palette values for light mode
-  //           primary: amber,
-  //           divider: amber[200],
-  //           text: {
-  //             primary: grey[900],
-  //             secondary: grey[800],
-  //           },
-  //         }
-  //       : {
-  //           // palette values for dark mode
-  //           primary: deepOrange,
-  //           divider: deepOrange[700],
-  //           background: {
-  //             default: deepOrange[900],
-  //             paper: deepOrange[900],
-  //           },
-  //           text: {
-  //             primary: '#fff',
-  //             secondary: grey[500],
-  //           },
-  //         }),
-  //   },
-  // });
-
-  // const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
-
-  return (
-    // <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={darkTheme}>
-        <App jams={jams} songs={songs}/>
-      </ThemeProvider>
-    // </ColorModeContext.Provider>
-  );
 }

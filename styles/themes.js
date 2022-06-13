@@ -8,7 +8,8 @@ const theme = createTheme({
       // main: '#247dad'
       //cream
       bg: '#edf2f5',
-      main: '#79c5ed',
+      // main: '#79c5ed',
+      main: '#59dee3',
       graybg: '#e6e6e6'
 
 
