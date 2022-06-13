@@ -7,6 +7,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { supabase } from '../utils/supabaseClient'
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+
 
 export default function TopContributors() {
   const [leaders, setLeaders] = useState(null)
@@ -33,20 +36,22 @@ export default function TopContributors() {
   }, [])
 
   return (
-    <TableContainer component={Paper} sx={{ height: '50vh', overflowY: 'auto'}}>
-      <Table sx={{ width: '96vw' }}>
+    <Box mx="auto" my="1em" width='96vw' maxWidth='400px'>
+    <Typography variant="h4" textAlign="center">Top Contributors</Typography>
+    <TableContainer component={Paper} sx={{ height: '50vh', overflowY: 'auto', borderRadius: '1em' }}>
+      <Table>
         <TableHead>
           <TableRow>
-            <TableCell align="right">Rank</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell align="right">Score</TableCell>
+            <TableCell align="right" sx={{ bgcolor: "primary.main"}}>Rank</TableCell>
+            <TableCell sx={{ bgcolor: "primary.main"}}>Name</TableCell>
+            <TableCell align="right" sx={{ bgcolor: "primary.main"}}>Score</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {leaders?.map((row, index) => (
             <TableRow
-              key={index}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            key={index}
+            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell align="right" component="th" scope="row">
                 {index + 1}
@@ -58,5 +63,6 @@ export default function TopContributors() {
         </TableBody>
       </Table>
     </TableContainer>
+          </Box>
   );
 }
