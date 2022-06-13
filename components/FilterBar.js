@@ -25,15 +25,13 @@ export default function FilterBar({ setDates, setArtist, tagsSelected, setTagsSe
   //   </Box>
   // )
 
-  return(
-    <Box>
-      <Stack direction="row" overflow="scroll" spacing={'.4em'} sx={{ m: '0.4em' }}>
-        <ArtistPicker setArtist={setArtist} artist={artist}/>
-        <SongPicker songs={songs} setSong={setSong} song={song}></SongPicker>
-        <TagPicker tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} />
-        <DateFilter before={false} afterDate={afterDate} setAfterDate={setAfterDate}></DateFilter>
-        <DateFilter before={true} beforeDate={beforeDate} setBeforeDate={setBeforeDate}></DateFilter>
-      </Stack>
+  return (
+    <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'top' }}>
+      <ArtistPicker setArtist={setArtist} artist={artist} />
+      <SongPicker songs={songs} setSong={setSong} song={song} />
+      <TagPicker tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} />
+      <DateFilter before={false} afterDate={afterDate} setAfterDate={setAfterDate} />
+      <DateFilter before={true} beforeDate={beforeDate} setBeforeDate={setBeforeDate} />
     </Box>
   )
 }

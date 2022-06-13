@@ -36,7 +36,7 @@ export default function ArtistPicker({ artist, setArtist}) {
   };
 
   return (
-    <FormControl sx={{ minWidth: 120 }} size="small">
+    <FormControl sx={{ minWidth: 120, m:'0.25em' }} size="small">
       <InputLabel id="artist-select">Band</InputLabel>
       <Select
         labelId="artist-select"

@@ -22,7 +22,7 @@ export default function DateFilter({ before, beforeDate, setBeforeDate, afterDat
 
   return (
     <>
-    <FormControl sx={{ minWidth: 120 }} size="small">
+    <FormControl sx={{ minWidth: 120,  m:'0.25em' }} size="small">
     <InputLabel id="before-select">{before ? 'Before' : 'After'}</InputLabel>
     <Select
       labelId="before-select"

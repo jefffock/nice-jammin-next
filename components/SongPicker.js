@@ -48,7 +48,7 @@ export default function SongPicker({ songs, song, setSong, wide }) {
   }, [song])
 
     return (
-      <Box sx={{ minWidth: 120 }}>
+      <Box sx={{ minWidth: 120,  m:'0.25em' }}>
         <Autocomplete
           disablePortal
           value={value}

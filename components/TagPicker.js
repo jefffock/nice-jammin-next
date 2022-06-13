@@ -105,7 +105,7 @@ export default function TagPicker({ tagsSelected, setTagsSelected }) {
 
   return (
     <div>
-      <FormControl sx={{ minWidth: 120 }} size="small">
+      <FormControl sx={{ minWidth: 120,  m:'0.25em' }} size="small">
         <InputLabel id="tag-filter-select-label">Tags</InputLabel>
         <Select
           labelId="tag-filter-select-label"
