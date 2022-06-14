@@ -92,8 +92,7 @@ return (
 );
 }
 
-function Row(props) {
-  const { row } = props;
+function Row({ row, user }) {
   const [open, setOpen] = useState(false);
   const [tags, setTags] = useState('')
 
@@ -193,20 +192,16 @@ function Row(props) {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ m: '0.2em', maxWidth: '90vw' }}>
-              {/* <Typography variant="h6" gutterBottom component="div">
-                More
-              </Typography> */}
-              <RateVersion song={row.song_name} date={row.date} tags={tags}/>
+              {row.listen_link &&
+              <Typography sx={{ 'text-decoration': 'underline', color: '#000000' }}>{<a href={row.listen_link}>Listen</a>}</Typography>
+              }
               {tags &&
               <Typography>{tags}</Typography>
-              }
+            }
               <Typography>{row.location}</Typography>
               <Typography>{row.num_ratings} ratings</Typography>
               <Typography>Added by {row.submitter_name}. Thank you!</Typography>
-              {row.listen_link &&
-              <Typography sx={{ 'text-decoration': 'underline', color: 'primary.main' }}>{<a href={row.listen_link}>Listen</a>}</Typography>
-              }
-              {/* <Typography sx={{ 'text-decoration': 'underline' }}>Rate this Version</Typography> */}
+            <RateVersion song={row.song_name} date={row.date} tags={tags} user={user}/>
             </Box>
           </Collapse>
         </TableCell>
@@ -215,7 +210,7 @@ function Row(props) {
   );
 }
 
-export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order, orderBy, setOrder, setOrderBy }) {
+export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order, orderBy, setOrder, setOrderBy, user }) {
   const [orderedSongs, setOrderedSongs] = useState(null)
 
   const handleRequestSort = (event, property) => {
@@ -268,6 +263,7 @@ export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order,
               <Row
               key={jam.id}
               row={jam}
+              user={user}
               />
               ))}
         </TableBody>

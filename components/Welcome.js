@@ -5,8 +5,8 @@ export default function Welcome() {
 
   return (
     <Box my="1em" mx="auto" px="0.5em" width="96vw" maxWidth="fit-content">
-    <Typography variant="h5">Find your next favorite jam</Typography>
-    <Typography>Use the filters below to narrow things down, then tap a row to listen to and rate it</Typography>
+    <Typography variant="h4" textAlign="center">Find your jam</Typography>
+    <Typography>Tap a row to listen and rate</Typography>
     </Box>
   )
 }

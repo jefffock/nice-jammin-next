@@ -12,9 +12,9 @@ import MenuItem from '@mui/material/MenuItem';
 import TagPicker from './TagPicker'
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
+import Alert from '@mui/material/Alert';
 
-
-export default function RateVersion({ song, date, tags }) {
+export default function RateVersion({ song, date, tags, user }) {
   const [open, setOpen] = useState(false);
   const [rating, setRating] = useState(null)
   const [comment, setComment] = useState('')
@@ -132,9 +132,9 @@ export default function RateVersion({ song, date, tags }) {
       <Button
         variant="contained"
         onClick={handleClickOpen}
-        sx={{ borderRadius: '50px' }}
+        sx={{ borderRadius: '50px', textTransform: 'none', my: '.5em' }}
       >
-        Rate
+        Rate this jam
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Rate &quot;{song}&quot; from {date}</DialogTitle>
@@ -142,8 +142,10 @@ export default function RateVersion({ song, date, tags }) {
           {/* <DialogContentText>
             Rating art is always subjective, so just go with whatever rating feels right to you
           </DialogContentText> */}
-          <br></br>
-          <FormControl>
+          {!user &&
+          <Alert severity="warning" sx={{ mb: '1em' }}>Please log in to rate this jam - thank you!</Alert>
+          }
+            <FormControl>
             <InputLabel id="rating-select-label">Your Rating</InputLabel>
             <Select
             sx={{ width: 120 }}

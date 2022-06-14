@@ -26,11 +26,11 @@ import Welcome from './Welcome'
 
 const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
-export default function App({ jams, songs }) {
+export default function App({ jams, songs }) {const [session, setSession] = useState(null)
+  const [user, setUser] = useState(null)
   const [artists, setArtists] = useState(null)
   const [artist, setArtist] = useState(null)
   const [song, setSong] = useState(null)
-  const [session, setSession] = useState(null)
   const [filteredSongs, setFilteredSongs] = useState(jams)
   const [sortedSongs, setSortedSongs] = useState(jams)
   const [order, setOrder] = useState('desc');
@@ -40,14 +40,19 @@ export default function App({ jams, songs }) {
   const [tagsSelected, setTagsSelected] = useState([])
   const router = useRouter()
 
-  const colorMode = useContext(ColorModeContext);
-
   useEffect(() => {
     setSession(supabase.auth.session())
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
+      if (session !== null) {
+        setUser(session.user)
+      }
     })
   }, [])
+
+  useEffect(() => {
+    setUser(supabase.auth.user())
+  }, [session])
 
   useEffect(() => {
     let newFilteredSongs = jams?.filter(filterFunc)
@@ -140,9 +145,9 @@ export default function App({ jams, songs }) {
       <Welcome />
       <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate} songs={songs} song={song} setSong={setSong}/>
       <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} afterDate={afterDate} setBeforeDate={setBeforeDate} setAfterDate={setAfterDate} song={song} setSong={setSong}/>
-      <CollapsibleTable songs={jams} sortedSongs={sortedSongs} sortSongs={sortSongs} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy}/>
+      <CollapsibleTable songs={jams} sortedSongs={sortedSongs} sortSongs={sortSongs} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} />
       <br></br>
-      <AddVersion songs={songs} jams={jams}/>
+      <AddVersion songs={songs} jams={jams} user={user}/>
         <TopContributors />
       </Box>
       {/* </ThemeProvider>

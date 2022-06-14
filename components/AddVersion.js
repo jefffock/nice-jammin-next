@@ -15,7 +15,7 @@ import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 
 
-export default function AddVersion({ songs, jams }) {
+export default function AddVersion({ songs, jams, user }) {
   const [open, setOpen] = useState(false);
   const [song, setSong] = useState(null);
   const [artist, setArtist] = useState(null);
@@ -211,18 +211,17 @@ export default function AddVersion({ songs, jams }) {
       <Button
         variant="contained"
         onClick={handleClickOpen}
-        sx={{ borderRadius: '50px', bgcolor: 'third.main', mx: 'auto' }}>
+        sx={{ borderRadius: '50px', bgcolor: 'third.main', mx: 'auto', textTransform: 'none' }}>
         Add Version
       </Button>
       <Dialog open={open} onClose={handleClose} sx={{ minHeight: '50%' }}>
         <DialogTitle>Add a Version</DialogTitle>
         <DialogContent>
-          <br></br>
+          {!user &&
+          <Alert severity="warning" sx={{ mb: '1em' }}>Please log in to add a version - thank you!</Alert>
+          }
           <SongPicker songs={songs} song={song} setSong={setSong} wide={true}/>
           <br></br>
-          <Alert severity="error">This is an error alert — check it out!</Alert>
-          <Alert severity="warning">This is a warning alert — check it out!</Alert>
-          <Alert severity="success">This is a success alert — check it out!</Alert>
           {song &&
           <ArtistPicker artist={artist} setArtist={setArtist}/>
           }
@@ -266,7 +265,7 @@ export default function AddVersion({ songs, jams }) {
             <Typography>{artist}</Typography>
             <Typography>{date}</Typography>
             <Typography>{location}</Typography> */}
-            <Typography>Year: {year} {typeof year} Tags: {tagsText}</Typography>
+            <Typography>{tagsText}</Typography>
           </>
           }
         </DialogContent>
