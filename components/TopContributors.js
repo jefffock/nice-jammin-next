@@ -37,7 +37,7 @@ export default function TopContributors() {
 
   return (
     <Box mx="auto" my="1em" width='96vw' maxWidth='400px'>
-    <Typography variant="h4" textAlign="center">Top Contributors</Typography>
+    <Typography variant="h4" textAlign="center" my="0.4em">Top Contributors</Typography>
     <TableContainer component={Paper} sx={{ height: '50vh', overflowY: 'auto', borderRadius: '1em' }}>
       <Table>
         <TableHead>

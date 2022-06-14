@@ -13,11 +13,13 @@ import DatePicker from './DatePicker'
 import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
+import AddSong from './AddSong'
 
 
 export default function AddVersion({ songs, jams, user }) {
   const [open, setOpen] = useState(false);
   const [song, setSong] = useState(null);
+  const [songExists, setSongExists] = useState(true)
   const [artist, setArtist] = useState(null);
   const [tags, setTags] = useState([])
   const [date, setDate] = useState(null)
@@ -68,6 +70,13 @@ export default function AddVersion({ songs, jams, user }) {
       setYear(null)
     }
   }, [date])
+
+  useEffect(() => {
+    let index = songs.findIndex(song => {
+      return song.song === song;
+    })
+    index === -1 ? setSongExists(false) : setSongExists(true)
+  }, [song])
 
   // const handleSubmit = () => {
   //   if (verifyData()) {
@@ -212,17 +221,24 @@ export default function AddVersion({ songs, jams, user }) {
         variant="contained"
         onClick={handleClickOpen}
         sx={{ borderRadius: '50px', bgcolor: 'third.main', mx: 'auto', textTransform: 'none' }}>
-        Add Version
+        Add a version
       </Button>
       <Dialog open={open} onClose={handleClose} sx={{ minHeight: '50%' }}>
         <DialogTitle>Add a Version</DialogTitle>
         <DialogContent>
           {!user &&
-          <Alert severity="warning" sx={{ mb: '1em' }}>Please log in to add a version - thank you!</Alert>
+          <Alert severity="warning" sx={{ mb: '1em' }}>Please log in to contribute - thank you!</Alert>
           }
           <SongPicker songs={songs} song={song} setSong={setSong} wide={true}/>
           <br></br>
-          {song &&
+          {!songExists && song &&
+          <>
+          <br/><br/>
+          <Typography>{song} hasn&apos;t been added yet.</Typography>
+          <AddSong song={song} user={user} />
+          </>
+          }
+          {song && songExists &&
           <ArtistPicker artist={artist} setArtist={setArtist}/>
           }
           {artist &&

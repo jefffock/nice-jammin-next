@@ -16,7 +16,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 const pages = [];
 const settings = ['Profile', 'Logout'];
 
-const NavBar = () => {
+export default function TopBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -58,7 +58,7 @@ const NavBar = () => {
             Nice Jammin
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          {/* <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -93,7 +93,7 @@ const NavBar = () => {
                 </MenuItem>
               ))}
             </Menu>
-          </Box>
+          </Box> */}
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
@@ -113,7 +113,7 @@ const NavBar = () => {
           >
             NJ
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          {/* <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
                 key={page}
@@ -123,15 +123,16 @@ const NavBar = () => {
                 {page}
               </Button>
             ))}
-          </Box>
+          </Box> */}
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            <Button sx={{ bgcolor: 'third.main', textTransform: 'none', color: '#000000', borderRadius: '2em', '&:hover': { bgcolor: 'primary.bg' } }}>Sign In / Sign Up</Button>
+            {/* <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
               </IconButton>
-            </Tooltip>
-            <Menu
+            </Tooltip> */}
+            {/* <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
               anchorEl={anchorElUser}
@@ -152,11 +153,10 @@ const NavBar = () => {
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
-            </Menu>
+            </Menu> */}
           </Box>
         </Toolbar>
       </Container>
     </AppBar>
   );
 };
-export default NavBar;

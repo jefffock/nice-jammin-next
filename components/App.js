@@ -21,7 +21,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { amber, deepOrange, grey } from '@mui/material/colors';
 import TopContributors from './TopContributors';
 import fetchLeaders from '../utils/fetchLeaders';
-import NavBar from './AppBar'
+import TopBar from './AppBar'
 import Welcome from './Welcome'
 
 const ColorModeContext = createContext({ toggleColorMode: () => {} });
@@ -135,7 +135,7 @@ export default function App({ jams, songs }) {const [session, setSession] = useS
     {/* <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}> */}
       <Box sx={{ bgcolor: 'primary.graybg', minHeight: '100vh', maxWidth: '100vw', overflow: 'hidden'}}>
-        <NavBar />
+        <TopBar />
 
       {/* <Typography variant="h4" sx={{ mb: '.2em', ml: '.2em', color: 'primary.main'}}>Nice Jammin</Typography> */}
       {/* <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">

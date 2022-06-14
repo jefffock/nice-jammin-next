@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import Chip from '@mui/material/Chip';
 import FilterChip from './FilterChip'
+import Box from '@mui/material/Box';
+
 
 export default function FilterList({ artist, setArtist, tagsSelected, setTagsSelected, beforeDate, afterDate, setBeforeDate, setAfterDate, song, setSong }) {
 
   return (
-    <div className="filter-list-wrapper">
+    <Box sx={{ p:'0.5em' }}>
     {artist && artist !== 'All Bands' &&
     <FilterChip artist={artist} setArtist={setArtist}></FilterChip>}
     {song &&
@@ -18,6 +20,6 @@ export default function FilterList({ artist, setArtist, tagsSelected, setTagsSel
     tagsSelected.map((tag) => (
       <FilterChip key={tag} tag={tag} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected}></FilterChip>
     ))}
-    </div>
+    </Box>
   )
 }

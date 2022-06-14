@@ -182,10 +182,12 @@ export default function RateVersion({ song, date, tags, user }) {
           <br></br>
           <br></br>
           <TagPicker tagsSelected={newTags} setTagsSelected={setNewTags}/>
-          <br></br>
+          {tagsToAddText &&
           <Typography>Tags to Add: {tagsToAddText}</Typography>
-          <br></br>
+        }
+          {tags &&
           <Typography>Current Tags: {tags}</Typography>
+          }
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>

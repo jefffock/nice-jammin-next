@@ -246,7 +246,7 @@ export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order,
   }
 
   return (
-    <TableContainer component={Paper} sx={{ height: '55vh', overflowY: 'auto', width: '96vw', maxWidth: '900px', bgcolor: 'primary.bg', mx: "auto" }}>
+    <TableContainer component={Paper} sx={{ height: '55vh', overflowY: 'auto', width: '96vw', maxWidth: '900px', bgcolor: 'primary.bg', mx: 'auto', borderRadius: '1em' }}>
       <Table
       aria-label="jams table"
       stickyHeader
