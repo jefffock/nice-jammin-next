@@ -134,7 +134,7 @@ export default function RateVersion({ song, date, tags, user }) {
         onClick={handleClickOpen}
         sx={{ borderRadius: '50px', textTransform: 'none', my: '.5em' }}
       >
-        Rate this jam
+        Rate this Jam
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Rate &quot;{song}&quot; from {date}</DialogTitle>
@@ -146,9 +146,9 @@ export default function RateVersion({ song, date, tags, user }) {
           <Alert severity="warning" sx={{ mb: '1em' }}>Please log in to rate this jam - thank you!</Alert>
           }
             <FormControl>
-            <InputLabel id="rating-select-label">Your Rating</InputLabel>
+            <InputLabel id="rating-select-label">Rating</InputLabel>
             <Select
-            sx={{ width: 120 }}
+            sx={{ width: 120, m:'0.25em' }}
             size="small"
             labelId="rating-select-label"
             id="rating-select"

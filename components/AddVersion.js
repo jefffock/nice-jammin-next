@@ -20,6 +20,7 @@ export default function AddVersion({ songs, jams, user }) {
   const [open, setOpen] = useState(false);
   const [song, setSong] = useState(null);
   const [songExists, setSongExists] = useState(true)
+  const [songArray, setSongArray] = useState([])
   const [artist, setArtist] = useState(null);
   const [tags, setTags] = useState([])
   const [date, setDate] = useState(null)
@@ -72,11 +73,12 @@ export default function AddVersion({ songs, jams, user }) {
   }, [date])
 
   useEffect(() => {
-    let index = songs.findIndex(song => {
-      return song.song === song;
+    let index = songs.findIndex(item => {
+      return item.song === song;
     })
+    console.log('index', index, 'song', song, 'songs', songs)
     index === -1 ? setSongExists(false) : setSongExists(true)
-  }, [song])
+  }, [song, songs])
 
   // const handleSubmit = () => {
   //   if (verifyData()) {
@@ -221,10 +223,10 @@ export default function AddVersion({ songs, jams, user }) {
         variant="contained"
         onClick={handleClickOpen}
         sx={{ borderRadius: '50px', bgcolor: 'third.main', mx: 'auto', textTransform: 'none' }}>
-        Add a version
+        Add a Jam
       </Button>
       <Dialog open={open} onClose={handleClose} sx={{ minHeight: '50%' }}>
-        <DialogTitle>Add a Version</DialogTitle>
+        <DialogTitle>Add a Great Jam</DialogTitle>
         <DialogContent>
           {!user &&
           <Alert severity="warning" sx={{ mb: '1em' }}>Please log in to contribute - thank you!</Alert>

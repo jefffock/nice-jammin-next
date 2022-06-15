@@ -5,7 +5,6 @@ import DateFilter from './DateFilter'
 import SongPicker from './SongPicker'
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-// import DateRangeSlider from './DateRangeSlider'
 
 export default function FilterBar({ setDates, setArtist, tagsSelected, setTagsSelected, artist, beforeDate, setBeforeDate, afterDate, setAfterDate, song, setSong, songs }) {
 
