@@ -14,7 +14,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Alert from '@mui/material/Alert';
 
-export default function RateVersion({ song, date, tags, user }) {
+export default function RateVersion({ song, date, location, tags, user }) {
   const [open, setOpen] = useState(false);
   const [rating, setRating] = useState(null)
   const [comment, setComment] = useState('')
@@ -137,7 +137,7 @@ export default function RateVersion({ song, date, tags, user }) {
         Rate this Jam
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Rate &quot;{song}&quot; from {date}</DialogTitle>
+        <DialogTitle>{song} - {location} - {date}</DialogTitle>
         <DialogContent>
           {/* <DialogContentText>
             Rating art is always subjective, so just go with whatever rating feels right to you

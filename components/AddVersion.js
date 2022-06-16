@@ -225,9 +225,9 @@ export default function AddVersion({ songs, jams, user }) {
         sx={{ borderRadius: '50px', bgcolor: 'third.main', mx: 'auto', textTransform: 'none' }}>
         Add a Jam
       </Button>
-      <Dialog open={open} onClose={handleClose} sx={{ minHeight: '50%' }}>
+      <Dialog open={open} onClose={handleClose} sx={{ minHeight: '50vh' }}>
         <DialogTitle>Add a Great Jam</DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{ minHeight: '200px' }}>
           {!user &&
           <Alert severity="warning" sx={{ mb: '1em' }}>Please log in to contribute - thank you!</Alert>
           }

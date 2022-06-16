@@ -75,7 +75,9 @@ return (
             onClick={createSortHandler(headCell.id)}
           >
             {headCell.label === 'Rating' ?
-            <StarRateIcon /> :
+           <>
+           <StarRateIcon /><p>Rating</p>
+           </> :
             headCell.label === 'Date' ?
             <CalendarMonthIcon /> :
             headCell.label}
@@ -201,7 +203,7 @@ function Row({ row, user }) {
               <Typography>{row.location}</Typography>
               <Typography>{row.num_ratings} ratings</Typography>
               <Typography>Added by {row.submitter_name}. Thank you!</Typography>
-            <RateVersion song={row.song_name} date={row.date} tags={tags} user={user}/>
+            <RateVersion song={row.song_name} date={row.date} location={row.location} tags={tags} user={user}/>
             </Box>
           </Collapse>
         </TableCell>
@@ -246,6 +248,8 @@ export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order,
   }
 
   return (
+    <>
+    <Typography textAlign="center" mt="1em">Tap a row to listen and rate</Typography>
     <TableContainer component={Paper} sx={{ height: '55vh', overflowY: 'auto', width: '96vw', maxWidth: '900px', bgcolor: 'primary.bg', mx: 'auto', borderRadius: '1em' }}>
       <Table
       aria-label="jams table"
@@ -255,19 +259,20 @@ export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order,
           order={order}
           orderBy={orderBy}
           onRequestSort={handleRequestSort}
-        />
+          />
         <TableBody>
           {sortedSongs &&
           sortedSongs
-            .map((jam) => (
-              <Row
-              key={jam.id}
-              row={jam}
-              user={user}
-              />
-              ))}
+          .map((jam) => (
+            <Row
+            key={jam.id}
+            row={jam}
+            user={user}
+            />
+            ))}
         </TableBody>
       </Table>
     </TableContainer>
+    </>
   );
 }

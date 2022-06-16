@@ -53,7 +53,7 @@ export default function FilterChip({ tag, artist, setArtist, tagsSelected, setTa
     } if (afterDate) {
       setLabel(`After ${afterDate}`)
     } if (song) {
-      setLabel(`"${song}"`)
+      setLabel(song)
     }
   }, [])
 

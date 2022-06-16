@@ -43,8 +43,7 @@ export default function ArtistPicker({ artist, setArtist}) {
         value={artist ? artist : ''}
         label="Band"
         onChange={handleChange}
-        // sx={{ bgcolor: 'primary.main' }}
-      >
+        >
         {artists.map((artist) => (
           <MenuItem key={artist} value={artist}>{artist}</MenuItem>
         ))}

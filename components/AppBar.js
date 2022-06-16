@@ -13,32 +13,26 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
 import AdbIcon from '@mui/icons-material/Adb';
+import { supabase } from '../utils/supabaseClient'
 
-export default function TopBar() {
-  const [anchorElNav, setAnchorElNav] = useState(null);
-  const [anchorElUser, setAnchorElUser] = useState(null);
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
+export default function TopBar({ showButton, user, session, router }) {
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut()
+    if (error) {
+      console.log('error', error)
+    } else {
+      router.push('/')
+    }
+  }
 
   return (
     <AppBar position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
+      <Container maxWidth="xl" justifyContent="center">
+        <Toolbar disableGutters sx={{ maxWidth: '900px', mx:'auto', justifyContent: 'space-between' }}>
           <Stack direction="row" sx={{ flexGrow: 1 }}>
-            <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+            {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
             <Typography
               variant="h6"
               noWrap
@@ -56,9 +50,9 @@ export default function TopBar() {
               >
               Nice Jammin
             </Typography>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
           <Typography
-            variant="h5"
+            variant="h6"
             noWrap
             component="a"
             href="/"
@@ -73,12 +67,22 @@ export default function TopBar() {
               textDecoration: 'none',
             }}
             >
-            NJ
+            Nice Jammin
           </Typography>
           </Stack>
+          {showButton &&
           <Box>
-            <Button href="/login" sx={{ bgcolor: 'third.main', textTransform: 'none', color: '#000000', borderRadius: '2em', '&:hover': { bgcolor: 'primary.bg' } }}>Sign In / Sign Up</Button>
+            {!user &&
+            <>
+             <Button href="/signup" sx={{ bgcolor: 'third.main', textTransform: 'none', color: '#000000', borderRadius: '2em', '&:hover': { bgcolor: 'primary.bg' } }}>Sign Up</Button>
+             <Button href="/signup" sx={{ bgcolor: 'primary.main', textTransform: 'none', color: '#000000', borderRadius: '2em', '&:hover': { bgcolor: 'primary.bg' } }}>Sign In</Button>
+            </>
+            }
+            {user &&
+            <Button onClick={handleLogout} sx={{ bgcolor: 'primary.main', textTransform: 'none', color: '#000000', borderRadius: '2em', '&:hover': { bgcolor: 'primary.bg' } }}>Log Out</Button>
+          }
             </Box>
+      }
         </Toolbar>
       </Container>
     </AppBar>

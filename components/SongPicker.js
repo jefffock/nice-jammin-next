@@ -61,9 +61,6 @@ export default function SongPicker({ songs, song, setSong, wide }) {
           }}
           id="song-picker"
           options={uniqueSongs ? uniqueSongs : [{ label: 'Song' }]}
-          // sx={{ minWidth: 120, bgcolor: 'primary.main', borderRadius: '5px' }}
-          // sx={{ minWidth: 120 }}
-
           size='small'
           renderInput={(params) => <TextField {...params} label="Song"/>}
         />
