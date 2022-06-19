@@ -15,17 +15,17 @@ import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import AddSong from './AddSong'
 
-
 export default function AddVersion({ songs, jams, user, profile, setSongs }) {
   const [loading, setLoading] = useState(null)
   const [open, setOpen] = useState(false);
   const [song, setSong] = useState(null);
   const [songExists, setSongExists] = useState(true)
   const [songArray, setSongArray] = useState([])
-  const [songWarningText, setSongWarningText] = useState(null)
-  const [artistWarningText, setArtistWarningText] = useState(null)
-  const [dateWarningText, setDateWarningText] = useState(null)
-  const [locationWarningText, setLocationWarningText] = useState(null)
+  const [songErrorText, setSongErrorText] = useState(null)
+  const [artistErrorText, setArtistErrorText] = useState(null)
+  const [dateErrorText, setDateErrorText] = useState(null)
+  const [locationErrorText, setLocationErrorText] = useState(null)
+  const [successAlertText, setSuccessAlertText] = useState(null)
   const [artist, setArtist] = useState(null);
   const [tags, setTags] = useState([])
   const [date, setDate] = useState(null)
@@ -70,6 +70,7 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
 
   useEffect(() => {
     if (date) {
+      setDateErrorText(null)
       let yearString = date.slice(0,4)
       setYear(parseInt(yearString))
     } else {
@@ -78,57 +79,13 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
   }, [date])
 
   useEffect(() => {
-    let index = songs.findIndex(item => {
-      return item.song === song;
-    })
-    console.log('index', index, 'song', song, 'songs', songs)
-    index === -1 ? setSongExists(false) : setSongExists(true)
+    if (songs) {
+      let index = songs.findIndex(item => {
+        return item.song === song;
+      })
+      index === -1 ? setSongExists(false) : setSongExists(true)
+    }
   }, [song, songs])
-
-  const handleSubmit = () => {
-    if (validateData()) {
-      console.log('validated')
-    } else {
-      console.log('issue with data')
-    }
-  }
-
-  const validateData = () => {
-    let locationValid = true
-    let dateValid = true
-    let currentDate = new Date()
-    if (currentDate < Date.parse(date)) {
-      dateValid = false
-      alert(`Hello, time traveller! Thanks for trying to add this version of ${song.song}.\n\nUnfortunately, that would create a few paradoxes.\n\nIf the jam is great again in this timeline, feel free to come back and add it. Thank you, and safe travels!`)
-    }
-    if (!canWrite) {
-      locationValid = false;
-      dateValid = false;
-    }
-    if ((artist.start_year && year < artist.start_year) ||
-    (artist.end_year && year > artist.end_year)) {
-        dateValid = false
-        alert(`I don't think ${artist.artist} played in ${year}. Imagine if they did, though!`)
-    }
-    if (location === '') {
-      alert('Please enter a location')
-      locationValid = false
-    } if (location.length > 60) {
-      locationValid = false
-      alert('Please make the location shorter (60 characters max.)')
-    }
-    if (date === '') {
-      dateValid = false
-      alert('Please enter a date')
-    } if (dateValid && locationValid) {
-
-
-        insertVersion(date)
-      } else {
-        setShowAlreadyExistsMessage(true)
-      }
-      setLoading(false)
-  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -142,6 +99,190 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
     setLocation(null)
     setOpen(false);
   };
+
+
+
+  const handleSubmit = async () => {
+    setLoading(true)
+    if (validateData()) {
+      setSuccessAlertText('Jam looks good, adding to the database. Please don\'t refresh')
+      await insertVersion()
+    } else {
+      console.log('issue with data')
+    } setLoading(false)
+  }
+
+  const validateData = () => {
+    let currentDate = new Date()
+    if (currentDate < Date.parse(date)) {
+      setDateErrorText(`Hello, time traveller! Thanks for trying to add this version of ${song}.\n\nUnfortunately, that would create a few paradoxes.\n\nIf the jam is great again in this timeline, feel free to come back and add it. Thank you, and safe travels!`)
+      return false
+    } if (date === '') {
+      setDateErrorText('Please enter a date')
+      return false
+    } if (date && year && artist) {
+      if (year < artistsAndDates[artist].start || (artistsAndDates[artist].end && year > artistsAndDates[artist].end)) {
+        setDateErrorText(`I don't think ${artist} played in ${year}. Imagine if they did, though!`)
+      }
+    } if (!profile.can_write) {
+      console.log('cant write')
+      return false
+    } if (location === '') {
+      setLocationErrorText('Please enter a location')
+      return false
+    } if (location.length > 60) {
+      setLocationErrorText('Please make the location shorter (60 characters max.)')
+      return false
+    }
+    if (!songExists) {
+      setSongErrorText('Please choose a song name that has already been added, or add a new song')
+      return false
+    } if (!artist) {
+      setArtistErrorText('Please select an artist')
+    }
+      return true
+  }
+
+  const insertVersion = async () => {
+    console.log('in insertVersion')
+    const { error } = await supabase
+      .from('versions')
+      .insert(
+        [{ song_id: songId,
+          song_name: song,
+          user_id: user.id,
+          submitter_name: profile.name,
+          location: location,
+          artist: artist,
+          date: date,
+          funky: funky,
+          ambient: ambient,
+          fast: fast,
+          slow: slow,
+          bliss: bliss,
+          shred: shred,
+          dark: dark,
+          silly: silly,
+          guest: guest,
+          type2: type2,
+          groovy: groovy,
+          peaks: peaks,
+          reggae: reggae,
+          heavy: heavy,
+          jazzy: jazzy,
+          trippy: trippy,
+          soaring: soaring,
+          crunchy: crunchy,
+          happy: happy,
+          acoustic: acoustic,
+          soulful: soulful,
+          official_release: officialRelease,
+          sloppy: sloppy,
+          tease: tease,
+          listen_link: listenLink,
+          multi_part: multiPart,
+          sludgy: sludgy,
+          synthy: synthy,
+          chaotic: chaotic,
+          dissonant: dissonant,
+          bluesy: bluesy,
+          stop_start: stopStart,
+          segue: segue,
+          unusual: unusual,
+          long: long,
+          that_years_style: thatYearsStyle
+        }])
+    if (error) {
+    } else {
+      setShowSuccessMessage(true)
+      addOnePoint(song.submitter_name)
+      addTenPoints(username)
+      fetchVersions(song.id)
+      }
+  }
+
+  let artistsAndDates = {
+    'The Allman Brothers Band': {
+      start: 1969,
+      end: 2014
+    },
+    'Billy Strings': {
+      start: 2013,
+      end: null
+    },
+    'Dopapod': {
+      start: 2008,
+      end: null
+    },
+    'Furthur': {
+      start: 2009,
+      end: 2014
+    },
+    'Goose': {
+      start: 2014,
+      end: null
+    },
+    'Grateful Dead': {
+      start: 1965,
+      end: 1995
+    },
+    'Greensky Bluegrass': {
+      start: 2000,
+      end: null
+    },
+    'Jerry Garcia Band, Legion of Mary': {
+      start: 1960,
+      end: 1995
+    },
+    "Joe Russo's Almost Dead": {
+      start: 2013,
+      end: null
+    },
+    'Lettuce': {
+      start: 1992,
+      end: null
+    },
+    'Lotus': {
+      start: 1999,
+      end: null
+    },
+    'Medeski Martin & Wood': {
+      start: 1991,
+      end: null
+    },
+    'moe.': {
+      start: 1989,
+      end: null
+    },
+    'Osees': {
+      start: 1997,
+      end: null
+    },
+    'Phil Lesh & Friends': {
+      start: 1994,
+      end: null
+    },
+    'Phish': {
+      start: 1983,
+      end: null
+    },
+    'String Cheese Incident': {
+      start: 1993,
+      end: null
+    },
+    'Trey Anastasio, TAB': {
+      start: 1998,
+      end: null
+    },
+    "Umphrey's McGee": {
+      start: 1997,
+      end: null
+    },
+    'Widespread Panic': {
+      start: 1986,
+      end: null
+    }
+  }
 
   useEffect(() => {
     const tagsList = {
@@ -248,29 +389,29 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
           <AddSong song={song} user={user} songs={songs} setSong={setSong} profile={profile} setSongs={setSongs} />
           </>
           }
-          {songWarningText &&
-          <Alert severity="warning" sx={{ mb: '1em' }}>{songWarningText}</Alert>
+          {songErrorText &&
+          <Alert severity="error" sx={{ my: '1em' }}>{songErrorText}</Alert>
           }
-          {song && songExists &&
+          {songExists &&
           <>
           <br/>
           <ArtistPicker artist={artist} setArtist={setArtist}/>
           </>
           }
-          {artistWarningText &&
-          <Alert severity="warning" sx={{ mb: '1em' }}>{artistWarningText}</Alert>
+          {artistErrorText &&
+          <Alert severity="error" sx={{ my: '1em' }}>{artistErrorText}</Alert>
           }
-          {artist &&
+          {songExists && artist &&
           <>
           <br></br>
           <br></br>
           <DatePicker setDate={setDate}/>
           </>
           }
-          {dateWarningText &&
-          <Alert severity="warning" sx={{ mb: '1em' }}>{dateWarningText}</Alert>
+          {dateErrorText &&
+          <Alert severity="error" sx={{ my: '1em' }}>{dateErrorText}</Alert>
           }
-          {date &&
+          {songExists && artist && date &&
           <>
           <br></br>
           <br></br>
@@ -282,30 +423,31 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
           type="text"
           fullWidth
           variant="standard"
+          value={location}
           onChange={(e) => setLocation(e.target.value)}
           />
           </>
           }
-          {locationWarningText &&
-          <Alert severity="warning" sx={{ mb: '1em' }}>{locationWarningText}</Alert>
+          {locationErrorText &&
+          <Alert severity="error" sx={{ my: '1em' }}>{locationErrorText}</Alert>
           }
-          {location &&
+          {songExists && artist && date && location && location.length > 2 &&
           <>
           <br></br>
           <br></br>
           <TagPicker tagsSelected={tags} setTagsSelected={setTags}/>
           </>
           }
-          {/* <DialogContentText>
-            Know a great jam that hasn't been add
-          </DialogContentText> */}
-          {song && tagsText &&
+          {songExists && artist && date && location && location.length > 2 && tagsText &&
             <Typography>{tagsText}</Typography>
+          }
+          {successAlertText &&
+          <Alert severity="success" sx={{ my: '1em' }}>{successAlertText}</Alert>
           }
         </DialogContent>
         <DialogActions>            
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
-          {artist && song && date && location &&
+          {artist && song && date && location && location.length > 2 &&
           <Button onClick={handleSubmit}
             disabled={loading}
           >Add Version</Button>

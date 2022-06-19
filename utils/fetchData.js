@@ -15,12 +15,14 @@ async function fetchArtists() {
 
 async function fetchSongs() {
   const { data, error } = await supabase
-  .from('songs')
-  .select('song')
-  .order('ratings', {ascending: false})
+    .from('songs')
+    .select('song', 'id')
+    // .gt('avg_rating', 0)
+    // .limit(100)
+    .order('song', { ascending: true })
   if (error) {
-    console.log('error fetching songs', error)
-  } if (data) {
+    console.error(error)
+  } else if (data) {
     return data
   }
 }

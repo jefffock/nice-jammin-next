@@ -26,24 +26,26 @@ export async function getServerSideProps() {
       return data
     }
   }
-  async function getSongs() {
-    const { data, error } = await supabase
-      .from('songs')
-      .select('song', 'id')
-      // .gt('avg_rating', 0)
-      // .limit(100)
-      .order('song', { ascending: true })
-    if (error) {
-      console.error(error)
-    } else if (data) {
-      return data
-    }
-  }
-  const [jams, songs] = await Promise.all([
-    getJams(),
-    getSongs()
+
+  // async function getSongs() {
+  //   const { data, error } = await supabase
+  //     .from('songs')
+  //     .select('song', 'id')
+  //     // .gt('avg_rating', 0)
+  //     // .limit(100)
+  //     .order('song', { ascending: true })
+  //   if (error) {
+  //     console.error(error)
+  //   } else if (data) {
+  //     return data
+  //   }
+  // }
+
+  const [jams] = await Promise.all([
+    getJams()
+    // getSongs()
   ])
   return {
-    props: { jams, songs }
+    props: { jams }
   }
 }

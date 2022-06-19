@@ -14,7 +14,6 @@ export default function SongPicker({ songs, song, setSong, wide }) {
   const [inputValue, setInputValue] = useState('');
   const [uniqueSongs, setUniqueSongs] = useState(null)
 
-
   useEffect(() => {
     let titlesOnly = new Set()
     if (songs) {

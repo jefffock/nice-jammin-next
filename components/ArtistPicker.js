@@ -6,14 +6,13 @@ import Select from '@mui/material/Select';
 
 
 let artists = [
-  'Phish',
-  'Grateful Dead',
   'All Bands',
   'The Allman Brothers Band',
   'Billy Strings',
   'Dopapod',
   'Furthur',
   'Goose',
+  'Grateful Dead',
   'Greensky Bluegrass',
   'Jerry Garcia Band, Legion of Mary',
   "Joe Russo's Almost Dead",
@@ -23,6 +22,7 @@ let artists = [
   'moe.',
   'Osees',
   'Phil Lesh & Friends',
+  'Phish',
   'String Cheese Incident',
   'Trey Anastasio, TAB',
   "Umphrey's McGee",

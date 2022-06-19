@@ -20,7 +20,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { amber, deepOrange, grey } from '@mui/material/colors';
 import TopContributors from './TopContributors';
-import { fetchLeaders } from '../utils/fetchData';
+import { fetchLeaders, fetchSongs } from '../utils/fetchData';
 import TopBar from './AppBar'
 import Welcome from './Welcome'
 import Gratitude from './Gratitude'
@@ -28,14 +28,15 @@ import Gratitude from './Gratitude'
 
 const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
-export default function App({ jams, songs }) {
-  const [updatedSongs, setUpdatedSongs] = useState(songs)
+export default function App({ jams }) {
+  const [updatedSongs, setUpdatedSongs] = useState(null)
   const [session, setSession] = useState(null)
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
   const [artists, setArtists] = useState(null)
   const [artist, setArtist] = useState(null)
   const [song, setSong] = useState(null)
+  const [songs, setSongs] = useState(null)
   const [filteredSongs, setFilteredSongs] = useState(jams)
   const [sortedSongs, setSortedSongs] = useState(jams)
   const [order, setOrder] = useState('desc');
@@ -53,7 +54,16 @@ export default function App({ jams, songs }) {
         setUser(session.user)
       }
     })
+    if (!songs) {
+      const getSongs = async () => {
+        let songs = await fetchSongs()
+        setSongs(songs)
+        setUpdatedSongs(songs)
+      }
+      getSongs()
+    }
   }, [])
+
 
   useEffect(() => {
     setUser(supabase.auth.user())

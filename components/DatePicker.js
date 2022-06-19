@@ -12,9 +12,11 @@ export default function DatePicker({ setDate }) {
   const [value, setValue] = useState(null);
 
   const handleChange = (newValue) => {
-    setValue(newValue);
-    let stringedDate = newValue.toISOString().slice(0, 10)
-    setDate(stringedDate)
+    if (newValue) {
+      setValue(newValue);
+      let stringedDate = newValue.toISOString().slice(0, 10)
+      setDate(stringedDate)
+    }
   };
 
   // useEffect(() => {
