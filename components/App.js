@@ -20,7 +20,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { amber, deepOrange, grey } from '@mui/material/colors';
 import TopContributors from './TopContributors';
-import fetchLeaders from '../utils/fetchLeaders';
+import { fetchLeaders } from '../utils/fetchData';
 import TopBar from './AppBar'
 import Welcome from './Welcome'
 import Gratitude from './Gratitude'
@@ -29,8 +29,10 @@ import Gratitude from './Gratitude'
 const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 export default function App({ jams, songs }) {
+  const [updatedSongs, setUpdatedSongs] = useState(songs)
   const [session, setSession] = useState(null)
   const [user, setUser] = useState(null)
+  const [profile, setProfile] = useState(null)
   const [artists, setArtists] = useState(null)
   const [artist, setArtist] = useState(null)
   const [song, setSong] = useState(null)
@@ -65,6 +67,28 @@ export default function App({ jams, songs }) {
   useEffect(() => {
     sortSongs()
   }, [order, orderBy, filteredSongs])
+
+  useEffect(() => {
+    fetchProfile()
+  }, [user])
+
+  async function fetchProfile() {
+    const user = supabase.auth.user()
+    if (user) {
+      let id = user.id
+      let { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', id)
+        .limit(1)
+      if (error) {
+        console.log('error getting profile', error)
+      } if (data) {
+        console.log('profile data', data[0])
+        setProfile(data[0])
+      }
+    }
+  }
 
   function filterFunc(item) {
     if (artist && artist !== 'All Bands' && item.artist !== artist) {
@@ -146,11 +170,11 @@ export default function App({ jams, songs }) {
       </IconButton> */}
       {/* <DiscoverContributeSwitch /> */}
         <Welcome />
-        <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate} songs={songs} song={song} setSong={setSong}/>
+        <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate} songs={updatedSongs} song={song} setSong={setSong}/>
         <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} afterDate={afterDate} setBeforeDate={setBeforeDate} setAfterDate={setAfterDate} song={song} setSong={setSong}/>
-        <CollapsibleTable songs={jams} sortedSongs={sortedSongs} sortSongs={sortSongs} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} />
+        <CollapsibleTable songs={jams} sortedSongs={sortedSongs} sortSongs={sortSongs} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} />
         <br></br>
-        <AddVersion songs={songs} jams={jams} user={user}/>
+        <AddVersion songs={updatedSongs} setSongs={setUpdatedSongs} jams={jams} user={user} profile={profile}/>
         <Gratitude />
         <TopContributors />
       </Box>

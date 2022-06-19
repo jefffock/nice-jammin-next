@@ -16,11 +16,16 @@ import Box from '@mui/material/Box';
 import AddSong from './AddSong'
 
 
-export default function AddVersion({ songs, jams, user }) {
+export default function AddVersion({ songs, jams, user, profile, setSongs }) {
+  const [loading, setLoading] = useState(null)
   const [open, setOpen] = useState(false);
   const [song, setSong] = useState(null);
   const [songExists, setSongExists] = useState(true)
   const [songArray, setSongArray] = useState([])
+  const [songWarningText, setSongWarningText] = useState(null)
+  const [artistWarningText, setArtistWarningText] = useState(null)
+  const [dateWarningText, setDateWarningText] = useState(null)
+  const [locationWarningText, setLocationWarningText] = useState(null)
   const [artist, setArtist] = useState(null);
   const [tags, setTags] = useState([])
   const [date, setDate] = useState(null)
@@ -80,49 +85,50 @@ export default function AddVersion({ songs, jams, user }) {
     index === -1 ? setSongExists(false) : setSongExists(true)
   }, [song, songs])
 
-  // const handleSubmit = () => {
-  //   if (verifyData()) {
-  //     console.log(true)
-  //   }
-  // }
+  const handleSubmit = () => {
+    if (validateData()) {
+      console.log('validated')
+    } else {
+      console.log('issue with data')
+    }
+  }
 
-  // const verifyData = () => {
-  //   let locationValid = true
-  //   let dateValid = true
-  //   let currentDate = new Date()
-  //   if (currentDate < Date.parse(date)) {
-  //     dateValid = false
-  //     alert(`Hello, time traveller! Thanks for trying to add this version of ${song.song}.\n\nUnfortunately, that would create a few paradoxes.\n\nIf the jam is great again in this timeline, feel free to come back and add it. Thank you, and safe travels!`)
-  //   }
-  //   if (!canWrite) {
-  //     locationValid = false;
-  //     dateValid = false;
-  //   }
-  //   if ((artist.start_year && year < artist.start_year) ||
-  //   (artist.end_year && year > artist.end_year)) {
-  //       dateValid = false
-  //       alert(`I don't think ${artist.artist} played in ${year}. Imagine if they did, though!`)
-  //   }
-  //   if (location === '') {
-  //     alert('Please enter a location')
-  //     locationValid = false
-  //   } if (location.length > 60) {
-  //     locationValid = false
-  //     alert('Please make the location shorter (60 characters max.)')
-  //   }
-  //   if (date === '') {
-  //     dateValid = false
-  //     alert('Please enter a date')
-  //   } if (dateValid && locationValid) {
+  const validateData = () => {
+    let locationValid = true
+    let dateValid = true
+    let currentDate = new Date()
+    if (currentDate < Date.parse(date)) {
+      dateValid = false
+      alert(`Hello, time traveller! Thanks for trying to add this version of ${song.song}.\n\nUnfortunately, that would create a few paradoxes.\n\nIf the jam is great again in this timeline, feel free to come back and add it. Thank you, and safe travels!`)
+    }
+    if (!canWrite) {
+      locationValid = false;
+      dateValid = false;
+    }
+    if ((artist.start_year && year < artist.start_year) ||
+    (artist.end_year && year > artist.end_year)) {
+        dateValid = false
+        alert(`I don't think ${artist.artist} played in ${year}. Imagine if they did, though!`)
+    }
+    if (location === '') {
+      alert('Please enter a location')
+      locationValid = false
+    } if (location.length > 60) {
+      locationValid = false
+      alert('Please make the location shorter (60 characters max.)')
+    }
+    if (date === '') {
+      dateValid = false
+      alert('Please enter a date')
+    } if (dateValid && locationValid) {
 
 
-  //       insertVersion(date)
-  //     } else {
-  //       setShowAlreadyExistsMessage(true)
-  //     }
-  //     setLoading(false)
-  //   }
-  // }
+        insertVersion(date)
+      } else {
+        setShowAlreadyExistsMessage(true)
+      }
+      setLoading(false)
+  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -227,21 +233,32 @@ export default function AddVersion({ songs, jams, user }) {
       </Button>
       <Dialog open={open} onClose={handleClose} sx={{ minHeight: '50vh' }}>
         <DialogTitle>Add a Great Jam</DialogTitle>
-        <DialogContent sx={{ minHeight: '200px' }}>
+        <DialogContent sx={{ minHeight: '300px', minWidth: '300px' }}>
           {!user &&
-          <Alert severity="warning" sx={{ mb: '1em' }}>Please log in to contribute - thank you!</Alert>
+            <Alert severity="warning" sx={{ mb: '1em' }}>Please log in to contribute - thank you!</Alert>
           }
+          <br/><br/>
           <SongPicker songs={songs} song={song} setSong={setSong} wide={true}/>
-          <br></br>
           {!songExists && song &&
           <>
+          <br></br>
           <br/><br/>
-          <Typography>{song} hasn&apos;t been added yet.</Typography>
-          <AddSong song={song} user={user} />
+          <Alert severity="warning" sx={{ mb: '1em' }}>{song} hasn&apos;t been added yet.</Alert>
+          {/* <Typography>{song} hasn&apos;t been added yet.</Typography> */}
+          <AddSong song={song} user={user} songs={songs} setSong={setSong} profile={profile} setSongs={setSongs} />
           </>
           }
+          {songWarningText &&
+          <Alert severity="warning" sx={{ mb: '1em' }}>{songWarningText}</Alert>
+          }
           {song && songExists &&
+          <>
+          <br/>
           <ArtistPicker artist={artist} setArtist={setArtist}/>
+          </>
+          }
+          {artistWarningText &&
+          <Alert severity="warning" sx={{ mb: '1em' }}>{artistWarningText}</Alert>
           }
           {artist &&
           <>
@@ -249,6 +266,9 @@ export default function AddVersion({ songs, jams, user }) {
           <br></br>
           <DatePicker setDate={setDate}/>
           </>
+          }
+          {dateWarningText &&
+          <Alert severity="warning" sx={{ mb: '1em' }}>{dateWarningText}</Alert>
           }
           {date &&
           <>
@@ -266,6 +286,9 @@ export default function AddVersion({ songs, jams, user }) {
           />
           </>
           }
+          {locationWarningText &&
+          <Alert severity="warning" sx={{ mb: '1em' }}>{locationWarningText}</Alert>
+          }
           {location &&
           <>
           <br></br>
@@ -277,20 +300,15 @@ export default function AddVersion({ songs, jams, user }) {
             Know a great jam that hasn't been add
           </DialogContentText> */}
           {song && tagsText &&
-          <>
-            {/* <Typography>Summary:</Typography>
-            <Typography>{song}</Typography>
-            <Typography>{artist}</Typography>
-            <Typography>{date}</Typography>
-            <Typography>{location}</Typography> */}
             <Typography>{tagsText}</Typography>
-          </>
           }
         </DialogContent>
         <DialogActions>            
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
           {artist && song && date && location &&
-          <Button onClick={handleClose}>Add Version</Button>
+          <Button onClick={handleSubmit}
+            disabled={loading}
+          >Add Version</Button>
           }
         </DialogActions>
       </Dialog>

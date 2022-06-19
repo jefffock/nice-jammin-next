@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { supabase } from '../utils/supabaseClient'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -13,54 +14,107 @@ import TagPicker from './TagPicker'
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box'
+import { addTenPoints } from '../utils/dbFunctions'
+import { fetchSongs } from '../utils/fetchData'
 
-export default function AddSong({ song, user }) {
+
+export default function AddSong({ song, setSong, user, songs, profile, setSongs }) {
   const [open, setOpen] = useState(false);
   const [songToAdd, setSongToAdd] = useState(song)
+  const [loading, setLoading] = useState(null)
+  const [successAlertText, setSuccessAlertText] = useState(null)
 
   useEffect(() => {
     setSongToAdd(song)
   }, [song])
 
   const handleClickOpen = () => {
+    setLoading(false)
+    setSuccessAlertText(null)
     setOpen(true);
   };
 
   const handleClose = () => {
+    setLoading(false)
+    setSuccessAlertText(null)
+    setSongToAdd(null)
     setOpen(false);
   };
 
-  const handleSubmit = () => {
-    //validate rating, comment, tags
-    //verify user perms
-    //submit
-    //add points
-  }
-
   const handleSongChange = (e) => {
     setSongToAdd(e.target.value)
+    if (successAlertText) {
+      setSuccessAlertText(null)
+    }
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    setLoading(true)
+    const valid = validate()
+    if (valid) {
+      console.log('user', user)
+      await insertSong()
+    }
+    setLoading(false)
+  }
+
+  function validate() {
+    let index
+    songs.find((song, i) => {
+      if (song.song === songToAdd) {
+        index = i
+      }
+    })
+    if (index) {
+      setSong(songToAdd)
+      handleClose()
+      return false
+    }if (!user || !profile || !profile.can_write) {
+      return false
+    } if (!index) {
+      if (songToAdd.length > 0) {
+        return true
+      }
+    }
+  }
+
+  async function insertSong() {
+    const { error } = await supabase
+      .from('songs')
+      .insert(
+        { song: songToAdd, submitter_name: profile.name }, { returning: 'minimal' })
+    if (error) {
+      console.log(error)
+    } else {
+      setSuccessAlertText(`${songToAdd} added successfully - Thank you!`)
+      setLoading(false)
+      addTenPoints(profile.name)
+      let newSongs = await fetchSongs()
+      setSongs(newSongs)
+    }
   }
 
   return (
     <div>
-      <Button
-        variant="contained"
-        onClick={handleClickOpen}
-        sx={{ borderRadius: '50px', textTransform: 'none', my: '.5em' }}
-      >
-        Add {song}
-      </Button>
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Button
+          variant="contained"
+          onClick={handleClickOpen}
+          sx={{ borderRadius: '50px', textTransform: 'none', my: '.5em' }}
+          >
+          Add {song}
+        </Button>
+      </Box>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add {song}</DialogTitle>
+        <DialogTitle>Add {songToAdd}</DialogTitle>
         <DialogContent>
           {/* <DialogContentText>
             Rating art is always subjective, so just go with whatever rating feels right to you
           </DialogContentText> */}
           {!user &&
           <Alert severity="warning" sx={{ mb: '1em' }}>Please log in to add this song - thank you!</Alert>
-          }
-          {user &&
-          <Alert severity="warning" sx={{ mb: '1em' }}>Please double check for typos - thank you!</Alert>
           }
             <FormControl>
           </FormControl>
@@ -75,12 +129,26 @@ export default function AddSong({ song, user }) {
             variant="standard"
             multiline
             onChange={handleSongChange}
-          />
-          <br></br>
+            />
+            {user && !successAlertText &&
+            <Alert severity="warning" sx={{ mb: '1em' }}>Please double check for typos - thank you!</Alert>
+            }
+            {successAlertText &&
+            <Alert severity="success" sx={{ mb: '1em' }}>{successAlertText}</Alert>
+            }
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>Add This Song</Button>
+          {!successAlertText &&
+          <>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleSubmit}
+              disabled={loading}>
+            Add This Song</Button>
+          </>
+          }
+          {successAlertText &&
+            <Button onClick={handleClose}>Close</Button>
+          }
         </DialogActions>
       </Dialog>
     </div>

@@ -20,6 +20,41 @@ export default function RateVersion({ song, date, location, tags, user }) {
   const [comment, setComment] = useState('')
   const [newTags, setNewTags] = useState([])
   const [tagsToAddText, setTagsToAddText] = useState('')
+  const [funky, setFunky] = useState(false)
+  const [ambient, setAmbient] = useState(false)
+  const [fast, setFast] = useState(false)
+  const [slow, setSlow] = useState(false)
+  const [bliss, setBliss] = useState(false)
+  const [shred, setShred] = useState(false)
+  const [dark, setDark] = useState(false)
+  const [silly, setSilly] = useState(false)
+  const [guest, setGuest] = useState(false)
+  const [type2, setType2] = useState(false)
+  const [groovy, setGroovy] = useState(false)
+  const [peaks, setPeaks] = useState(false)
+  const [reggae, setReggae] = useState(false)
+  const [heavy, setHeavy] = useState(false)
+  const [jazzy, setJazzy] = useState(false)
+  const [trippy, setTrippy] = useState(false)
+  const [soaring, setSoaring] = useState(false)
+  const [crunchy, setCrunchy] = useState(false)
+  const [happy, setHappy] = useState(false)
+  const [acoustic, setAcoustic] = useState(false)
+  const [soulful, setSoulful] = useState(false)
+  const [officialRelease, setOfficialRelease] = useState(false)
+  const [sloppy, setSloppy] = useState(false)
+  const [tease, setTease] = useState(false)
+  const [multiPart, setMultiPart] = useState(false)
+  const [sludgy, setSludgy] = useState(false)
+  const [synthy, setSynthy] = useState(false)
+  const [chaotic, setChaotic] = useState(false)
+  const [dissonant, setDissonant] = useState(false)
+  const [bluesy, setBluesy] = useState(false)
+  const [stopStart, setStopStart] = useState(false)
+  const [segue, setSegue] = useState(false)
+  const [unusual, setUnusual] = useState(false)
+  const [long, setLong] = useState(false)
+  const [thatYearsStyle, setThatYearsStyle] = useState(false)
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -118,13 +153,82 @@ export default function RateVersion({ song, date, location, tags, user }) {
   ];
 
   useEffect(() => {
-    let newTagText = ''
-    for (var i = 0; i < tagsList.length; i++) {
-      if (newTags.indexOf(tagsList[i].value) !== -1) {
-        newTagText += tagsList[i].label + ', '
-      }
-    } let trimmedTags = newTagText.slice(0, newTagText.length - 2)
+    const tagsList = {
+      'acoustic': 'Acoustic',
+      'ambient': 'Ambient/Space',
+      'bliss': 'Bliss',
+      'bluesy': 'Bluesy',
+      'chaotic': 'Chaotic',
+      'crunchy': 'Crunchy',
+      'dark': 'Dark',
+      'dissonant': 'Dissonant',
+      'fast': 'Fast',
+      'funky': 'Funky',
+      'groovy': 'Groovy',
+      'guest': 'Guest',
+      'happy': 'Happy',
+      'heavy': 'Heavy',
+      'jazzy': 'Jazzy',
+      'long': 'Long',
+      'multi_part': 'Multi-part',
+      'official_release': 'Official Release',
+      'peaks': 'Peaks',
+      'reggae': 'Reggae',
+      'seque': 'Segue',
+      'shred': 'Shred',
+      'silly': 'Silly',
+      'sloppy': 'Sloppy',
+      'slow': 'Slow',
+      'sludgy': 'Sludgy',
+      'soaring': 'Soaring',
+      'soulful': 'Soulful',
+      'stop_start': 'Stop-start',
+      'synthy': 'Synthy',
+      'teases': 'Teases',
+      'that_years_style': "That Year's Style",
+      'trippy': 'Trippy',
+      'type2': 'Type II',
+      'unusual': 'Unusual',
+    }
+    let newTagsText = ''
+    for (var i = 0; i < newTags.length; i++) {
+      newTagsText += tagsList[newTags[i]] + ', '
+    } let trimmedTags = newTagsText.slice(0, newTagsText.length - 2)
     setTagsToAddText(trimmedTags)
+    newTags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
+    newTags.indexOf('ambient') !== -1 ? setAmbient(true) : setAmbient(false)
+    newTags.indexOf('bliss') !== -1 ? setBliss(true) : setBliss(false)
+    newTags.indexOf('bluesy') !== -1 ? setBluesy(true) : setBluesy(false)
+    newTags.indexOf('chaotic') !== -1 ? setChaotic(true) : setChaotic(false)
+    newTags.indexOf('crunchy') !== -1 ? setCrunchy(true) : setCrunchy(false)
+    newTags.indexOf('dark') !== -1 ? setDark(true) : setDark(false)
+    newTags.indexOf('dissonant') !== -1 ? setDissonant(true) : setDissonant(false)
+    newTags.indexOf('fast') !== -1 ? setFast(true) : setFast(false)
+    newTags.indexOf('funky') !== -1 ? setFunky(true) : setFunky(false)
+    newTags.indexOf('groovy') !== -1 ? setGroovy(true) : setGroovy(false)
+    newTags.indexOf('guest') !== -1 ? setGuest(true) : setGuest(false)
+    newTags.indexOf('happy') !== -1 ? setHappy(true) : setHappy(false)
+    newTags.indexOf('jazzy') !== -1 ? setJazzy(true) : setJazzy(false)
+    newTags.indexOf('long') !== -1 ? setLong(true) : setLong(false)
+    newTags.indexOf('multi_part') !== -1 ? setMultiPart(true) : setMultiPart(false)
+    newTags.indexOf('official_release') !== -1 ? setOfficialRelease(true) : setOfficialRelease(false)
+    newTags.indexOf('peaks') !== -1 ? setPeaks(true) : setPeaks(false)
+    newTags.indexOf('reggae') !== -1 ? setReggae(true) : setReggae(false)
+    newTags.indexOf('segue') !== -1 ? setSegue(true) : setSegue(false)
+    newTags.indexOf('shred') !== -1 ? setShred(true) : setShred(false)
+    newTags.indexOf('silly') !== -1 ? setSilly(true) : setSilly(false)
+    newTags.indexOf('sloppy') !== -1 ? setSloppy(true) : setSloppy(false)
+    newTags.indexOf('slow') !== -1 ? setSlow(true) : setSlow(false)
+    newTags.indexOf('sludgy') !== -1 ? setSludgy(true) : setSludgy(false)
+    newTags.indexOf('soaring') !== -1 ? setSoaring(true) : setSoaring(false)
+    newTags.indexOf('soulful') !== -1 ? setSoulful(true) : setSoulful(false)
+    newTags.indexOf('stop_start') !== -1 ? setStopStart(true) : setStopStart(false)
+    newTags.indexOf('synthy') !== -1 ? setSynthy(true) : setSynthy(false)
+    newTags.indexOf('tease') !== -1 ? setTease(true) : setTease(false)
+    newTags.indexOf('that_years_style') !== -1 ? setThatYearsStyle(true) : setThatYearsStyle(false)
+    newTags.indexOf('trippy') !== -1 ? setTrippy(true) : setTrippy(false)
+    newTags.indexOf('type2') !== -1 ? setType2(true) : setType2(false)
+    newTags.indexOf('Unusual') !== -1 ? setUnusual(true) : setUnusual(false)
   }, [newTags])
 
   return (

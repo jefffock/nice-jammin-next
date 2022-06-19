@@ -75,7 +75,7 @@ export default function TopBar({ showButton, user, session, router }) {
             {!user &&
             <>
              <Button href="/signup" sx={{ bgcolor: 'third.main', textTransform: 'none', color: '#000000', borderRadius: '2em', '&:hover': { bgcolor: 'primary.bg' } }}>Sign Up</Button>
-             <Button href="/signup" sx={{ bgcolor: 'primary.main', textTransform: 'none', color: '#000000', borderRadius: '2em', '&:hover': { bgcolor: 'primary.bg' } }}>Sign In</Button>
+             <Button href="/login" sx={{ bgcolor: 'primary.main', textTransform: 'none', color: '#000000', borderRadius: '2em', '&:hover': { bgcolor: 'primary.bg' } }}>Sign In</Button>
             </>
             }
             {user &&

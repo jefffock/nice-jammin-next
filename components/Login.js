@@ -23,12 +23,10 @@ export default function SignIn() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true)
     const data = new FormData(event.currentTarget);
     const  email = data.get('email');
     const password = data.get('password')
-    console.log( email, password);
-
-    setLoading(true)
     const { error } = await supabase.auth.signIn({
       email: email,
       password: password,

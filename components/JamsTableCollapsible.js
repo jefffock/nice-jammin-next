@@ -94,7 +94,7 @@ return (
 );
 }
 
-function Row({ row, user }) {
+function Row({ row, user, profile }) {
   const [open, setOpen] = useState(false);
   const [tags, setTags] = useState('')
 
@@ -203,7 +203,7 @@ function Row({ row, user }) {
               <Typography>{row.location}</Typography>
               <Typography>{row.num_ratings} ratings</Typography>
               <Typography>Added by {row.submitter_name}. Thank you!</Typography>
-            <RateVersion song={row.song_name} date={row.date} location={row.location} tags={tags} user={user}/>
+            <RateVersion song={row.song_name} date={row.date} location={row.location} tags={tags} user={user} profile={profile} />
             </Box>
           </Collapse>
         </TableCell>
@@ -212,7 +212,7 @@ function Row({ row, user }) {
   );
 }
 
-export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order, orderBy, setOrder, setOrderBy, user }) {
+export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order, orderBy, setOrder, setOrderBy, user, profile }) {
   const [orderedSongs, setOrderedSongs] = useState(null)
 
   const handleRequestSort = (event, property) => {
