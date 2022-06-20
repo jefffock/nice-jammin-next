@@ -1,5 +1,47 @@
 import { supabase } from '../utils/supabaseClient'
 
+async function rateVersion(versionId, songId, profileName, rating, comment, versionSubmitterName, songSubmitterName) {
+  console.log('in rate version')
+  const { data, error } = await supabase
+    .from('ratings')
+    .insert(
+      { user_id: user.id,
+        version_id: version.id,
+        submitter_name: username,
+        rating: rating,
+        comment: comment
+      })
+  if (error) {
+    console.log('error', error)
+    return error
+  } else {
+    console.log('success adding rating: ', data)
+    addOnePoint(versionSubmitterName)
+    addOnePoint(songSubmitterName)
+    addTenPoints(profileName)
+    addRatingCountToSong(songId)
+    addRatingCountToVersion(versionId)
+    calcAverageForVersion(versionId)
+    return data
+  }
+}
+
+async function updateRating(versionId, profileName, rating, comment) {
+  const { data, error } = await supabase
+    .from('ratings')
+    .update({
+      comment: comment,
+      rating: rating
+    })
+    .match({submitter_name: username, version_id: version.id})
+  if (error) {
+    return error
+  } else {
+    calcAverageForVersion(versionId)
+    return data
+  }
+}
+
 async function addOnePoint(profileName) {
   const { error } = await supabase.rpc( 'add_one_point', { username: profileName })
   if (error) {

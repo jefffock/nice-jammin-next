@@ -6,6 +6,8 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
+import Box from '@mui/material/Box';
+
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -91,7 +93,7 @@ const tags = [
   value: 'unusual'},
 ];
 
-export default function TagPicker({ tagsSelected, setTagsSelected, size }) {
+export default function TagPicker({ tagsSelected, setTagsSelected, size, mx, my }) {
 
   const handleChange = (event) => {
     const {
@@ -104,8 +106,8 @@ export default function TagPicker({ tagsSelected, setTagsSelected, size }) {
   };
 
   return (
-    <div>
-      <FormControl sx={{ minWidth: 120,  m:'0.25em' }} size={size ? size : "small"}>
+    <Box mx={mx ? mx : '0.25em'} my={my ? my : '0.25em'} minWidth="120px">
+      <FormControl sx={{ minWidth: 120 }} size={size ? size : "small"}>
         <InputLabel id="tag-filter-select-label">Tags</InputLabel>
         <Select
           labelId="tag-filter-select-label"
@@ -126,7 +128,7 @@ export default function TagPicker({ tagsSelected, setTagsSelected, size }) {
           ))}
         </Select>
       </FormControl>
-    </div>
+    </Box>
   );
 }
 

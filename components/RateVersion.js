@@ -13,9 +13,11 @@ import TagPicker from './TagPicker'
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Alert from '@mui/material/Alert';
+import { rateVersion, updateRating } from '../utils/dbFunctions'
 
 export default function RateVersion({ song, date, location, tags, user }) {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false)
   const [rating, setRating] = useState(null)
   const [comment, setComment] = useState('')
   const [newTags, setNewTags] = useState([])
@@ -77,6 +79,10 @@ export default function RateVersion({ song, date, location, tags, user }) {
 
   const handleCommentChange = (e) => {
     setComment(e.target.value)
+  }
+
+  const validateRatingData = () => {
+
   }
 
   const tagsList = [
@@ -249,10 +255,10 @@ export default function RateVersion({ song, date, location, tags, user }) {
           {!user &&
           <Alert severity="warning" sx={{ mb: '1em' }}>Please log in to rate this jam - thank you!</Alert>
           }
-            <FormControl sx={{ minWidth: 120, m:'0.25em' }}>
+            <FormControl sx={{ minWidth: 120, mx:'0.25em', my: '1em' }}>
             <InputLabel id="rating-select-label">Rating</InputLabel>
             <Select
-            size="small"
+            size="normal"
             labelId="rating-select-label"
             id="rating-select"
             value={rating}
@@ -273,6 +279,7 @@ export default function RateVersion({ song, date, location, tags, user }) {
           </FormControl>
           <TextField
             autoFocus
+            sx={{ mx:'0.25em', mb: '1em'}}
             margin="dense"
             id="comment"
             label="Comments (optional)"
@@ -284,17 +291,17 @@ export default function RateVersion({ song, date, location, tags, user }) {
           />
           <br></br>
           <br></br>
-          <TagPicker tagsSelected={newTags} setTagsSelected={setNewTags}/>
-          {tagsToAddText &&
-          <Typography>Tags to Add: {tagsToAddText}</Typography>
-        }
+          <TagPicker tagsSelected={newTags} setTagsSelected={setNewTags} size={'normal'}/>
           {tags &&
           <Typography>Current Tags: {tags}</Typography>
           }
+          {tagsToAddText &&
+          <Typography>Tags to Add: {tagsToAddText}</Typography>
+          }
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>Rate</Button>
+          {/* <Button onClick={handleClose}>Cancel</Button> */}
+          <Button onClick={handleSubmit} disabled={loading}>Rate</Button>
         </DialogActions>
       </Dialog>
     </div>

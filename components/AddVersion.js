@@ -19,7 +19,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
-import { addOnePoint, addTenPoints } from '../utils/dbFunctions'
+import { addOnePoint, addTenPoints, rateVersion } from '../utils/dbFunctions'
 
 
 
@@ -134,10 +134,6 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
     if (validateData()) {
       setSuccessAlertText("Looks good, adding jam...")
       await insertVersion()
-      if (rating) {
-        //rate that version
-        console.log('rating', rating)
-      }
     } else {
       console.log('issue with data')
     } setLoading(false)
@@ -227,10 +223,21 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
     if (error) {
     } else {
       console.log('data after insert', data)
-      setSuccessAlertText(`Successfully added ${song} from ${date}. Thank you for contributing!`)
-      addOnePoint(songObj.submitter_name)
-      addTenPoints(profile.name)
-      fetchVersions(songObj.id)
+      if (rating) {
+        setSuccessAlertText(`Successfully added ${song} from ${date}. Now adding your rating...`)
+        console.log('versionId', data[0].id)
+        console.log('songId', songObj.id)
+        console.log('songSubmitterName', songObj.submitter_name)
+        console.log('rating', rating)
+        console.log('comments', comment)
+        // rateVersion(data)
+        setSuccessAlertText(`Successfully added ${song} from ${date} and your rating. Thank you for contributing!`)
+      } else {
+        setSuccessAlertText(`Successfully added ${song} from ${date}. Thank you for contributing!`)
+      }
+      // addOnePoint(songObj.submitter_name)
+      // addTenPoints(profile.name)
+      // fetchVersions(songObj.id)
       }
   }
 
@@ -411,12 +418,9 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
           {!user &&
             <Alert severity="warning" sx={{ mb: '1em' }}>Please log in to contribute - thank you!</Alert>
           }
-          <br/><br/>
-          <SongPicker songs={songs} song={song} setSong={setSong} wide={true} size={'normal'}/>
-
+          <SongPicker songs={songs} song={song} setSong={setSong} wide={true} size={'normal'} mx={'0.25em'} my={'1em'}/>
           {!songExists && song &&
           <>
-          <br/><br/>
           <Alert severity="warning" sx={{ mb: '1em' }}>{song} hasn&apos;t been added yet.</Alert>
           {/* <Typography>{song} hasn&apos;t been added yet.</Typography> */}
           <AddSong song={song} user={user} songs={songs} setSong={setSong} profile={profile} setSongs={setSongs} />
@@ -427,40 +431,54 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
           <Alert severity="error" sx={{ my: '1em' }}>{songErrorText}</Alert>
           }
           {songExists &&
-          <><br/><ArtistPicker artist={artist} setArtist={setArtist} size={'normal'}/></>
+          <ArtistPicker artist={artist} setArtist={setArtist} size={'normal'} my={'1em'}/>
           }
           {artistErrorText &&
           <Alert severity="error" sx={{ my: '1em' }}>{artistErrorText}</Alert>
           }
           {songExists && artist &&
-          <><br/><br/><DatePicker setDate={setDate}/></>
+          <DatePicker setDate={setDate} my={'1em'} date={date}/>
           }
           {dateErrorText &&
           <Alert severity="error" sx={{ my: '1em' }}>{dateErrorText}</Alert>
           }
           {songExists && artist && date &&
-          <>
-          <TextField
-          sx={{ m:'0.25em', mt: '1em' }}
-          autoFocus
-          margin="dense"
-          id="name"
-          label="Location"
-          type="text"
-          fullWidth
-          variant="standard"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          />
+          <Box mx="0.25em" my="1em">
+            <TextField
+            autoFocus
+            id="name"
+            label="Location"
+            type="text"
+            fullWidth
+            variant="standard"
+            multiline
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            />
+          </Box>
+          }
           {locationErrorText &&
           <Alert severity="error" sx={{ my: '1em' }}>{locationErrorText}</Alert>
           }
-          <br></br>
-          <br></br>
-          <Typography textAlign="center" mb="1em">Optional</Typography>
-          <TagPicker tagsSelected={tags} setTagsSelected={setTags} size={'normal'}/>
-          <Typography>{tagsText}</Typography>
-          <FormControl sx={{ minWidth: 120, mt:'1.5em', mx: '0.25em' }}>
+          {song && artist && date && location && location.length > 2 &&
+          <>
+          <Typography mx="0.25em" my="1em">Optional:</Typography>
+          <TagPicker tagsSelected={tags} setTagsSelected={setTags} size={'normal'} my={'1em'}/>
+          {tagsText &&
+          <Typography mx="0.25em" my="1em">{tagsText}</Typography>
+          }
+          <TextField
+            sx={{ mb: '1em', mx:'0.25em' }}
+            // margin="dense"
+            id="listen_link"
+            label="Link (Relisten, YouTube)"
+            type="text"
+            fullWidth
+            variant="standard"
+            multiline
+            onChange={(e) => setListenLink(e.target.value)}
+            />
+          <FormControl sx={{ my:'1em', mx: '0.25em' }}>
             <InputLabel id="rating-select-label">Rating</InputLabel>
             <Select
             size="normal"
@@ -483,8 +501,6 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
             </Select>
           <TextField
             sx={{ mt: '1em' }}
-            autoFocus
-            margin="dense"
             id="comment"
             label="Comments"
             type="text"
@@ -492,25 +508,13 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
             variant="standard"
             multiline
             onChange={handleCommentChange}
-          />
-          <TextField
-            sx={{ mt: '1em' }}
-            autoFocus
-            margin="dense"
-            id="listen_link"
-            label="Audio Link"
-            type="text"
-            fullWidth
-            variant="standard"
-            multiline
-            onChange={(e) => setListenLink(e.target.value)}
-          />
+            />
           </FormControl>
           </>
           }
           {successAlertText &&
           <Alert severity="success" sx={{ my: '1em' }}>{successAlertText}</Alert>
-          }
+        }
         </DialogContent>
         <DialogActions>            
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              

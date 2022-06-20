@@ -3,6 +3,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Box from '@mui/material/Box'
+
 
 
 let artists = [
@@ -29,25 +31,27 @@ let artists = [
   'Widespread Panic'
 ]
 
-export default function ArtistPicker({ artist, setArtist, size}) {
+export default function ArtistPicker({ artist, setArtist, size, my }) {
 
   const handleChange = (event) => {
       setArtist(event.target.value);
   };
 
   return (
-    <FormControl sx={{ minWidth: 120, m:'0.25em' }} size={size ? size : 'small' }>
-      <InputLabel id="artist-select">Band</InputLabel>
-      <Select
-        labelId="artist-select"
-        value={artist ? artist : ''}
-        label="Band"
-        onChange={handleChange}
-        >
-        {artists.map((artist) => (
-          <MenuItem key={artist} value={artist}>{artist}</MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+    <Box my={my ? my : '0.25em'}>
+      <FormControl sx={{ minWidth: 120, mx:'0.25em' }} size={size ? size : 'small' }>
+        <InputLabel id="artist-select">Band</InputLabel>
+        <Select
+          labelId="artist-select"
+          value={artist ? artist : ''}
+          label="Band"
+          onChange={handleChange}
+          >
+          {artists.map((artist) => (
+            <MenuItem key={artist} value={artist}>{artist}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Box>
   );
 }

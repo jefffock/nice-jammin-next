@@ -9,7 +9,7 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import Box from '@mui/material/Box';
 
-export default function DatePicker({ setDate }) {
+export default function DatePicker({ setDate, date, my }) {
   const [value, setValue] = useState(null);
 
   const handleChange = (newValue) => {
@@ -25,12 +25,12 @@ export default function DatePicker({ setDate }) {
   // }, [setDate, value])
 
   return (
-    <Box sx={{ m:'0.25em' }}>
+    <Box my={my ? my : '0.25em'} sx={{ mx:'0.25em' }}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
           <MobileDatePicker
             label="Date"
             inputFormat="MM/dd/yyyy"
-            value={value}
+            value={date}
             onChange={handleChange}
             renderInput={(params) => <TextField {...params} />}
             />

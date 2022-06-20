@@ -103,7 +103,8 @@ export default function App({ jams }) {
   function filterFunc(item) {
     if (artist && artist !== 'All Bands' && item.artist !== artist) {
       return false
-    } if (song && !item.song_name?.toLowerCase().includes(song.toLowerCase())) {
+    } console.log('song in filterFunc', song)
+    if (song && !item.song_name?.toLowerCase().includes(song.toLowerCase())) {
       return false
     } if (tagsSelected) {
       for (var i = 0; i < tagsSelected.length; i++) {
