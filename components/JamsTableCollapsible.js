@@ -203,7 +203,7 @@ function Row({ row, user, profile }) {
               <Typography>{row.location}</Typography>
               <Typography>{row.num_ratings} ratings</Typography>
               <Typography>Added by {row.submitter_name}. Thank you!</Typography>
-            <RateVersion song={row.song_name} date={row.date} location={row.location} tags={tags} user={user} profile={profile} />
+            <RateVersion song={row.song_name} date={row.date} location={row.location} tags={tags} user={user} profile={profile} jam={row}/>
             </Box>
           </Collapse>
         </TableCell>
@@ -269,6 +269,7 @@ export default function CollapsibleTable({ jams, sortedJams, sortJams, order, or
             key={jam.id}
             row={jam}
             user={user}
+            profile={profile}
             />
             ))}
         </TableBody>

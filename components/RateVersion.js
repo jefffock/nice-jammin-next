@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { rateVersion, updateRating } from '../utils/dbFunctions'
+import { checkUserAlreadyRated } from '../utils/fetchData'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -13,15 +15,18 @@ import TagPicker from './TagPicker'
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Alert from '@mui/material/Alert';
-import { rateVersion, updateRating } from '../utils/dbFunctions'
+import Box from '@mui/material/Box';
 
-export default function RateVersion({ song, date, location, tags, user }) {
+
+export default function RateVersion({ song, date, location, tags, user, profile, jam }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false)
   const [rating, setRating] = useState(null)
   const [comment, setComment] = useState('')
   const [newTags, setNewTags] = useState([])
   const [tagsToAddText, setTagsToAddText] = useState('')
+  const [userAlreadyRated, setUserAlreadyRated] = useState(false)
+  const [buttonText, setButtonText] = useState('Rate')
   const [funky, setFunky] = useState(false)
   const [ambient, setAmbient] = useState(false)
   const [fast, setFast] = useState(false)
@@ -85,78 +90,21 @@ export default function RateVersion({ song, date, location, tags, user }) {
 
   }
 
-  const tagsList = [
-    {label: 'Acoustic',
-    value: 'acoustic'},
-    {label: 'Ambient/Space',
-    value: 'ambient'},
-    {label: 'Bliss',
-    value: 'bliss'},
-    {label: 'Bluesy',
-    value: 'bluesy'},
-    {label: 'Chaotic',
-    value: 'chaotic'},
-    {label: 'Crunchy',
-    value: 'crunchy'},
-    {label: 'Dark',
-    value: 'dark'},
-    {label: 'Dissonant',
-    value: 'dissonant'},
-    {label: 'Fast',
-    value: 'fast'},
-    {label: 'Funky',
-    value: 'funky'},
-    {label: 'Groovy',
-    value: 'groovy'},
-    {label: 'Guest',
-    value: 'guest'},
-    {label: 'Happy',
-    value: 'happy'},
-    {label: 'Heavy',
-    value: 'heavy'},
-    {label: 'Jazzy',
-    value: 'jazzy'},
-    {label: 'Long',
-    value: 'long'},
-    {label: 'Multi-part',
-    value: 'multi_part'},
-    {label: 'Official Release',
-    value: 'official_release'},
-    {label: 'Peaks',
-    value: 'peaks'},
-    {label: 'Reggae',
-    value: 'reggae'},
-    {label: 'Segue',
-    value: 'seque'},
-    {label: 'Shred',
-    value: 'shred'},
-    {label: 'Silly',
-    value: 'silly'},
-    {label: 'Sloppy',
-    value: 'sloppy'},
-    {label: 'Slow',
-    value: 'slow'},
-    {label: 'Sludgy',
-    value: 'sludgy'},
-    {label: 'Soaring',
-    value: 'soaring'},
-    {label: 'Soulful',
-    value: 'soulful'},
-    {label: 'Stop-start',
-    value: 'stop_start'},
-    {label: 'Synthy',
-    value: 'synthy'},
-    {label: 'Teases',
-    value: 'teases'},
-    {label: "That Year's Style",
-    value: 'that_years_style'},
-    {label: 'Trippy',
-    value: 'trippy'},
-    {label: 'Type II',
-    value: 'type2'},
-    {label: 'Unusual',
-    value: 'unusual'},
-  ];
+  useEffect(() => {
+    if (open) {
+      console.log('open, about to check if already rated')
+      let checkRated = async () => {
+        let data = await checkUserAlreadyRated(profile.name, jam.id)
+        if (data) {
+          setComment(data[0].comment)
+          setRating(parseInt(data[0].rating))
+          setUserAlreadyRated(true)
+          setButtonText('Update')
+        }
+      }
+      checkRated()
+    }
+  }, [user, profile, jam, open])
 
   useEffect(() => {
     const tagsList = {
@@ -255,7 +203,7 @@ export default function RateVersion({ song, date, location, tags, user }) {
           {!user &&
           <Alert severity="warning" sx={{ mb: '1em' }}>Please log in to rate this jam - thank you!</Alert>
           }
-            <FormControl sx={{ minWidth: 120, mx:'0.25em', my: '1em' }}>
+            <Box sx={{ minWidth: 120, mx:'0.25em', my: '1em' }}>
             <InputLabel id="rating-select-label">Rating</InputLabel>
             <Select
             size="normal"
@@ -276,7 +224,7 @@ export default function RateVersion({ song, date, location, tags, user }) {
               <MenuItem value={2}>2</MenuItem>
               <MenuItem value={1}>1</MenuItem>
             </Select>
-          </FormControl>
+          </Box>
           <TextField
             autoFocus
             sx={{ mx:'0.25em', mb: '1em'}}
@@ -301,7 +249,7 @@ export default function RateVersion({ song, date, location, tags, user }) {
         </DialogContent>
         <DialogActions>
           {/* <Button onClick={handleClose}>Cancel</Button> */}
-          <Button onClick={handleSubmit} disabled={loading}>Rate</Button>
+          <Button onClick={handleSubmit} disabled={loading}>{buttonText}</Button>
         </DialogActions>
       </Dialog>
     </div>

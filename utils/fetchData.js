@@ -93,4 +93,19 @@ async function fetchIdeas() {
   }
 }
 
-export { fetchJams, fetchArtists, fetchSongs, fetchLeaders, fetchVersions, fetchRatings, fetchIdeas }
+async function checkUserAlreadyRated(name, versionId) {
+  const { data, error } = await supabase
+    .from('ratings')
+    .select('*')
+    .eq('submitter_name', name)
+    .eq('version_id', versionId)
+  if (error) {
+    console.log('error in checkUserAlreadyRated', error)
+  } else {
+    if (data.length > 0) {
+      return data
+    }
+  }
+}
+
+export { fetchJams, fetchArtists, fetchSongs, fetchLeaders, fetchVersions, fetchRatings, fetchIdeas, checkUserAlreadyRated }
