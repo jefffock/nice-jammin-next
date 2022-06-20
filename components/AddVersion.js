@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { supabase } from '../utils/supabaseClient'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -14,11 +15,19 @@ import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import AddSong from './AddSong'
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
+import { addOnePoint, addTenPoints } from '../utils/dbFunctions'
+
+
 
 export default function AddVersion({ songs, jams, user, profile, setSongs }) {
   const [loading, setLoading] = useState(null)
   const [open, setOpen] = useState(false);
   const [song, setSong] = useState(null);
+  const [songObj, setSongObj] = useState(null)
   const [songExists, setSongExists] = useState(true)
   const [songArray, setSongArray] = useState([])
   const [songErrorText, setSongErrorText] = useState(null)
@@ -32,6 +41,9 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
   const [year, setYear] = useState(null)
   const [location, setLocation] = useState(null)
   const [tagsText, setTagsText] = useState('')
+  const [rating, setRating] = useState(null)
+  const [comment, setComment] = useState('')
+  const [listenLink, setListenLink] = useState(null)
   const [funky, setFunky] = useState(false)
   const [ambient, setAmbient] = useState(false)
   const [fast, setFast] = useState(false)
@@ -83,7 +95,10 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
       let index = songs.findIndex(item => {
         return item.song === song;
       })
-      index === -1 ? setSongExists(false) : setSongExists(true)
+      index === -1 ?
+      setSongExists(false) :
+      setSongExists(true)
+      setSongObj(songs[index])
     }
   }, [song, songs])
 
@@ -100,13 +115,29 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
     setOpen(false);
   };
 
+  const handleRatingChange = (e) => {
+    setRating(e.target.value)
+  }
 
+  const handleCommentChange = (e) => {
+    setComment(e.target.value)
+  }
+
+  const handleLocationChange = (e) => {
+    set
+    setLocation(e.target.value)
+  }
 
   const handleSubmit = async () => {
+    console.log('songObj', songObj)
     setLoading(true)
     if (validateData()) {
-      setSuccessAlertText('Jam looks good, adding to the database. Please don\'t refresh')
+      setSuccessAlertText("Looks good, adding jam...")
       await insertVersion()
+      if (rating) {
+        //rate that version
+        console.log('rating', rating)
+      }
     } else {
       console.log('issue with data')
     } setLoading(false)
@@ -145,10 +176,11 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
 
   const insertVersion = async () => {
     console.log('in insertVersion')
-    const { error } = await supabase
+    console.log('songObj', songObj)
+    const { data, error } = await supabase
       .from('versions')
       .insert(
-        [{ song_id: songId,
+        [{ song_id: songObj.id,
           song_name: song,
           user_id: user.id,
           submitter_name: profile.name,
@@ -194,10 +226,11 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
         }])
     if (error) {
     } else {
-      setShowSuccessMessage(true)
-      addOnePoint(song.submitter_name)
-      addTenPoints(username)
-      fetchVersions(song.id)
+      console.log('data after insert', data)
+      setSuccessAlertText(`Successfully added ${song} from ${date}. Thank you for contributing!`)
+      addOnePoint(songObj.submitter_name)
+      addTenPoints(profile.name)
+      fetchVersions(songObj.id)
       }
   }
 
@@ -379,43 +412,36 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
             <Alert severity="warning" sx={{ mb: '1em' }}>Please log in to contribute - thank you!</Alert>
           }
           <br/><br/>
-          <SongPicker songs={songs} song={song} setSong={setSong} wide={true}/>
+          <SongPicker songs={songs} song={song} setSong={setSong} wide={true} size={'normal'}/>
+
           {!songExists && song &&
           <>
-          <br></br>
           <br/><br/>
           <Alert severity="warning" sx={{ mb: '1em' }}>{song} hasn&apos;t been added yet.</Alert>
           {/* <Typography>{song} hasn&apos;t been added yet.</Typography> */}
           <AddSong song={song} user={user} songs={songs} setSong={setSong} profile={profile} setSongs={setSongs} />
           </>
           }
+
           {songErrorText &&
           <Alert severity="error" sx={{ my: '1em' }}>{songErrorText}</Alert>
           }
           {songExists &&
-          <>
-          <br/>
-          <ArtistPicker artist={artist} setArtist={setArtist}/>
-          </>
+          <><br/><ArtistPicker artist={artist} setArtist={setArtist} size={'normal'}/></>
           }
           {artistErrorText &&
           <Alert severity="error" sx={{ my: '1em' }}>{artistErrorText}</Alert>
           }
           {songExists && artist &&
-          <>
-          <br></br>
-          <br></br>
-          <DatePicker setDate={setDate}/>
-          </>
+          <><br/><br/><DatePicker setDate={setDate}/></>
           }
           {dateErrorText &&
           <Alert severity="error" sx={{ my: '1em' }}>{dateErrorText}</Alert>
           }
           {songExists && artist && date &&
           <>
-          <br></br>
-          <br></br>
           <TextField
+          sx={{ m:'0.25em', mt: '1em' }}
           autoFocus
           margin="dense"
           id="name"
@@ -426,20 +452,61 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
           value={location}
           onChange={(e) => setLocation(e.target.value)}
           />
-          </>
-          }
           {locationErrorText &&
           <Alert severity="error" sx={{ my: '1em' }}>{locationErrorText}</Alert>
           }
-          {songExists && artist && date && location && location.length > 2 &&
-          <>
           <br></br>
           <br></br>
-          <TagPicker tagsSelected={tags} setTagsSelected={setTags}/>
+          <Typography textAlign="center" mb="1em">Optional</Typography>
+          <TagPicker tagsSelected={tags} setTagsSelected={setTags} size={'normal'}/>
+          <Typography>{tagsText}</Typography>
+          <FormControl sx={{ minWidth: 120, mt:'1.5em', mx: '0.25em' }}>
+            <InputLabel id="rating-select-label">Rating</InputLabel>
+            <Select
+            size="normal"
+            labelId="rating-select-label"
+            id="rating-select"
+            value={rating}
+            label="Rating"
+            onChange={handleRatingChange}
+            >
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={9}>9</MenuItem>
+              <MenuItem value={8}>8</MenuItem>
+              <MenuItem value={7}>7</MenuItem>
+              <MenuItem value={6}>6</MenuItem>
+              <MenuItem value={5}>5</MenuItem>
+              <MenuItem value={4}>4</MenuItem>
+              <MenuItem value={3}>3</MenuItem>
+              <MenuItem value={2}>2</MenuItem>
+              <MenuItem value={1}>1</MenuItem>
+            </Select>
+          <TextField
+            sx={{ mt: '1em' }}
+            autoFocus
+            margin="dense"
+            id="comment"
+            label="Comments"
+            type="text"
+            fullWidth
+            variant="standard"
+            multiline
+            onChange={handleCommentChange}
+          />
+          <TextField
+            sx={{ mt: '1em' }}
+            autoFocus
+            margin="dense"
+            id="listen_link"
+            label="Audio Link"
+            type="text"
+            fullWidth
+            variant="standard"
+            multiline
+            onChange={(e) => setListenLink(e.target.value)}
+          />
+          </FormControl>
           </>
-          }
-          {songExists && artist && date && location && location.length > 2 && tagsText &&
-            <Typography>{tagsText}</Typography>
           }
           {successAlertText &&
           <Alert severity="success" sx={{ my: '1em' }}>{successAlertText}</Alert>

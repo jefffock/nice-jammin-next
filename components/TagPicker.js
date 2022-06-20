@@ -91,7 +91,7 @@ const tags = [
   value: 'unusual'},
 ];
 
-export default function TagPicker({ tagsSelected, setTagsSelected }) {
+export default function TagPicker({ tagsSelected, setTagsSelected, size }) {
 
   const handleChange = (event) => {
     const {
@@ -105,7 +105,7 @@ export default function TagPicker({ tagsSelected, setTagsSelected }) {
 
   return (
     <div>
-      <FormControl sx={{ minWidth: 120,  m:'0.25em' }} size="small">
+      <FormControl sx={{ minWidth: 120,  m:'0.25em' }} size={size ? size : "small"}>
         <InputLabel id="tag-filter-select-label">Tags</InputLabel>
         <Select
           labelId="tag-filter-select-label"

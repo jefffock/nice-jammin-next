@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box'
 
-export default function SongPicker({ songs, song, setSong, wide }) {
+export default function SongPicker({ songs, song, setSong, wide, size }) {
   const [value, setValue] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [uniqueSongs, setUniqueSongs] = useState(null)
@@ -28,7 +28,7 @@ export default function SongPicker({ songs, song, setSong, wide }) {
       })
       setUniqueSongs(formattedSongs)
     }
-  }, [])
+  }, [songs])
 
   useEffect(() => {
     setSong(value)
@@ -60,7 +60,7 @@ export default function SongPicker({ songs, song, setSong, wide }) {
           }}
           id="song-picker"
           options={uniqueSongs ? uniqueSongs : [{ label: 'Song' }]}
-          size='small'
+          size={size ? size : 'small'}
           renderInput={(params) => <TextField {...params} label="Song"/>}
         />
       </Box>

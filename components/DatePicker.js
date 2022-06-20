@@ -7,6 +7,7 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import Box from '@mui/material/Box';
 
 export default function DatePicker({ setDate }) {
   const [value, setValue] = useState(null);
@@ -24,14 +25,16 @@ export default function DatePicker({ setDate }) {
   // }, [setDate, value])
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <MobileDatePicker
-          label="Date"
-          inputFormat="MM/dd/yyyy"
-          value={value}
-          onChange={handleChange}
-          renderInput={(params) => <TextField {...params} />}
-        />
-    </LocalizationProvider>
+    <Box sx={{ m:'0.25em' }}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <MobileDatePicker
+            label="Date"
+            inputFormat="MM/dd/yyyy"
+            value={value}
+            onChange={handleChange}
+            renderInput={(params) => <TextField {...params} />}
+            />
+      </LocalizationProvider>
+    </Box>
   );
 }

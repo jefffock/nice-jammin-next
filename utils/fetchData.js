@@ -16,7 +16,7 @@ async function fetchArtists() {
 async function fetchSongs() {
   const { data, error } = await supabase
     .from('songs')
-    .select('song', 'id')
+    .select('*')
     // .gt('avg_rating', 0)
     // .limit(100)
     .order('song', { ascending: true })

@@ -30,13 +30,13 @@ const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 export default function App({ jams }) {
   const [updatedSongs, setUpdatedSongs] = useState(null)
+  const [songs, setSongs] = useState(null)
   const [session, setSession] = useState(null)
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
   const [artists, setArtists] = useState(null)
   const [artist, setArtist] = useState(null)
   const [song, setSong] = useState(null)
-  const [songs, setSongs] = useState(null)
   const [filteredSongs, setFilteredSongs] = useState(jams)
   const [sortedSongs, setSortedSongs] = useState(jams)
   const [order, setOrder] = useState('desc');

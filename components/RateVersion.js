@@ -249,15 +249,14 @@ export default function RateVersion({ song, date, location, tags, user }) {
           {!user &&
           <Alert severity="warning" sx={{ mb: '1em' }}>Please log in to rate this jam - thank you!</Alert>
           }
-            <FormControl>
+            <FormControl sx={{ minWidth: 120, m:'0.25em' }}>
             <InputLabel id="rating-select-label">Rating</InputLabel>
             <Select
-            sx={{ width: 120, m:'0.25em' }}
             size="small"
             labelId="rating-select-label"
             id="rating-select"
             value={rating}
-            label="Your Rating"
+            label="Rating"
             onChange={handleRatingChange}
             >
               <MenuItem value={10}>10</MenuItem>

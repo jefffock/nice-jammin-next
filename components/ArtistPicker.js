@@ -20,23 +20,23 @@ let artists = [
   'Lotus',
   'Medeski Martin & Wood',
   'moe.',
+  'Phish',
   'Osees',
   'Phil Lesh & Friends',
-  'Phish',
   'String Cheese Incident',
   'Trey Anastasio, TAB',
   "Umphrey's McGee",
   'Widespread Panic'
 ]
 
-export default function ArtistPicker({ artist, setArtist}) {
+export default function ArtistPicker({ artist, setArtist, size}) {
 
   const handleChange = (event) => {
       setArtist(event.target.value);
   };
 
   return (
-    <FormControl sx={{ minWidth: 120, m:'0.25em' }} size="small">
+    <FormControl sx={{ minWidth: 120, m:'0.25em' }} size={size ? size : 'small' }>
       <InputLabel id="artist-select">Band</InputLabel>
       <Select
         labelId="artist-select"
