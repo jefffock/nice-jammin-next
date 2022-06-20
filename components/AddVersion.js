@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabaseClient'
+import { addOnePoint, addTenPoints, rateVersion } from '../utils/dbFunctions'
+import { fetchJams } from '../utils/fetchData'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -19,11 +21,10 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
-import { addOnePoint, addTenPoints, rateVersion } from '../utils/dbFunctions'
 
 
 
-export default function AddVersion({ songs, jams, user, profile, setSongs }) {
+export default function AddVersion({ songs, jams, user, profile, setSongs, setUpdatedJams }) {
   const [loading, setLoading] = useState(null)
   const [open, setOpen] = useState(false);
   const [song, setSong] = useState(null);
@@ -117,6 +118,11 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
   };
 
   const handleClose = () => {
+    setSuccessAlertText(null)
+    setSongErrorText(null)
+    setArtistErrorText(null)
+    setDateErrorText(null)
+    setLocationErrorText(null)
     setSuccessAlertText(null)
     setLoading(false)
     setSong(null)
@@ -239,14 +245,11 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
         setSuccessAlertText(`Successfully added ${song} from ${date}. Now adding your rating...`)
         await rateVersion(data[0].id, songObj.id, profile.name, rating, comment, profile.name, songObj.submitter_name, user.id)
         setSuccessAlertText(`Successfully added ${song} from ${date} and your rating. Thank you for contributing!`)
-        //fetch AllVersions?
       } else {
         setSuccessAlertText(`Successfully added ${song} from ${date}. Thank you for contributing!`)
-      }
-      // addOnePoint(songObj.submitter_name)
-      // addTenPoints(profile.name)
-      // fetchVersions(songObj.id)
-      }
+      } let updatedJams = await fetchJams()
+      setUpdatedJams(updatedJams)
+    }
   }
 
   let artistsAndDates = {
