@@ -1,13 +1,13 @@
 import { supabase } from '../utils/supabaseClient'
 
-async function rateVersion(versionId, songId, profileName, rating, comment, versionSubmitterName, songSubmitterName) {
+async function rateVersion(versionId, songId, profileName, rating, comment, versionSubmitterName, songSubmitterName, userId) {
   console.log('in rate version')
   const { data, error } = await supabase
     .from('ratings')
     .insert(
-      { user_id: user.id,
-        version_id: version.id,
-        submitter_name: username,
+      { user_id: userId,
+        version_id: versionId,
+        submitter_name: profileName,
         rating: rating,
         comment: comment
       })
@@ -43,6 +43,7 @@ async function updateRating(versionId, profileName, rating, comment) {
 }
 
 async function addOnePoint(profileName) {
+  console.log('in add One Point', profileName)
   const { error } = await supabase.rpc( 'add_one_point', { username: profileName })
   if (error) {
     console.log('error adding one point', error)
@@ -65,6 +66,7 @@ async function addRatingCountToArtist(artistId) {
 }
 
 async function addRatingCountToSong(songId) {
+  console.log('in addRatingCountToSong', songId)
   let song_id = parseInt(songId)
   const { error } = await supabase.rpc( 'increment_song_rating_count', { songid: song_id })
   if (error) {
@@ -73,6 +75,7 @@ async function addRatingCountToSong(songId) {
 }
 
 async function addRatingCountToVersion(versionId) {
+  console.log('in addRatingCountToVersion', versionId)
   let version_id = parseInt(versionId)
   const { error } = await supabase.rpc( 'increment_version_rating_count', { versionid: version_id })
   if (error) {
@@ -81,6 +84,7 @@ async function addRatingCountToVersion(versionId) {
 }
 
 async function calcAverageForVersion(versionId) {
+  console.log('in calcAverageForVersion', versionId)
   let version = parseInt(versionId)
   const { error } = await supabase.rpc( 'calc_average', { versionid: version })
   if (error) {
@@ -119,4 +123,4 @@ async function countHelpfulVotesIdeas(ideaId) {
 //   }
 // }
 
-export { addOnePoint, addTenPoints, addRatingCountToArtist, addRatingCountToSong, addRatingCountToVersion,  countHelpfulVotesRatings, countFunnyVotesRatings, countHelpfulVotesIdeas }
+export { rateVersion, addOnePoint, addTenPoints, addRatingCountToArtist, addRatingCountToSong, addRatingCountToVersion,  countHelpfulVotesRatings, countFunnyVotesRatings, countHelpfulVotesIdeas }

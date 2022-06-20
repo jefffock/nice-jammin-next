@@ -107,6 +107,8 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
   };
 
   const handleClose = () => {
+    setSuccessAlertText(null)
+    setLoading(false)
     setSong(null)
     setArtist(null)
     setTags([])
@@ -225,13 +227,9 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
       console.log('data after insert', data)
       if (rating) {
         setSuccessAlertText(`Successfully added ${song} from ${date}. Now adding your rating...`)
-        console.log('versionId', data[0].id)
-        console.log('songId', songObj.id)
-        console.log('songSubmitterName', songObj.submitter_name)
-        console.log('rating', rating)
-        console.log('comments', comment)
-        // rateVersion(data)
+        await rateVersion(data[0].id, songObj.id, profile.name, rating, comment, profile.name, songObj.submitter_name, user.id)
         setSuccessAlertText(`Successfully added ${song} from ${date} and your rating. Thank you for contributing!`)
+        //fetch AllVersions?
       } else {
         setSuccessAlertText(`Successfully added ${song} from ${date}. Thank you for contributing!`)
       }

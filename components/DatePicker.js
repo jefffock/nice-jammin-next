@@ -9,7 +9,7 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import Box from '@mui/material/Box';
 
-export default function DatePicker({ setDate, date, my }) {
+export default function DatePicker({ setDate, my }) {
   const [value, setValue] = useState(null);
 
   const handleChange = (newValue) => {
@@ -30,7 +30,7 @@ export default function DatePicker({ setDate, date, my }) {
           <MobileDatePicker
             label="Date"
             inputFormat="MM/dd/yyyy"
-            value={date}
+            value={value}
             onChange={handleChange}
             renderInput={(params) => <TextField {...params} />}
             />
