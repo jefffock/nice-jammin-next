@@ -30,6 +30,7 @@ const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 export default function App({ jams }) {
   const [updatedSongs, setUpdatedSongs] = useState(null)
+  const [updatedJams, setUpdatedJams] = useState(jams)
   const [songs, setSongs] = useState(null)
   const [session, setSession] = useState(null)
   const [user, setUser] = useState(null)
@@ -37,8 +38,8 @@ export default function App({ jams }) {
   const [artists, setArtists] = useState(null)
   const [artist, setArtist] = useState(null)
   const [song, setSong] = useState(null)
-  const [filteredSongs, setFilteredSongs] = useState(jams)
-  const [sortedSongs, setSortedSongs] = useState(jams)
+  const [filteredJams, setFilteredJams] = useState(jams)
+  const [sortedJams, setSortedJams] = useState(jams)
   const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState('avg_rating');
   const [beforeDate, setBeforeDate] = useState('')
@@ -70,17 +71,21 @@ export default function App({ jams }) {
   }, [session])
 
   useEffect(() => {
-    let newFilteredSongs = jams?.filter(filterFunc)
-    setFilteredSongs(newFilteredSongs)
-  }, [artist, tagsSelected, beforeDate, afterDate, song])
+    let newFilteredJams = updatedJams?.filter(filterFunc)
+    setFilteredJams(newFilteredJams)
+  }, [artist, tagsSelected, beforeDate, afterDate, song, updatedJams])
 
   useEffect(() => {
-    sortSongs()
-  }, [order, orderBy, filteredSongs])
+    sortJams()
+  }, [order, orderBy, filteredJams])
 
   useEffect(() => {
     fetchProfile()
   }, [user])
+
+  useEffect(() => {
+
+  })
 
   async function fetchProfile() {
     const user = supabase.auth.user()
@@ -103,8 +108,7 @@ export default function App({ jams }) {
   function filterFunc(item) {
     if (artist && artist !== 'All Bands' && item.artist !== artist) {
       return false
-    } console.log('song in filterFunc', song)
-    if (song && !item.song_name?.toLowerCase().includes(song.toLowerCase())) {
+    } if (song && !item.song_name?.toLowerCase().includes(song.toLowerCase())) {
       return false
     } if (tagsSelected) {
       for (var i = 0; i < tagsSelected.length; i++) {
@@ -121,9 +125,9 @@ export default function App({ jams }) {
     return true
   }
 
-  function sortSongs() {
-    let newSortedSongs = filteredSongs.slice().sort(getComparator(order, orderBy))
-    setSortedSongs(newSortedSongs)
+  function sortJams() {
+    let newSortedJams = filteredJams.slice().sort(getComparator(order, orderBy))
+    setSortedJams(newSortedJams)
   }
 
   function getComparator(order, orderBy) {
@@ -174,18 +178,15 @@ export default function App({ jams }) {
       <ThemeProvider theme={theme}> */}
       <Box sx={{ bgcolor: 'primary.graybg', minHeight: '100vh', maxWidth: '100vw', overflow: 'hidden'}}>
         <TopBar showButton={true} user={user} session={session} router={router}/>
-
-      {/* <Typography variant="h4" sx={{ mb: '.2em', ml: '.2em', color: 'primary.main'}}>Nice Jammin</Typography> */}
       {/* <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
         {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
       </IconButton> */}
-      {/* <DiscoverContributeSwitch /> */}
         <Welcome />
         <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate} songs={updatedSongs} song={song} setSong={setSong}/>
         <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} afterDate={afterDate} setBeforeDate={setBeforeDate} setAfterDate={setAfterDate} song={song} setSong={setSong}/>
-        <CollapsibleTable songs={jams} sortedSongs={sortedSongs} sortSongs={sortSongs} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} />
+        <CollapsibleTable jams={jams} sortedJams={sortedJams} sortJams={sortJams} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} />
         <br></br>
-        <AddVersion songs={updatedSongs} setSongs={setUpdatedSongs} jams={jams} user={user} profile={profile}/>
+        <AddVersion songs={updatedSongs} setSongs={setUpdatedSongs} jams={updatedJams} user={user} profile={profile} setUpdatedJams={setUpdatedJams}/>
         <Gratitude />
         <TopContributors />
       </Box>

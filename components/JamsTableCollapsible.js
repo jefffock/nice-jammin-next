@@ -212,7 +212,7 @@ function Row({ row, user, profile }) {
   );
 }
 
-export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order, orderBy, setOrder, setOrderBy, user, profile }) {
+export default function CollapsibleTable({ jams, sortedJams, sortJams, order, orderBy, setOrder, setOrderBy, user, profile }) {
   const [orderedSongs, setOrderedSongs] = useState(null)
 
   const handleRequestSort = (event, property) => {
@@ -226,8 +226,8 @@ export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order,
   };
 
   useEffect(() => {
-    if (!sortedSongs) {
-      sortSongs(order, orderBy)
+    if (!sortedJams) {
+      sortJams(order, orderBy)
     }
   })
 
@@ -249,7 +249,8 @@ export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order,
 
   return (
     <>
-    <Typography textAlign="center" mt="1em">Tap a row to listen and rate</Typography>
+    <Typography variant="h5" textAlign="center" mt="0.5em">Favorite Jams</Typography>
+    <Typography textAlign="center">Tap a row to listen and rate</Typography>
     <TableContainer component={Paper} sx={{ height: '55vh', overflowY: 'auto', width: '96vw', maxWidth: '900px', bgcolor: 'primary.bg', mx: 'auto', borderRadius: '1em' }}>
       <Table
       aria-label="jams table"
@@ -261,8 +262,8 @@ export default function CollapsibleTable({ songs, sortedSongs, sortSongs, order,
           onRequestSort={handleRequestSort}
           />
         <TableBody>
-          {sortedSongs &&
-          sortedSongs
+          {sortedJams &&
+          sortedJams
           .map((jam) => (
             <Row
             key={jam.id}

@@ -85,6 +85,16 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
       setDateErrorText(null)
       let yearString = date.slice(0,4)
       setYear(parseInt(yearString))
+      if (jams && song) {
+        let index = jams.findIndex(jam => {
+          return (jam.song_name === song && jam.date === date);
+        })
+        if (index !== -1) {
+          setDateErrorText(`${song} from ${date} has already been added. Great minds think alike!`)
+        } else {
+          setDateErrorText(null)
+        }
+      }
     } else {
       setYear(null)
     }
@@ -168,8 +178,8 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
       return false
     } if (!artist) {
       setArtistErrorText('Please select an artist')
-    }
-      return true
+      return false
+    } return true
   }
 
   const insertVersion = async () => {
@@ -516,7 +526,7 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
         </DialogContent>
         <DialogActions>            
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
-          {artist && song && date && location && location.length > 2 &&
+          {artist && song && date && location && location.length > 2 && !dateErrorText &&
           <Button onClick={handleSubmit}
             disabled={loading}
           >Add Version</Button>

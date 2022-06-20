@@ -1,5 +1,19 @@
 import { supabase } from './supabaseClient'
 
+async function fetchJams() {
+  const { data, error } = await supabase
+    .from('versions')
+    .select('*')
+    // .gt('avg_rating', 0)
+    // .limit(100)
+    .order('avg_rating', { ascending: false })
+    .order('num_ratings', { ascending: false })
+  if (error) {
+    console.error(error)
+  } else if (data) {
+    return data
+  }
+}
 
 async function fetchArtists() {
   const { data, error } = await supabase
@@ -41,7 +55,6 @@ export default async function fetchLeaders() {
   }
 }
 
-
 async function fetchVersions(songId) {
   const { data, error } = await supabase
   .from('versions')
@@ -80,4 +93,4 @@ async function fetchIdeas() {
   }
 }
 
-export { fetchArtists, fetchSongs, fetchLeaders, fetchVersions, fetchRatings, fetchIdeas }
+export { fetchJams, fetchArtists, fetchSongs, fetchLeaders, fetchVersions, fetchRatings, fetchIdeas }
