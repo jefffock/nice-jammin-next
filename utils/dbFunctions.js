@@ -33,11 +33,37 @@ async function updateRating(versionId, profileName, rating, comment) {
       comment: comment,
       rating: rating
     })
-    .match({submitter_name: username, version_id: version.id})
+    .match({submitter_name: profileName, version_id: versionId})
   if (error) {
     return error
   } else {
     calcAverageForVersion(versionId)
+    return data
+  }
+}
+
+async function postUpdatedTags(versionId, profileName, tagsText, tagsLength) {
+  console.log('in postUpdatedTags')
+  const { error } = await supabase
+    .from('update_tags')
+    .insert({
+      version_id: versionId,
+      username: profileName,
+      tags_added: tagsText,
+      length: tagsLength
+  })
+}
+
+async function updateTags(tagsToUpdate, versionId, profileName, tagsText, tagsLength) {
+  console.log('in updateTags')
+  const { data, error } = await supabase
+    .from('versions')
+    .update(tagsToUpdate)
+    .match({ id: versionId })
+  if (error) {
+    return error
+  } else {
+    postUpdatedTags(versionId, profileName, tagsText, tagsLength)
     return data
   }
 }
@@ -123,4 +149,4 @@ async function countHelpfulVotesIdeas(ideaId) {
 //   }
 // }
 
-export { rateVersion, addOnePoint, addTenPoints, addRatingCountToArtist, addRatingCountToSong, addRatingCountToVersion,  countHelpfulVotesRatings, countFunnyVotesRatings, countHelpfulVotesIdeas }
+export { rateVersion, updateRating, updateTags, addOnePoint, addTenPoints, addRatingCountToArtist, addRatingCountToSong, addRatingCountToVersion,  countHelpfulVotesRatings, countFunnyVotesRatings, countHelpfulVotesIdeas }

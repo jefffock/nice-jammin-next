@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { rateVersion, updateRating } from '../utils/dbFunctions'
+import { rateVersion, updateRating, updateTags } from '../utils/dbFunctions'
 import { checkUserAlreadyRated } from '../utils/fetchData'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -25,8 +25,11 @@ export default function RateVersion({ song, date, location, tags, user, profile,
   const [comment, setComment] = useState('')
   const [newTags, setNewTags] = useState([])
   const [tagsToAddText, setTagsToAddText] = useState('')
+  const [tagsObj, setTagsObj] = useState(null)
   const [userAlreadyRated, setUserAlreadyRated] = useState(false)
   const [buttonText, setButtonText] = useState('Rate')
+  const [commentWarningText, setCommentWarningText] = useState(null)
+  const [ratingErrorText, setRatingErrorText] = useState(null)
   const [funky, setFunky] = useState(false)
   const [ambient, setAmbient] = useState(false)
   const [fast, setFast] = useState(false)
@@ -71,27 +74,59 @@ export default function RateVersion({ song, date, location, tags, user, profile,
     setOpen(false);
   };
 
-  const handleSubmit = () => {
-    //validate rating, comment, tags
-    //verify user perms
-    //submit
-    //add points
-  }
-
   const handleRatingChange = (e) => {
     setRating(e.target.value)
   }
 
   const handleCommentChange = (e) => {
     setComment(e.target.value)
+    if (e.target.value.length > 10000) {
+      setCommentWarningText('Your enthusiasm is commendable! Also, character limit exceeded')
+    } else {
+      setCommentWarningText(null)
+    }
+  }
+
+  const handleSubmit = async () => {
+    setLoading(true)
+    console.log('jam', jam)
+    let valid = validateRatingData()
+    if (valid) {
+      console.log('data is valid')
+      let data
+      if (userAlreadyRated) {
+        data = await updateRating(jam.id, profile.name, rating, comment)
+      } else {
+        data = await rateVersion(jam.id, jam.song_id, profile.name, rating, comment, jam.submitter_name, user.id)
+      } if (tagsObj) {
+        let updatedTags = await updateTags(tagsObj, jam.id, profile.name, tagsToAddText, newTags.length)
+      }
+    } else {
+      console.log('data not valid')
+    }
+    setLoading(false)
   }
 
   const validateRatingData = () => {
-
+    if (!rating) {
+      setRatingErrorText(`Please add your rating to rate this version of ${song}`)
+      return false
+    } if (rating < 1 || rating > 10) {
+      setRatingErrorText('Rating must be between 1 and 10')
+      return false
+    } if (comment.length > 10000) {
+      return false
+    } if (!profile.can_write) {
+      return false
+    } return true
   }
 
   useEffect(() => {
     if (open) {
+      setComment(null)
+      setRating(null)
+      setUserAlreadyRated(false)
+      setButtonText('Rate')
       console.log('open, about to check if already rated')
       let checkRated = async () => {
         let data = await checkUserAlreadyRated(profile.name, jam.id)
@@ -144,11 +179,15 @@ export default function RateVersion({ song, date, location, tags, user, profile,
       'type2': 'Type II',
       'unusual': 'Unusual',
     }
+    let newTagsObj = {}
     let newTagsText = ''
     for (var i = 0; i < newTags.length; i++) {
       newTagsText += tagsList[newTags[i]] + ', '
+      newTagsObj[newTags[i]] = true
     } let trimmedTags = newTagsText.slice(0, newTagsText.length - 2)
     setTagsToAddText(trimmedTags)
+    console.log('newTagsObj', newTagsObj)
+    setTagsObj(newTagsObj)
     newTags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
     newTags.indexOf('ambient') !== -1 ? setAmbient(true) : setAmbient(false)
     newTags.indexOf('bliss') !== -1 ? setBliss(true) : setBliss(false)
@@ -203,53 +242,62 @@ export default function RateVersion({ song, date, location, tags, user, profile,
           {!user &&
           <Alert severity="warning" sx={{ mb: '1em' }}>Please log in to rate this jam - thank you!</Alert>
           }
-            <Box sx={{ minWidth: 120, mx:'0.25em', my: '1em' }}>
-            <InputLabel id="rating-select-label">Rating</InputLabel>
-            <Select
-            size="normal"
-            labelId="rating-select-label"
-            id="rating-select"
-            value={rating}
-            label="Rating"
-            onChange={handleRatingChange}
-            >
-              <MenuItem value={10}>10</MenuItem>
-              <MenuItem value={9}>9</MenuItem>
-              <MenuItem value={8}>8</MenuItem>
-              <MenuItem value={7}>7</MenuItem>
-              <MenuItem value={6}>6</MenuItem>
-              <MenuItem value={5}>5</MenuItem>
-              <MenuItem value={4}>4</MenuItem>
-              <MenuItem value={3}>3</MenuItem>
-              <MenuItem value={2}>2</MenuItem>
-              <MenuItem value={1}>1</MenuItem>
-            </Select>
+            <Box sx={{ minWidth: '120px', mx:'0.25em', my: '1em' }}>
+              <FormControl>
+                <InputLabel id="rating-select-label">Rating</InputLabel>
+                <Select
+                sx={{ minWidth: '120px' }}
+                size="normal"
+                labelId="rating-select-label"
+                id="rating-select"
+                value={rating}
+                label="Rating"
+                onChange={handleRatingChange}
+                >
+                  <MenuItem value={10}>10</MenuItem>
+                  <MenuItem value={9}>9</MenuItem>
+                  <MenuItem value={8}>8</MenuItem>
+                  <MenuItem value={7}>7</MenuItem>
+                  <MenuItem value={6}>6</MenuItem>
+                  <MenuItem value={5}>5</MenuItem>
+                  <MenuItem value={4}>4</MenuItem>
+                  <MenuItem value={3}>3</MenuItem>
+                  <MenuItem value={2}>2</MenuItem>
+                  <MenuItem value={1}>1</MenuItem>
+              </Select>
+            </FormControl>
+            {ratingErrorText &&
+            <Alert severity="error" sx={{ mb: '1em' }}>{ratingErrorText}</Alert>
+            }
           </Box>
+          {rating &&
+          <>
+            <Typography mx="0.25em" mt="1em">Optional:</Typography>
           <TextField
             autoFocus
             sx={{ mx:'0.25em', mb: '1em'}}
             margin="dense"
             id="comment"
-            label="Comments (optional)"
+            label="Comments"
             type="text"
             fullWidth
             variant="standard"
             multiline
             onChange={handleCommentChange}
-          />
-          <br></br>
-          <br></br>
-          <TagPicker tagsSelected={newTags} setTagsSelected={setNewTags} size={'normal'}/>
-          {tags &&
-          <Typography>Current Tags: {tags}</Typography>
-          }
-          {tagsToAddText &&
-          <Typography>Tags to Add: {tagsToAddText}</Typography>
+            />
+            <TagPicker tagsSelected={newTags} setTagsSelected={setNewTags} size={'normal'}/>
+            {tags &&
+            <Typography>Current Tags: {tags}</Typography>
+            }
+            {tagsToAddText &&
+            <Typography>Tags to Add: {tagsToAddText}</Typography>
+            }
+          </>
           }
         </DialogContent>
         <DialogActions>
           {/* <Button onClick={handleClose}>Cancel</Button> */}
-          <Button onClick={handleSubmit} disabled={loading}>{buttonText}</Button>
+          <Button onClick={handleSubmit} disabled={loading || !rating || commentWarningText}>{buttonText}</Button>
         </DialogActions>
       </Dialog>
     </div>

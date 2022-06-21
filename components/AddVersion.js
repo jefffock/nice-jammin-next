@@ -433,7 +433,6 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
           {!songExists && song &&
           <>
           <Alert severity="warning" sx={{ mb: '1em' }}>{song} hasn&apos;t been added yet.</Alert>
-          {/* <Typography>{song} hasn&apos;t been added yet.</Typography> */}
           <AddSong song={song} user={user} songs={songs} setSong={setSong} profile={profile} setSongs={setSongs} />
           </>
           }
