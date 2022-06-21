@@ -18,6 +18,8 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
 import RateVersion from './RateVersion'
+import AddListenLink from './AddListenLink'
+import ListenLink from './ListenLink'
 
 function JamsTableHead(props) {
   const { order, orderBy, onRequestSort } = props;
@@ -195,7 +197,11 @@ function Row({ row, user, profile }) {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ m: '0.2em', maxWidth: '90vw' }}>
               {row.listen_link &&
-              <Typography sx={{ 'text-decoration': 'underline', color: '#000000' }}>{<a href={row.listen_link}>Listen</a>}</Typography>
+              // <Typography sx={{ 'text-decoration': 'underline', color: '#000000' }}>{<a href={row.listen_link}>Listen</a>}</Typography>
+              <ListenLink link={row.listen_link} jam={row}></ListenLink>
+              }
+              {!row.listen_link &&
+              <AddListenLink song={row.song_name} date={row.date} user={user} profile={profile}/>
               }
               {tags &&
               <Typography>{tags}</Typography>
@@ -249,8 +255,8 @@ export default function CollapsibleTable({ jams, sortedJams, sortJams, order, or
 
   return (
     <>
-    <Typography variant="h5" textAlign="center" mt="0.5em">Favorite Jams</Typography>
-    <Typography textAlign="center">Tap a row to listen and rate</Typography>
+    {/* <Typography variant="h5" textAlign="center" mt="0.5em">Favorite Jams</Typography>
+    <Typography textAlign="center">Tap a row to listen and rate</Typography> */}
     <TableContainer component={Paper} sx={{ height: '55vh', overflowY: 'auto', width: '96vw', maxWidth: '900px', bgcolor: 'primary.bg', mx: 'auto', borderRadius: '1em' }}>
       <Table
       aria-label="jams table"

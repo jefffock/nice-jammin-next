@@ -5,7 +5,7 @@ export default function Welcome() {
 
   return (
     <Box my="3em" mx="auto" px="0.5em" width="96vw" maxWidth="fit-content">
-    <Typography variant="h4" textAlign="center">Ready to find a great jam?</Typography>
+    <Typography variant="h4" textAlign="center">What would you like to hear?</Typography>
     </Box>
   )
 }
