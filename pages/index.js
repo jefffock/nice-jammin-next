@@ -17,7 +17,7 @@ export async function getServerSideProps() {
       .from('versions')
       .select('*')
       // .gt('avg_rating', 0)
-      // .limit(100)
+      .limit(10)
       .order('avg_rating', { ascending: false })
       .order('num_ratings', { ascending: false })
     if (error) {

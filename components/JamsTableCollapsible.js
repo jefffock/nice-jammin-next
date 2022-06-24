@@ -61,11 +61,11 @@ const headCells = [
 ]
 
 return (
-  <TableHead sx={{ color: 'primary.main' }}>
+  <TableHead>
     <TableRow>
       {headCells.map((headCell) => (
         <TableCell
-        sx={{ bgcolor: 'primary.main' }}
+          sx={{ bgcolor: 'primary.main' }}
           key={headCell.id}
           align={headCell.numeric ? 'center' : 'left'}
           padding={headCell.disablePadding ? 'none' : 'normal'}
@@ -257,7 +257,7 @@ export default function CollapsibleTable({ jams, sortedJams, sortJams, order, or
     <>
     {/* <Typography variant="h5" textAlign="center" mt="0.5em">Favorite Jams</Typography>
     <Typography textAlign="center">Tap a row to listen and rate</Typography> */}
-    <TableContainer component={Paper} sx={{ height: '55vh', overflowY: 'auto', width: '96vw', maxWidth: '900px', bgcolor: 'primary.bg', mx: 'auto', borderRadius: '1em' }}>
+    <TableContainer component={Paper} sx={{ height: '55vh', overflowY: 'auto', width: '96vw', maxWidth: '900px', mx: 'auto', borderRadius: '1em' }}>
       <Table
       aria-label="jams table"
       stickyHeader

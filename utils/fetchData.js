@@ -1,6 +1,6 @@
 import { supabase } from './supabaseClient'
 
-async function fetchJams() {
+async function fetchAllJams() {
   const { data, error } = await supabase
     .from('versions')
     .select('*')
@@ -85,11 +85,13 @@ async function fetchIdeas() {
   const { data, error } = await supabase
   .from('ideas')
   .select('*')
+  .eq('done', false)
   .order('votes', { ascending: false})
   if (error) {
     console.log('error fetching ideas', error)
+    return error
   } else {
-    setIdeas(data)
+    return data
   }
 }
 
@@ -108,4 +110,4 @@ async function checkUserAlreadyRated(name, versionId) {
   }
 }
 
-export { fetchJams, fetchArtists, fetchSongs, fetchLeaders, fetchVersions, fetchRatings, fetchIdeas, checkUserAlreadyRated }
+export { fetchAllJams, fetchArtists, fetchSongs, fetchLeaders, fetchVersions, fetchRatings, fetchIdeas, checkUserAlreadyRated }

@@ -20,10 +20,11 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { amber, deepOrange, grey } from '@mui/material/colors';
 import TopContributors from './TopContributors';
-import { fetchLeaders, fetchSongs } from '../utils/fetchData';
+import { fetchLeaders, fetchSongs, fetchAllJams } from '../utils/fetchData';
 import TopBar from './AppBar'
 import Welcome from './Welcome'
 import Gratitude from './Gratitude'
+import IdeasTable from './IdeasTable'
 
 
 const ColorModeContext = createContext({ toggleColorMode: () => {} });
@@ -55,6 +56,11 @@ export default function App({ jams }) {
         setUser(session.user)
       }
     })
+    const getAllJams = async () => {
+      let allJams = await fetchAllJams()
+      setUpdatedJams(allJams)
+    }
+    getAllJams()
     if (!songs) {
       const getSongs = async () => {
         let songs = await fetchSongs()
@@ -63,6 +69,7 @@ export default function App({ jams }) {
       }
       getSongs()
     }
+
   }, [])
 
 
@@ -190,6 +197,7 @@ export default function App({ jams }) {
         <br></br>
         <AddVersion songs={updatedSongs} setSongs={setUpdatedSongs} jams={updatedJams} user={user} profile={profile} setUpdatedJams={setUpdatedJams}/>
         <Gratitude />
+        <IdeasTable />
         <TopContributors />
       </Box>
       {/* </ThemeProvider>

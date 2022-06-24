@@ -55,7 +55,7 @@ export default function ListenLink({ link, jam }) {
     <div>
       <Button variant="outlined"
       onClick={handleClickOpen}
-      sx={{ textTransform: 'none', borderRadius: '50px', color: '#000000' }}
+      sx={{ textTransform: 'none', borderRadius: '50px', color: '#000000', my:'0.5em' }}
       >
         Listen
       </Button>
@@ -75,7 +75,8 @@ export default function ListenLink({ link, jam }) {
             >
               <CloseIcon />
             </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div"
+            onClick={handleClose}>
               Back to Nice Jammin'
             </Typography>
             {/* <Button autoFocus color="inherit" onClick={handleClose}>
