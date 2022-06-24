@@ -1,26 +1,17 @@
 import { useState, useEffect, createContext, useContext, useMemo } from 'react'
-import JamsTable from './JamsTable'
 import { supabase } from '../utils/supabaseClient'
-import Auth from './Auth'
-import Account from './Account'
-import DiscoverContributeSwitch from './DiscContSwitch'
-import Table from '@mui/material/Table';
-import Box from '@mui/material/Box'
-import CollapsibleTable from './JamsTableCollapsible'
+import { fetchLeaders, fetchSongs, fetchAllJams } from '../utils/fetchData';
 import { useRouter } from 'next/router'
-import TableTitle from './TableTitle'
 import Head from 'next/head'
-import JamsDataGrid from './JamsDataGrid'
+import CollapsibleTable from './JamsTableCollapsible'
+import Box from '@mui/material/Box'
 import FilterBar from './FilterBar'
 import FilterList from './FilterList'
 import AddVersion from './AddVersion'
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { amber, deepOrange, grey } from '@mui/material/colors';
+// import IconButton from '@mui/material/IconButton';
+// import { amber, deepOrange, grey } from '@mui/material/colors';
 import TopContributors from './TopContributors';
-import { fetchLeaders, fetchSongs, fetchAllJams } from '../utils/fetchData';
 import TopBar from './AppBar'
 import Welcome from './Welcome'
 import Gratitude from './Gratitude'
