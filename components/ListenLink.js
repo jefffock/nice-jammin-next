@@ -77,7 +77,7 @@ export default function ListenLink({ link, jam }) {
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div"
             onClick={handleClose}>
-              Back to Nice Jammin'
+              Back to Nice Jammin&apos;
             </Typography>
             {/* <Button autoFocus color="inherit" onClick={handleClose}>
               save
