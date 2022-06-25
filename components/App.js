@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext, useMemo } from 'react'
+import { useState, useEffect, createContext, useContext, useMemo, Suspense } from 'react'
 import { supabase } from '../utils/supabaseClient'
 import { fetchLeaders, fetchSongs, fetchAllJams } from '../utils/fetchData';
 import { useRouter } from 'next/router'
@@ -16,6 +16,14 @@ import TopBar from './AppBar'
 import Welcome from './Welcome'
 import Gratitude from './Gratitude'
 import IdeasTable from './IdeasTable'
+import dynamic from 'next/dynamic'
+
+const DynamicContributorsTable = dynamic(() => import('./TopContributors'), {
+  suspense: true,
+})
+const DynamicJamsTable = dynamic(() => import('./JamsTableCollapsible'), {
+  suspense: true,
+})
 
 
 const ColorModeContext = createContext({ toggleColorMode: () => {} });
@@ -162,37 +170,35 @@ export default function App({ jams }) {
       </>
       }
       {song && !artist &&
-      <>
-      <title>{song} Best Jams - NiceJammin.com</title>
-      </>
+      <><title>{song} Best Jams - NiceJammin.com</title></>
       }
       {artist && song &&
-      <>
-      <title>{artist} {song} Best Jams - NiceJammin.com</title>
-      </>
+      <><title>{artist} {song} Best Jams - NiceJammin.com</title></>
       }
     </Head>
-    {/* <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}> */}
-      <Box sx={{ bgcolor: 'primary.graybg', minHeight: '100vh', maxWidth: '100vw', overflow: 'hidden'}}>
-        <TopBar showButton={true} user={user} session={session} router={router}/>
-      {/* <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
-        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-      </IconButton> */}
-        <Welcome />
-        <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate} songs={updatedSongs} song={song} setSong={setSong}/>
-        <Typography variant="h5" textAlign="center" mt="2em">Favorite Jams</Typography>
-        <Typography textAlign="center">Tap to listen</Typography>
-        <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} afterDate={afterDate} setBeforeDate={setBeforeDate} setAfterDate={setAfterDate} song={song} setSong={setSong}/>
-        <CollapsibleTable jams={jams} sortedJams={sortedJams} sortJams={sortJams} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} />
-        <br></br>
-        <AddVersion songs={updatedSongs} setSongs={setUpdatedSongs} jams={updatedJams} user={user} profile={profile} setUpdatedJams={setUpdatedJams}/>
-        <Gratitude />
-        <IdeasTable />
-        <TopContributors />
-      </Box>
-      {/* </ThemeProvider>
-    </ColorModeContext.Provider> */}
+    <Box sx={{ bgcolor: 'primary.graybg', minHeight: '100vh', maxWidth: '100vw', overflow: 'hidden'}}>
+      <TopBar showButton={true} user={user} session={session} router={router}/>
+    {/* <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+      {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+    </IconButton> */}
+      <Welcome />
+      <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate} songs={updatedSongs} song={song} setSong={setSong}/>
+      <Typography variant="h5" textAlign="center" mt="2em">Favorite Jams</Typography>
+      <Typography textAlign="center">Tap to listen</Typography>
+      <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} afterDate={afterDate} setBeforeDate={setBeforeDate} setAfterDate={setAfterDate} song={song} setSong={setSong}/>
+      <Suspense fallback={`Loading...`}>
+        <DynamicJamsTable jams={jams} sortedJams={sortedJams} sortJams={sortJams} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile}/>
+      </Suspense>
+      <CollapsibleTable jams={jams} sortedJams={sortedJams} sortJams={sortJams} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} />
+      <br></br>
+      <AddVersion songs={updatedSongs} setSongs={setUpdatedSongs} jams={updatedJams} user={user} profile={profile} setUpdatedJams={setUpdatedJams}/>
+      <Gratitude />
+      <IdeasTable />
+      {/* <TopContributors /> */}
+      <Suspense fallback={`Loading...`}>
+        <DynamicContributorsTable />
+      </Suspense>
+    </Box>
     </>
   )
 }
