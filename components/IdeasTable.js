@@ -11,13 +11,59 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import AddIdea from './AddIdea'
+import { countVotesIdeas } from '../utils/dbFunctions'
+import { supabase } from '../utils/supabaseClient'
 
 
-function IdeaRow({currentIdea}) {
+function IdeaRow({ currentIdea, user, profile, loading, setLoading }) {
   const [votes, setVotes] = useState(null)
 
-  function handleVote() {
-    console.log('in handle vote', currentIdea )
+  async function handleVote() {
+    if (!loading) {
+      setLoading(true)
+      let valid = await validate()
+      if (valid) {
+        console.log('valid')
+        await addVote()
+      } else {
+        console.log('not valid')
+        setLoading(false)
+      }
+    }
+  }
+
+  async function validate() {
+    if (profile && profile.name) {
+      const { data, error } = await supabase
+        .from('helpful_votes_ideas')
+        .select('*')
+        .eq('idea_id', currentIdea.id)
+        .eq('user_name', profile.name)
+      if (error) {
+        console.log('Error checking if already voted', error)
+      } else {
+        if (data.length === 0) {
+          return true
+        } else {
+          return false
+        }
+      }
+    } console.log('no profile')
+    return false
+  }
+
+  async function addVote() {
+    const { error } = await supabase
+      .from('helpful_votes_ideas')
+      .insert({ idea_id: currentIdea.id, user_name: profile.name })
+    if (error) {
+      console.log('error voting', error)
+    } else {
+      let newVoteTotal = currentIdea.votes + 1
+      setVotes(newVoteTotal)
+      await countVotesIdeas(currentIdea.id)
+      setLoading(false)
+    }
   }
 
   let idea = currentIdea
@@ -32,7 +78,7 @@ function IdeaRow({currentIdea}) {
     <TableCell align="right">{idea.artist_idea ? 'Artist' :
     idea.tag_idea ? 'Tag' : 'Other'}</TableCell>
     <TableCell align="right"
-    onClick={handleVote}>{idea.votes}&nbsp;&nbsp;&nbsp;{<ThumbUpOutlinedIcon sx={{ verticalAlign: 'bottom', '&:hover': { color: 'primary.main' } }}/>}</TableCell>
+    onClick={handleVote}>{votes ? votes : idea.votes}&nbsp;&nbsp;&nbsp;{<ThumbUpOutlinedIcon sx={{ verticalAlign: 'bottom', '&:hover': { color: 'primary.main' } }}/>}</TableCell>
     <TableCell align="right">{idea.user_name}</TableCell>
   </TableRow>
   )
@@ -43,6 +89,7 @@ function IdeaRow({currentIdea}) {
 
 export default function IdeasTable({ user, profile }) {
   const [ideas, setIdeas] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (!ideas) {
@@ -101,7 +148,7 @@ export default function IdeasTable({ user, profile }) {
         {ideas &&
         <TableBody>
           {ideas.map((idea) => (
-            <IdeaRow key={idea.id} currentIdea={idea} />
+            <IdeaRow key={idea.id} currentIdea={idea} user={user} profile={profile} loading={loading} setLoading={setLoading}/>
             // <TableRow
             //   key={idea.id}
             //   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

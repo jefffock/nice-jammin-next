@@ -21,8 +21,9 @@ export default function TopBar({ showButton, user, session, router }) {
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut()
     if (error) {
-      console.log('error', error)
+      console.log('error signing out', error)
     } else {
+      console.log('going home')
       router.push('/')
     }
   }

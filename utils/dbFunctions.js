@@ -132,7 +132,7 @@ async function countFunnyVotesRatings(ratingId) {
     }
 }
 
-async function countHelpfulVotesIdeas(ideaId) {
+async function countVotesIdeas(ideaId) {
   console.log('in count helpful votes ideas')
   const { error } = await supabase.rpc( 'count_helpful_votes_ideas', {ideaid: ideaId})
     if (error) {
@@ -149,4 +149,4 @@ async function countHelpfulVotesIdeas(ideaId) {
 //   }
 // }
 
-export { rateVersion, updateRating, updateTags, addOnePoint, addTenPoints, addRatingCountToArtist, addRatingCountToSong, addRatingCountToVersion,  countHelpfulVotesRatings, countFunnyVotesRatings, countHelpfulVotesIdeas }
+export { rateVersion, updateRating, updateTags, addOnePoint, addTenPoints, addRatingCountToArtist, addRatingCountToSong, addRatingCountToVersion,  countHelpfulVotesRatings, countFunnyVotesRatings, countVotesIdeas }

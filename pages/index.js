@@ -70,12 +70,12 @@ export default function App({ jams }) {
   const router = useRouter()
 
   useEffect(() => {
-    // setSession(supabase.auth.session())
+    setSession(supabase.auth.session())
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
-      // if (session !== null) {
-      //   setUser(session.user)
-      // }
+      if (session !== null) {
+        setUser(session.user)
+      }
     })
     const getAllJams = async () => {
       let allJams = await fetchAllJams()
