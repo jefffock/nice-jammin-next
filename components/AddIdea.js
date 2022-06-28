@@ -16,41 +16,46 @@ import FormControl from '@mui/material/FormControl';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box'
 import { addTenPoints } from '../utils/dbFunctions'
-import { fetchSongs } from '../utils/fetchData'
+import { fetchIdeas } from '../utils/fetchData'
 import FormHelperText from '@mui/material/FormHelperText';
 
 
 
-export default function AddIdea({ user, profile }) {
+export default function AddIdea({ user, profile, setIdeas }) {
   const [open, setOpen] = useState(false);
-  const [ideaToAdd, setIdeaToAdd] = useState(null)
+  const [idea, setIdea] = useState(null)
   const [ideaError, setIdeaError] = useState(false)
+  const [ideaErrorText, setIdeaErrorText] = useState(null)
   const [ideaType, setIdeaType] = useState(null)
   const [ideaTypeError, setIdeaTypeError] = useState(false)
   const [loading, setLoading] = useState(null)
-
-  const [successAlertText, setSuccessAlertText] = useState(null)
+  const [success, setSuccess] = useState(false)
 
   const handleClickOpen = () => {
     setLoading(false)
-    setSuccessAlertText(null)
+    setSuccess(null)
     setOpen(true);
   };
 
   const handleClose = () => {
     setLoading(false)
-    setSuccessAlertText(null)
-    setIdeaToAdd(null)
+    setSuccess(null)
+    setIdea(null)
     setIdeaType(null)
+    setIdeaError(false)
+    setIdeaTypeError(false)
+    setIdeaErrorText(null)
+    setSuccess(false)
     setOpen(false);
   };
 
   const handleIdeaChange = (e) => {
-    setIdeaToAdd(e.target.value)
+    setIdea(e.target.value)
     if (ideaError) {
       setIdeaError(false)
-    } if (successAlertText) {
-      setSuccessAlertText(null)
+      setIdeaErrorText(null)
+    } if (success) {
+      setSuccess(null)
     }
   }
 
@@ -59,8 +64,8 @@ export default function AddIdea({ user, profile }) {
       setIdeaTypeError(false)
     }
     setIdeaType(e.target.value)
-    if (successAlertText) {
-      setSuccessAlertText(null)
+    if (success) {
+      setSuccess(null)
     }
   }
 
@@ -70,7 +75,7 @@ export default function AddIdea({ user, profile }) {
     const valid = validate()
     if (valid) {
       console.log('user', user)
-      await insertSong()
+      await insertIdea()
     }
     setLoading(false)
   }
@@ -79,28 +84,53 @@ export default function AddIdea({ user, profile }) {
     if (!ideaType) {
       setIdeaTypeError(true)
       return false
-    } if (!ideaToAdd) {
+    } if (!idea) {
       setIdeaError(true)
+      setIdeaErrorText('Required')
       return false
-    } if (!user || !profile || !profile.can_write) {
+    } if (idea.length > 1000) {
+      setIdeaError(true)
+      setIdeaErrorText('Brevity, please (1000 character limit)')
       return false
     }
+    if (!user || !profile || !profile.can_write) {
+      return false
+    } return true
   }
 
-  async function insertSong() {
-    const { error } = await supabase
-      .from('songs')
-      .insert(
-        { song: songToAdd, submitter_name: profile.name }, { returning: 'minimal' })
-    if (error) {
-      console.log(error)
-    } else {
-      setSuccessAlertText(`Idea added successfully - Thank you!`)
-      setLoading(false)
-      addTenPoints(profile.name)
-      let newSongs = await fetchSongs()
-      setSongs(newSongs)
+  async function insertIdea() {
+    let ideaToAdd = {
+      user_name: profile.name,
+      idea_body: idea,
+      tag_idea: (ideaType === 'tag'),
+      artist_idea: (ideaType === 'artist'),
+      other_idea: (ideaType === 'other')
     }
+    console.log('idea to add', ideaToAdd)
+    const { error } = await supabase
+      .from('ideas')
+      .insert(ideaToAdd)
+    if (error) {
+      console.log('error adding idea', error)
+    } else {
+      setSuccess(true)
+      addTenPoints(profile.name)
+      let newIdeas = await fetchIdeas()
+      setIdeas(newIdeas)
+    }
+    // const { error } = await supabase
+    //   .from('songs')
+    //   .insert(
+    //     { song: songToAdd, submitter_name: profile.name }, { returning: 'minimal' })
+    // if (error) {
+    //   console.log(error)
+    // } else {
+    //   setSuccessAlertText(`Idea added successfully - Thank you!`)
+    //   setLoading(false)
+    //   addTenPoints(profile.name)
+    //   let newSongs = await fetchSongs()
+    //   setSongs(newSongs)
+    // }
   }
 
   return (
@@ -133,9 +163,9 @@ export default function AddIdea({ user, profile }) {
               onChange={handleTypeChange}
               error={ideaTypeError}
               >
-                <MenuItem key={1} value={'artist_idea'}>Artist</MenuItem>
-                <MenuItem key={2} value={'tag_idea'}>Tag</MenuItem>
-                <MenuItem key={3} value={'other_idea'}>Other</MenuItem>
+                <MenuItem key={1} value={'artist'}>Artist</MenuItem>
+                <MenuItem key={2} value={'tag'}>Tag</MenuItem>
+                <MenuItem key={3} value={'other'}>Other</MenuItem>
             </Select>
             {ideaTypeError &&
             <FormHelperText>Required</FormHelperText>
@@ -148,19 +178,19 @@ export default function AddIdea({ user, profile }) {
             label="Your suggestion"
             type="text"
             fullWidth
-            value={ideaToAdd}
+            value={idea}
             variant="standard"
             multiline
             onChange={handleIdeaChange}
             error={ideaError}
-            helperText={ideaError ? "Required" : ''}
+            helperText={ideaError ? ideaErrorText : ''}
             />
-            {successAlertText &&
-            <Alert severity="success" sx={{ mb: '1em' }}>{successAlertText}</Alert>
+            {success &&
+            <Alert severity="success" sx={{ mb: '1em' }}>Suggestion added - thank you!</Alert>
             }
         </DialogContent>
         <DialogActions>
-          {!successAlertText &&
+          {!success &&
           <>
             <Button onClick={handleClose}>Cancel</Button>
             <Button onClick={handleSubmit}
@@ -168,7 +198,7 @@ export default function AddIdea({ user, profile }) {
             Add This Suggestion</Button>
           </>
           }
-          {successAlertText &&
+          {success &&
             <Button onClick={handleClose}>Close</Button>
           }
         </DialogActions>
