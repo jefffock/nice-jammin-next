@@ -8,6 +8,7 @@ import Box from '@mui/material/Box'
 import FilterBar from './FilterBar'
 import FilterList from './FilterList'
 import AddVersion from './AddVersion'
+import AddIdea from './AddIdea'
 import Typography from '@mui/material/Typography';
 // import IconButton from '@mui/material/IconButton';
 // import { amber, deepOrange, grey } from '@mui/material/colors';

@@ -31,17 +31,24 @@ import Welcome from '../components/Welcome'
 // import IdeasTable from '../components/IdeasTable'
 import dynamic from 'next/dynamic'
 
-// const DynamicContributorsTable = dynamic(() => import('../components/TopContributors'), {
-//   suspense: true,
-// })
-// const DynamicJamsTable = dynamic(() => import('../components/JamsTableCollapsible'), {
-//   suspense: true,
-// })
+const DynamicContributorsTable = dynamic(() => import('../components/TopContributors'), {
+  suspense: true
+})
+const DynamicJamsTable = dynamic(() => import('../components/JamsTableCollapsible'), {
+  suspense: true
+})
 
-const DynamicContributorsTable = dynamic(() => import('../components/TopContributors'))
-const DynamicJamsTable = dynamic(() => import('../components/JamsTableCollapsible'))
-const DynamicGratitude = dynamic(() => import('../components/Gratitude'))
-const DynamicIdeasTable = dynamic(() => import('../components/IdeasTable'))
+// const DynamicContributorsTable = dynamic(() => import('../components/TopContributors'))
+// const DynamicJamsTable = dynamic(() => import('../components/JamsTableCollapsible'))
+const DynamicAddVersion = dynamic(() => import('../components/AddVersion'), {
+  suspense: true
+})
+const DynamicGratitude = dynamic(() => import('../components/Gratitude'), {
+  suspense: true
+})
+const DynamicIdeasTable = dynamic(() => import('../components/IdeasTable'), {
+  suspense: true
+})
 
 export default function App({ jams }) {
   const [updatedSongs, setUpdatedSongs] = useState(null)
@@ -63,12 +70,12 @@ export default function App({ jams }) {
   const router = useRouter()
 
   useEffect(() => {
-    setSession(supabase.auth.session())
+    // setSession(supabase.auth.session())
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
-      if (session !== null) {
-        setUser(session.user)
-      }
+      // if (session !== null) {
+      //   setUser(session.user)
+      // }
     })
     const getAllJams = async () => {
       let allJams = await fetchAllJams()
@@ -103,10 +110,6 @@ export default function App({ jams }) {
   useEffect(() => {
     fetchProfile()
   }, [user])
-
-  useEffect(() => {
-
-  })
 
   async function fetchProfile() {
     const user = supabase.auth.user()
@@ -198,12 +201,14 @@ export default function App({ jams }) {
       <Typography variant="h5" textAlign="center" mt="2em">Favorite Jams</Typography>
       <Typography textAlign="center">Tap to listen</Typography>
       <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} afterDate={afterDate} setBeforeDate={setBeforeDate} setAfterDate={setAfterDate} song={song} setSong={setSong}/>
-      <CollapsibleTable jams={jams} sortedJams={sortedJams} sortJams={sortJams} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} />
-      <br></br>
-      <AddVersion songs={updatedSongs} setSongs={setUpdatedSongs} jams={updatedJams} user={user} profile={profile} setUpdatedJams={setUpdatedJams}/>
-      <DynamicGratitude />
-      <DynamicIdeasTable />
-      <DynamicContributorsTable />
+      <Suspense fallback={<p>Loading....</p>}>
+        <DynamicJamsTable jams={jams} sortedJams={sortedJams} sortJams={sortJams} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} />
+        <br></br>
+        <DynamicAddVersion songs={updatedSongs} setSongs={setUpdatedSongs} jams={updatedJams} user={user} profile={profile} setUpdatedJams={setUpdatedJams}/>
+        <DynamicGratitude />
+        <DynamicIdeasTable user={user} profile={profile}/>
+        <DynamicContributorsTable />
+      </Suspense>
     </Box>
     </ThemeProvider>
   )

@@ -10,22 +10,9 @@ import { fetchIdeas } from '../utils/fetchData'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
+import AddIdea from './AddIdea'
 
-
-
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
-export default function IdeasTable() {
+export default function IdeasTable({ user, profile }) {
   const [ideas, setIdeas] = useState(null)
 
   useEffect(() => {
@@ -38,14 +25,10 @@ export default function IdeasTable() {
     }
   })
 
-  useEffect(() => {
-    console.log('ideas', ideas)
-  }, [ideas])
-
   return (
     <Box mx='auto' maxWidth='95vw'>
-      <Typography variant="h5" textAlign="center">Ideas</Typography>
-    <TableContainer component={Paper} sx={{ maxHeight: '45vh', overflowY: 'auto', maxWidth: '700px', mx: 'auto', borderRadius: '1em' }}>
+      <Typography variant="h5" textAlign="center">Suggestions</Typography>
+    <TableContainer component={Paper} sx={{ maxHeight: '45vh', overflowY: 'auto', maxWidth: '700px', mx: 'auto', borderRadius: '1em', my: '1em' }}>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -75,6 +58,7 @@ export default function IdeasTable() {
         }
       </Table>
     </TableContainer>
+    <AddIdea user={user} profile={profile} setIdeas={setIdeas}/>
     </Box>
   );
 }
