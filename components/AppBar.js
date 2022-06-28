@@ -14,6 +14,9 @@ import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
 import AdbIcon from '@mui/icons-material/Adb';
 import { supabase } from '../utils/supabaseClient'
+import Image from 'next/image'
+import Link from 'next/link'
+
 
 
 export default function TopBar({ showButton, user, session, router }) {
@@ -51,25 +54,38 @@ export default function TopBar({ showButton, user, session, router }) {
               >
               Nice Jammin
             </Typography>
-          {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
-          <Typography
+            <Link href="/">
+            <Image
+              alt="Nice Jammin Logo"
+              src="/icon-circle.png"
+              quality={100}
+              priority
+              width={45}
+              height={45}
+              component="a"
+              href="/"
+              />
+            </Link>
+            <Typography
             variant="h6"
             noWrap
             component="a"
+            fontFamily="Helvetica Neue"
             href="/"
             sx={{
-              mr: 2,
+              mx: 2,
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
+              fontWeight: 400,
+              letterSpacing: '.1rem',
               color: 'inherit',
               textDecoration: 'none',
+              my: 'auto'
             }}
             >
-            Nice Jammin
+            Nice Jammin&apos;
           </Typography>
+
           </Stack>
           {showButton &&
           <Box>
