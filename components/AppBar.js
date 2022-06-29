@@ -37,7 +37,7 @@ export default function TopBar({ showButton, user, session, router }) {
         <Toolbar disableGutters sx={{ maxWidth: '900px', mx:'auto', justifyContent: 'space-between' }}>
           <Stack direction="row" sx={{ flexGrow: 1 }}>
             {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
-            <Typography
+            {/* <Typography
               variant="h6"
               noWrap
               component="a"
@@ -53,7 +53,7 @@ export default function TopBar({ showButton, user, session, router }) {
               }}
               >
               Nice Jammin
-            </Typography>
+            </Typography> */}
             <Link href="/" passHref={true}>
             <Image
               alt="Nice Jammin Logo"
@@ -74,7 +74,7 @@ export default function TopBar({ showButton, user, session, router }) {
             href="/"
             sx={{
               mx: 2,
-              display: { xs: 'flex', md: 'none' },
+              display: { xs: 'flex' },
               flexGrow: 1,
               fontWeight: 400,
               letterSpacing: '.1rem',
