@@ -20,9 +20,11 @@ import { visuallyHidden } from '@mui/utils';
 import RateVersion from './RateVersion'
 import AddListenLink from './AddListenLink'
 import ListenLink from './ListenLink'
+import Comments from './Comments'
+import { fetchComments } from '../utils/fetchData'
 
-function JamsTableHead(props) {
-  const { order, orderBy, onRequestSort } = props;
+function JamsTableHead({ order, orderBy, onRequestSort }) {
+
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
 };
@@ -99,6 +101,7 @@ return (
 function Row({ row, user, profile }) {
   const [open, setOpen] = useState(false);
   const [tags, setTags] = useState('')
+  const [comments, setComments] = useState(null)
 
   useEffect(() => {
     let allTags = ''
@@ -174,6 +177,19 @@ function Row({ row, user, profile }) {
     setTags(trimmed)
   }, [row])
 
+  useEffect(() => {
+    if (open && !comments) {
+      console.log('about to fetch comments')
+      async function getComments(versionId) {
+        let newComments = await fetchComments(versionId)
+        if (newComments && newComments !== null) {
+          console.log('newComments', newComments)
+          setComments(newComments)
+        }
+      } getComments(row.id)
+    }
+  }, [open])
+
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}
@@ -209,7 +225,10 @@ function Row({ row, user, profile }) {
               <Typography>{row.location}</Typography>
               <Typography>{row.num_ratings} ratings</Typography>
               <Typography>Added by {row.submitter_name}. Thank you!</Typography>
-            <RateVersion song={row.song_name} date={row.date} location={row.location} tags={tags} user={user} profile={profile} jam={row}/>
+              <RateVersion song={row.song_name} date={row.date} location={row.location} tags={tags} user={user} profile={profile} jam={row}/>
+              {comments &&
+              <Comments version={row.version_id} song={row.song_name} date={row.date} location={row.location} comments={comments}  user={user} profile={profile}/>
+              }
             </Box>
           </Collapse>
         </TableCell>

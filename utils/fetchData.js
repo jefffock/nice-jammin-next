@@ -41,7 +41,8 @@ async function fetchSongs() {
   }
 }
 
-export default async function fetchLeaders() {
+async function fetchLeaders() {
+  console.log('in fetchLeaders')
   const { data, error } = await supabase
   .from('profiles')
   .select('name, points')
@@ -86,13 +87,32 @@ async function fetchIdeas() {
   .from('ideas')
   .select('*')
   .eq('done', false)
-  .order('votes', { ascending: false})
+  .order('votes', { ascending: false })
   if (error) {
     console.log('error fetching ideas', error)
     return error
   } else {
     return data
   }
+}
+
+async function fetchComments(versionId) {
+  console.log('in fetchComments')
+  const { data, error } = await supabase
+  .from('ratings')
+  .select('*')
+  // .neq('comment', NULL)
+  .eq('version_id', versionId)
+  .order('helpful', { ascending: false })
+  if (error) {
+    console.log(error)
+  } if (data) {
+    console.log('got Comments:', data)
+    return data
+  } console.log('no comments')
+  return null
+
+
 }
 
 async function checkUserAlreadyRated(name, versionId) {
@@ -110,4 +130,4 @@ async function checkUserAlreadyRated(name, versionId) {
   }
 }
 
-export { fetchAllJams, fetchArtists, fetchSongs, fetchLeaders, fetchVersions, fetchRatings, fetchIdeas, checkUserAlreadyRated }
+export { fetchAllJams, fetchArtists, fetchSongs, fetchLeaders, fetchVersions, fetchRatings, fetchIdeas, fetchComments, checkUserAlreadyRated }

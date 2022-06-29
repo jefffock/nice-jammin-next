@@ -54,7 +54,7 @@ export default function TopBar({ showButton, user, session, router }) {
               >
               Nice Jammin
             </Typography>
-            <Link href="/">
+            <Link href="/" passHref={true}>
             <Image
               alt="Nice Jammin Logo"
               src="/icon-circle.png"

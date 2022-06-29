@@ -68,6 +68,36 @@ async function updateTags(tagsToUpdate, versionId, profileName, tagsText, tagsLe
   }
 }
 
+async function checkIfUpvotedComment( name, ratingId ) {
+  const { data, error } = await supabase
+    .from('helpful_votes_ratings')
+    .select('*')
+    .eq('rating_id', ratingId)
+    .eq('user_name', name)
+  if (error) {
+    console.log('error checking already voted helpful', error)
+  } else {
+    if (data.length === 0) {
+      return false
+      // props.addOnePoint(props.data.submitter_name)
+      // voteHelpful()
+    } return true
+  }
+}
+
+async function upvoteComment(name, ratingId) {
+  const { error } = await supabase
+    .from('helpful_votes_ratings')
+    .insert({ rating_id: ratingId, user_name: name })
+  if (error) {
+    console.log('error voting helpful', error)
+  } else {
+    // let current = helpfulToShow
+    // setHelpfulToShow(current + 1)
+    // props.countHelpfulVotesRatings(props.data.id)
+  }
+}
+
 async function addOnePoint(profileName) {
   console.log('in add One Point', profileName)
   const { error } = await supabase.rpc( 'add_one_point', { username: profileName })
@@ -133,20 +163,10 @@ async function countFunnyVotesRatings(ratingId) {
 }
 
 async function countVotesIdeas(ideaId) {
-  console.log('in count helpful votes ideas')
   const { error } = await supabase.rpc( 'count_helpful_votes_ideas', {ideaid: ideaId})
     if (error) {
       console.log('error counting helpful votes ideas', error)
     }
 }
 
-// function addPointsToVersion(id, points) {
-//   for (var i = 0; i < versions.length; i++) {
-//     if (versions[i].id === id) {
-//       versions[i].points = points;
-//       break;
-//     }
-//   }
-// }
-
-export { rateVersion, updateRating, updateTags, addOnePoint, addTenPoints, addRatingCountToArtist, addRatingCountToSong, addRatingCountToVersion,  countHelpfulVotesRatings, countFunnyVotesRatings, countVotesIdeas }
+export { rateVersion, updateRating, updateTags, addOnePoint, addTenPoints, addRatingCountToArtist, addRatingCountToSong, addRatingCountToVersion,  countHelpfulVotesRatings, countFunnyVotesRatings, countVotesIdeas, upvoteComment, checkIfUpvotedComment }
