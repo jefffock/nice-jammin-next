@@ -251,17 +251,21 @@ export default function CollapsibleTable({ jams, sortedJams, sortJams, order, or
   };
 
  useEffect(() => {
-  const getAllJams = async () => {
-    let allJams = await fetchAllJams()
-    setUpdatedJams(allJams)
+  if (jams.length < 100) {
+    const getAllJams = async () => {
+      let allJams = await fetchAllJams()
+      setUpdatedJams(allJams)
+    }
+    getAllJams()
   }
-  getAllJams()
-  const getSongs = async () => {
-    let songs = await fetchSongs()
-    setSongs(songs)
-  }
+  if (!songs) {
+    const getSongs = async () => {
+      let songs = await fetchSongs()
+      setSongs(songs)
+    }
     getSongs()
- }, [])
+  }
+ })
 
   function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
