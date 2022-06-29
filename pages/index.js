@@ -32,7 +32,6 @@ const DynamicIdeasTable = dynamic(() => import('../components/IdeasTable'), {
 })
 
 export default function App({ jams }) {
-  const [updatedSongs, setUpdatedSongs] = useState(null)
   const [updatedJams, setUpdatedJams] = useState(jams)
   const [songs, setSongs] = useState(null)
   const [session, setSession] = useState(null)
@@ -174,14 +173,14 @@ export default function App({ jams }) {
     <Box sx={{ bgcolor: 'primary.graybg', minHeight: '100vh', maxWidth: '100vw', overflow: 'hidden'}}>
       <TopBar showButton={true} user={user} session={session} router={router}/>
       <Welcome />
-      <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate} songs={updatedSongs} song={song} setSong={setSong}/>
+      <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate} songs={songs} song={song} setSong={setSong}/>
       <Typography variant="h5" textAlign="center" mt="2em">Favorite Jams</Typography>
       <Typography textAlign="center">Tap to listen</Typography>
       <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} afterDate={afterDate} setBeforeDate={setBeforeDate} setAfterDate={setAfterDate} song={song} setSong={setSong}/>
       <Suspense fallback={<p>Loading....</p>}>
-        <DynamicJamsTable jams={jams} sortedJams={sortedJams}  order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} />
+        <DynamicJamsTable jams={jams} sortedJams={sortedJams}  order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} setUpdatedJams={setUpdatedJams} setSongs={setSongs}/>
         <br></br>
-        <DynamicAddVersion songs={updatedSongs} setSongs={setUpdatedSongs} jams={updatedJams} user={user} profile={profile} setUpdatedJams={setUpdatedJams}/>
+        <DynamicAddVersion songs={songs} setSongs={setSongs} jams={updatedJams} user={user} profile={profile} setUpdatedJams={setUpdatedJams}/>
         <DynamicGratitude />
         <DynamicIdeasTable user={user} profile={profile}/>
         <DynamicContributorsTable />

@@ -21,7 +21,7 @@ import RateVersion from './RateVersion'
 import AddListenLink from './AddListenLink'
 import ListenLink from './ListenLink'
 import Comments from './Comments'
-import { fetchComments } from '../utils/fetchData'
+import { fetchComments, fetchAllJams, fetchSongs } from '../utils/fetchData'
 
 function JamsTableHead({ order, orderBy, onRequestSort }) {
 
@@ -237,7 +237,7 @@ function Row({ row, user, profile }) {
   );
 }
 
-export default function CollapsibleTable({ jams, sortedJams, sortJams, order, orderBy, setOrder, setOrderBy, user, profile }) {
+export default function CollapsibleTable({ jams, sortedJams, sortJams, order, orderBy, setOrder, setOrderBy, user, profile, setUpdatedJams, setSongs }) {
   const [orderedSongs, setOrderedSongs] = useState(null)
 
   const handleRequestSort = (event, property) => {
@@ -250,11 +250,18 @@ export default function CollapsibleTable({ jams, sortedJams, sortJams, order, or
     setOrderBy(property);
   };
 
-  // useEffect(() => {
-  //   if (!sortedJams) {
-  //     sortJams(order, orderBy)
-  //   }
-  // })
+ useEffect(() => {
+  const getAllJams = async () => {
+    let allJams = await fetchAllJams()
+    setUpdatedJams(allJams)
+  }
+  getAllJams()
+  const getSongs = async () => {
+    let songs = await fetchSongs()
+    setSongs(songs)
+  }
+    getSongs()
+ }, [])
 
   function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
