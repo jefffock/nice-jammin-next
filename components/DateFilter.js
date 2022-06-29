@@ -23,9 +23,9 @@ export default function DateFilter({ before, beforeDate, setBeforeDate, afterDat
   return (
     <>
     <FormControl sx={{ minWidth: 120,  m:'0.25em' }} size="small">
-    <InputLabel id="before-select">{before ? 'Before' : 'After'}</InputLabel>
+    <InputLabel id={ before ? "before-date-select" : "after-date-select"}>{before ? 'Before' : 'After'}</InputLabel>
     <Select
-      labelId="before-select"
+      labelId={ before ? "before-date-select" : "after-date-select"}
       value={before ? beforeDate : afterDate}
       label={before ? 'Before' : 'After'}
       onChange={handleChange}
