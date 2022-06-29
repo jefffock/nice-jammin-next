@@ -198,7 +198,7 @@ export async function getServerSideProps() {
       // .gt('avg_rating', 0)
       .limit(10)
       .order('avg_rating', { ascending: false })
-      .order('num_ratings', { ascending: false })
+      // .order('num_ratings', { ascending: false })
     if (error) {
       console.error(error)
     } else if (data) {

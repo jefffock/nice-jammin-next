@@ -14,12 +14,11 @@ import { fetchLeaders } from '../utils/fetchData'
 
 export default function TopContributors() {
   const [leaders, setLeaders] = useState(null)
-
-
-
+  const [fetchingLeaders, setFetchingLeaders] = useState(false)
 
   useEffect(() => {
-    if (!leaders) {
+    if (!leaders && !fetchingLeaders) {
+      setFetchingLeaders(true)
       async function getLeaders() {
         let data = await fetchLeaders()
         console.log('newLeaders', data)

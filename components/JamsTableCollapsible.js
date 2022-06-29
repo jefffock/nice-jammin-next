@@ -240,6 +240,10 @@ function Row({ row, user, profile }) {
 export default function CollapsibleTable({ jams, sortedJams, sortJams, order, orderBy, setOrder, setOrderBy, user, profile, setUpdatedJams, setSongs, songs }) {
   const [orderedSongs, setOrderedSongs] = useState(null)
   const [jamsFetched, setJamsFetched] = useState(false)
+  const [songsFetched, setSongsFetched] = useState(false)
+  const [fetchingJams, setFetchingJams] = useState(false)
+  const [fetchingSongs, setFetchingSongs] = useState(false)
+
 
   const handleRequestSort = (event, property) => {
     if (property === 'avg_rating' && orderBy !== 'avg_rating') {
@@ -252,7 +256,8 @@ export default function CollapsibleTable({ jams, sortedJams, sortJams, order, or
   };
 
  useEffect(() => {
-  if (!jamsFetched) {
+  if (!jamsFetched && !fetchingJams) {
+    setFetchingJams(true)
     const getAllJams = async () => {
       let allJams = await fetchAllJams()
       setJamsFetched(true)
@@ -260,9 +265,14 @@ export default function CollapsibleTable({ jams, sortedJams, sortJams, order, or
     }
     getAllJams()
   }
-  if (!songs) {
+  })
+
+  useEffect(() => {
+  if (!songsFetched && !fetchingSongs) {
+    setFetchingSongs(true)
     const getSongs = async () => {
       let songs = await fetchSongs()
+      setSongsFetched(true)
       setSongs(songs)
     }
     getSongs()
