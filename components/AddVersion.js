@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabaseClient'
 import { addOnePoint, addTenPoints, rateVersion } from '../utils/dbFunctions'
-import { fetchJams } from '../utils/fetchData'
+import { fetchAllJams } from '../utils/fetchData'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -99,7 +99,7 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
     } else {
       setYear(null)
     }
-  }, [date])
+  }, [date, jams, song])
 
   useEffect(() => {
     if (songs) {

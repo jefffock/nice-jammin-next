@@ -1,16 +1,5 @@
-// import { supabase } from '../utils/supabaseClient'
 import { ThemeProvider } from '@mui/material/styles';
-// import App from '../components/App.js'
 import theme from '../styles/themes'
-
-// export default function Home({ jams, songs }) {
-//   return (
-//     <ThemeProvider theme={theme}>
-//       <App jams={jams} songs={songs} />
-//     </ThemeProvider>
-//   )
-// }
-
 import { useState, useEffect, createContext, useContext, useMemo, Suspense } from 'react'
 import { supabase } from '../utils/supabaseClient'
 import { fetchLeaders, fetchSongs, fetchAllJams } from '../utils/fetchData';
@@ -22,13 +11,8 @@ import FilterBar from '../components/FilterBar'
 import FilterList from '../components/FilterList'
 import AddVersion from '../components/AddVersion'
 import Typography from '@mui/material/Typography';
-// import IconButton from '@mui/material/IconButton';
-// import { amber, deepOrange, grey } from '@mui/material/colors';
-// import TopContributors from '../components/TopContributors';
 import TopBar from '../components/AppBar'
 import Welcome from '../components/Welcome'
-// import Gratitude from '../components/Gratitude'
-// import IdeasTable from '../components/IdeasTable'
 import dynamic from 'next/dynamic'
 
 const DynamicContributorsTable = dynamic(() => import('../components/TopContributors'), {
@@ -37,9 +21,6 @@ const DynamicContributorsTable = dynamic(() => import('../components/TopContribu
 const DynamicJamsTable = dynamic(() => import('../components/JamsTableCollapsible'), {
   suspense: true
 })
-
-// const DynamicContributorsTable = dynamic(() => import('../components/TopContributors'))
-// const DynamicJamsTable = dynamic(() => import('../components/JamsTableCollapsible'))
 const DynamicAddVersion = dynamic(() => import('../components/AddVersion'), {
   suspense: true
 })
@@ -77,19 +58,19 @@ export default function App({ jams }) {
         setUser(session.user)
       }
     })
-    const getAllJams = async () => {
-      let allJams = await fetchAllJams()
-      setUpdatedJams(allJams)
-    }
-    getAllJams()
-    if (!songs) {
-      const getSongs = async () => {
-        let songs = await fetchSongs()
-        setSongs(songs)
-        setUpdatedSongs(songs)
-      }
-      getSongs()
-    }
+    // const getAllJams = async () => {
+    //   let allJams = await fetchAllJams()
+    //   setUpdatedJams(allJams)
+    // }
+    // getAllJams()
+    // if (!songs) {
+    //   const getSongs = async () => {
+    //     let songs = await fetchSongs()
+    //     setSongs(songs)
+    //     setUpdatedSongs(songs)
+    //   }
+    //   getSongs()
+    // }
 
   }, [])
 
@@ -99,76 +80,72 @@ export default function App({ jams }) {
   }, [session])
 
   useEffect(() => {
+    function filterFunc(item) {
+      if (artist && artist !== 'All Bands' && item.artist !== artist) {
+        return false
+      } if (song && !item.song_name?.toLowerCase().includes(song.toLowerCase())) {
+        return false
+      } if (tagsSelected) {
+        for (var i = 0; i < tagsSelected.length; i++) {
+          if (!item[tagsSelected[i]]) {
+            return false
+          }
+        }
+      } let itemDate = parseInt(item.date.slice(0,4))
+      if (beforeDate && beforeDate < itemDate) {
+        return false
+      } if (afterDate && afterDate > itemDate) {
+        return false
+      }
+      return true
+    }
     let newFilteredJams = updatedJams?.filter(filterFunc)
     setFilteredJams(newFilteredJams)
   }, [artist, tagsSelected, beforeDate, afterDate, song, updatedJams])
 
   useEffect(() => {
+    function descendingComparator(a, b, orderBy) {
+      if (b[orderBy] < a[orderBy]) {
+        return -1;
+      }
+      if (b[orderBy] > a[orderBy]) {
+        return 1;
+      }
+      return 0;
+    }
+    function getComparator(order, orderBy) {
+      return order === 'desc'
+      ? (a, b) => descendingComparator(a, b, orderBy)
+      : (a, b) => -descendingComparator(a, b, orderBy);
+    }
+    function sortJams() {
+      let newSortedJams = filteredJams.slice().sort(getComparator(order, orderBy))
+      setSortedJams(newSortedJams)
+    }
     sortJams()
   }, [order, orderBy, filteredJams])
 
   useEffect(() => {
-    fetchProfile()
-  }, [user])
-
-  async function fetchProfile() {
-    const user = supabase.auth.user()
-    if (user) {
-      let id = user.id
-      let { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', id)
-        .limit(1)
-      if (error) {
-        console.log('error getting profile', error)
-      } if (data) {
-        console.log('profile data', data[0])
-        setProfile(data[0])
-      }
-    }
-  }
-
-  function filterFunc(item) {
-    if (artist && artist !== 'All Bands' && item.artist !== artist) {
-      return false
-    } if (song && !item.song_name?.toLowerCase().includes(song.toLowerCase())) {
-      return false
-    } if (tagsSelected) {
-      for (var i = 0; i < tagsSelected.length; i++) {
-        if (!item[tagsSelected[i]]) {
-          return false
+    if (user && !profile) {
+      async function fetchProfile() {
+        if (user) {
+          let id = user.id
+          let { data, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', id)
+            .limit(1)
+          if (error) {
+            console.log('error getting profile', error)
+          } if (data) {
+            console.log('profile data', data[0])
+            setProfile(data[0])
+          }
         }
       }
-    } let itemDate = parseInt(item.date.slice(0,4))
-    if (beforeDate && beforeDate < itemDate) {
-      return false
-    } if (afterDate && afterDate > itemDate) {
-      return false
+      fetchProfile()
     }
-    return true
-  }
-
-  function sortJams() {
-    let newSortedJams = filteredJams.slice().sort(getComparator(order, orderBy))
-    setSortedJams(newSortedJams)
-  }
-
-  function getComparator(order, orderBy) {
-    return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-  }
-
-  function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-      return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-      return 1;
-    }
-    return 0;
-  }
+  }, [user, profile])
 
   return (
     <ThemeProvider theme={theme}>
@@ -202,7 +179,7 @@ export default function App({ jams }) {
       <Typography textAlign="center">Tap to listen</Typography>
       <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} afterDate={afterDate} setBeforeDate={setBeforeDate} setAfterDate={setAfterDate} song={song} setSong={setSong}/>
       <Suspense fallback={<p>Loading....</p>}>
-        <DynamicJamsTable jams={jams} sortedJams={sortedJams} sortJams={sortJams} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} />
+        <DynamicJamsTable jams={jams} sortedJams={sortedJams}  order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} />
         <br></br>
         <DynamicAddVersion songs={updatedSongs} setSongs={setUpdatedSongs} jams={updatedJams} user={user} profile={profile} setUpdatedJams={setUpdatedJams}/>
         <DynamicGratitude />
@@ -230,24 +207,7 @@ export async function getServerSideProps() {
     }
   }
 
-  // async function getSongs() {
-  //   const { data, error } = await supabase
-  //     .from('songs')
-  //     .select('song', 'id')
-  //     // .gt('avg_rating', 0)
-  //     // .limit(100)
-  //     .order('song', { ascending: true })
-  //   if (error) {
-  //     console.error(error)
-  //   } else if (data) {
-  //     return data
-  //   }
-  // }
-
-  const [jams] = await Promise.all([
-    getJams()
-    // getSongs()
-  ])
+  const jams = await getJams()
   return {
     props: { jams }
   }

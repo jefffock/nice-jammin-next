@@ -33,7 +33,7 @@ export default function TopBar({ showButton, user, session, router }) {
 
   return (
     <AppBar position="static">
-      <Container maxWidth="xl" justifyContent="center">
+      <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ maxWidth: '900px', mx:'auto', justifyContent: 'space-between' }}>
           <Stack direction="row" sx={{ flexGrow: 1 }}>
             {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}

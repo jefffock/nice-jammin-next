@@ -38,13 +38,13 @@ const headCells = [
   },
   {
     id: 'date',
-    numeric: false,
+    center: true,
     disablePadding: false,
     label: 'Date'
   },
   {
     id: 'avg_rating',
-    numeric: false,
+    center: true,
     disablePadding: false,
     label: 'Rating'
   },
@@ -69,7 +69,7 @@ return (
         <TableCell
           sx={{ bgcolor: 'primary.main' }}
           key={headCell.id}
-          align={headCell.numeric ? 'center' : 'left'}
+          align={headCell.center ? 'center' : 'left'}
           padding={headCell.disablePadding ? 'none' : 'normal'}
           sortDirection={orderBy === headCell.id ? order : false}
         >
@@ -188,7 +188,7 @@ function Row({ row, user, profile }) {
         }
       } getComments(row.id)
     }
-  }, [open])
+  }, [open, comments, row])
 
   return (
     <React.Fragment>
@@ -196,7 +196,7 @@ function Row({ row, user, profile }) {
       onClick={() => setOpen(!open)}>
         <TableCell sx={{ maxWidth: '10px'}}>{row.song_name}</TableCell>
         <TableCell sx={{ maxWidth: '10px'}}>{row.date}</TableCell>
-        <TableCell sx={{ maxWidth: '10px'}}>{row.avg_rating}</TableCell>
+        <TableCell sx={{ maxWidth: '10px', textAlign:'center'}}>{row.avg_rating}</TableCell>
         <TableCell sx={{ maxWidth: '10px'}}>{row.artist}</TableCell>
         <TableCell>
           <IconButton
@@ -250,11 +250,11 @@ export default function CollapsibleTable({ jams, sortedJams, sortJams, order, or
     setOrderBy(property);
   };
 
-  useEffect(() => {
-    if (!sortedJams) {
-      sortJams(order, orderBy)
-    }
-  })
+  // useEffect(() => {
+  //   if (!sortedJams) {
+  //     sortJams(order, orderBy)
+  //   }
+  // })
 
   function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {

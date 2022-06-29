@@ -84,22 +84,20 @@ function IdeaRow({ currentIdea, user, profile, loading, setLoading }) {
   )
 }
 
-
-
-
 export default function IdeasTable({ user, profile }) {
   const [ideas, setIdeas] = useState(null)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (!ideas) {
+    if (!ideas && !loading) {
+      setLoading(true)
       async function getIdeas() {
         let newIdeas = await fetchIdeas()
         console.log('newIdeas', newIdeas)
         setIdeas(newIdeas)
       } getIdeas()
-    }
-  })
+    } setLoading(false)
+  }, [ideas, loading])
 
   async function checkAlreadyVotedHelpful() {
     if (props.username && (props.ideaData.user_name !== props.username)) {

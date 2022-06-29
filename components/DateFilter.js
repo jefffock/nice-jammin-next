@@ -13,7 +13,7 @@ export default function DateFilter({ before, beforeDate, setBeforeDate, afterDat
     for (var i = currentYear; i > 1964; i--) {
       fullDates.push(i)
     } setDates(fullDates)
-  })
+  }, [])
 
   function handleChange(event) {
     let newDate = event.target.value

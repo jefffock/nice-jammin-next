@@ -9,31 +9,24 @@ import Paper from '@mui/material/Paper';
 import { supabase } from '../utils/supabaseClient'
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { fetchLeaders } from '../utils/fetchData'
 
 
 export default function TopContributors() {
   const [leaders, setLeaders] = useState(null)
 
-    const fetchLeaders = async () => {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('name, points')
-        .not('name', 'eq', 'Henrietta')
-        .limit(20)
-        .order('points', {ascending: false})
-      if (error) {
-        console.log('error fetching top contributors', error)
-      } else {
-        console.log('data fetched', data)
-        setLeaders(data)
-      }
-    }
+
+
 
   useEffect(() => {
     if (!leaders) {
-      fetchLeaders()
+      async function getLeaders() {
+        let { data } = await fetchLeaders
+        console.log('newLeaders', data)
+        setLeaders(data)
+      } getLeaders()
     }
-  }, [])
+  })
 
   return (
     <Box mx="auto" my="1em" width='96vw' maxWidth='400px'>
@@ -48,7 +41,7 @@ export default function TopContributors() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {leaders?.map((row, index) => (
+          {leaders && leaders.map((row, index) => (
             <TableRow
             key={index}
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

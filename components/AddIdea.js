@@ -118,19 +118,6 @@ export default function AddIdea({ user, profile, setIdeas }) {
       let newIdeas = await fetchIdeas()
       setIdeas(newIdeas)
     }
-    // const { error } = await supabase
-    //   .from('songs')
-    //   .insert(
-    //     { song: songToAdd, submitter_name: profile.name }, { returning: 'minimal' })
-    // if (error) {
-    //   console.log(error)
-    // } else {
-    //   setSuccessAlertText(`Idea added successfully - Thank you!`)
-    //   setLoading(false)
-    //   addTenPoints(profile.name)
-    //   let newSongs = await fetchSongs()
-    //   setSongs(newSongs)
-    // }
   }
 
   return (
@@ -147,10 +134,6 @@ export default function AddIdea({ user, profile, setIdeas }) {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add Suggestion</DialogTitle>
         <DialogContent>
-          {/*
-          //select type: artist, tag, other
-          //text
-          */}
           {!user &&
           <Alert severity="warning" sx={{ mb: '1em' }}>Please log in to add a suggestion - thank you!</Alert>
           }

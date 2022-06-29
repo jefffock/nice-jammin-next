@@ -41,7 +41,7 @@ const tags = {
 }
 
 export default function FilterChip({ tag, artist, setArtist, tagsSelected, setTagsSelected, beforeDate, setBeforeDate, afterDate, setAfterDate, song, setSong }) {
-  const [label, setLabel] = useState('')
+  const [label, setLabel] = useState(null)
 
   useEffect(() => {
     if (artist) {
@@ -55,7 +55,7 @@ export default function FilterChip({ tag, artist, setArtist, tagsSelected, setTa
     } if (song) {
       setLabel(song)
     }
-  }, [])
+  }, [artist, tag, beforeDate, afterDate, song])
 
   const handleDelete = () => {
     if (artist) {
@@ -78,6 +78,10 @@ export default function FilterChip({ tag, artist, setArtist, tagsSelected, setTa
   }
 
   return (
+    <>
+    {label &&
       <Chip sx={{  m:'0.25em' }} label={label} onDelete={handleDelete} />
+    }
+    </>
   );
 }

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect, forwardRef } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import ListItemText from '@mui/material/ListItemText';
@@ -14,13 +14,13 @@ import Slide from '@mui/material/Slide';
 import Box from '@mui/material/Box';
 
 
-const Transition = React.forwardRef(function Transition(props, ref) {
+const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default function ListenLink({ link, jam }) {
-  const [open, setOpen] = React.useState(false);
-  const [newLink, setNewLink] = React.useState(null)
+  const [open, setOpen] = useState(false);
+  const [newLink, setNewLink] = useState(null)
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -30,26 +30,26 @@ export default function ListenLink({ link, jam }) {
     setOpen(false);
   };
 
-  React.useEffect(() => {
-    console.log('link', link)
-    let embedLink
-    if (link.includes('youtu')) {
-      if (link.includes('watch?v=')) {
-        embedLink = link.replace('watch?v=', 'embed/')
-      } if (link.includes('youtu.be')) {
-        let youTubeId;
-        let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-        let match = link.match(regExp);
-        if (match && match[2].length == 11) {
-          youTubeId = match[2];
-          console.log('youtubeId', youTubeId)
-          embedLink = `//www.youtube.com/embed/${youTubeId}`
+  useEffect(() => {
+    if (!newLink) {
+      let embedLink = link
+      if (link.includes('youtu')) {
+        if (link.includes('watch?v=')) {
+          embedLink = link.replace('watch?v=', 'embed/')
+        } if (link.includes('youtu.be')) {
+          let youTubeId;
+          let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+          let match = link.match(regExp);
+          if (match && match[2].length == 11) {
+            youTubeId = match[2];
+            console.log('youtubeId', youTubeId)
+            embedLink = `//www.youtube.com/embed/${youTubeId}`
+          }
         }
       }
     }
-    console.log('embedLink', embedLink)
     setNewLink(embedLink)
-  })
+  }, [link, newLink])
 
   return (
     <div>

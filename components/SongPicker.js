@@ -10,8 +10,8 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box'
 
 export default function SongPicker({ songs, song, setSong, wide, size, mx, my }) {
-  const [value, setValue] = useState('');
-  const [inputValue, setInputValue] = useState('');
+  const [value, setValue] = useState(null);
+  const [inputValue, setInputValue] = useState(null);
   const [uniqueSongs, setUniqueSongs] = useState(null)
 
   useEffect(() => {
@@ -32,12 +32,12 @@ export default function SongPicker({ songs, song, setSong, wide, size, mx, my })
 
   useEffect(() => {
     setSong(value)
-  }, [value])
+  }, [value, setSong])
 
   useEffect(() => {
     setValue(inputValue)
     setSong(inputValue)
-  }, [inputValue])
+  }, [inputValue, setValue, setSong])
 
   useEffect(() => {
     if (!song) {
@@ -50,7 +50,8 @@ export default function SongPicker({ songs, song, setSong, wide, size, mx, my })
       <Box mx={mx ? mx : '0.25em'}  my={my ? my : '0.25em'} sx={{ minWidth: '120px', maxWidth: '240px' }}>
         <Autocomplete
           disablePortal
-          value={value}
+          value={value ? value : undefined}
+          isOptionEqualToValue={(option, value) => option === value}
           onChange={(event, newValue) => {
             setValue(newValue);
           }}
