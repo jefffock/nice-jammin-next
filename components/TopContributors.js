@@ -21,7 +21,7 @@ export default function TopContributors() {
   useEffect(() => {
     if (!leaders) {
       async function getLeaders() {
-        let { data } = await fetchLeaders
+        let data = await fetchLeaders()
         console.log('newLeaders', data)
         setLeaders(data)
       } getLeaders()

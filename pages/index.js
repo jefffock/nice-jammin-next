@@ -2,7 +2,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from '../styles/themes'
 import { useState, useEffect, createContext, useContext, useMemo, Suspense } from 'react'
 import { supabase } from '../utils/supabaseClient'
-import { fetchLeaders, fetchSongs, fetchAllJams } from '../utils/fetchData';
+import { fetchSongs, fetchAllJams } from '../utils/fetchData';
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import CollapsibleTable from '../components/JamsTableCollapsible'
