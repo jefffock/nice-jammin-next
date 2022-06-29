@@ -190,13 +190,13 @@ export default function App({ jams }) {
   )
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   async function getJams() {
     const { data, error } = await supabase
       .from('versions')
       .select('*')
       // .gt('avg_rating', 0)
-      .limit(10)
+      .limit(20)
       .order('avg_rating', { ascending: false })
       // .order('num_ratings', { ascending: false })
     if (error) {
