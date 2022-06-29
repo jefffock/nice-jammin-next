@@ -237,8 +237,9 @@ function Row({ row, user, profile }) {
   );
 }
 
-export default function CollapsibleTable({ jams, sortedJams, sortJams, order, orderBy, setOrder, setOrderBy, user, profile, setUpdatedJams, setSongs }) {
+export default function CollapsibleTable({ jams, sortedJams, sortJams, order, orderBy, setOrder, setOrderBy, user, profile, setUpdatedJams, setSongs, songs }) {
   const [orderedSongs, setOrderedSongs] = useState(null)
+  const [jamsFetched, setJamsFetched] = useState(false)
 
   const handleRequestSort = (event, property) => {
     if (property === 'avg_rating' && orderBy !== 'avg_rating') {
@@ -251,9 +252,10 @@ export default function CollapsibleTable({ jams, sortedJams, sortJams, order, or
   };
 
  useEffect(() => {
-  if (jams.length < 100) {
+  if (!jamsFetched) {
     const getAllJams = async () => {
       let allJams = await fetchAllJams()
+      setJamsFetched(true)
       setUpdatedJams(allJams)
     }
     getAllJams()
