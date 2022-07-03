@@ -31,11 +31,6 @@ export default function SongPicker({ songs, song, setSong, wide, size, mx, my })
   }, [songs])
 
   useEffect(() => {
-    setSong(value)
-  }, [value, setSong])
-
-  useEffect(() => {
-    setValue(inputValue)
     setSong(inputValue)
   }, [inputValue, setValue, setSong])
 
@@ -50,7 +45,7 @@ export default function SongPicker({ songs, song, setSong, wide, size, mx, my })
       <Box mx={mx ? mx : '0.25em'}  my={my ? my : '0.25em'} sx={{ minWidth: '120px', maxWidth: '240px' }}>
         <Autocomplete
           disablePortal
-          value={value ? value : undefined}
+          value={value ? value : ''}
           isOptionEqualToValue={(option, value) => option === value}
           onChange={(event, newValue) => {
             setValue(newValue);

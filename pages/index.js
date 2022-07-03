@@ -149,6 +149,7 @@ export default function App({ jams }) {
   return (
     <ThemeProvider theme={theme}>
     <Head>
+    <link rel="shortcut icon" href="/favicon.ico" />
       {!artist && !song &&
       <>
       <title>Discover Great Jams by All Jam Bands</title>

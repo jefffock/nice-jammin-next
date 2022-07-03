@@ -32,7 +32,7 @@ export default function ListenLink({ link, jam }) {
 
   useEffect(() => {
     let embedLink = link
-    if (!newLink) {
+    if (!newLink && link) {
       if (link.includes('youtu')) {
         if (link.includes('watch?v=')) {
           embedLink = link.replace('watch?v=', 'embed/')
