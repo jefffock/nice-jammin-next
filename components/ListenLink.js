@@ -24,6 +24,7 @@ export default function ListenLink({ link, jam }) {
 
   const handleClickOpen = () => {
     setOpen(true);
+    console.log('link', link)
   };
 
   const handleClose = () => {
@@ -31,25 +32,24 @@ export default function ListenLink({ link, jam }) {
   };
 
   useEffect(() => {
-    let embedLink = link
+    let reformattedLink
     if (!newLink && link) {
       if (link.includes('youtu')) {
         if (link.includes('watch?v=')) {
-          embedLink = link.replace('watch?v=', 'embed/')
+          reformattedLink = link.replace('watch?v=', 'embed/')
         } if (link.includes('youtu.be')) {
           let youTubeId;
           let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
           let match = link.match(regExp);
           if (match && match[2].length == 11) {
             youTubeId = match[2];
-            console.log('youtubeId', youTubeId)
-            embedLink = `//www.youtube.com/embed/${youTubeId}`
+           reformattedLink = `//www.youtube.com/embed/${youTubeId}`
           }
         }
       }
     }
-    setNewLink(embedLink)
-  }, [link, newLink])
+    setNewLink(reformattedLink ? reformattedLink : link)
+  }, [link])
 
   return (
     <div>
