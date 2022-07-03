@@ -10,8 +10,8 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box'
 
 export default function SongPicker({ songs, song, setSong, wide, size, mx, my }) {
-  const [value, setValue] = useState(null);
-  const [inputValue, setInputValue] = useState(null);
+  const [value, setValue] = useState('');
+  const [inputValue, setInputValue] = useState('');
   const [uniqueSongs, setUniqueSongs] = useState(null)
 
   useEffect(() => {
@@ -42,22 +42,37 @@ export default function SongPicker({ songs, song, setSong, wide, size, mx, my })
   }, [song])
 
     return (
-      <Box mx={mx ? mx : '0.25em'}  my={my ? my : '0.25em'} sx={{ minWidth: '120px', maxWidth: '240px' }}>
+      <Box mx={mx ? mx : '0.25em'}  my={my ? my : '0.25em'} sx={{ minWidth: '240px', maxWidth: '240px' }}>
         <Autocomplete
-          disablePortal
+          // disablePortal
+          ListboxProps={{
+            sx: {maxHeight: '90vh'}
+          }}
+          freeSolo
+          selectOnFocus={true}
+          openOnFocus={true}
+          fullWidth
           value={value ? value : ''}
           isOptionEqualToValue={(option, value) => option === value}
           onChange={(event, newValue) => {
             setValue(newValue);
+            // setOpen(false)
           }}
           inputValue={inputValue}
           onInputChange={(event, newInputValue) => {
             setInputValue(newInputValue);
           }}
           id="song-picker"
+          // maxHeight="95vh"
+          // sx={{maxHeight: '95vh'}}
           options={uniqueSongs ? uniqueSongs : [{ label: 'Loading songs...' }]}
           size={size ? size : 'small'}
-          renderInput={(params) => <TextField {...params} label="Song"/>}
+          renderInput={(params) => <TextField {...params}
+          // InputProps={{
+          //   style: { maxHeight: 100}
+          // }}
+          label="Song"/>
+        }
         />
       </Box>
     );

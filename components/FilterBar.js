@@ -13,11 +13,12 @@ export default function FilterBar({ setDates, setArtist, tagsSelected, setTagsSe
   return (
     <Box sx={{ mx: '0.5em' }} >
       <Box sx={{ bgcolor: 'primary.bg', width: 'fit-content', mx:'auto', borderRadius: '.5em', p: '0.3em' }}>
-        {/* <Typography textAlign="center">What would you like to hear?</Typography> */}
+        <Typography textAlign="center">Filters</Typography>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'top', mx: 'auto', mt: '0.1em', justifyContent: 'center', bgcolor: 'primary.bg', borderRadius: '0.25em', width: 'fit-content', p:'0.3em'}}>
+          <TagPicker tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} />
+          <br/>
           <ArtistPicker setArtist={setArtist} artist={artist} />
           <SongPicker songs={songs} setSong={setSong} song={song} size={'small'}/>
-          <TagPicker tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} />
           <DateFilter before={false} afterDate={afterDate} setAfterDate={setAfterDate} />
           <DateFilter before={true} beforeDate={beforeDate} setBeforeDate={setBeforeDate} />
         </Box>

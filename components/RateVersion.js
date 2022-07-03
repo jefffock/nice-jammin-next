@@ -231,7 +231,7 @@ export default function RateVersion({ song, date, location, tags, user, profile,
         onClick={handleClickOpen}
         sx={{ borderRadius: '50px', textTransform: 'none', my: '.5em' }}
       >
-        Rate this Jam
+        Rate and Comment
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{song} - {location} - {date}</DialogTitle>
