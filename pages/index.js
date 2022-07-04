@@ -14,11 +14,15 @@ import Typography from '@mui/material/Typography';
 import TopBar from '../components/AppBar'
 import Welcome from '../components/Welcome'
 import dynamic from 'next/dynamic'
+import JamsTableVirtualized from '../components/JamsTableVirtualized'
 
 const DynamicContributorsTable = dynamic(() => import('../components/TopContributors'), {
   suspense: true
 })
 const DynamicJamsTable = dynamic(() => import('../components/JamsTableCollapsible'), {
+  suspense: true
+})
+const DynamicJamsTableVirtualized = dynamic(() => import('../components/JamsTableVirtualized'), {
   suspense: true
 })
 const DynamicAddVersion = dynamic(() => import('../components/AddVersion'), {
@@ -179,6 +183,7 @@ export default function App({ jams }) {
       <Typography textAlign="center">Tap to listen</Typography>
       <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} afterDate={afterDate} setBeforeDate={setBeforeDate} setAfterDate={setAfterDate} song={song} setSong={setSong}/>
       <Suspense fallback={<p>Loading....</p>}>
+        <DynamicJamsTableVirtualized jams={jams} sortedJams={sortedJams}  order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} setUpdatedJams={setUpdatedJams} songs={songs} setSongs={setSongs}/>
         <DynamicJamsTable jams={jams} sortedJams={sortedJams}  order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} setUpdatedJams={setUpdatedJams} songs={songs} setSongs={setSongs}/>
         <br></br>
         <DynamicAddVersion songs={songs} setSongs={setSongs} jams={updatedJams} user={user} profile={profile} setUpdatedJams={setUpdatedJams}/>
