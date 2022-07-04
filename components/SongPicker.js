@@ -9,10 +9,11 @@ import Button from '@mui/material/Button';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box'
 
-export default function SongPicker({ songs, song, setSong, wide, size, mx, my }) {
+export default function SongPicker({ artist, songs, song, setSong, wide, size, mx, my }) {
   const [value, setValue] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [uniqueSongs, setUniqueSongs] = useState(null)
+  const [songsByArtist, setSongsByArtist] = useState(null)
 
   useEffect(() => {
     let titlesOnly = new Set()
@@ -29,6 +30,36 @@ export default function SongPicker({ songs, song, setSong, wide, size, mx, my })
       setUniqueSongs(formattedSongs)
     }
   }, [songs])
+
+  useEffect(() => {
+    let artistSongSet = new Set()
+    let formattedSongs = []
+    if (artist) {
+      console.log('artist', artist)
+      //if artist is gd, jrad, furthur, dead and co
+      if (artist === 'Grateful Dead' || artist === "Joe Russo's Almost Dead" || artist === 'Jerry Garcia Band, Legion of Mary' || artist === 'Furthur' || artist === 'Dead & Company') {
+        console.log('artist is dead related')
+        for (var i = 0; i < songs.length; i++) {
+          if (songs[i].artist === 'Grateful Dead' || songs[i].artist === "Joe Russo's Almost Dead" || songs[i].artist === 'Jerry Garcia Band, Legion of Mary' || songs[i].artist === 'Furthur' || songs[i].artist === 'Dead & Company') {
+            artistSongSet.add(songs[i].song)
+          }
+        } artistSongSet.forEach(song => {
+          formattedSongs.push({ label: song })
+        })
+      } else {
+        for (var i = 0; i < songs.length; i++) {
+          if (songs[i].artist === artist) {
+            formattedSongs.push({ label: songs[i].song })
+          }
+        }
+      } setSongsByArtist(formattedSongs)
+        //add songs from any of those artists
+      //else
+        //add songs from the artist
+    }
+  }, [artist])
+
+  console.log('songs', songs)
 
   useEffect(() => {
     setSong(inputValue)
@@ -65,7 +96,8 @@ export default function SongPicker({ songs, song, setSong, wide, size, mx, my })
           id="song-picker"
           // maxHeight="95vh"
           // sx={{maxHeight: '95vh'}}
-          options={uniqueSongs ? uniqueSongs : [{ label: 'Loading songs...' }]}
+          options={artist ? songsByArtist :
+            uniqueSongs ? uniqueSongs : [{ label: 'Loading songs...' }]}
           size={size ? size : 'small'}
           renderInput={(params) => <TextField {...params}
           // InputProps={{

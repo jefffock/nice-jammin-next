@@ -22,6 +22,7 @@ import { fetchSongs } from '../utils/fetchData'
 export default function AddSong({ song, setSong, user, songs, profile, setSongs }) {
   const [open, setOpen] = useState(false);
   const [songToAdd, setSongToAdd] = useState(song)
+  const [artist, setArtist] = useState(null)
   const [loading, setLoading] = useState(null)
   const [successAlertText, setSuccessAlertText] = useState(null)
 

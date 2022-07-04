@@ -16,7 +16,7 @@ export default function FilterBar({ setDates, setArtist, tagsSelected, setTagsSe
         <Typography textAlign="center">Filters</Typography>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'top', mx: 'auto', mt: '0.1em', justifyContent: 'center', bgcolor: 'primary.bg', borderRadius: '0.25em', width: 'fit-content', p:'0.3em'}}>
           <ArtistPicker setArtist={setArtist} artist={artist} />
-          <SongPicker songs={songs} setSong={setSong} song={song} size={'small'}/>
+          <SongPicker songs={songs} setSong={setSong} song={song} size={'small'} artist={artist}/>
           <TagPicker tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} />
           <DateFilter before={false} afterDate={afterDate} setAfterDate={setAfterDate} />
           <DateFilter before={true} beforeDate={beforeDate} setBeforeDate={setBeforeDate} />
