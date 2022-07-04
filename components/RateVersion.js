@@ -101,6 +101,7 @@ export default function RateVersion({ song, date, location, tags, user, profile,
       } if (tagsObj) {
         let updatedTags = await updateTags(tagsObj, jam.id, profile.name, tagsToAddText, newTags.length)
       }
+      handleClose()
     } else {
       console.log('data not valid')
     }
@@ -296,8 +297,8 @@ export default function RateVersion({ song, date, location, tags, user, profile,
           }
         </DialogContent>
         <DialogActions>
-          {/* <Button onClick={handleClose}>Cancel</Button> */}
-          <Button onClick={handleSubmit} disabled={loading || !rating || commentWarningText}>{buttonText}</Button>
+          <Button onClick={handleClose}>Close</Button>
+          <Button onClick={handleSubmit} disabled={loading || !rating || commentWarningText || !user || !profile}>{buttonText}</Button>
         </DialogActions>
       </Dialog>
     </div>

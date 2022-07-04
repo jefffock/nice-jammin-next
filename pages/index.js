@@ -183,7 +183,7 @@ export default function App({ jams }) {
       <Typography textAlign="center">Tap to listen</Typography>
       <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} afterDate={afterDate} setBeforeDate={setBeforeDate} setAfterDate={setAfterDate} song={song} setSong={setSong}/>
       <Suspense fallback={<p>Loading....</p>}>
-        <DynamicJamsTableVirtualized jams={jams} sortedJams={sortedJams}  order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} setUpdatedJams={setUpdatedJams} songs={songs} setSongs={setSongs}/>
+        {/* <DynamicJamsTableVirtualized jams={jams} sortedJams={sortedJams}  order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} setUpdatedJams={setUpdatedJams} songs={songs} setSongs={setSongs}/> */}
         <DynamicJamsTable jams={jams} sortedJams={sortedJams}  order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} setUpdatedJams={setUpdatedJams} songs={songs} setSongs={setSongs}/>
         <br></br>
         <DynamicAddVersion songs={songs} setSongs={setSongs} jams={updatedJams} user={user} profile={profile} setUpdatedJams={setUpdatedJams}/>
@@ -191,6 +191,7 @@ export default function App({ jams }) {
         <DynamicIdeasTable user={user} profile={profile}/>
         <DynamicContributorsTable />
       </Suspense>
+      <Typography>Currently working on: performance of the table, selecting a band will change the songs dropdown to only show songs by that band</Typography>
     </Box>
     </ThemeProvider>
   )

@@ -170,7 +170,7 @@ export default function JamsTableVirtualized({ jams, sortedJams, sortJams, order
   return (
     <Paper style={{ height: 400, width: '100%' }}>
       <VirtualizedTable
-        rowCount={rows.length}
+        rowCount={jams.length}
         rowGetter={({ index }) => rows[index]}
         columns={[
           {

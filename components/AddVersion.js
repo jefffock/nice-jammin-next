@@ -526,11 +526,11 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
           <Alert severity="success" sx={{ my: '1em' }}>{successAlertText}</Alert>
         }
         </DialogContent>
-        <DialogActions>            
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+        <DialogActions>
+          <Button onClick={handleClose}>Close</Button>
           {artist && song && date && location && location.length > 2 && !dateErrorText &&
           <Button onClick={handleSubmit}
-            disabled={loading}
+            disabled={loading || !user || !profile}
           >Add Version</Button>
           }
         </DialogActions>

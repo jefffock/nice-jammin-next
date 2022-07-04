@@ -128,7 +128,7 @@ export default function AddIdea({ user, profile, setIdeas }) {
           onClick={handleClickOpen}
           sx={{ borderRadius: '50px', textTransform: 'none', my: '.5em' }}
           >
-          Add Suggestion
+          Add Your Suggestion
         </Button>
       </Box>
       <Dialog open={open} onClose={handleClose}>

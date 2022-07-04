@@ -75,11 +75,11 @@ function IdeaRow({ currentIdea, user, profile, loading, setLoading }) {
     <TableCell component="th" scope="row">
       {idea.idea_body}
     </TableCell>
-    <TableCell align="right">{idea.artist_idea ? 'Artist' :
-    idea.tag_idea ? 'Tag' : 'Other'}</TableCell>
-    <TableCell align="right"
+    <TableCell>{idea.artist_idea ? 'Artist to add' :
+    idea.tag_idea ? 'Tag to add' : 'Other idea'}</TableCell>
+    <TableCell
     onClick={handleVote}>{votes ? votes : idea.votes}&nbsp;&nbsp;&nbsp;{<ThumbUpOutlinedIcon sx={{ verticalAlign: 'bottom', '&:hover': { color: 'primary.main' } }}/>}</TableCell>
-    <TableCell align="right">{idea.user_name}</TableCell>
+    <TableCell>{idea.user_name}</TableCell>
   </TableRow>
   )
 }
@@ -132,7 +132,8 @@ export default function IdeasTable({ user, profile }) {
 
   return (
     <Box mx='auto' maxWidth='95vw'>
-      <Typography variant="h5" textAlign="center">Suggestions</Typography>
+      <Typography variant="h5" textAlign="center">User Suggestions for this Site</Typography>
+      <Typography textAlign="center">Thank you for your ideas about what could make this site better!</Typography>
     <TableContainer component={Paper} sx={{ maxHeight: '45vh', overflowY: 'auto', maxWidth: '700px', mx: 'auto', borderRadius: '1em', my: '1em' }}>
       <Table aria-label="simple table">
         <TableHead>
