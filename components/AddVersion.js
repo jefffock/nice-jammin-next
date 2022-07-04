@@ -24,10 +24,9 @@ import FormControl from '@mui/material/FormControl';
 
 
 
-export default function AddVersion({ songs, jams, user, profile, setSongs, setUpdatedJams }) {
+export default function AddVersion({ songs, jams, user, profile, setSongs, setUpdatedJams, artist, setArtist, song, setSong }) {
   const [loading, setLoading] = useState(null)
   const [open, setOpen] = useState(false);
-  const [song, setSong] = useState(null);
   const [songObj, setSongObj] = useState(null)
   const [songExists, setSongExists] = useState(true)
   const [songArray, setSongArray] = useState([])
@@ -36,7 +35,6 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
   const [dateErrorText, setDateErrorText] = useState(null)
   const [locationErrorText, setLocationErrorText] = useState(null)
   const [successAlertText, setSuccessAlertText] = useState(null)
-  const [artist, setArtist] = useState(null);
   const [tags, setTags] = useState([])
   const [date, setDate] = useState(null)
   const [year, setYear] = useState(null)
@@ -125,8 +123,6 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
     setLocationErrorText(null)
     setSuccessAlertText(null)
     setLoading(false)
-    setSong(null)
-    setArtist(null)
     setTags([])
     setDate(null)
     setLocation(null)
@@ -433,7 +429,7 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
           {!songExists && song &&
           <>
           <Alert severity="warning" sx={{ mb: '1em' }}>{song} hasn&apos;t been added yet.</Alert>
-          <AddSong song={song} user={user} songs={songs} setSong={setSong} profile={profile} setSongs={setSongs} />
+          <AddSong song={song} user={user} songs={songs} setSong={setSong} profile={profile} setSongs={setSongs} artist={artist} setArtist={setArtist}/>
           </>
           }
 

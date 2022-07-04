@@ -101,7 +101,7 @@ export default function AddListenLink({ song, date, location, tags, user, profil
           {/* <Button onClick={handleClose}>Cancel</Button> */}
           <Button
           onClick={handleSubmit}
-          disabled={loading || !link}
+          disabled={loading || !link || !user || !profile}
           sx={{ borderRadius: '50px', textTransform: 'none' }}
           >Add Link</Button>
         </DialogActions>

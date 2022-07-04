@@ -22,6 +22,7 @@ import AddListenLink from './AddListenLink'
 import ListenLink from './ListenLink'
 import Comments from './Comments'
 import { fetchComments, fetchAllJams, fetchSongs } from '../utils/fetchData'
+import ReportIssue from './ReportIssue'
 
 function JamsTableHead({ order, orderBy, onRequestSort }) {
 
@@ -190,6 +191,12 @@ function Row({ row, user, profile }) {
     }
   }, [open, comments, row])
 
+  useEffect(() => {
+    if (comments) {
+      console.log('comments', comments)
+    }
+  }, [comments])
+
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}
@@ -226,9 +233,10 @@ function Row({ row, user, profile }) {
               <Typography>{row.num_ratings} ratings</Typography>
               <Typography>Added by {row.submitter_name}. Thank you!</Typography>
               <RateVersion song={row.song_name} date={row.date} location={row.location} tags={tags} user={user} profile={profile} jam={row}/>
-              {comments &&
+              {comments && comments.length > 0 &&
               <Comments version={row.version_id} song={row.song_name} date={row.date} location={row.location} comments={comments}  user={user} profile={profile}/>
               }
+              <ReportIssue />
             </Box>
           </Collapse>
         </TableCell>

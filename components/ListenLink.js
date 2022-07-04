@@ -53,9 +53,9 @@ export default function ListenLink({ link, jam }) {
 
   return (
     <div>
-      <Button variant="outlined"
+      <Button variant="contained"
       onClick={handleClickOpen}
-      sx={{ textTransform: 'none', borderRadius: '50px', color: '#000000', my:'0.5em' }}
+      sx={{ textTransform: 'none', borderRadius: '50px', my:'0.5em' }}
       >
         Listen
       </Button>

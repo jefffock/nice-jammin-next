@@ -20,10 +20,9 @@ import { fetchSongs } from '../utils/fetchData'
 import ArtistPicker from './ArtistPicker'
 
 
-export default function AddSong({ song, setSong, user, songs, profile, setSongs }) {
+export default function AddSong({ song, setSong, user, songs, profile, setSongs, artist, setArtist }) {
   const [open, setOpen] = useState(false);
   const [songToAdd, setSongToAdd] = useState(song)
-  const [artist, setArtist] = useState(null)
   const [loading, setLoading] = useState(null)
   const [successAlertText, setSuccessAlertText] = useState(null)
 
@@ -79,6 +78,8 @@ export default function AddSong({ song, setSong, user, songs, profile, setSongs 
       return false
     }if (!user || !profile || !profile.can_write) {
       return false
+    } if (!artist) {
+      return false
     } if (!index) {
       if (songToAdd.length > 0) {
         return true
@@ -90,7 +91,7 @@ export default function AddSong({ song, setSong, user, songs, profile, setSongs 
     const { error } = await supabase
       .from('songs')
       .insert(
-        { song: songToAdd, submitter_name: profile.name }, { returning: 'minimal' })
+        { song: songToAdd, submitter_name: profile.name, artist: artist }, { returning: 'minimal' })
     if (error) {
       console.log(error)
     } else {

@@ -186,7 +186,7 @@ export default function App({ jams }) {
         {/* <DynamicJamsTableVirtualized jams={jams} sortedJams={sortedJams}  order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} setUpdatedJams={setUpdatedJams} songs={songs} setSongs={setSongs}/> */}
         <DynamicJamsTable jams={jams} sortedJams={sortedJams}  order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} setUpdatedJams={setUpdatedJams} songs={songs} setSongs={setSongs}/>
         <br></br>
-        <DynamicAddVersion songs={songs} setSongs={setSongs} jams={updatedJams} user={user} profile={profile} setUpdatedJams={setUpdatedJams}/>
+        <DynamicAddVersion songs={songs} setSongs={setSongs} jams={updatedJams} user={user} profile={profile} setUpdatedJams={setUpdatedJams} artist={artist} setArtist={setArtist} song={song} setSong={setSong}/>
         <DynamicGratitude />
         <DynamicIdeasTable user={user} profile={profile}/>
         <DynamicContributorsTable />

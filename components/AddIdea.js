@@ -146,9 +146,9 @@ export default function AddIdea({ user, profile, setIdeas }) {
               onChange={handleTypeChange}
               error={ideaTypeError}
               >
-                <MenuItem key={1} value={'artist'}>Artist</MenuItem>
-                <MenuItem key={2} value={'tag'}>Tag</MenuItem>
-                <MenuItem key={3} value={'other'}>Other</MenuItem>
+                <MenuItem key={1} value={'artist'}>Artist to add</MenuItem>
+                <MenuItem key={2} value={'tag'}>Tag to add</MenuItem>
+                <MenuItem key={3} value={'other'}>Other idea</MenuItem>
             </Select>
             {ideaTypeError &&
             <FormHelperText>Required</FormHelperText>
@@ -175,9 +175,9 @@ export default function AddIdea({ user, profile, setIdeas }) {
         <DialogActions>
           {!success &&
           <>
-            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleClose}>Close</Button>
             <Button onClick={handleSubmit}
-              disabled={loading}>
+              disabled={loading || !user || !profile || !idea || !ideaType}>
             Add This Suggestion</Button>
           </>
           }

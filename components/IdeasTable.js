@@ -131,8 +131,8 @@ export default function IdeasTable({ user, profile }) {
   }
 
   return (
-    <Box mx='auto' maxWidth='95vw'>
-      <Typography variant="h5" textAlign="center">User Suggestions for this Site</Typography>
+    <Box mx='auto' maxWidth='95vw' my="3em">
+      <Typography fontSize="24px" textAlign="center">User Suggestions for this Site</Typography>
       <Typography textAlign="center">Thank you for your ideas about what could make this site better!</Typography>
     <TableContainer component={Paper} sx={{ maxHeight: '45vh', overflowY: 'auto', maxWidth: '700px', mx: 'auto', borderRadius: '1em', my: '1em' }}>
       <Table aria-label="simple table">
