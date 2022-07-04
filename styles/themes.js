@@ -9,7 +9,9 @@ const theme = createTheme({
       //cream
       bg: '#edf2f5',
       // main: '#79c5ed',
-      main: '#59dee3',
+      // main: '#0489b2',
+      // main: '#0178b2',
+      main: '#04a5b7',
       graybg: '#e6e6e6'
 
 

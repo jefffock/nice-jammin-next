@@ -17,6 +17,7 @@ import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box'
 import { addTenPoints } from '../utils/dbFunctions'
 import { fetchSongs } from '../utils/fetchData'
+import ArtistPicker from './ArtistPicker'
 
 
 export default function AddSong({ song, setSong, user, songs, profile, setSongs }) {
@@ -29,6 +30,10 @@ export default function AddSong({ song, setSong, user, songs, profile, setSongs 
   useEffect(() => {
     setSongToAdd(song)
   }, [song])
+
+  useEffect(() => {
+    setSuccessAlertText(null)
+  }, [artist])
 
   const handleClickOpen = () => {
     setLoading(false)
@@ -130,12 +135,14 @@ export default function AddSong({ song, setSong, user, songs, profile, setSongs 
             variant="standard"
             multiline
             onChange={handleSongChange}
+            sx={{ mb: '1em'}}
             />
+            <ArtistPicker setArtist={setArtist} artist={artist} />
             {user && !successAlertText &&
-            <Alert severity="warning" sx={{ mb: '1em' }}>Please double check for typos - thank you!</Alert>
+            <Alert severity="warning" sx={{ my: '1em' }}>Please double check for typos - thank you!</Alert>
             }
             {successAlertText &&
-            <Alert severity="success" sx={{ mb: '1em' }}>{successAlertText}</Alert>
+            <Alert severity="success" sx={{ my: '1em' }}>{successAlertText}</Alert>
             }
         </DialogContent>
         <DialogActions>
@@ -143,7 +150,7 @@ export default function AddSong({ song, setSong, user, songs, profile, setSongs 
           <>
             <Button onClick={handleClose}>Cancel</Button>
             <Button onClick={handleSubmit}
-              disabled={loading}>
+              disabled={loading || !song || !artist || artist === 'All Bands'}>
             Add This Song</Button>
           </>
           }

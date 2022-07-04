@@ -37,10 +37,10 @@ export default function SongPicker({ artist, songs, song, setSong, wide, size, m
     if (artist) {
       console.log('artist', artist)
       //if artist is gd, jrad, furthur, dead and co
-      if (artist === 'Grateful Dead' || artist === "Joe Russo's Almost Dead" || artist === 'Jerry Garcia Band, Legion of Mary' || artist === 'Furthur' || artist === 'Dead & Company') {
+      if (artist === 'Grateful Dead' || artist === "Joe Russo's Almost Dead" || artist === 'Furthur' || artist === 'Dead & Company') {
         console.log('artist is dead related')
         for (var i = 0; i < songs.length; i++) {
-          if (songs[i].artist === 'Grateful Dead' || songs[i].artist === "Joe Russo's Almost Dead" || songs[i].artist === 'Jerry Garcia Band, Legion of Mary' || songs[i].artist === 'Furthur' || songs[i].artist === 'Dead & Company') {
+          if (songs[i].artist === 'Grateful Dead' || songs[i].artist === "Joe Russo's Almost Dead" || songs[i].artist === 'Furthur' || songs[i].artist === 'Dead & Company') {
             artistSongSet.add(songs[i].song)
           }
         } artistSongSet.forEach(song => {

@@ -191,7 +191,6 @@ export default function App({ jams }) {
         <DynamicIdeasTable user={user} profile={profile}/>
         <DynamicContributorsTable />
       </Suspense>
-      <Typography>Currently working on: performance of the table, selecting a band will change the songs dropdown to only show songs by that band</Typography>
     </Box>
     </ThemeProvider>
   )
