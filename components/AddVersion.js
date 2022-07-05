@@ -78,6 +78,15 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
   const [unusual, setUnusual] = useState(false)
   const [long, setLong] = useState(false)
   const [thatYearsStyle, setThatYearsStyle] = useState(false)
+  const [grimy, setGrimy] = useState(false)
+  const [historic, setHistoric] = useState(false)
+  const [lowkey, setLowkey] = useState(false)
+  const [mellow, setMellow] = useState(false)
+  const [melodic, setMelodic] = useState(false)
+  const [rocking, setRocking] = useState(false)
+  const [tensionRelease, setTensionRelease] = useState(false)
+  const [trance, setTrance] = useState(false)
+  const [upbeat, setUpbeat] = useState(false)
 
   useEffect(() => {
     if (date) {
@@ -232,7 +241,16 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
           segue: segue,
           unusual: unusual,
           long: long,
-          that_years_style: thatYearsStyle
+          that_years_style: thatYearsStyle,
+          grimy: grimy,
+          historic: historic,
+          low_key: lowkey,
+          mellow: mellow,
+          melodic: melodic,
+          rocking: rocking,
+          tension_release: tensionRelease,
+          trance: trance,
+          upbeat: upbeat,
         }])
     if (error) {
     } else {
@@ -328,6 +346,26 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
     'Widespread Panic': {
       start: 1986,
       end: null
+    },
+    'Railroad Earth': {
+      start: 2001,
+      end: null
+    },
+    'Sound Tribe Sector 9 (STS9)': {
+      start: 1998,
+      end: null
+    },
+    'King Gizzard & the Lizard Wizard': {
+      start: 2010,
+      end: null
+    },
+    'Dead & Company': {
+      start: 2015,
+      end: null
+    },
+    'Dizgo': {
+      start: 2016,
+      end: null
     }
   }
 
@@ -343,16 +381,22 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
       'dissonant': 'Dissonant',
       'fast': 'Fast',
       'funky': 'Funky',
+      'grimy': 'Grimy',
       'groovy': 'Groovy',
       'guest': 'Guest',
       'happy': 'Happy',
       'heavy': 'Heavy',
+      'historic': 'Historic',
       'jazzy': 'Jazzy',
       'long': 'Long',
+      'low_key': 'Low-key',
+      'mellow': 'Mellow',
+      'melodic': 'Melodic',
       'multi_part': 'Multi-part',
       'official_release': 'Official Release',
       'peaks': 'Peaks',
       'reggae': 'Reggae',
+      'rocking': 'Rocking',
       'seque': 'Segue',
       'shred': 'Shred',
       'silly': 'Silly',
@@ -364,10 +408,13 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
       'stop_start': 'Stop-start',
       'synthy': 'Synthy',
       'teases': 'Teases',
+      'tension_release': 'Tension and Release',
       'that_years_style': "That Year's Style",
+      'trance': 'Trance',
       'trippy': 'Trippy',
       'type2': 'Type II',
       'unusual': 'Unusual',
+      'upbeat': 'Upbeat'
     }
     let newTagsText = ''
     for (var i = 0; i < tags.length; i++) {
@@ -408,6 +455,15 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
     tags.indexOf('trippy') !== -1 ? setTrippy(true) : setTrippy(false)
     tags.indexOf('type2') !== -1 ? setType2(true) : setType2(false)
     tags.indexOf('Unusual') !== -1 ? setUnusual(true) : setUnusual(false)
+    tags.indexOf('grimy') !== -1 ? setGrimy(true) : setGrimy(false)
+    tags.indexOf('historic') !== -1 ? setHistoric(true) : setHistoric(false)
+    tags.indexOf('low_key') !== -1 ? setLowkey(true) : setLowkey(false)
+    tags.indexOf('mellow') !== -1 ? setMellow(true) : setMellow(false)
+    tags.indexOf(',elodic') !== -1 ? setMelodic(true) : setMelodic(false)
+    tags.indexOf('rocking') !== -1 ? setRocking(true) : setRocking(false)
+    tags.indexOf('tension_release') !== -1 ? setTensionRelease(true) : setTensionRelease(false)
+    tags.indexOf('trance') !== -1 ? setTrance(true) : setTrance(false)
+    tags.indexOf('upbeat') !== -1 ? setUpbeat(true) : setUpbeat(false)
   }, [tags])
 
 

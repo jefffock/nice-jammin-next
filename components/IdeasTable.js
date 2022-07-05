@@ -75,8 +75,8 @@ function IdeaRow({ currentIdea, user, profile, loading, setLoading }) {
     <TableCell component="th" scope="row">
       {idea.idea_body}
     </TableCell>
-    <TableCell>{idea.artist_idea ? 'Artist to add' :
-    idea.tag_idea ? 'Tag to add' : 'Other idea'}</TableCell>
+    <TableCell>{idea.artist_idea ? 'Artist' :
+    idea.tag_idea ? 'Tag' : 'Other'}</TableCell>
     <TableCell
     onClick={handleVote}>{votes ? votes : idea.votes}&nbsp;&nbsp;&nbsp;{<ThumbUpOutlinedIcon sx={{ verticalAlign: 'bottom', '&:hover': { color: 'primary.main' } }}/>}</TableCell>
     <TableCell>{idea.user_name}</TableCell>

@@ -65,6 +65,15 @@ export default function RateVersion({ song, date, location, tags, user, profile,
   const [unusual, setUnusual] = useState(false)
   const [long, setLong] = useState(false)
   const [thatYearsStyle, setThatYearsStyle] = useState(false)
+  const [grimy, setGrimy] = useState(false)
+  const [historic, setHistoric] = useState(false)
+  const [lowkey, setLowkey] = useState(false)
+  const [mellow, setMellow] = useState(false)
+  const [melodic, setMelodic] = useState(false)
+  const [rocking, setRocking] = useState(false)
+  const [tensionRelease, setTensionRelease] = useState(false)
+  const [trance, setTrance] = useState(false)
+  const [upbeat, setUpbeat] = useState(false)
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -154,16 +163,22 @@ export default function RateVersion({ song, date, location, tags, user, profile,
       'dissonant': 'Dissonant',
       'fast': 'Fast',
       'funky': 'Funky',
+      'grimy': 'Grimy',
       'groovy': 'Groovy',
       'guest': 'Guest',
       'happy': 'Happy',
       'heavy': 'Heavy',
+      'historic': 'Historic',
       'jazzy': 'Jazzy',
       'long': 'Long',
+      'low_key': 'Low-key',
+      'mellow': 'Mellow',
+      'melodic': 'Melodic',
       'multi_part': 'Multi-part',
       'official_release': 'Official Release',
       'peaks': 'Peaks',
       'reggae': 'Reggae',
+      'rocking': 'Rocking',
       'seque': 'Segue',
       'shred': 'Shred',
       'silly': 'Silly',
@@ -175,10 +190,13 @@ export default function RateVersion({ song, date, location, tags, user, profile,
       'stop_start': 'Stop-start',
       'synthy': 'Synthy',
       'teases': 'Teases',
+      'tension_release': 'Tension and Release',
       'that_years_style': "That Year's Style",
+      'trance': 'Trance',
       'trippy': 'Trippy',
       'type2': 'Type II',
       'unusual': 'Unusual',
+      'upbeat': 'Upbeat'
     }
     let newTagsObj = {}
     let newTagsText = ''
@@ -223,6 +241,15 @@ export default function RateVersion({ song, date, location, tags, user, profile,
     newTags.indexOf('trippy') !== -1 ? setTrippy(true) : setTrippy(false)
     newTags.indexOf('type2') !== -1 ? setType2(true) : setType2(false)
     newTags.indexOf('Unusual') !== -1 ? setUnusual(true) : setUnusual(false)
+    newTags.indexOf('grimy') !== -1 ? setGrimy(true) : setGrimy(false)
+    newTags.indexOf('historic') !== -1 ? setHistoric(true) : setHistoric(false)
+    newTags.indexOf('low_key') !== -1 ? setLowkey(true) : setLowkey(false)
+    newTags.indexOf('mellow') !== -1 ? setMellow(true) : setMellow(false)
+    newTags.indexOf(',elodic') !== -1 ? setMelodic(true) : setMelodic(false)
+    newTags.indexOf('rocking') !== -1 ? setRocking(true) : setRocking(false)
+    newTags.indexOf('tension_release') !== -1 ? setTensionRelease(true) : setTensionRelease(false)
+    newTags.indexOf('trance') !== -1 ? setTrance(true) : setTrance(false)
+    newTags.indexOf('upbeat') !== -1 ? setUpbeat(true) : setUpbeat(false)
   }, [newTags])
 
   return (
