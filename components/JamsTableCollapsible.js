@@ -242,7 +242,7 @@ function Row({ row, user, profile }) {
               <ListenLink link={row.listen_link} jam={row}></ListenLink>
               }
               {!row.listen_link &&
-              <AddListenLink song={row.song_name} date={row.date} user={user} profile={profile}/>
+              <AddListenLink song={row.song_name} date={row.date} user={user} profile={profile} jam={row}/>
               }
               {tags &&
               <Typography>{tags}</Typography>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { rateVersion, updateRating, updateTags } from '../utils/dbFunctions'
+import { insertAddLink } from '../utils/dbFunctions'
 import { checkUserAlreadyRated } from '../utils/fetchData'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -24,6 +24,7 @@ export default function AddListenLink({ song, date, location, tags, user, profil
   const [link, setLink] = useState(null)
   const [linkWarningText, setLinkWarningText] = useState(null)
   const [linkErrorText, setLinkErrorText] = useState(null)
+  const [success, setSuccess] = useState(null)
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -33,35 +34,35 @@ export default function AddListenLink({ song, date, location, tags, user, profil
     setOpen(false);
   };
 
-  const handleRatingChange = (e) => {
-    setRating(e.target.value)
-  }
-
   const handleLinkChange = (e) => {
     setLink(e.target.value)
   }
 
   const handleSubmit = async () => {
-    setLoading(true)
+    if (!loading) {
+      setLoading(true)
     console.log('jam', jam)
-    let valid = validateRatingData()
+    let valid = validateLink()
     if (valid) {
       console.log('data is valid')
-      let data
-      if (userAlreadyRated) {
-        data = await updateRating(jam.id, profile.name, rating, comment)
+      let data = await insertAddLink(link, jam, profile.name)
+      if (data) {
+        console.log('added link successfully')
+        setSuccess(true)
       } else {
-        data = await rateVersion(jam.id, jam.song_id, profile.name, rating, comment, jam.submitter_name, user.id)
-      } if (tagsObj) {
-        let updatedTags = await updateTags(tagsObj, jam.id, profile.name, tagsToAddText, newTags.length)
+        console.log('failed to add link')
       }
     } else {
       console.log('data not valid')
     }
     setLoading(false)
   }
+  }
 
   const validateLink = () => {
+    if (!user || !profile || !profile.can_write || !link) {
+      return false
+    }
     return true
   }
 
@@ -96,12 +97,14 @@ export default function AddListenLink({ song, date, location, tags, user, profil
             multiline
             onChange={handleLinkChange}
             />
+            {success &&
+            <Alert severity="success" sx={{ m: '1em'}}>Successfully added link. Thank you! (The link will show if you refresh the page)</Alert>}
         </DialogContent>
         <DialogActions>
-          {/* <Button onClick={handleClose}>Cancel</Button> */}
+          <Button sx={{ textTransform: 'none' }} onClick={handleClose}>Close</Button>
           <Button
           onClick={handleSubmit}
-          disabled={loading || !link || !user || !profile}
+          disabled={loading || !link || !user || !profile || success}
           sx={{ borderRadius: '50px', textTransform: 'none' }}
           >Add Link</Button>
         </DialogActions>

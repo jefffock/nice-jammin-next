@@ -182,4 +182,36 @@ async function countVotesIdeas(ideaId) {
     }
 }
 
-export { rateVersion, updateRating, updateTags, addOnePoint, addTenPoints, addRatingCountToArtist, addRatingCountToSong, addRatingCountToVersion,  countHelpfulVotesRatings, countFunnyVotesRatings, countVotesIdeas, upvoteComment, checkIfUpvotedComment, reportIssue }
+async function insertAddLink(linkToAdd, version, username) {
+  const { error } = await supabase
+    .from('add_link')
+    .insert({
+      link: linkToAdd,
+      version_id: version.id,
+      username: username
+    })
+  if (error) {
+    console.log('error inserting add link', error)
+  } else {
+    return await updateVersionWithLink(linkToAdd, version, username)
+  }
+}
+
+async function updateVersionWithLink(linkToAdd, version, username) {
+  const { error } = await supabase
+    .from('versions')
+    .update({
+      listen_link: linkToAdd
+    })
+    .match({id: version.id})
+  if (error) {
+    console.log('error adding link', error)
+    return false
+  } else {
+    addTenPoints(username)
+    return true
+  }
+}
+
+
+export { rateVersion, updateRating, updateTags, addOnePoint, addTenPoints, addRatingCountToArtist, addRatingCountToSong, addRatingCountToVersion,  countHelpfulVotesRatings, countFunnyVotesRatings, countVotesIdeas, upvoteComment, checkIfUpvotedComment, reportIssue, insertAddLink }
