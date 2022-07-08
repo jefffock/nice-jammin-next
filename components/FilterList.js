@@ -6,14 +6,6 @@ import Box from '@mui/material/Box';
 
 export default function FilterList({ artist, setArtist, tagsSelected, setTagsSelected, beforeDate, afterDate, setBeforeDate, setAfterDate, song, setSong }) {
 
-  useEffect(()=> {
-    console.log('artist', artist)
-    console.log('song', song)
-    console.log('tagsSelected', tagsSelected)
-    console.log('beforeDate', beforeDate)
-    console.log('afterDate', afterDate)
-  })
-
   return (
     //justifyContent="center"
     <Box display="flex" mx="auto" maxWidth='900px'>

@@ -10,8 +10,8 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box'
 
 export default function SongPicker({ artist, songs, song, setSong, wide, size, mx, my }) {
-  const [value, setValue] = useState('');
-  const [inputValue, setInputValue] = useState('');
+  const [value, setValue] = useState(song || '');
+  const [inputValue, setInputValue] = useState(song || '');
   const [uniqueSongs, setUniqueSongs] = useState(null)
   const [songsByArtist, setSongsByArtist] = useState(null)
 
@@ -93,7 +93,7 @@ export default function SongPicker({ artist, songs, song, setSong, wide, size, m
           // maxHeight="95vh"
           // sx={{maxHeight: '95vh'}}
           options={artist ? songsByArtist :
-            uniqueSongs ? uniqueSongs : [{ label: 'Loading songs...' }]}
+            (uniqueSongs ? uniqueSongs : [{ label: 'Loading songs...' }])}
           size={size ? size : 'small'}
           renderInput={(params) => <TextField {...params}
           // InputProps={{

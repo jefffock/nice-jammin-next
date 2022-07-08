@@ -22,14 +22,11 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 
-
-
 export default function AddVersion({ songs, jams, user, profile, setSongs, setUpdatedJams, artist, setArtist, song, setSong }) {
   const [loading, setLoading] = useState(null)
   const [open, setOpen] = useState(false);
   const [songObj, setSongObj] = useState(null)
   const [songExists, setSongExists] = useState(true)
-  const [songArray, setSongArray] = useState([])
   const [songErrorText, setSongErrorText] = useState(null)
   const [artistErrorText, setArtistErrorText] = useState(null)
   const [dateErrorText, setDateErrorText] = useState(null)
@@ -89,6 +86,7 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
   const [upbeat, setUpbeat] = useState(false)
 
   useEffect(() => {
+    setSuccessAlertText(null)
     if (date) {
       setDateErrorText(null)
       let yearString = date.slice(0,4)
@@ -147,18 +145,20 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
   }
 
   const handleLocationChange = (e) => {
-    set
     setLocation(e.target.value)
   }
 
   const handleSubmit = async () => {
-    console.log('songObj', songObj)
+    console.log('in handle submit')
     if (!loading) {
       setLoading(true)
-      if (validateData()) {
+      let valid = validateData()
+      if (valid) {
+        console.log('data is valid')
         setSuccessAlertText("Looks good, adding jam...")
         await insertVersion()
-        console.log('insertedVersion successully')
+        console.log('inserted version successully')
+        setLoading(false)
       } else {
         console.log('issue with data')
       } setLoading(false)
