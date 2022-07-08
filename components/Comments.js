@@ -23,24 +23,16 @@ function Comment({ comment, profile }) {
   const [votes, setVotes] = useState(comment.helpful)
   const [loading, setLoading] = useState(false)
 
-
-  useEffect(()=> {
-    console.log('comment', comment)
-  })
-
   async function handleUpvoteComment() {
-    //check if loading
     if (!loading) {
       setLoading(true)
       let valid = await validate(comment.id)
       if (valid) {
-        console.log('valid')
         await upvoteComment(profile.name, comment.id)
         setVotes(votes + 1)
+        setLoading(false)
       }
     }
-    //check if already upvoted
-    //upvote
   }
 
   async function validate() {
@@ -48,7 +40,6 @@ function Comment({ comment, profile }) {
       return false
     } let data = await checkIfUpvotedComment(profile.name, comment.id)
     if (data.length > 0) {
-      console.log('already upvoted')
       return false
     } return true
   }
@@ -84,7 +75,6 @@ export default function Comments({ version, song, date, location, comments, user
   return (
     <Box>
       <Button
-      // variant="contained"
       onClick={handleClickOpen}
       sx={{ borderRadius: '50px', textTransform: 'none', my: '.5em' }}
       >
@@ -93,9 +83,6 @@ export default function Comments({ version, song, date, location, comments, user
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>{song} - {location} - {date} Comments</DialogTitle>
       <DialogContent>
-        {/* <DialogContentText>
-          Rating art is always subjective, so just go with whatever rating feels right to you
-        </DialogContentText> */}
           <Box sx={{ minWidth: '120px', mx:'0.25em', my: '1em' }}>
             {comments && comments.map((comment) => (
               comment.comment &&

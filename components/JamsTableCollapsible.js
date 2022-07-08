@@ -234,9 +234,9 @@ function Row({ row, user, profile }) {
               <Typography>Added by {row.submitter_name}. Thank you!</Typography>
               <RateVersion song={row.song_name} date={row.date} location={row.location} tags={tags} user={user} profile={profile} jam={row}/>
               {comments && comments.length > 0 &&
-              <Comments version={row.version_id} song={row.song_name} date={row.date} location={row.location} comments={comments}  user={user} profile={profile}/>
+              <Comments song={row.song_name} date={row.date} location={row.location} comments={comments}  user={user} profile={profile}/>
               }
-              <ReportIssue />
+              <ReportIssue user={user} profile={profile} version={row.id}/>
             </Box>
           </Collapse>
         </TableCell>

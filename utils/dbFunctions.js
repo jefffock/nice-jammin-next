@@ -1,7 +1,6 @@
 import { supabase } from '../utils/supabaseClient'
 
 async function rateVersion(versionId, songId, profileName, rating, comment, versionSubmitterName, songSubmitterName, userId) {
-  console.log('in rate version')
   const { data, error } = await supabase
     .from('ratings')
     .insert(
@@ -15,7 +14,6 @@ async function rateVersion(versionId, songId, profileName, rating, comment, vers
     console.log('error', error)
     return error
   } else {
-    console.log('success adding rating: ', data)
     addOnePoint(versionSubmitterName)
     addOnePoint(songSubmitterName)
     addTenPoints(profileName)
@@ -40,6 +38,23 @@ async function updateRating(versionId, profileName, rating, comment) {
     calcAverageForVersion(versionId)
     return data
   }
+}
+
+async function reportIssue(version, profile, linkBroken, issue) {
+  let name = (profile?.name || 'none')
+  const { data, error } = await supabase
+    .from('issues')
+    .insert({
+      version_id: version,
+      username: name,
+      broken_link: linkBroken,
+      issue: issue
+    })
+    if (error) {
+      return error
+    } else {
+      return data
+    }
 }
 
 async function postUpdatedTags(versionId, profileName, tagsText, tagsLength) {
@@ -92,9 +107,7 @@ async function upvoteComment(name, ratingId) {
   if (error) {
     console.log('error voting helpful', error)
   } else {
-    // let current = helpfulToShow
-    // setHelpfulToShow(current + 1)
-    // props.countHelpfulVotesRatings(props.data.id)
+    countHelpfulVotesRatings(ratingId)
   }
 }
 
@@ -169,4 +182,4 @@ async function countVotesIdeas(ideaId) {
     }
 }
 
-export { rateVersion, updateRating, updateTags, addOnePoint, addTenPoints, addRatingCountToArtist, addRatingCountToSong, addRatingCountToVersion,  countHelpfulVotesRatings, countFunnyVotesRatings, countVotesIdeas, upvoteComment, checkIfUpvotedComment }
+export { rateVersion, updateRating, updateTags, addOnePoint, addTenPoints, addRatingCountToArtist, addRatingCountToSong, addRatingCountToVersion,  countHelpfulVotesRatings, countFunnyVotesRatings, countVotesIdeas, upvoteComment, checkIfUpvotedComment, reportIssue }
