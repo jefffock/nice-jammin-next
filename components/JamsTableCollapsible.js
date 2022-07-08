@@ -126,6 +126,8 @@ function Row({ row, user, profile }) {
       allTags += 'Fast, '
     } if (row.funky) {
       allTags += 'Funky, '
+    } if (row.grimy) {
+      allTags += 'Grimy, '
     } if (row.groovy) {
       allTags += 'Groovy, '
     } if (row.guest) {
@@ -134,10 +136,18 @@ function Row({ row, user, profile }) {
       allTags += 'Happy, '
     } if (row.heavy) {
       allTags += 'Heavy, '
+    } if (row.historic) {
+      allTags += 'Historic, '
     } if (row.jazzy) {
       allTags += 'Jazzy, '
     } if (row.long) {
       allTags += 'Long, '
+    } if (row.low_key) {
+      allTags += 'Low-key, '
+    } if (row.mellow) {
+      allTags += 'Mellow, '
+    } if (row.melodic) {
+      allTags += 'Melodic, '
     } if (row.multi_part) {
       allTags += 'Multi-part, '
     } if (row.official_release) {
@@ -146,6 +156,8 @@ function Row({ row, user, profile }) {
       allTags += 'Peaks, '
     } if (row.reggae) {
       allTags += 'Reggae, '
+    } if (row.rocking) {
+      allTags += 'Rocking, '
     } if (row.segue) {
       allTags += 'Segue, '
     } if (row.shred) {
@@ -168,12 +180,18 @@ function Row({ row, user, profile }) {
       allTags += 'Synthy, '
     } if (row.tease) {
       allTags += 'Teases, '
+    } if (row.tension_release) {
+      allTags += 'Tension and Release, '
+    } if (row.trance) {
+      allTags += 'Trance, '
     } if (row.trippy) {
       allTags += 'Trippy, '
     } if (row.type2) {
       allTags += 'Type II, '
     } if (row.unusual) {
       allTags += 'Unusual, '
+    } if (row.upbeat) {
+      allTags += 'Upbeat, '
     } let trimmed = allTags.length > 2 ? allTags.slice(0, allTags.length - 2) : ''
     setTags(trimmed)
   }, [row])

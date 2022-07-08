@@ -153,13 +153,16 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
 
   const handleSubmit = async () => {
     console.log('songObj', songObj)
-    setLoading(true)
-    if (validateData()) {
-      setSuccessAlertText("Looks good, adding jam...")
-      await insertVersion()
-    } else {
-      console.log('issue with data')
-    } setLoading(false)
+    if (!loading) {
+      setLoading(true)
+      if (validateData()) {
+        setSuccessAlertText("Looks good, adding jam...")
+        await insertVersion()
+        console.log('insertedVersion successully')
+      } else {
+        console.log('issue with data')
+      } setLoading(false)
+    }
   }
 
   const validateData = () => {
@@ -261,7 +264,7 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
         setSuccessAlertText(`Successfully added ${song} from ${date} and your rating. Thank you for contributing!`)
       } else {
         setSuccessAlertText(`Successfully added ${song} from ${date}. Thank you for contributing!`)
-      } let updatedJams = await fetchJams()
+      } let updatedJams = await fetchAllJams()
       setUpdatedJams(updatedJams)
     }
   }
@@ -397,7 +400,7 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
       'peaks': 'Peaks',
       'reggae': 'Reggae',
       'rocking': 'Rocking',
-      'seque': 'Segue',
+      'segue': 'Segue',
       'shred': 'Shred',
       'silly': 'Silly',
       'sloppy': 'Sloppy',
@@ -407,7 +410,7 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
       'soulful': 'Soulful',
       'stop_start': 'Stop-start',
       'synthy': 'Synthy',
-      'teases': 'Teases',
+      'tease': 'Teases',
       'tension_release': 'Tension and Release',
       'that_years_style': "That Year's Style",
       'trance': 'Trance',
@@ -454,12 +457,12 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
     tags.indexOf('that_years_style') !== -1 ? setThatYearsStyle(true) : setThatYearsStyle(false)
     tags.indexOf('trippy') !== -1 ? setTrippy(true) : setTrippy(false)
     tags.indexOf('type2') !== -1 ? setType2(true) : setType2(false)
-    tags.indexOf('Unusual') !== -1 ? setUnusual(true) : setUnusual(false)
+    tags.indexOf('unusual') !== -1 ? setUnusual(true) : setUnusual(false)
     tags.indexOf('grimy') !== -1 ? setGrimy(true) : setGrimy(false)
     tags.indexOf('historic') !== -1 ? setHistoric(true) : setHistoric(false)
     tags.indexOf('low_key') !== -1 ? setLowkey(true) : setLowkey(false)
     tags.indexOf('mellow') !== -1 ? setMellow(true) : setMellow(false)
-    tags.indexOf(',elodic') !== -1 ? setMelodic(true) : setMelodic(false)
+    tags.indexOf('melodic') !== -1 ? setMelodic(true) : setMelodic(false)
     tags.indexOf('rocking') !== -1 ? setRocking(true) : setRocking(false)
     tags.indexOf('tension_release') !== -1 ? setTensionRelease(true) : setTensionRelease(false)
     tags.indexOf('trance') !== -1 ? setTrance(true) : setTrance(false)
