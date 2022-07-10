@@ -23,10 +23,9 @@ function IdeaRow({ currentIdea, user, profile, loading, setLoading }) {
       setLoading(true)
       let valid = await validate()
       if (valid) {
-        console.log('valid')
         await addVote()
       } else {
-        console.log('not valid')
+        console.error('not valid')
         setLoading(false)
       }
     }
@@ -40,7 +39,7 @@ function IdeaRow({ currentIdea, user, profile, loading, setLoading }) {
         .eq('idea_id', currentIdea.id)
         .eq('user_name', profile.name)
       if (error) {
-        console.log('Error checking if already voted', error)
+        console.error('Error checking if already voted', error)
       } else {
         if (data.length === 0) {
           return true
@@ -48,7 +47,7 @@ function IdeaRow({ currentIdea, user, profile, loading, setLoading }) {
           return false
         }
       }
-    } console.log('no profile')
+    } console.error('no profile')
     return false
   }
 
@@ -57,7 +56,7 @@ function IdeaRow({ currentIdea, user, profile, loading, setLoading }) {
       .from('helpful_votes_ideas')
       .insert({ idea_id: currentIdea.id, user_name: profile.name })
     if (error) {
-      console.log('error voting', error)
+      console.error('error voting', error)
     } else {
       let newVoteTotal = currentIdea.votes + 1
       setVotes(newVoteTotal)
@@ -93,7 +92,6 @@ export default function IdeasTable({ user, profile }) {
       setLoading(true)
       async function getIdeas() {
         let newIdeas = await fetchIdeas()
-        console.log('newIdeas', newIdeas)
         setIdeas(newIdeas)
       } getIdeas()
     } setLoading(false)
@@ -107,7 +105,7 @@ export default function IdeasTable({ user, profile }) {
         .eq('idea_id', props.ideaData.id)
         .eq('user_name', props.username)
       if (error) {
-        console.log('error checking already voted helpful', error)
+        console.error('error checking already voted helpful', error)
       } else {
         if (data.length === 0) {
           props.addOnePoint(props.ideaData.user_name)
@@ -122,7 +120,7 @@ export default function IdeasTable({ user, profile }) {
       .from('helpful_votes_ideas')
       .insert({ idea_id: props.ideaData.id, user_name: props.username })
     if (error) {
-      console.log('error voting helpful', error)
+      console.error('error voting helpful', error)
     } else {
       let current = helpfulToShow
       setHelpfulToShow(current + 1)

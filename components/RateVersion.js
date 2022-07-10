@@ -98,10 +98,8 @@ export default function RateVersion({ song, date, location, tags, user, profile,
 
   const handleSubmit = async () => {
     setLoading(true)
-    console.log('jam', jam)
     let valid = validateRatingData()
     if (valid) {
-      console.log('data is valid')
       let data
       if (userAlreadyRated) {
         data = await updateRating(jam.id, profile.name, rating, comment)
@@ -112,7 +110,7 @@ export default function RateVersion({ song, date, location, tags, user, profile,
       }
       handleClose()
     } else {
-      console.log('data not valid')
+      console.error('data not valid')
     }
     setLoading(false)
   }

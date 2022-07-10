@@ -59,7 +59,6 @@ export default function AddSong({ song, setSong, user, songs, profile, setSongs,
     setLoading(true)
     const valid = validate()
     if (valid) {
-      console.log('user', user)
       await insertSong()
     }
     setLoading(false)
@@ -93,7 +92,7 @@ export default function AddSong({ song, setSong, user, songs, profile, setSongs,
       .insert(
         { song: songToAdd, submitter_name: profile.name, artist: artist }, { returning: 'minimal' })
     if (error) {
-      console.log(error)
+      console.error(error)
     } else {
       setSuccessAlertText(`${songToAdd} added successfully - Thank you!`)
       setLoading(false)

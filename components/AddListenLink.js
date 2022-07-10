@@ -41,19 +41,16 @@ export default function AddListenLink({ song, date, location, tags, user, profil
   const handleSubmit = async () => {
     if (!loading) {
       setLoading(true)
-    console.log('jam', jam)
     let valid = validateLink()
     if (valid) {
-      console.log('data is valid')
       let data = await insertAddLink(link, jam, profile.name)
       if (data) {
-        console.log('added link successfully')
         setSuccess(true)
       } else {
-        console.log('failed to add link')
+        console.error('failed to add link')
       }
     } else {
-      console.log('data not valid')
+      console.error('data not valid')
     }
     setLoading(false)
   }

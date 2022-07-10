@@ -198,22 +198,14 @@ function Row({ row, user, profile }) {
 
   useEffect(() => {
     if (open && !comments) {
-      console.log('about to fetch comments')
       async function getComments(versionId) {
         let newComments = await fetchComments(versionId)
         if (newComments && newComments !== null) {
-          console.log('newComments', newComments)
           setComments(newComments)
         }
       } getComments(row.id)
     }
   }, [open, comments, row])
-
-  useEffect(() => {
-    if (comments) {
-      console.log('comments', comments)
-    }
-  }, [comments])
 
   return (
     <React.Fragment>

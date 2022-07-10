@@ -24,7 +24,6 @@ export default function ListenLink({ link, jam }) {
 
   const handleClickOpen = () => {
     setOpen(true);
-    console.log('link', link)
   };
 
   const handleClose = () => {

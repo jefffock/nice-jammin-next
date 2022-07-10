@@ -74,7 +74,6 @@ export default function AddIdea({ user, profile, setIdeas }) {
     setLoading(true)
     const valid = validate()
     if (valid) {
-      console.log('user', user)
       await insertIdea()
     }
     setLoading(false)
@@ -106,12 +105,11 @@ export default function AddIdea({ user, profile, setIdeas }) {
       artist_idea: (ideaType === 'artist'),
       other_idea: (ideaType === 'other')
     }
-    console.log('idea to add', ideaToAdd)
     const { error } = await supabase
       .from('ideas')
       .insert(ideaToAdd)
     if (error) {
-      console.log('error adding idea', error)
+      console.error('error adding idea', error)
     } else {
       setSuccess(true)
       addTenPoints(profile.name)

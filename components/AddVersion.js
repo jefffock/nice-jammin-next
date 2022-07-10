@@ -149,18 +149,15 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
   }
 
   const handleSubmit = async () => {
-    console.log('in handle submit')
     if (!loading) {
       setLoading(true)
       let valid = validateData()
       if (valid) {
-        console.log('data is valid')
         setSuccessAlertText("Looks good, adding jam...")
         await insertVersion()
-        console.log('inserted version successully')
         setLoading(false)
       } else {
-        console.log('issue with data')
+        console.error('issue with data')
       } setLoading(false)
     }
   }
@@ -178,7 +175,6 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
         setDateErrorText(`I don't think ${artist} played in ${year}. Imagine if they did, though!`)
       }
     } if (!profile.can_write) {
-      console.log('cant write')
       return false
     } if (location === '') {
       setLocationErrorText('Please enter a location')
@@ -197,8 +193,7 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
   }
 
   const insertVersion = async () => {
-    console.log('in insertVersion')
-    console.log('songObj', songObj)
+
     const { data, error } = await supabase
       .from('versions')
       .insert(
@@ -257,15 +252,13 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
         }])
     if (error) {
     } else {
-      console.log('data after insert', data)
       if (rating) {
         setSuccessAlertText(`Successfully added ${song} from ${date}. Now adding your rating...`)
         await rateVersion(data[0].id, songObj.id, profile.name, rating, comment, profile.name, songObj.submitter_name, user.id)
         setSuccessAlertText(`Successfully added ${song} from ${date} and your rating. Thank you for contributing!`)
       } else {
         setSuccessAlertText(`Successfully added ${song} from ${date}. Thank you for contributing!`)
-      } let updatedJams = await fetchAllJams()
-      setUpdatedJams(updatedJams)
+      }
     }
   }
 

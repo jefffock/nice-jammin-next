@@ -43,7 +43,6 @@ async function fetchSongs() {
 }
 
 async function fetchLeaders() {
-  console.log('in fetchLeaders')
   const { data, error } = await supabase
   .from('profiles')
   .select('name, points')
@@ -98,7 +97,6 @@ async function fetchIdeas() {
 }
 
 async function fetchComments(versionId) {
-  console.log('in fetchComments')
   const { data, error } = await supabase
   .from('ratings')
   .select('*')

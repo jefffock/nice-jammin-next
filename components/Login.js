@@ -33,7 +33,7 @@ export default function SignIn() {
     })
     if (error) {
       setLoading(false)
-      console.log('error:', error)
+      console.error('error:', error)
     } else {
       setLoading(false)
       router.push('/')

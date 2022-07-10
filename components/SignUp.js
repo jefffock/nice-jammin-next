@@ -117,7 +117,7 @@ export default function SignUp({ setSession }) {
       setLoading(false)
       setSuccessText(`Welcome, ${username}!
       Please check for an email from nicejammin@nicejammin.com.
-      Once you confirm your account, you can start contributing!`)
+      Once you verify your email, you can start contributing!`)
     }
   }
 

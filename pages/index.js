@@ -202,7 +202,7 @@ export async function getStaticProps() {
       .from('versions')
       .select('*')
       // .gt('avg_rating', 0)
-      .limit(20)
+      .limit(30)
       .order('avg_rating', { ascending: false })
       .order('num_ratings', { ascending: false })
     if (error) {
