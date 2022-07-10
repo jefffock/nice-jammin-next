@@ -230,7 +230,6 @@ function Row({ row, user, profile }) {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ m: '0.2em', maxWidth: '90vw' }}>
               {row.listen_link &&
-              // <Typography sx={{ 'text-decoration': 'underline', color: '#000000' }}>{<a href={row.listen_link}>Listen</a>}</Typography>
               <ListenLink link={row.listen_link} jam={row}></ListenLink>
               }
               {!row.listen_link &&

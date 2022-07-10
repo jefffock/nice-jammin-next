@@ -41,7 +41,6 @@ export default function ReportIssue({ user, profile, version }) {
   };
 
   const handleIssueChange = (e) => {
-    console.log('e.target.value', e.target.value)
     setIssue(e.target.value)
   }
 
@@ -50,11 +49,13 @@ export default function ReportIssue({ user, profile, version }) {
   }
 
   const handleSubmit = async (event) => {
+    console.log('linkbroken', linkBroken, 'issue', issue)
     event.preventDefault()
     setLoading(true)
     const valid = validate()
     if (valid) {
       await reportIssue(version, profile, linkBroken, issue)
+      setSuccessAlertText('Thank you for reporting this issue!')
     }
     setLoading(false)
   }
@@ -105,7 +106,7 @@ export default function ReportIssue({ user, profile, version }) {
         <DialogActions>
           {!successAlertText &&
           <>
-            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleClose}>Close</Button>
             <Button onClick={handleSubmit}
               disabled={loading || (!issue && !linkBroken)}>
             Report this issue</Button>

@@ -253,7 +253,6 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
     if (error) {
     } else {
       if (rating) {
-        setSuccessAlertText(`Successfully added ${song} from ${date}. Now adding your rating...`)
         await rateVersion(data[0].id, songObj.id, profile.name, rating, comment, profile.name, songObj.submitter_name, user.id)
         setSuccessAlertText(`Successfully added ${song} from ${date} and your rating. Thank you for contributing!`)
       } else {
