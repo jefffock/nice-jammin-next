@@ -18,18 +18,20 @@ import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 
 
-export default function RateVersion({ song, date, location, tags, user, profile, jam }) {
+export default function RateVersion({ song, date, location, tags, user, profile, jam, songs }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false)
-  const [rating, setRating] = useState(null)
+  const [rating, setRating] = useState(10)
   const [comment, setComment] = useState('')
   const [newTags, setNewTags] = useState([])
   const [tagsToAddText, setTagsToAddText] = useState('')
   const [tagsObj, setTagsObj] = useState(null)
+  const [songSubmitter, setSongSubmitter] = useState(null)
   const [userAlreadyRated, setUserAlreadyRated] = useState(false)
   const [buttonText, setButtonText] = useState('Rate')
   const [commentWarningText, setCommentWarningText] = useState(null)
   const [ratingErrorText, setRatingErrorText] = useState(null)
+  const [successAlertText, setSuccessAlertText] = useState(null)
   const [funky, setFunky] = useState(false)
   const [ambient, setAmbient] = useState(false)
   const [fast, setFast] = useState(false)
@@ -77,10 +79,14 @@ export default function RateVersion({ song, date, location, tags, user, profile,
 
   const handleClickOpen = () => {
     setOpen(true);
+    setLoading(false)
+    setSuccessAlertText(null)
   };
 
   const handleClose = () => {
+    setLoading(false)
     setOpen(false);
+    setSuccessAlertText(null)
   };
 
   const handleRatingChange = (e) => {
@@ -96,19 +102,38 @@ export default function RateVersion({ song, date, location, tags, user, profile,
     }
   }
 
+  useEffect(() => {
+    let index = songs.findIndex(item => {
+      return item.song === song;
+    })
+    setSongSubmitter(songs[index].submitter_name)
+  }, [])
+
   const handleSubmit = async () => {
+    console.log('newTags', newTags)
     setLoading(true)
     let valid = validateRatingData()
     if (valid) {
       let data
       if (userAlreadyRated) {
-        data = await updateRating(jam.id, profile.name, rating, comment)
+        console.log(jam.id, profile.name, rating, comment)
+        await updateRating(jam.id, profile.name, rating, comment)
+        if (newTags.length > 0) {
+          let updatedTags = await updateTags(tagsObj, jam.id, profile.name, tagsToAddText, newTags.length)
+          setSuccessAlertText('Successfully updated your rating and added tags. Thank you for contributing!')
+        } else {
+          setSuccessAlertText('Successfully updated your rating. Thank you for contributing!')
+        }
       } else {
-        data = await rateVersion(jam.id, jam.song_id, profile.name, rating, comment, jam.submitter_name, user.id)
-      } if (tagsObj) {
-        let updatedTags = await updateTags(tagsObj, jam.id, profile.name, tagsToAddText, newTags.length)
+        console.log('user id', user.id)
+        await rateVersion(jam.id, jam.song_id, profile.name, rating, comment, jam.submitter_name, jam.song_submitter_name ?? songSubmitter, user.id)
+        if (newTags.length > 0) {
+          let updatedTags = await updateTags(tagsObj, jam.id, profile.name, tagsToAddText, newTags.length)
+          setSuccessAlertText('Successfully added your rating and tags. Thank you for contributing!')
+        } else {
+          setSuccessAlertText('Successfully added your rating. Thank you for contributing!')
+        }
       }
-      handleClose()
     } else {
       console.error('data not valid')
     }
@@ -122,7 +147,7 @@ export default function RateVersion({ song, date, location, tags, user, profile,
     } if (rating < 1 || rating > 10) {
       setRatingErrorText('Rating must be between 1 and 10')
       return false
-    } if (comment.length > 10000) {
+    } if (comment?.length > 10000) {
       return false
     } if (!profile.can_write) {
       return false
@@ -139,8 +164,8 @@ export default function RateVersion({ song, date, location, tags, user, profile,
       let checkRated = async () => {
         let data = await checkUserAlreadyRated(profile.name, jam.id)
         if (data) {
+          setRating(data[0].rating)
           setComment(data[0].comment)
-          setRating(parseInt(data[0].rating))
           setUserAlreadyRated(true)
           setButtonText('Update')
         }
@@ -177,7 +202,7 @@ export default function RateVersion({ song, date, location, tags, user, profile,
       'peaks': 'Peaks',
       'reggae': 'Reggae',
       'rocking': 'Rocking',
-      'seque': 'Segue',
+      'segue': 'Segue',
       'shred': 'Shred',
       'silly': 'Silly',
       'sloppy': 'Sloppy',
@@ -187,7 +212,7 @@ export default function RateVersion({ song, date, location, tags, user, profile,
       'soulful': 'Soulful',
       'stop_start': 'Stop-start',
       'synthy': 'Synthy',
-      'teases': 'Teases',
+      'tease': 'Teases',
       'tension_release': 'Tension and Release',
       'that_years_style': "That Year's Style",
       'trance': 'Trance',
@@ -238,12 +263,12 @@ export default function RateVersion({ song, date, location, tags, user, profile,
     newTags.indexOf('that_years_style') !== -1 ? setThatYearsStyle(true) : setThatYearsStyle(false)
     newTags.indexOf('trippy') !== -1 ? setTrippy(true) : setTrippy(false)
     newTags.indexOf('type2') !== -1 ? setType2(true) : setType2(false)
-    newTags.indexOf('Unusual') !== -1 ? setUnusual(true) : setUnusual(false)
+    newTags.indexOf('unusual') !== -1 ? setUnusual(true) : setUnusual(false)
     newTags.indexOf('grimy') !== -1 ? setGrimy(true) : setGrimy(false)
     newTags.indexOf('historic') !== -1 ? setHistoric(true) : setHistoric(false)
     newTags.indexOf('low_key') !== -1 ? setLowkey(true) : setLowkey(false)
     newTags.indexOf('mellow') !== -1 ? setMellow(true) : setMellow(false)
-    newTags.indexOf(',elodic') !== -1 ? setMelodic(true) : setMelodic(false)
+    newTags.indexOf('melodic') !== -1 ? setMelodic(true) : setMelodic(false)
     newTags.indexOf('rocking') !== -1 ? setRocking(true) : setRocking(false)
     newTags.indexOf('tension_release') !== -1 ? setTensionRelease(true) : setTensionRelease(false)
     newTags.indexOf('trance') !== -1 ? setTrance(true) : setTrance(false)
@@ -257,14 +282,11 @@ export default function RateVersion({ song, date, location, tags, user, profile,
         onClick={handleClickOpen}
         sx={{ borderRadius: '50px', textTransform: 'none', my: '.5em' }}
       >
-        Rate and Comment
+        Rate
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{song} - {location} - {date}</DialogTitle>
         <DialogContent>
-          {/* <DialogContentText>
-            Rating art is always subjective, so just go with whatever rating feels right to you
-          </DialogContentText> */}
           {!user &&
           <Alert severity="warning" sx={{ mb: '1em' }}>Please log in to rate this jam - thank you!</Alert>
           }
@@ -296,8 +318,6 @@ export default function RateVersion({ song, date, location, tags, user, profile,
             <Alert severity="error" sx={{ mb: '1em' }}>{ratingErrorText}</Alert>
             }
           </Box>
-          {rating &&
-          <>
             <Typography mx="0.25em" mt="1em">Optional:</Typography>
           <TextField
             autoFocus
@@ -305,6 +325,7 @@ export default function RateVersion({ song, date, location, tags, user, profile,
             margin="dense"
             id="comment"
             label="Comments"
+            value={comment}
             type="text"
             fullWidth
             variant="standard"
@@ -318,12 +339,16 @@ export default function RateVersion({ song, date, location, tags, user, profile,
             {tagsToAddText &&
             <Typography>Tags to Add: {tagsToAddText}</Typography>
             }
-          </>
+          {successAlertText &&
+          <Alert severity="success" sx={{ my: '1em' }}>{successAlertText}</Alert>
           }
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Close</Button>
-          <Button onClick={handleSubmit} disabled={loading || !rating || commentWarningText || !user || !profile}>{buttonText}</Button>
+          <Button onClick={handleClose}
+          sx={{ textTransform: 'none' }}>Close</Button>
+          <Button onClick={handleSubmit}
+          disabled={loading || !rating || commentWarningText || !user || !profile}
+          sx={{ textTransform: 'none' }}>{buttonText}</Button>
         </DialogActions>
       </Dialog>
     </div>

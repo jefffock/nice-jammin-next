@@ -193,7 +193,6 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
   }
 
   const insertVersion = async () => {
-
     const { data, error } = await supabase
       .from('versions')
       .insert(
@@ -201,6 +200,7 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
           song_name: song,
           user_id: user.id,
           submitter_name: profile.name,
+          song_submitter_name: songObj.submitter_name,
           location: location,
           artist: artist,
           date: date,
@@ -574,10 +574,12 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
         }
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Close</Button>
-          {artist && song && date && location && location.length > 2 && !dateErrorText &&
+          <Button onClick={handleClose}
+          sx={{ textTransform: 'none' }}>Close</Button>
+          {artist && song && date && location && location.length > 2 && !dateErrorText && !successAlertText && 
           <Button onClick={handleSubmit}
             disabled={loading || !user || !profile}
+            sx={{ textTransform: 'none' }}
           >Add Version</Button>
           }
         </DialogActions>

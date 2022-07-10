@@ -146,16 +146,13 @@ export default function AddSong({ song, setSong, user, songs, profile, setSongs,
             }
         </DialogContent>
         <DialogActions>
+          <Button onClick={handleClose}
+          sx={{ textTransform: 'none' }}>Close</Button>
           {!successAlertText &&
-          <>
-            <Button onClick={handleClose}>Cancel</Button>
             <Button onClick={handleSubmit}
-              disabled={loading || !song || !artist || artist === 'All Bands'}>
-            Add This Song</Button>
-          </>
-          }
-          {successAlertText &&
-            <Button onClick={handleClose}>Close</Button>
+              disabled={loading || !song || !artist || artist === 'All Bands'}
+              sx={{ textTransform: 'none' }}>
+            Add song</Button>
           }
         </DialogActions>
       </Dialog>

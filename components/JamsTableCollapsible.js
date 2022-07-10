@@ -99,7 +99,7 @@ return (
 );
 }
 
-function Row({ row, user, profile }) {
+function Row({ row, user, profile, songs }) {
   const [open, setOpen] = useState(false);
   const [tags, setTags] = useState('')
   const [comments, setComments] = useState(null)
@@ -241,7 +241,7 @@ function Row({ row, user, profile }) {
               <Typography>{row.location}</Typography>
               <Typography>{row.num_ratings} rating{row.num_ratings === 1 ? '' : 's'}</Typography>
               <Typography>Added by {row.submitter_name}. Thank you!</Typography>
-              <RateVersion song={row.song_name} date={row.date} location={row.location} tags={tags} user={user} profile={profile} jam={row}/>
+              <RateVersion song={row.song_name} date={row.date} location={row.location} tags={tags} user={user} profile={profile} jam={row} songs={songs}/>
               {comments && comments.length > 0 &&
               <Comments song={row.song_name} date={row.date} location={row.location} comments={comments}  user={user} profile={profile}/>
               }
@@ -335,6 +335,7 @@ export default function CollapsibleTable({ jams, sortedJams, sortJams, order, or
             row={jam}
             user={user}
             profile={profile}
+            songs={songs}
             />
             ))}
         </TableBody>

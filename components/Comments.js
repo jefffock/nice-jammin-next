@@ -92,7 +92,8 @@ export default function Comments({ version, song, date, location, comments, user
           </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Close</Button>
+        <Button onClick={handleClose}
+        sx={{ textTransform: 'none' }}>Close</Button>
       </DialogActions>
     </Dialog>
     </Box>

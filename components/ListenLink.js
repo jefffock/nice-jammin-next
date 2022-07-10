@@ -78,12 +78,9 @@ export default function ListenLink({ link, jam }) {
             onClick={handleClose}>
               Back to Nice Jammin&apos;
             </Typography>
-            {/* <Button autoFocus color="inherit" onClick={handleClose}>
-              save
-            </Button> */}
           </Toolbar>
         </AppBar>
-        <Box sx={{ height: '100vh', width: '100vw'}}>
+        <Box sx={{ height: '100vh', width: '100vw', bgcolor: '#000000'}}>
           <iframe
           src={newLink ? newLink : link}
           title={`Listen to ${jam.song_name} from ${jam.date}`}

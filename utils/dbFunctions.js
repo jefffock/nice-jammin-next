@@ -1,6 +1,6 @@
 import { supabase } from '../utils/supabaseClient'
 
-async function rateVersion(versionId, songId, profileName, rating, comment, versionSubmitterName, songSubmitterName, userId) {
+async function rateVersion(versionId, songId, profileName, rating, comment, versionSubmitterName, songSubmitterName, userId, songs) {
   const { data, error } = await supabase
     .from('ratings')
     .insert(
@@ -33,6 +33,7 @@ async function updateRating(versionId, profileName, rating, comment) {
     })
     .match({submitter_name: profileName, version_id: versionId})
   if (error) {
+    console.log('error updating rating', error)
     return error
   } else {
     calcAverageForVersion(versionId)

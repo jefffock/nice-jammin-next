@@ -104,16 +104,14 @@ export default function ReportIssue({ user, profile, version }) {
             }
         </DialogContent>
         <DialogActions>
+          <Button onClick={handleClose}
+          sx={{ textTransform: 'none' }}
+          >Close</Button>
           {!successAlertText &&
-          <>
-            <Button onClick={handleClose}>Close</Button>
             <Button onClick={handleSubmit}
-              disabled={loading || (!issue && !linkBroken)}>
-            Report this issue</Button>
-          </>
-          }
-          {successAlertText &&
-            <Button onClick={handleClose}>Close</Button>
+              disabled={loading || (!issue && !linkBroken)}
+              sx={{ textTransform: 'none' }}>
+            Report issue</Button>
           }
         </DialogActions>
       </Dialog>

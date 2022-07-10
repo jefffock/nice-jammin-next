@@ -95,7 +95,7 @@ export default function TopBar({ showButton, user, session, router }) {
             </>
             }
             {user &&
-            <Button onClick={handleLogout} sx={{ bgcolor: 'primary.main', textTransform: 'none', color: '#000000', borderRadius: '2em', '&:hover': { bgcolor: 'primary.bg' } }}>Log Out</Button>
+            <Button onClick={handleLogout} sx={{ bgcolor: 'primary.main', textTransform: 'none', color: '#000000', borderRadius: '2em', '&:hover': { bgcolor: 'primary.bg' } }}>Log out</Button>
           }
             </Box>
       }

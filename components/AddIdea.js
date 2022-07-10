@@ -171,16 +171,13 @@ export default function AddIdea({ user, profile, setIdeas }) {
             }
         </DialogContent>
         <DialogActions>
+            <Button onClick={handleClose}
+            sx={{ textTransform: 'none' }}>Close</Button>
           {!success &&
-          <>
-            <Button onClick={handleClose}>Close</Button>
             <Button onClick={handleSubmit}
-              disabled={loading || !user || !profile || !idea || !ideaType}>
-            Add This Suggestion</Button>
-          </>
-          }
-          {success &&
-            <Button onClick={handleClose}>Close</Button>
+              disabled={loading || !user || !profile || !idea || !ideaType}
+              sx={{ textTransform: 'none' }}>
+            Add suggestion</Button>
           }
         </DialogActions>
       </Dialog>
