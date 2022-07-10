@@ -239,7 +239,7 @@ function Row({ row, user, profile }) {
               <Typography>{tags}</Typography>
             }
               <Typography>{row.location}</Typography>
-              <Typography>{row.num_ratings} ratings</Typography>
+              <Typography>{row.num_ratings} rating{row.num_ratings === 1 ? '' : 's'}</Typography>
               <Typography>Added by {row.submitter_name}. Thank you!</Typography>
               <RateVersion song={row.song_name} date={row.date} location={row.location} tags={tags} user={user} profile={profile} jam={row}/>
               {comments && comments.length > 0 &&
