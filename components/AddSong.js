@@ -147,7 +147,7 @@ export default function AddSong({ song, setSong, user, songs, profile, setSongs,
           sx={{ textTransform: 'none' }}>Close</Button>
           {!successAlertText &&
             <Button onClick={handleSubmit}
-              disabled={loading || !song || !artist || artist === 'All Bands'}
+              disabled={loading || !song || !user || !artist || artist === 'All Bands'}
               sx={{ textTransform: 'none' }}>
             Add song</Button>
           }
