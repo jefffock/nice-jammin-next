@@ -110,13 +110,11 @@ export default function RateVersion({ song, date, location, tags, user, profile,
   }, [])
 
   const handleSubmit = async () => {
-    console.log('newTags', newTags)
     setLoading(true)
     let valid = validateRatingData()
     if (valid) {
       let data
       if (userAlreadyRated) {
-        console.log(jam.id, profile.name, rating, comment)
         await updateRating(jam.id, profile.name, rating, comment)
         if (newTags.length > 0) {
           let updatedTags = await updateTags(tagsObj, jam.id, profile.name, tagsToAddText, newTags.length)
@@ -125,7 +123,6 @@ export default function RateVersion({ song, date, location, tags, user, profile,
           setSuccessAlertText('Successfully updated your rating. Thank you for contributing!')
         }
       } else {
-        console.log('user id', user.id)
         await rateVersion(jam.id, jam.song_id, profile.name, rating, comment, jam.submitter_name, jam.song_submitter_name ?? songSubmitter, user.id)
         if (newTags.length > 0) {
           let updatedTags = await updateTags(tagsObj, jam.id, profile.name, tagsToAddText, newTags.length)
@@ -134,8 +131,6 @@ export default function RateVersion({ song, date, location, tags, user, profile,
           setSuccessAlertText('Successfully added your rating. Thank you for contributing!')
         }
       }
-    } else {
-      console.error('data not valid')
     }
     setLoading(false)
   }
@@ -160,7 +155,6 @@ export default function RateVersion({ song, date, location, tags, user, profile,
       setRating(null)
       setUserAlreadyRated(false)
       setButtonText('Rate')
-      console.log('open, about to check if already rated')
       let checkRated = async () => {
         let data = await checkUserAlreadyRated(profile.name, jam.id)
         if (data) {
@@ -228,7 +222,6 @@ export default function RateVersion({ song, date, location, tags, user, profile,
       newTagsObj[newTags[i]] = true
     } let trimmedTags = newTagsText.slice(0, newTagsText.length - 2)
     setTagsToAddText(trimmedTags)
-    console.log('newTagsObj', newTagsObj)
     setTagsObj(newTagsObj)
     newTags.indexOf('acoustic') !== -1 ? setAcoustic(true) : setAcoustic(false)
     newTags.indexOf('ambient') !== -1 ? setAmbient(true) : setAmbient(false)

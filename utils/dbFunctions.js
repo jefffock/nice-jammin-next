@@ -11,7 +11,7 @@ async function rateVersion(versionId, songId, profileName, rating, comment, vers
         comment: comment
       })
   if (error) {
-    console.log('error', error)
+    console.error('error', error)
     return error
   } else {
     addOnePoint(versionSubmitterName)
@@ -33,7 +33,7 @@ async function updateRating(versionId, profileName, rating, comment) {
     })
     .match({submitter_name: profileName, version_id: versionId})
   if (error) {
-    console.log('error updating rating', error)
+    console.error('error updating rating', error)
     return error
   } else {
     calcAverageForVersion(versionId)
@@ -59,7 +59,6 @@ async function reportIssue(version, profile, linkBroken, issue) {
 }
 
 async function postUpdatedTags(versionId, profileName, tagsText, tagsLength) {
-  console.log('in postUpdatedTags')
   const { error } = await supabase
     .from('update_tags')
     .insert({
@@ -71,7 +70,6 @@ async function postUpdatedTags(versionId, profileName, tagsText, tagsLength) {
 }
 
 async function updateTags(tagsToUpdate, versionId, profileName, tagsText, tagsLength) {
-  console.log('in updateTags')
   const { data, error } = await supabase
     .from('versions')
     .update(tagsToUpdate)
@@ -91,7 +89,7 @@ async function checkIfUpvotedComment( name, ratingId ) {
     .eq('rating_id', ratingId)
     .eq('user_name', name)
   if (error) {
-    console.log('error checking already voted helpful', error)
+    console.error('error checking already voted helpful', error)
   } else {
     if (data.length === 0) {
       return false
@@ -104,7 +102,7 @@ async function upvoteComment(name, ratingId) {
     .from('helpful_votes_ratings')
     .insert({ rating_id: ratingId, user_name: name })
   if (error) {
-    console.log('error voting helpful', error)
+    console.error('error voting helpful', error)
   } else {
     countHelpfulVotesRatings(ratingId)
   }
@@ -114,7 +112,7 @@ async function addOnePoint(profileName) {
   console.log('in add One Point', profileName)
   const { error } = await supabase.rpc( 'add_one_point', { username: profileName })
   if (error) {
-    console.log('error adding one point', error)
+    console.error('error adding one point', error)
   }
 }
 
@@ -122,23 +120,22 @@ async function addTenPoints(profileName) {
   console.log('in add Ten Points', profileName)
   const { error } = await supabase.rpc( 'add_ten_points', { username: profileName })
   if (error) {
-    console.log('error adding ten points', error)
+    console.error('error adding ten points', error)
   }
 }
 
 async function addRatingCountToArtist(artistId) {
   const { error } = await supabase.rpc( 'add_rating_count_artist', { artistid: artistId })
   if (error) {
-    console.log('error adding rating count to artist', error)
+    console.error('error adding rating count to artist', error)
   }
 }
 
 async function addRatingCountToSong(songId) {
-  console.log('in addRatingCountToSong', songId)
   let song_id = parseInt(songId)
   const { error } = await supabase.rpc( 'increment_song_rating_count', { songid: song_id })
   if (error) {
-    console.log('error adding incrementing song rating count', error)
+    console.error('error adding incrementing song rating count', error)
   }
 }
 
@@ -147,7 +144,7 @@ async function addRatingCountToVersion(versionId) {
   let version_id = parseInt(versionId)
   const { error } = await supabase.rpc( 'increment_version_rating_count', { versionid: version_id })
   if (error) {
-    console.log('error adding incrementing version rating count', error)
+    console.error('error adding incrementing version rating count', error)
   }
 }
 
@@ -156,28 +153,28 @@ async function calcAverageForVersion(versionId) {
   let version = parseInt(versionId)
   const { error } = await supabase.rpc( 'calc_average', { versionid: version })
   if (error) {
-    console.log('error calculating average', error)
+    console.error('error calculating average', error)
   }
 }
 
 async function countHelpfulVotesRatings(ratingId) {
   const { error } = await supabase.rpc( 'count_helpful_votes_ratings', {ratingid: ratingId})
     if (error) {
-      console.log('error counting helpful votes', error)
+      console.error('error counting helpful votes', error)
     }
 }
 
 async function countFunnyVotesRatings(ratingId) {
   const { error } = await supabase.rpc( 'count_funny_votes_ratings', {ratingid: ratingId})
     if (error) {
-      console.log('error counting funny votes', error)
+      console.error('error counting funny votes', error)
     }
 }
 
 async function countVotesIdeas(ideaId) {
   const { error } = await supabase.rpc( 'count_helpful_votes_ideas', {ideaid: ideaId})
     if (error) {
-      console.log('error counting helpful votes ideas', error)
+      console.error('error counting helpful votes ideas', error)
     }
 }
 
@@ -190,7 +187,7 @@ async function insertAddLink(linkToAdd, version, username) {
       username: username
     })
   if (error) {
-    console.log('error inserting add link', error)
+    console.error('error inserting add link', error)
   } else {
     return await updateVersionWithLink(linkToAdd, version, username)
   }
@@ -204,7 +201,7 @@ async function updateVersionWithLink(linkToAdd, version, username) {
     })
     .match({id: version.id})
   if (error) {
-    console.log('error adding link', error)
+    console.error('error adding link', error)
     return false
   } else {
     addTenPoints(username)

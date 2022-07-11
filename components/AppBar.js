@@ -53,7 +53,6 @@ export default function TopBar({ showButton, user, session, router }) {
               >
               Nice Jammin
             </Typography> */}
-            <Link href="/" passHref={true}>
             <Image
               alt="Nice Jammin Logo"
               src="/icon-circle.png"
@@ -63,8 +62,7 @@ export default function TopBar({ showButton, user, session, router }) {
               height={45}
               component="a"
               href="/"
-              />
-            </Link>
+            />
             <Typography
             variant="h6"
             noWrap

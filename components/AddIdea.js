@@ -19,11 +19,9 @@ import { addTenPoints } from '../utils/dbFunctions'
 import { fetchIdeas } from '../utils/fetchData'
 import FormHelperText from '@mui/material/FormHelperText';
 
-
-
 export default function AddIdea({ user, profile, setIdeas }) {
   const [open, setOpen] = useState(false);
-  const [idea, setIdea] = useState(null)
+  const [idea, setIdea] = useState('')
   const [ideaError, setIdeaError] = useState(false)
   const [ideaErrorText, setIdeaErrorText] = useState(null)
   const [ideaType, setIdeaType] = useState(null)

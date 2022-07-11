@@ -139,9 +139,8 @@ export default function App({ jams }) {
             .eq('id', id)
             .limit(1)
           if (error) {
-            console.log('error getting profile', error)
+            console.error('error getting profile', error)
           } if (data) {
-            console.log('profile data', data[0])
             setProfile(data[0])
           }
         }

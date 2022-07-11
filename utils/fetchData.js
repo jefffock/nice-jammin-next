@@ -22,7 +22,7 @@ async function fetchArtists() {
   .select('*')
   .order('ratings', {ascending: false})
   if (error) {
-    console.log(error)
+    console.error(error)
   } else {
     setArtists(data)
   }
@@ -50,7 +50,7 @@ async function fetchLeaders() {
   .limit(20)
   .order('points', {ascending: false})
   if (error) {
-    console.log('error fetching top contributors', error)
+    console.error('error fetching top contributors', error)
   } else {
     return data
   }
@@ -63,7 +63,7 @@ async function fetchVersions(songId) {
   .eq('song_id', songId)
   .order('avg_rating', {ascending: false})
   if (error) {
-    console.log('error fetching versions', error)
+    console.error('error fetching versions', error)
   } else if (data) {
     setVersions(data)
   }
@@ -76,7 +76,7 @@ async function fetchRatings(versionId) {
   .eq('versions.id', versionId)
   .order('helpful', {ascending: false})
   if (error) {
-    console.log(error)
+    console.error(error)
   } else if (data) {
     setReviews(data)
   }
@@ -89,7 +89,7 @@ async function fetchIdeas() {
   .eq('done', false)
   .order('votes', { ascending: false })
   if (error) {
-    console.log('error fetching ideas', error)
+    console.error('error fetching ideas', error)
     return error
   } else {
     return data
@@ -104,14 +104,10 @@ async function fetchComments(versionId) {
   .eq('version_id', versionId)
   .order('helpful', { ascending: false })
   if (error) {
-    console.log(error)
+    console.error(error)
   } if (data) {
-    console.log('got Comments:', data)
     return data
-  } console.log('no comments')
-  return null
-
-
+  } return null
 }
 
 async function checkUserAlreadyRated(name, versionId) {
@@ -121,7 +117,7 @@ async function checkUserAlreadyRated(name, versionId) {
     .eq('submitter_name', name)
     .eq('version_id', versionId)
   if (error) {
-    console.log('error in checkUserAlreadyRated', error)
+    console.error('error in checkUserAlreadyRated', error)
   } else {
     if (data.length > 0) {
       return data

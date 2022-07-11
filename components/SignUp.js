@@ -35,7 +35,6 @@ export default function SignUp({ setSession }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('in handleSubmit')
     setLoading(true)
     setUsernameErrorText(null)
     setPasswordErrorText(null)
@@ -45,9 +44,7 @@ export default function SignUp({ setSession }) {
     const email = data.get('email')
     const password = data.get('password')
     const username = data.get('username')
-    console.log(username, email, password);
     const isValid = await validateSignUp(email, password, username)
-    console.log('isValid', isValid)
     if (isValid) {
       await signUpWithEmail(email, password, username)
     }
@@ -82,7 +79,7 @@ export default function SignUp({ setSession }) {
       .select('name')
       .eq('name', username)
     if (error) {
-      console.log(error)
+      console.error(error)
       setLoading(false)
       setUsernameErrorText('Something went wrong, sorry about that! Please refresh the page and try again')
       return false
@@ -100,19 +97,18 @@ export default function SignUp({ setSession }) {
       password: password,
     })
     if (error) {
-      console.log('sign up error', error)
+      console.error('sign up error', error)
     } else {
       await createProfile(username, user)
     }
   }
 
   async function createProfile(username, user) {
-    console.log('username', username, 'user', user)
     const { error } = await supabase
       .from('profiles')
       .insert([{ name: username, id: user.id }])
     if (error) {
-      console.log('create profile error', error)
+      console.error('create profile error', error)
     } else {
       setLoading(false)
       setSuccessText(`Welcome, ${username}!

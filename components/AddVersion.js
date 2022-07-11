@@ -251,9 +251,13 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
           upbeat: upbeat,
         }])
     if (error) {
+      console.error(error)
     } else {
+      addOnePoint(songObj.submitter_name)
+      addTenPoints(profile.name)
       if (rating) {
-        await rateVersion(data[0].id, songObj.id, profile.name, rating, comment, profile.name, songObj.submitter_name, user.id)
+        rateVersion(data[0].id, songObj.id, profile.name, rating, comment, profile.name, songObj.submitter_name, user.id)
+        addTenPoints(profile.name)
         setSuccessAlertText(`Successfully added ${song} from ${date} and your rating. Thank you for contributing!`)
       } else {
         setSuccessAlertText(`Successfully added ${song} from ${date}. Thank you for contributing!`)
@@ -576,7 +580,7 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
         <DialogActions>
           <Button onClick={handleClose}
           sx={{ textTransform: 'none' }}>Close</Button>
-          {artist && song && date && location && location.length > 2 && !dateErrorText && !successAlertText && 
+          {artist && song && date && location && location.length > 2 && !dateErrorText && !successAlertText &&
           <Button onClick={handleSubmit}
             disabled={loading || !user || !profile}
             sx={{ textTransform: 'none' }}

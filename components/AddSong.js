@@ -116,9 +116,6 @@ export default function AddSong({ song, setSong, user, songs, profile, setSongs,
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add {songToAdd}</DialogTitle>
         <DialogContent>
-          {/* <DialogContentText>
-            Rating art is always subjective, so just go with whatever rating feels right to you
-          </DialogContentText> */}
           {!user &&
           <Alert severity="warning" sx={{ mb: '1em' }}>Please log in to add this song - thank you!</Alert>
           }

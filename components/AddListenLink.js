@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { insertAddLink } from '../utils/dbFunctions'
+import { insertAddLink, addTenPoints } from '../utils/dbFunctions'
 import { checkUserAlreadyRated } from '../utils/fetchData'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -41,19 +41,19 @@ export default function AddListenLink({ song, date, location, tags, user, profil
   const handleSubmit = async () => {
     if (!loading) {
       setLoading(true)
-    let valid = validateLink()
-    if (valid) {
-      let data = await insertAddLink(link, jam, profile.name)
-      if (data) {
-        setSuccess(true)
+      let valid = validateLink()
+      if (valid) {
+        let data = await insertAddLink(link, jam, profile.name)
+        if (data) {
+          setSuccess(true)
+        } else {
+          console.error('failed to add link')
+        }
       } else {
-        console.error('failed to add link')
+        console.error('data not valid')
       }
-    } else {
-      console.error('data not valid')
+      setLoading(false)
     }
-    setLoading(false)
-  }
   }
 
   const validateLink = () => {

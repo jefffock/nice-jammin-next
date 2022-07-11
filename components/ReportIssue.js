@@ -49,7 +49,6 @@ export default function ReportIssue({ user, profile, version }) {
   }
 
   const handleSubmit = async (event) => {
-    console.log('linkbroken', linkBroken, 'issue', issue)
     event.preventDefault()
     setLoading(true)
     const valid = validate()

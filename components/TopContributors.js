@@ -21,11 +21,10 @@ export default function TopContributors() {
       setFetchingLeaders(true)
       async function getLeaders() {
         let data = await fetchLeaders()
-        console.log('newLeaders', data)
         setLeaders(data)
       } getLeaders()
     }
-  })
+  }, [])
 
   return (
     <Box mx="auto" my="1em" width='96vw' maxWidth='400px'>
