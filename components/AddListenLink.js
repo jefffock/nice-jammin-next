@@ -95,7 +95,7 @@ export default function AddListenLink({ song, date, location, tags, user, profil
             onChange={handleLinkChange}
             />
             {success &&
-            <Alert severity="success" sx={{ m: '1em'}}>Successfully added link. Thank you! (The link will show if you refresh the page)</Alert>}
+            <Alert severity="success" sx={{ m: '1em'}}>Successfully added link. Thank you! The link will be visible when you refresh the page</Alert>}
         </DialogContent>
         <DialogActions>
           <Button sx={{ textTransform: 'none' }} onClick={handleClose}>Close</Button>

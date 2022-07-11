@@ -54,6 +54,6 @@ export default function TopContributors() {
         </TableBody>
       </Table>
     </TableContainer>
-          </Box>
+  </Box>
   );
 }

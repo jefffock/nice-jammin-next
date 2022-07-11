@@ -258,9 +258,9 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
       if (rating) {
         rateVersion(data[0].id, songObj.id, profile.name, rating, comment, profile.name, songObj.submitter_name, user.id)
         addTenPoints(profile.name)
-        setSuccessAlertText(`Successfully added ${song} from ${date} and your rating. Thank you for contributing!`)
+        setSuccessAlertText(`Successfully added ${song} from ${date} and your rating. Thank you for contributing! It will be in the table the next time you refresh the page.`)
       } else {
-        setSuccessAlertText(`Successfully added ${song} from ${date}. Thank you for contributing!`)
+        setSuccessAlertText(`Successfully added ${song} from ${date}. Thank you for contributing! It will be in the table the next time you refresh the page.`)
       }
     }
   }

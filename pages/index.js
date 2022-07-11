@@ -34,6 +34,7 @@ const DynamicGratitude = dynamic(() => import('../components/Gratitude'), {
 const DynamicIdeasTable = dynamic(() => import('../components/IdeasTable'), {
   suspense: true
 })
+const DynamicFooter = dynamic(() => import('../components/Footer'), { suspense: true})
 
 export default function App({ jams }) {
   const [updatedJams, setUpdatedJams] = useState(jams)
@@ -61,20 +62,6 @@ export default function App({ jams }) {
         setUser(session.user)
       }
     })
-    // const getAllJams = async () => {
-    //   let allJams = await fetchAllJams()
-    //   setUpdatedJams(allJams)
-    // }
-    // getAllJams()
-    // if (!songs) {
-    //   const getSongs = async () => {
-    //     let songs = await fetchSongs()
-    //     setSongs(songs)
-    //     setUpdatedSongs(songs)
-    //   }
-    //   getSongs()
-    // }
-
   }, [])
 
 
@@ -189,6 +176,7 @@ export default function App({ jams }) {
         <DynamicGratitude />
         <DynamicIdeasTable user={user} profile={profile}/>
         <DynamicContributorsTable />
+        <DynamicFooter user={user} profile={profile} />
       </Suspense>
     </Box>
     </ThemeProvider>

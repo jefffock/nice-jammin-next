@@ -78,14 +78,16 @@ export default function ReportIssue({ user, profile, version }) {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Report an issue</DialogTitle>
         <DialogContent>
+          {version &&
           <FormGroup>
             <FormControlLabel control={
               <Checkbox
-            checked={linkBroken}
-            onChange={handleCheck}
-            inputProps={{ 'aria-label': 'link-broken-checkbox' }}
-          />} label="Link doesn't work"></FormControlLabel>
+              checked={linkBroken}
+              onChange={handleCheck}
+              inputProps={{ 'aria-label': 'link-broken-checkbox' }}
+              />} label="Link doesn't work"></FormControlLabel>
           </FormGroup>
+          }
           <TextField
             margin="dense"
             id="issue"
