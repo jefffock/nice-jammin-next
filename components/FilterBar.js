@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 export default function FilterBar({ setDates, setArtist, tagsSelected, setTagsSelected, artist, beforeDate, setBeforeDate, afterDate, setAfterDate, song, setSong, songs }) {
 
   return (
-    <Box sx={{ mx: '0.5em' }} >
+    <Box sx={{ mx: '0.5em', mt:'1em' }} >
       <Box sx={{ bgcolor: 'primary.bg', width: 'fit-content', mx:'auto', borderRadius: '.5em', p: '0.3em' }}>
         <Typography textAlign="center">Filters</Typography>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'top', mx: 'auto', mt: '0.1em', justifyContent: 'center', bgcolor: 'primary.bg', borderRadius: '0.25em', width: 'fit-content', p:'0.3em'}}>
