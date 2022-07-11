@@ -95,8 +95,6 @@ async function checkIfUpvotedComment( name, ratingId ) {
   } else {
     if (data.length === 0) {
       return false
-      // props.addOnePoint(props.data.submitter_name)
-      // voteHelpful()
     } return true
   }
 }

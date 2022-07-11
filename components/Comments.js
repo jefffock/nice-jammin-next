@@ -38,10 +38,8 @@ function Comment({ comment, profile }) {
   async function validate() {
     if (!profile || (profile.name === comment.submitter_name)) {
       return false
-    } let data = await checkIfUpvotedComment(profile.name, comment.id)
-    if (data.length > 0) {
-      return false
-    } return true
+    } let alreadyVoted = await checkIfUpvotedComment(profile.name, comment.id)
+    return !alreadyVoted
   }
 
   return (
@@ -55,7 +53,7 @@ function Comment({ comment, profile }) {
         <Typography ml=".5em">{votes}</Typography>
       }
       </Stack>
-      </Box>
+    </Box>
   )
 }
 
@@ -69,8 +67,6 @@ export default function Comments({ version, song, date, location, comments, user
   const handleClose = () => {
     setOpen(false);
   };
-
-
 
   return (
     <Box>
