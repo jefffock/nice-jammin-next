@@ -34,7 +34,6 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
   const [successAlertText, setSuccessAlertText] = useState(null)
   const [tags, setTags] = useState([])
   const [date, setDate] = useState(null)
-  const [year, setYear] = useState(null)
   const [location, setLocation] = useState(null)
   const [tagsText, setTagsText] = useState('')
   const [rating, setRating] = useState(null)
@@ -89,8 +88,6 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
     setSuccessAlertText(null)
     if (date) {
       setDateErrorText(null)
-      let yearString = date.slice(0,4)
-      setYear(parseInt(yearString))
       if (jams && song) {
         let index = jams.findIndex(jam => {
           return (jam.song_name === song && jam.date === date);
@@ -101,8 +98,6 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
           setDateErrorText(null)
         }
       }
-    } else {
-      setYear(null)
     }
   }, [date, jams, song])
 
@@ -170,10 +165,6 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
     } if (date === '') {
       setDateErrorText('Please enter a date')
       return false
-    } if (date && year && artist) {
-      if (year < artistsAndDates[artist].start || (artistsAndDates[artist].end && year > artistsAndDates[artist].end)) {
-        setDateErrorText(`I don't think ${artist} played in ${year}. Imagine if they did, though!`)
-      }
     } if (!profile.can_write) {
       return false
     } if (location === '') {
@@ -262,113 +253,6 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
       } else {
         setSuccessAlertText(`Successfully added ${song} from ${date}. Thank you for contributing! It will be in the table the next time you refresh the page.`)
       }
-    }
-  }
-
-  let artistsAndDates = {
-    'The Allman Brothers Band': {
-      start: 1969,
-      end: 2014
-    },
-    'Billy Strings': {
-      start: 2013,
-      end: null
-    },
-    'Dopapod': {
-      start: 2008,
-      end: null
-    },
-    'Furthur': {
-      start: 2009,
-      end: 2014
-    },
-    'Goose': {
-      start: 2014,
-      end: null
-    },
-    "Gov't Mule": {
-      start: 1994,
-      end: null
-    },
-    'Grateful Dead': {
-      start: 1965,
-      end: 1995
-    },
-    'Greensky Bluegrass': {
-      start: 2000,
-      end: null
-    },
-    'Jerry Garcia Band, Legion of Mary': {
-      start: 1960,
-      end: 1995
-    },
-    "Joe Russo's Almost Dead": {
-      start: 2013,
-      end: null
-    },
-    'Lettuce': {
-      start: 1992,
-      end: null
-    },
-    'Lotus': {
-      start: 1999,
-      end: null
-    },
-    'Medeski Martin & Wood': {
-      start: 1991,
-      end: null
-    },
-    'moe.': {
-      start: 1989,
-      end: null
-    },
-    'Osees': {
-      start: 1997,
-      end: null
-    },
-    'Phil Lesh & Friends': {
-      start: 1994,
-      end: null
-    },
-    'Phish': {
-      start: 1983,
-      end: null
-    },
-    'String Cheese Incident': {
-      start: 1993,
-      end: null
-    },
-    'Trey Anastasio, TAB': {
-      start: 1998,
-      end: null
-    },
-    "Umphrey's McGee": {
-      start: 1997,
-      end: null
-    },
-    'Widespread Panic': {
-      start: 1986,
-      end: null
-    },
-    'Railroad Earth': {
-      start: 2001,
-      end: null
-    },
-    'Sound Tribe Sector 9 (STS9)': {
-      start: 1998,
-      end: null
-    },
-    'King Gizzard & the Lizard Wizard': {
-      start: 2010,
-      end: null
-    },
-    'Dead & Company': {
-      start: 2015,
-      end: null
-    },
-    'Dizgo': {
-      start: 2016,
-      end: null
     }
   }
 
