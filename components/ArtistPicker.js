@@ -13,6 +13,7 @@ let artists = [
   'Aqueous',
   'Billy Strings',
   'Dead & Company',
+  'Disco Biscuits',
   'Dizgo',
   'Dopapod',
   'Furthur',
