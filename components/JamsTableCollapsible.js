@@ -103,6 +103,7 @@ function Row({ row, user, profile, songs }) {
   const [open, setOpen] = useState(false);
   const [tags, setTags] = useState('')
   const [comments, setComments] = useState(null)
+  const [hasComments, setHasComments] = useState(false)
 
   useEffect(() => {
     let allTags = ''
@@ -201,6 +202,12 @@ function Row({ row, user, profile, songs }) {
       async function getComments(versionId) {
         let newComments = await fetchComments(versionId)
         if (newComments && newComments !== null) {
+          for (var i = 0; i < newComments.length; i++) {
+            if (newComments[i].comment.length > 0) {
+              setHasComments(true)
+              break
+            }
+          }
           setComments(newComments)
         }
       } getComments(row.id)
@@ -242,7 +249,7 @@ function Row({ row, user, profile, songs }) {
               <Typography>{row.num_ratings} rating{row.num_ratings === 1 ? '' : 's'}</Typography>
               <Typography>Added by {row.submitter_name}. Thank you!</Typography>
               <RateVersion song={row.song_name} date={row.date} location={row.location} tags={tags} user={user} profile={profile} jam={row} songs={songs}/>
-              {comments && comments.length > 0 &&
+              {hasComments &&
               <Comments song={row.song_name} date={row.date} location={row.location} comments={comments}  user={user} profile={profile}/>
               }
               <ReportIssue user={user} profile={profile} version={row.id}/>
