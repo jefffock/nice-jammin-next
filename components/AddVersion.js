@@ -286,6 +286,10 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
       start: 2014,
       end: null
     },
+    "Gov't Mule": {
+      start: 1994,
+      end: null
+    },
     'Grateful Dead': {
       start: 1965,
       end: 1995

@@ -16,6 +16,7 @@ let artists = [
   'Dopapod',
   'Furthur',
   'Goose',
+  "Gov't Mule",
   'Grateful Dead',
   'Greensky Bluegrass',
   'Jerry Garcia Band, Legion of Mary',
