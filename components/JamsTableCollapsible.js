@@ -72,7 +72,8 @@ const headCellsWithoutRatings = [
   },
   {
     id: 'date',
-    center: true,
+    // center: true,
+    numeric: false,
     disablePadding: false,
     label: 'Date'
   },
@@ -281,7 +282,7 @@ function Row({ row, user, profile, songs, showRatings }) {
         <TableCell sx={{ maxWidth: '10px', textAlign:'center'}}>{row.avg_rating}</TableCell>
         }
         <TableCell sx={{ maxWidth: '10px'}}>{row.artist}</TableCell>
-        <TableCell>
+        <TableCell padding="none">
           <IconButton
             aria-label="expand row"
             size="small"

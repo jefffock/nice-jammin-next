@@ -173,7 +173,7 @@ export default function App({ jams }) {
       <Welcome />
       <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate} songs={songs} song={song} setSong={setSong}/>
       <Typography fontSize="20px" textAlign="center" mt="1em">Filtered Jams</Typography>
-      <FormControl>
+      <FormControl sx={{ display: 'flex', alignItems:'center'}}>
         <FormControlLabel control={<Checkbox checked={showRatings}
         onChange={handleShowRatingsChange}/>} label="Show Ratings"/>
       </FormControl>
