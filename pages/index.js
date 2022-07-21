@@ -15,6 +15,9 @@ import TopBar from '../components/AppBar'
 import Welcome from '../components/Welcome'
 import dynamic from 'next/dynamic'
 import JamsTableVirtualized from '../components/JamsTableVirtualized'
+import Checkbox from '@mui/material/Checkbox';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 const DynamicContributorsTable = dynamic(() => import('../components/TopContributors'), {
   suspense: true
@@ -53,6 +56,7 @@ export default function App({ jams }) {
   const [afterDate, setAfterDate] = useState('')
   const [tagsSelected, setTagsSelected] = useState([])
   const router = useRouter()
+  const [showRatings, setShowRatings] = useState(false)
 
   useEffect(() => {
     setSession(supabase.auth.session())
@@ -63,7 +67,6 @@ export default function App({ jams }) {
       }
     })
   }, [])
-
 
   useEffect(() => {
     setUser(supabase.auth.user())
@@ -136,6 +139,10 @@ export default function App({ jams }) {
     }
   }, [user, profile])
 
+  function handleShowRatingsChange(e) {
+    setShowRatings(e.target.checked)
+  }
+
   return (
     <ThemeProvider theme={theme}>
     <Head>
@@ -166,10 +173,14 @@ export default function App({ jams }) {
       <Welcome />
       <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate} songs={songs} song={song} setSong={setSong}/>
       <Typography fontSize="20px" textAlign="center" mt="1em">Filtered Jams</Typography>
+      <FormControl>
+        <FormControlLabel control={<Checkbox checked={showRatings}
+        onChange={handleShowRatingsChange}/>} label="Show Ratings"/>
+      </FormControl>
       <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} afterDate={afterDate} setBeforeDate={setBeforeDate} setAfterDate={setAfterDate} song={song} setSong={setSong}/>
       <Suspense fallback={<p>Loading....</p>}>
         {/* <DynamicJamsTableVirtualized jams={jams} sortedJams={sortedJams}  order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} setUpdatedJams={setUpdatedJams} songs={songs} setSongs={setSongs}/> */}
-        <DynamicJamsTable jams={jams} sortedJams={sortedJams}  order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} setUpdatedJams={setUpdatedJams} songs={songs} setSongs={setSongs}/>
+        <DynamicJamsTable jams={jams} sortedJams={sortedJams}  order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} setUpdatedJams={setUpdatedJams} songs={songs} setSongs={setSongs} showRatings={showRatings}/>
         <br></br>
         <DynamicAddVersion songs={songs} setSongs={setSongs} jams={updatedJams} user={user} profile={profile} setUpdatedJams={setUpdatedJams} artist={artist} setArtist={setArtist} song={song} setSong={setSong}/>
         <DynamicGratitude />

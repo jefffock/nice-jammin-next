@@ -78,7 +78,7 @@ function IdeaRow({ currentIdea, user, profile, loading, setLoading }) {
     idea.tag_idea ? 'Tag' : 'Other'}</TableCell>
     <TableCell
     onClick={handleVote}>{votes ? votes : idea.votes}&nbsp;&nbsp;&nbsp;{<ThumbUpOutlinedIcon sx={{ verticalAlign: 'bottom', '&:hover': { color: 'primary.main' } }}/>}</TableCell>
-    <TableCell>{idea.user_name}</TableCell>
+    {/* <TableCell>{idea.user_name}</TableCell> */}
   </TableRow>
   )
 }
@@ -139,7 +139,7 @@ export default function IdeasTable({ user, profile }) {
             <TableCell sx={{ bgcolor: 'primary.main' }}>Idea</TableCell>
             <TableCell sx={{ bgcolor: 'primary.main' }}>Type</TableCell>
             <TableCell sx={{ bgcolor: 'primary.main' }} align="right">Supporters</TableCell>
-            <TableCell sx={{ bgcolor: 'primary.main' }}>User</TableCell>
+            {/* <TableCell sx={{ bgcolor: 'primary.main' }}>User</TableCell> */}
           </TableRow>
         </TableHead>
         {ideas &&
