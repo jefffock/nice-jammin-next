@@ -18,6 +18,7 @@ import JamsTableVirtualized from '../components/JamsTableVirtualized'
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Sorter from '../components/Sorter';
 
 const DynamicContributorsTable = dynamic(() => import('../components/TopContributors'), {
   suspense: true
@@ -112,6 +113,9 @@ export default function App({ jams }) {
       : (a, b) => -descendingComparator(a, b, orderBy);
     }
     function sortJams() {
+      console.log('filteredJams', filteredJams[0]);
+      console.log('order', order);
+      console.log('orderBy', orderBy);
       let newSortedJams = filteredJams.slice().sort(getComparator(order, orderBy))
       setSortedJams(newSortedJams)
     }
@@ -172,6 +176,7 @@ export default function App({ jams }) {
       <TopBar showButton={true} user={user} session={session} router={router}/>
       <Welcome />
       <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate} songs={songs} song={song} setSong={setSong}/>
+      <Sorter orderBy={orderBy} setOrderBy={setOrderBy} setOrder={setOrder}/>
       <Typography fontSize="20px" textAlign="center" mt="1em">
         {(!song && !artist && !beforeDate && !afterDate && tagsSelected.length === 0) ?
         'All Jams' : 'Filtered Jams'}
