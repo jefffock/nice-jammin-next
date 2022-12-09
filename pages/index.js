@@ -157,22 +157,25 @@ export default function App({ jams }) {
       }
       {artist && !song &&
       <>
-      <title>{artist} Best Jams - NiceJammin.com</title>
+      <title>{artist} Great Jams - NiceJammin.com</title>
       <meta name="keywords" content="best jam jams {artist}"></meta>
       </>
       }
       {song && !artist &&
-      <><title>{song} Best Jams - NiceJammin.com</title></>
+      <><title>{song} Great Jams - NiceJammin.com</title></>
       }
       {artist && song &&
-      <><title>{artist} {song} Best Jams - NiceJammin.com</title></>
+      <><title>{artist} {song} Great Jams - NiceJammin.com</title></>
       }
     </Head>
     <Box sx={{ bgcolor: 'primary.graybg', minHeight: '100vh', maxWidth: '100vw', overflow: 'hidden'}}>
       <TopBar showButton={true} user={user} session={session} router={router}/>
       <Welcome />
       <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate} songs={songs} song={song} setSong={setSong}/>
-      <Typography fontSize="20px" textAlign="center" mt="1em">Filtered Jams</Typography>
+      <Typography fontSize="20px" textAlign="center" mt="1em">
+        {(!song && !artist && !beforeDate && !afterDate && tagsSelected.length === 0) ?
+        'All Jams' : 'Filtered Jams'}
+      </Typography>
       <FormControl sx={{ display: 'flex', alignItems:'center'}}>
         <FormControlLabel control={<Checkbox checked={showRatings}
         onChange={handleShowRatingsChange}/>} label="Show Ratings"/>
