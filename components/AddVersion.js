@@ -366,27 +366,28 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
         <DialogTitle>Add a Great Jam</DialogTitle>
         <DialogContent sx={{ minHeight: '300px', minWidth: '300px' }}>
           {!user &&
-            <Alert severity="warning" sx={{ mb: '1em' }}>Please log in to contribute - thank you!</Alert>
+            <Alert severity="error" sx={{ mb: '1em' }}>Please <a href="login">log in</a> to contribute - thank you!</Alert>
           }
+          {user &&
+            <ArtistPicker artist={artist} setArtist={setArtist} size={'normal'} my={'1em'}/>
+          }
+          {artistErrorText &&
+            <Alert severity="error" sx={{ my: '1em' }}>{artistErrorText}</Alert>
+          }
+          {artist &&
           <SongPicker songs={songs} song={song} setSong={setSong} wide={true} size={'normal'} mx={'0.25em'} my={'1em'}/>
+          }
           {!songExists && song &&
           <>
           <Alert severity="warning" sx={{ mb: '1em' }}>{song} hasn&apos;t been added yet.</Alert>
           <AddSong song={song} user={user} songs={songs} setSong={setSong} profile={profile} setSongs={setSongs} artist={artist} setArtist={setArtist}/>
           </>
           }
-
           {songErrorText &&
           <Alert severity="error" sx={{ my: '1em' }}>{songErrorText}</Alert>
           }
-          {songExists &&
-          <ArtistPicker artist={artist} setArtist={setArtist} size={'normal'} my={'1em'}/>
-          }
-          {artistErrorText &&
-          <Alert severity="error" sx={{ my: '1em' }}>{artistErrorText}</Alert>
-          }
-          {songExists && artist &&
-          <DatePicker setDate={setDate} my={'1em'} date={date}/>
+          {artist &&
+            <DatePicker setDate={setDate} my={'1em'} date={date}/>
           }
           {dateErrorText &&
           <Alert severity="error" sx={{ my: '1em' }}>{dateErrorText}</Alert>

@@ -58,7 +58,7 @@ export default function ArtistPicker({ artist, setArtist, size, my }) {
         <InputLabel id="artist-select">Band</InputLabel>
         <Select
           labelId="artist-select"
-          value={artist ? artist : ''}
+          value={artist ?? 'All Bands'}
           label="Band"
           onChange={handleChange}
           >

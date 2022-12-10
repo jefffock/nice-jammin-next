@@ -52,7 +52,7 @@ export default function App({ jams }) {
   const [filteredJams, setFilteredJams] = useState(jams)
   const [sortedJams, setSortedJams] = useState(jams)
   const [order, setOrder] = useState('desc');
-  const [orderBy, setOrderBy] = useState('avg_rating');
+  const [orderBy, setOrderBy] = useState('date');
   const [beforeDate, setBeforeDate] = useState('')
   const [afterDate, setAfterDate] = useState('')
   const [tagsSelected, setTagsSelected] = useState([])
