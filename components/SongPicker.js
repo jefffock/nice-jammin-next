@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box'
 
-export default function SongPicker({ artist, songs, song, setSong, wide, size, mx, my }) {
+export default function SongPicker({ artist, songs, song, setSong, setlist, wide, size, mx, my }) {
   const [value, setValue] = useState(song || '');
   const [inputValue, setInputValue] = useState(song || '');
   const [uniqueSongs, setUniqueSongs] = useState(null)
@@ -17,45 +17,48 @@ export default function SongPicker({ artist, songs, song, setSong, wide, size, m
 
   useEffect(() => {
     let titlesOnly = new Set()
-    if (songs) {
-      for (var i = 0; i < songs.length; i++) {
-        titlesOnly.add(songs[i].song)
-      }
-      let formattedSongs = []
-      titlesOnly.forEach(song => {
-        formattedSongs.push({
-          label: song
-        })
-      })
-      setUniqueSongs(formattedSongs)
-    }
-  }, [songs])
-
-  useEffect(() => {
-    let artistSongSet = new Set()
     let formattedSongs = []
-    if (artist) {
-      //if artist is gd, jrad, furthur, dead and co
-      if (artist === 'Grateful Dead' || artist === "Joe Russo's Almost Dead" || artist === 'Furthur' || artist === 'Dead & Company') {
-        for (var i = 0; i < songs.length; i++) {
-          if (songs[i].artist === 'Grateful Dead' || songs[i].artist === "Joe Russo's Almost Dead" || songs[i].artist === 'Furthur' || songs[i].artist === 'Dead & Company') {
-            artistSongSet.add(songs[i].song)
-          }
-        } artistSongSet.forEach(song => {
-          formattedSongs.push({ label: song })
+      if (setlist) {
+        setlist.forEach(song => {
+          titlesOnly.add(song)
         })
-      } else {
-        for (var i = 0; i < songs.length; i++) {
-          if (songs[i].artist === artist) {
-            formattedSongs.push({ label: songs[i].song })
-          }
+      }
+      else if (songs) {
+        if (artist) { 
+        let artistSongs = new Set()
+        let otherSongs = new Set()
+        if (artist === "Joe Russo's Almost Dead" || artist === 'Furthur' || artist === 'Dead & Company') {
+          for (var i = 0; i < songs.length; i++) {
+            if (songs[i].artist === 'Grateful Dead' || songs[i].artist === artist) {
+              artistSongs.add(songs[i].song)
+            } else {
+              otherSongs.add(songs[i].song)
+            }
+          } 
+        } else {
+          for (var i = 0; i < songs.length; i++) {
+            if (songs[i].artist === artist) {
+             artistSongs.add(songs[i].song)
+            } else {
+              otherSongs.add(songs[i].song)
+            }
+          } 
         }
-      } setSongsByArtist(formattedSongs)
-        //add songs from any of those artists
-      //else
-        //add songs from the artist
+        artistSongs.forEach(song => titlesOnly.add(song))
+        otherSongs.forEach(song => titlesOnly.add(song))
+      } else { //no artist
+        songs.forEach(song => {
+          titlesOnly.add(song.song);
+        })
+      }
     }
-  }, [artist])
+    titlesOnly.forEach(song => {
+      formattedSongs.push({
+        label: song
+      })
+    })
+    setUniqueSongs(formattedSongs)
+  }, [songs, setlist, artist])
 
   useEffect(() => {
     setSong(inputValue)
@@ -69,11 +72,14 @@ export default function SongPicker({ artist, songs, song, setSong, wide, size, m
   }, [song])
 
     return (
-      <Box mx={mx ? mx : '0.25em'}  my={my ? my : '0.25em'} sx={{ minWidth: '240px', maxWidth: '240px' }}>
+      <Box mx={mx ? mx : '0.25em'}  my={my ? my : '0.25em'} sx={{ 
+        minWidth: '240px',
+        maxWidth: '240px',
+      }}>
         <Autocomplete
           // disablePortal
           ListboxProps={{
-            sx: {maxHeight: '90vh'}
+            sx: {maxHeight: '50vh'}
           }}
           freeSolo
           selectOnFocus={true}
@@ -92,8 +98,7 @@ export default function SongPicker({ artist, songs, song, setSong, wide, size, m
           id="song-picker"
           // maxHeight="95vh"
           // sx={{maxHeight: '95vh'}}
-          options={artist ? songsByArtist :
-            (uniqueSongs ? uniqueSongs : [{ label: 'Loading songs...' }])}
+          options={uniqueSongs ?? [{ label: 'Loading songs...' }]}
           size={size ? size : 'small'}
           renderInput={(params) => <TextField {...params}
           // InputProps={{

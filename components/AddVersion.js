@@ -83,6 +83,7 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
   const [tensionRelease, setTensionRelease] = useState(false)
   const [trance, setTrance] = useState(false)
   const [upbeat, setUpbeat] = useState(false)
+  const [setlist, setSetlist] = useState(null)
 
   useEffect(() => {
     setSuccessAlertText(null)
@@ -130,6 +131,40 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
     setLocation(null)
     setOpen(false);
   };
+
+  useEffect(() => {
+    if (artist === 'Phish' && date) {
+      async function getPhishSetlist() {
+        let data = {
+          date: date
+        }
+        await fetch('/api/phish/setlist', {
+          method: 'POST',
+          body: JSON.stringify(data)
+        })
+        .then(setlist => setlist.json())
+        .then(setlist => {
+          if (setlist && setlist.length > 0) {
+            if (setlist[0]) {
+            let setlistTitles = [];
+            setlist.forEach(element => {
+              setlistTitles.push(element.song)
+            });
+            setSetlist(setlistTitles)
+          }
+        }
+      })
+      } 
+      try {
+        getPhishSetlist()
+      }
+      catch (error) {
+        console.error(error)
+      }
+    } else {
+      setSetlist(null)
+    }
+  }, [artist, date])
 
   const handleRatingChange = (e) => {
     setRating(e.target.value)
@@ -375,7 +410,7 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
             <Alert severity="error" sx={{ my: '1em' }}>{artistErrorText}</Alert>
           }
           {artist &&
-          <SongPicker songs={songs} song={song} setSong={setSong} wide={true} size={'normal'} mx={'0.25em'} my={'1em'}/>
+          <SongPicker artist={artist} songs={songs} song={song} setSong={setSong} setlist={setlist} wide={true} size={'normal'} mx={'0.25em'} my={'1em'}/>
           }
           {!songExists && song &&
           <>

@@ -109,7 +109,6 @@ async function upvoteComment(name, ratingId) {
 }
 
 async function addOnePoint(profileName) {
-  console.log('in add One Point', profileName)
   const { error } = await supabase.rpc( 'add_one_point', { username: profileName })
   if (error) {
     console.error('error adding one point', error)
@@ -117,7 +116,6 @@ async function addOnePoint(profileName) {
 }
 
 async function addTenPoints(profileName) {
-  console.log('in add Ten Points', profileName)
   const { error } = await supabase.rpc( 'add_ten_points', { username: profileName })
   if (error) {
     console.error('error adding ten points', error)
@@ -140,7 +138,6 @@ async function addRatingCountToSong(songId) {
 }
 
 async function addRatingCountToVersion(versionId) {
-  console.log('in addRatingCountToVersion', versionId)
   let version_id = parseInt(versionId)
   const { error } = await supabase.rpc( 'increment_version_rating_count', { versionid: version_id })
   if (error) {
@@ -149,7 +146,6 @@ async function addRatingCountToVersion(versionId) {
 }
 
 async function calcAverageForVersion(versionId) {
-  console.log('in calcAverageForVersion', versionId)
   let version = parseInt(versionId)
   const { error } = await supabase.rpc( 'calc_average', { versionid: version })
   if (error) {
