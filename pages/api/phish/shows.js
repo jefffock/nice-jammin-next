@@ -1,8 +1,11 @@
 export default function handler(req, res) {
+  let data = JSON.parse(req.body)
+  let url = `https://api.phish.net/v5/setlists/showdate/${data.date}.json?apikey=${process.env.PHISHNET_API_KEY}`
   try {
-    fetch(`https://api.phish.net/v5/songs.json?apikey=${process.env.PHISHNET_API_KEY}`)
-      .then(data => {
-        res.status(200).json(data);
+    fetch(url)
+      .then(data => data.json())
+      .then(setlist => {
+        res.status(200).send(JSON.stringify(setlist.data));
       })
   }
   catch (error) {

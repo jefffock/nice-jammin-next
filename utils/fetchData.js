@@ -24,7 +24,7 @@ async function fetchArtists() {
   if (error) {
     console.error(error)
   } else {
-    setArtists(data)
+    return data
   }
 }
 
@@ -65,7 +65,7 @@ async function fetchVersions(songId) {
   if (error) {
     console.error('error fetching versions', error)
   } else if (data) {
-    setVersions(data)
+    return data
   }
 }
 
