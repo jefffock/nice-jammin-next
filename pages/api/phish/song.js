@@ -20,7 +20,6 @@ export default async function handler(req, res) {
       fetch(url)
         .then(data => data.json())
         .then(versions => {
-          console.log('typeof ', typeof versions.data, Array.isArray(versions.data))
           const versionsLessData = versions.data.map(({ showdate, isjamchart, venue, city, state, country, artistid }) => ({ showdate, isjamchart, venue, city, state, country, artistid }))
             
             // version => {

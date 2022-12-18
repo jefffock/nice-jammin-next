@@ -36,14 +36,15 @@ A full request might look like this: https://api.phish.net/v5/shows/showyear/198
 
 Be careful. Requesting endpoints with no arguments, e.g. /setlists/ or /shows/, can create a result set that is both slow and very large. We recommend that you do not use these naked methods for embedding in a webpage or a synchronous application.
 */
-export default function handler(req, res) {
-  let data = JSON.parse(req.body)
-  let url = `https://api.phish.net/v5/setlists/showdate/${data.date}.json?apikey=${process.env.PHISHNET_API_KEY}`
+export default async function handler(req, res) {
+  const body = JSON.parse(req.body)
+  let url = `https://api.phish.net/v5/setlists/showdate/${body.date}.json?apikey=${process.env.PHISHNET_API_KEY}`
   try {
     fetch(url)
       .then(data => data.json())
       .then(setlist => {
-        res.status(200).send(JSON.stringify(setlist.data));
+        const titlesInSetlist = setlist.data.map(({ song }) => song)
+        res.status(200).send(titlesInSetlist);
       })
   }
   catch (error) {

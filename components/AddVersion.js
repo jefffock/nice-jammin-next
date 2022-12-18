@@ -133,38 +133,34 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
   };
 
   useEffect(() => {
-    if (artist === 'Phish' && date) {
-      async function getPhishSetlist() {
-        let data = {
+    async function getPhishSetlist() {
+      const data = {
+        "date": date
+      }
+      console.log('data', data)
+      await fetch('/api/phish/setlist', {
+        method: 'POST',
+        body: JSON.stringify({
           date: date
-        }
-        await fetch('/api/phish/setlist', {
-          method: 'POST',
-          body: JSON.stringify(data)
         })
-        .then(setlist => setlist.json())
-        .then(setlist => {
-          if (setlist && setlist.length > 0) {
-            if (setlist[0]) {
-            let setlistTitles = [];
-            setlist.forEach(element => {
-              setlistTitles.push(element.song)
-            });
-            setSetlist(setlistTitles)
-          }
-        }
       })
-      } 
+      .then(setlist => setlist.json())
+      .then(setlist => {
+        console.log('setlist', setlist);
+        setSetlist(setlist)
+      })
+    } 
+    if (artist === 'Phish' && date && !song) {
       try {
         getPhishSetlist()
       }
       catch (error) {
         console.error(error)
       }
-    } else {
+    } else if (artist === 'Phish' && song && !date) {
       setSetlist(null)
     }
-  }, [artist, date])
+  }, [artist, date, song])
 
   const handleRatingChange = (e) => {
     setRating(e.target.value)
