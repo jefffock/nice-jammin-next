@@ -11,8 +11,9 @@ export default function ShowPicker({ show, shows, setShow, setDate, setLocation,
 
   const handleChange = (event) => {
     console.log('valueee', event.target.value)
-      // setShow(event.target.value);
-      // setDate
+      setShow(event.target.value);
+      setDate(event.target.value.showdate)
+      setLocation(event.target.value.location)
   };
 
   return (
@@ -25,9 +26,12 @@ export default function ShowPicker({ show, shows, setShow, setDate, setLocation,
           label="Show"
           onChange={handleChange}
           >
-          {shows.map((show, index) => (
-            <MenuItem key={index} value={show}>{show.label}</MenuItem>
-          ))}
+          {shows.map((show, index) => {
+            let label = (show.isjamchart === '1' ? '☆ ' : '') + (show.alreadyAdded ? '(Added) ' : '') + show.label
+            return (
+              <MenuItem key={index} value={show} disabled={show.alreadyAdded}>{label}</MenuItem>
+            )}
+          )}
         </Select>
       </FormControl>
     </Box>
