@@ -4,6 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Box from '@mui/material/Box'
+import ListItem from '@mui/material/ListItem';
 
 
 
@@ -17,19 +18,26 @@ export default function ShowPicker({ show, shows, setShow, setDate, setLocation,
   };
 
   return (
-    <Box my={my ? my : '0.25em'}>
-      <FormControl sx={{ minWidth: 120, maxWidth: 240, mx:'0.25em' }} size={size ? size : 'small' }>
+    <Box  my={my ? my : '0.25em'} 
+    sx={{ 
+      minWidth: '120px',
+      maxWidth: '120px',
+      maxHeight: 200
+    }}
+    >
+      <FormControl sx={{ minWidth: 120, maxWidth: 120, mx:'0.25em' }} size={'small'}>
         <InputLabel id="show-select">Show</InputLabel>
         <Select
           labelId="show-select"
           value={show ?? ''}
           label="Show"
           onChange={handleChange}
+          MenuProps={{ PaperProps: { sx: { maxHeight: '80vh' } } }}
           >
           {shows.map((show, index) => {
             const label = (show.isjamchart === '1' ? '☆ ' : '') + (show.alreadyAdded ? '(Added) ' : '') + show.label
             return (
-              <MenuItem key={index} value={show} disabled={show.alreadyAdded}>{label}</MenuItem>
+              <MenuItem key={index} value={show} disabled={show.alreadyAdded} sx={{ whiteSpace: 'normal'}}>{label}</MenuItem>
             )}
           )}
         </Select>

@@ -15,4 +15,6 @@ a {
 
 * {
   box-sizing: border-box;
+  white-space: "unset";
+  word-break: "break-all";
 }

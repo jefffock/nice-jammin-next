@@ -25,7 +25,7 @@ export default async function handler(req, res) {
             .filter((version) => version.artistid === "1")
             .map((version) => {
               if (version.artistid === "1") {
-                const date = new Date(version.showdate);
+                const date = new Date(version.showdate + 'T18:00:00Z');
                 return {
                   showdate: version.showdate,
                   isjamchart: version.isjamchart,

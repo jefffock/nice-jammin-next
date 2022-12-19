@@ -147,11 +147,16 @@ export default function AddVersion({
   };
 
   useEffect(() => {
+    console.log('in the fun use effect', artist, song, date)
     if (artist === "Phish") {
+      console.log('artist is phish')
       if (!song || song === '') {
         console.log('setting shows to null')
         setShows(null)
-      } else if (date && !song) {
+      } if (!date && setlist) {
+        setSetlist(null)
+      }  if (date) {
+        console.log('going to get setlist')
         async function getPhishSetlist() {
           const data = JSON.stringify({
             date: date,
@@ -170,7 +175,10 @@ export default function AddVersion({
         } catch (error) {
           console.error(error);
         }
-      } else if (!date && song && songExists) {
+      } 
+      console.log('d s sE', date, song, songExists)
+      if (song && songExists) {
+        console.log('going to get shows')
         const data = JSON.stringify({
           song: song,
         });
@@ -207,7 +215,7 @@ export default function AddVersion({
         }
       }
     }
-  }, [artist, date, song]);
+  }, [artist, date, song, songExists]);
 
   useEffect(() => {
     console.log("shows", shows);
@@ -277,6 +285,10 @@ export default function AddVersion({
     }
     return true;
   };
+
+  const clearDate = () => {
+    setDate('')
+  }
 
   const insertVersion = async () => {
     const { data, error } = await supabase
@@ -516,6 +528,7 @@ export default function AddVersion({
               song={song}
               setSong={setSong}
               setlist={setlist}
+              setSetlist={setSetlist}
               wide={true}
               size={"normal"}
               mx={"0.25em"}
@@ -547,6 +560,8 @@ export default function AddVersion({
           {(artist && !shows) && (
             <DatePicker setDate={setDate} my={"1em"} date={date} />
           )}
+          {artist && date && !shows &&
+          <Typography onClick={() => clearDate()}>Clear Date</Typography>}
           {dateErrorText && (
             <Alert severity="error" sx={{ my: "1em" }}>
               {dateErrorText}
