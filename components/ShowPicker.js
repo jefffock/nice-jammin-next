@@ -27,7 +27,7 @@ export default function ShowPicker({ show, shows, setShow, setDate, setLocation,
           onChange={handleChange}
           >
           {shows.map((show, index) => {
-            let label = (show.isjamchart === '1' ? '☆ ' : '') + (show.alreadyAdded ? '(Added) ' : '') + show.label
+            const label = (show.isjamchart === '1' ? '☆ ' : '') + (show.alreadyAdded ? '(Added) ' : '') + show.label
             return (
               <MenuItem key={index} value={show} disabled={show.alreadyAdded}>{label}</MenuItem>
             )}

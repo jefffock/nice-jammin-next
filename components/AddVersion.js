@@ -148,7 +148,10 @@ export default function AddVersion({
 
   useEffect(() => {
     if (artist === "Phish") {
-      if (date && !song) {
+      if (!song || song === '') {
+        console.log('setting shows to null')
+        setShows(null)
+      } else if (date && !song) {
         async function getPhishSetlist() {
           const data = JSON.stringify({
             date: date,
@@ -167,8 +170,7 @@ export default function AddVersion({
         } catch (error) {
           console.error(error);
         }
-      }
-      if (!date && song && songExists) {
+      } else if (!date && song && songExists) {
         const data = JSON.stringify({
           song: song,
         });
@@ -193,8 +195,9 @@ export default function AddVersion({
                 ({ showdate, isjamchart, location, artistid, label }) => {
                   if (nJVersions.indexOf(showdate) === -1) {
                     return { showdate, label, location, isjamchart, alreadyAdded: false };
+                  } else {
+                    return { showdate, label, location, isjamchart, alreadyAdded: true };
                   }
-                  return { showdate, label, location, isjamchart, alreadyAdded: true };
                 }
               );
               setShows(comboVersions);
