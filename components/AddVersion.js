@@ -13,6 +13,7 @@ import SongPicker from './SongPicker'
 import ArtistPicker from './ArtistPicker'
 import TagPicker from './TagPicker'
 import DatePicker from './DatePicker'
+import ShowPicker from './ShowPicker'
 import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
@@ -84,6 +85,8 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
   const [trance, setTrance] = useState(false)
   const [upbeat, setUpbeat] = useState(false)
   const [setlist, setSetlist] = useState(null)
+  const [show, setShow] = useState(null)
+  const [shows, setShows] = useState(null)
 
   useEffect(() => {
     setSuccessAlertText(null)
@@ -132,35 +135,57 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
     setOpen(false);
   };
 
+
   useEffect(() => {
-    async function getPhishSetlist() {
-      const data = {
-        "date": date
+    if (artist === 'Phish') {
+      if (date && !song) {
+        async function getPhishSetlist() {
+          const data = JSON.stringify({
+            date: date
+          })
+          await fetch('/api/phish/setlist', {
+            method: 'POST',
+            body: data
+          })
+          .then(setlist => setlist.json())
+          .then(setlist => {
+            setSetlist(setlist)
+          })
+        }
+        try {
+          getPhishSetlist()
+        }
+        catch (error) {
+          console.error(error)
+        }
+      } if (!date && song && songExists) {
+        async function getPhishVersions() {
+          const data = JSON.stringify({
+            song: song
+          })
+          await fetch('/api/phish/song', {
+            method: 'POST',
+            body: data
+          })
+          .then(versions => versions.json())
+          .then(versions => {
+            setShows(versions)
+          })
+        }
+        try {
+          getPhishVersions()
+        }
+        catch (error) {
+          console.error(error)
+        }
       }
-      console.log('data', data)
-      await fetch('/api/phish/setlist', {
-        method: 'POST',
-        body: JSON.stringify({
-          date: date
-        })
-      })
-      .then(setlist => setlist.json())
-      .then(setlist => {
-        console.log('setlist', setlist);
-        setSetlist(setlist)
-      })
     } 
-    if (artist === 'Phish' && date && !song) {
-      try {
-        getPhishSetlist()
-      }
-      catch (error) {
-        console.error(error)
-      }
-    } else if (artist === 'Phish' && song && !date) {
-      setSetlist(null)
-    }
   }, [artist, date, song])
+
+  useEffect(() => {
+    console.log('shows', shows)
+  }, [shows])
+  
 
   const handleRatingChange = (e) => {
     setRating(e.target.value)
@@ -417,12 +442,15 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, setUp
           {songErrorText &&
           <Alert severity="error" sx={{ my: '1em' }}>{songErrorText}</Alert>
           }
-          {artist &&
+          {artist && !shows &&
             <DatePicker setDate={setDate} my={'1em'} date={date}/>
           }
           {dateErrorText &&
           <Alert severity="error" sx={{ my: '1em' }}>{dateErrorText}</Alert>
           }
+          {artist && shows &&
+          <ShowPicker show={show} shows={shows} setShow={setShow} setDate={setDate} setlocation={setLocation}/>
+          } 
           {songExists && artist && date &&
           <Box mx="0.25em" my="1em">
             <TextField
