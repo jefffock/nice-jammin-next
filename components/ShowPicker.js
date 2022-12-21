@@ -18,14 +18,8 @@ export default function ShowPicker({ show, shows, setShow, setDate, setLocation,
   };
 
   return (
-    <Box  my={my ? my : '0.25em'} 
-    sx={{ 
-      minWidth: '120px',
-      maxWidth: '120px',
-      maxHeight: 200
-    }}
-    >
-      <FormControl sx={{ minWidth: 120, maxWidth: 120, mx:'0.25em' }} size={'small'}>
+    <Box>
+      <FormControl sx={{ minWidth: 120, mx:'0.25em' }}>
         <InputLabel id="show-select">Show</InputLabel>
         <Select
           labelId="show-select"

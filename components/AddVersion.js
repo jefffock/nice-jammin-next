@@ -576,6 +576,9 @@ export default function AddVersion({
               setLocation={setLocation}
             />
           )}
+          {date && show &&
+          <Typography sx={{ mx: '0.25em', my: '1em' }}>Date: {new Date(show.showdate + 'T18:00:00Z').toLocaleDateString()}</Typography>
+          }
           {songExists && artist && date && (
             <Box mx="0.25em" my="1em">
               <TextField
