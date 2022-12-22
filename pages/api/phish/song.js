@@ -5,7 +5,6 @@ import { supabase } from "../../../utils/supabaseClient";
 export default async function handler(req, res) {
   const body = JSON.parse(req.body);
   let songName = body.song;
-  console.log("songName", songName);
   try {
     let songId
     switch (songName) {

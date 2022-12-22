@@ -11,7 +11,6 @@ import ListItem from '@mui/material/ListItem';
 export default function ShowPicker({ show, shows, setShow, setDate, setLocation, size, my }) {
 
   const handleChange = (event) => {
-    console.log('valueee', event.target.value)
       setShow(event.target.value);
       setDate(event.target.value.showdate)
       setLocation(event.target.value.location)

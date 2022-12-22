@@ -5,7 +5,6 @@ import { supabase } from "../../utils/supabaseClient";
 export default async function handler(req, res) {
   const body = JSON.parse(req.body);
   let songName = body.song;
-  console.log("songName", songName);
   try {
     const { data, error } = await supabase
       .from("versions")
@@ -15,9 +14,7 @@ export default async function handler(req, res) {
       console.error(error)
       throw new Error(error)
     }
-    console.log('njVersions',data)
     const justDates = data.map((version => version.date))
-    console.log('just dates', justDates)
     res.status(200).send(justDates)
   } catch (error) {
     console.error("/song error", error);
