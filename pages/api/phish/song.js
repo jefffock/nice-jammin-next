@@ -7,15 +7,22 @@ export default async function handler(req, res) {
   let songName = body.song;
   console.log("songName", songName);
   try {
-    const { data, error } = await supabase
-      .from("phishnet_songs")
-      .select("*")
-      .eq("song", songName);
-    if (error) {
-      console.error("error getting phishnet songs from supabase", error);
-      throw new Error(error);
+    let songId
+    switch (songName) {
+      case 'Also Sprach Zarathustra (2001)':
+        songId = 21
+        break;
+      default:
+        const { data, error } = await supabase
+          .from("phishnet_songs")
+          .select("*")
+          .eq("song", songName);
+        if (error) {
+          console.error("error getting phishnet songs from supabase", error);
+          throw new Error(error);
+        }
+        songId = data[0]?.songid;
     }
-    const songId = data[0]?.songid;
     if (songId) {
       const url = `https://api.phish.net/v5/setlists/songid/${songId}.json?apikey=${process.env.PHISHNET_API_KEY}`;
       fetch(url)

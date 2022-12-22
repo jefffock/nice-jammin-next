@@ -98,6 +98,7 @@ export default function AddVersion({
   const [setlist, setSetlist] = useState(null);
   const [show, setShow] = useState(null);
   const [shows, setShows] = useState(null);
+  const [loadingShows, setLoadingShows] = useState(false)
 
   useEffect(() => {
     setSuccessAlertText(null);
@@ -147,16 +148,12 @@ export default function AddVersion({
   };
 
   useEffect(() => {
-    console.log('in the fun use effect', artist, song, date)
     if (artist === "Phish") {
-      console.log('artist is phish')
       if (!song || song === '') {
-        console.log('setting shows to null')
         setShows(null)
       } if (!date && setlist) {
         setSetlist(null)
       }  if (date) {
-        console.log('going to get setlist')
         async function getPhishSetlist() {
           const data = JSON.stringify({
             date: date,
@@ -176,9 +173,8 @@ export default function AddVersion({
           console.error(error);
         }
       } 
-      console.log('d s sE', date, song, songExists)
       if (song && songExists) {
-        console.log('going to get shows')
+        setLoadingShows(true)
         const data = JSON.stringify({
           song: song,
         });
@@ -196,7 +192,6 @@ export default function AddVersion({
               Promise.all(responses.map((_res) => _res.json()))
             )
             .then((responses) => {
-              console.log("responses", responses);
               const phishnetVersions = responses[0];
               const nJVersions = responses[1];
               let comboVersions = phishnetVersions.map(
@@ -208,6 +203,7 @@ export default function AddVersion({
                   }
                 }
               );
+              setLoadingShows(false)
               setShows(comboVersions);
             });
         } catch (error) {
@@ -557,9 +553,11 @@ export default function AddVersion({
               {songErrorText}
             </Alert>
           )}
-          {(artist && !shows) && (
+          {artist && !shows && !loadingShows &&
             <DatePicker setDate={setDate} my={"1em"} date={date} />
-          )}
+          }
+          {loadingShows &&
+          <Typography>Loading shows...</Typography>}
           {artist && date && !shows &&
           <Typography onClick={() => clearDate()}>Clear Date</Typography>}
           {dateErrorText && (
