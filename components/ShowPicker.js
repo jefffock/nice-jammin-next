@@ -17,7 +17,7 @@ export default function ShowPicker({ show, shows, setShow, setDate, setLocation,
   };
 
   return (
-    <Box>
+    <Box my="1em">
       <FormControl sx={{ minWidth: 120, mx:'0.25em' }}>
         <InputLabel id="show-select">Show</InputLabel>
         <Select

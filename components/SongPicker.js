@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box'
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Typography from "@mui/material/Typography";
 
 export default function SongPicker({ artist, songs, song, setSong, setlist, wide, size, mx, my }) {
   const [value, setValue] = useState(song || '');
@@ -15,12 +14,20 @@ export default function SongPicker({ artist, songs, song, setSong, setlist, wide
   const [uniqueSongs, setUniqueSongs] = useState(null)
   const [songsByArtist, setSongsByArtist] = useState(null)
 
+
+  useEffect(() => {
+    console.log('setlist in song picker', setlist)
+  })
+
   useEffect(() => {
     let titlesOnly = new Set()
     let formattedSongs = []
       if (setlist) {
         setlist.forEach(song => {
-          titlesOnly.add(song)
+          formattedSongs.push({
+            label: song.song,
+            alreadyAdded: song.alreadyAdded
+          })
         })
       }
       else if (songs) {
@@ -51,12 +58,12 @@ export default function SongPicker({ artist, songs, song, setSong, setlist, wide
           titlesOnly.add(song.song);
         })
       }
-    }
-    titlesOnly.forEach(song => {
-      formattedSongs.push({
-        label: song
+      titlesOnly.forEach(song => {
+        formattedSongs.push({
+          label: song
+        })
       })
-    })
+    }
     setUniqueSongs(formattedSongs)
   }, [songs, setlist, artist])
 
@@ -71,9 +78,14 @@ export default function SongPicker({ artist, songs, song, setSong, setlist, wide
     }
   }, [song])
 
+  const handleSetlistSongChange = (event) => {
+    setSong(event.target.value)
+  }
+
+  if (!setlist || setlist.length === 0) {
     return (
       <Box mx={mx ? mx : '0.25em'}  my={my ? my : '0.25em'} sx={{ 
-        minWidth: '120px',
+        minWidth: '240px',
         maxWidth: '240px',
       }}>
         <Autocomplete
@@ -109,4 +121,27 @@ export default function SongPicker({ artist, songs, song, setSong, setlist, wide
         />
       </Box>
     );
+  } else { //setlist is present
+    return (
+      <Box my={my ? my : '0.25em'}>
+        <FormControl sx={{ minWidth: 120, mx:'0.25em' }} size={size ? size : 'small' }>
+          <InputLabel id="song-select">Song</InputLabel>
+          <Select
+            labelId="song-select"
+            value={song ?? ''}
+            label="Song"
+            onChange={handleSetlistSongChange}
+            >
+            {uniqueSongs?.map((song, index) => {
+              const label = (song.alreadyAdded ? '(Added) ' : '') + song.label
+                return (
+                  <MenuItem key={index} value={song.label} disabled={song.alreadyAdded}>{label}</MenuItem>
+                )
+              })
+            }
+          </Select>
+        </FormControl>
+      </Box>
+    )
+  }
   }

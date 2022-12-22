@@ -43,8 +43,16 @@ export default async function handler(req, res) {
     fetch(url)
       .then(data => data.json())
       .then(setlist => {
-        const titlesInSetlist = setlist.data.map(({ song }) => song)
-        res.status(200).send(titlesInSetlist);
+        const titlesInSetlist = setlist.data.map(({ song }) => {
+          if (song === 'Also Sprach Zarathustra') {
+            return (
+              'Also Sprach Zarathustra (2001)'
+            )
+          } return song
+        })
+        const location = `${setlist.data[0].venue}, ${setlist.data[0].city}, ${setlist.data[0].country === 'USA' ? setlist.data[0].state : setlist.data[0].country}`
+        console.log('test')
+        res.status(200).send({ titlesInSetlist, location});
       })
   }
   catch (error) {

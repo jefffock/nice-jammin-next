@@ -19,6 +19,7 @@ export default async function handler(req, res) {
         if (error) {
           console.error("error getting phishnet songs from supabase", error);
           throw new Error(error);
+          res.status(500).send({ error })
         }
         songId = data[0]?.songid;
     }

@@ -99,6 +99,7 @@ export default function AddVersion({
   const [show, setShow] = useState(null);
   const [shows, setShows] = useState(null);
   const [loadingShows, setLoadingShows] = useState(false)
+  const [loadingSetlist, setLoadingSetlist] = useState(false)
 
   useEffect(() => {
     setSuccessAlertText(null);
@@ -145,6 +146,8 @@ export default function AddVersion({
     setDate(null);
     setLocation(null);
     setOpen(false);
+    setShows(null)
+    setShow(null)
   };
 
   useEffect(() => {
@@ -153,27 +156,49 @@ export default function AddVersion({
         setShows(null)
       } if (!date && setlist) {
         setSetlist(null)
-      }  if (date) {
-        async function getPhishSetlist() {
-          const data = JSON.stringify({
-            date: date,
-          });
-          await fetch("/api/phish/setlist", {
-            method: "POST",
-            body: data,
-          })
-            .then((setlist) => setlist.json())
-            .then((setlist) => {
-              setSetlist(setlist);
-            });
-        }
+      } if (date) {
+        setLoadingSetlist(true)
+        const data = JSON.stringify({
+          date: date,
+          artist: artist
+        });
+        const fetchPhishnetSetlist = fetch("/api/phish/setlist", {
+          method: "POST",
+          body: data,
+        })
+        const fetchNJVersionsByDate = fetch("/api/date", {
+          method: "POST",
+          body: data
+        })
         try {
-          getPhishSetlist();
+          Promise.all([fetchPhishnetSetlist, fetchNJVersionsByDate])
+          .then(responses => 
+            Promise.all(responses.map((_res) => _res.json()))
+          )
+          .then(responses => {
+            const phishnetSetlist = responses[0].titlesInSetlist;
+            const njVersions = responses[1];
+            const location = responses[0].location
+            let comboSetlist = phishnetSetlist.map(song => {
+              if (njVersions.indexOf(song) === -1) {
+                return {
+                  song, alreadyAdded: false
+                }
+              } else {
+                return { song, alreadyAdded: true }
+              }
+            })
+            console.log('combo setlist', comboSetlist)
+            setLoadingSetlist(false)
+            setSetlist(comboSetlist)
+            setLocation(location)
+          })
         } catch (error) {
+          setLoadingSetlist(false)
           console.error(error);
         }
       } 
-      if (song && songExists) {
+      if (song && songExists && !setlist) {
         setLoadingShows(true)
         const data = JSON.stringify({
           song: song,
@@ -188,10 +213,10 @@ export default function AddVersion({
         });
         try {
           Promise.all([fetchPhishnetVersions, fetchNJVersions])
-            .then((responses) =>
+            .then(responses =>
               Promise.all(responses.map((_res) => _res.json()))
             )
-            .then((responses) => {
+            .then(responses => {
               const phishnetVersions = responses[0];
               const nJVersions = responses[1];
               let comboVersions = phishnetVersions.map(
@@ -207,15 +232,12 @@ export default function AddVersion({
               setShows(comboVersions);
             });
         } catch (error) {
+          setLoadingShows(false)
           console.error(error);
         }
       }
     }
   }, [artist, date, song, songExists]);
-
-  useEffect(() => {
-    console.log("shows", shows);
-  }, [shows]);
 
   const handleRatingChange = (e) => {
     setRating(e.target.value);
@@ -284,6 +306,12 @@ export default function AddVersion({
 
   const clearDate = () => {
     setDate('')
+    setShow(null)
+    setLocation(null)
+  }
+
+  const clearSong = () => {
+    setSong('')
   }
 
   const insertVersion = async () => {
@@ -517,6 +545,8 @@ export default function AddVersion({
               {artistErrorText}
             </Alert>
           )}
+          {loadingSetlist &&
+          <Typography>Loading Setlist...</Typography>}
           {artist && (
             <SongPicker
               artist={artist}
@@ -531,6 +561,8 @@ export default function AddVersion({
               my={"1em"}
             />
           )}
+          {artist && song &&
+          <Button onClick={() => clearSong()}>Clear Song</Button>}
           {!songExists && song && (
             <>
               <Alert severity="warning" sx={{ mb: "1em" }}>
@@ -558,8 +590,6 @@ export default function AddVersion({
           }
           {loadingShows &&
           <Typography>Loading shows...</Typography>}
-          {artist && date && !shows &&
-          <Typography onClick={() => clearDate()}>Clear Date</Typography>}
           {dateErrorText && (
             <Alert severity="error" sx={{ my: "1em" }}>
               {dateErrorText}
@@ -567,17 +597,19 @@ export default function AddVersion({
           )}
           {artist && shows && (
             <ShowPicker
-              show={show}
-              shows={shows}
-              setShow={setShow}
-              setDate={setDate}
-              setLocation={setLocation}
+            show={show}
+            shows={shows}
+            setShow={setShow}
+            setDate={setDate}
+            setLocation={setLocation}
             />
-          )}
+            )}
           {date && show &&
-          <Typography sx={{ mx: '0.25em', my: '1em' }}>Date: {new Date(show.showdate + 'T18:00:00Z').toLocaleDateString()}</Typography>
+          <Typography sx={{ mx: '0.25em', my: '1em' }}>Date: {new Date(date + 'T18:00:00Z').toLocaleDateString()}</Typography>
           }
-          {songExists && artist && date && (
+          {artist && date &&
+          <Button onClick={() => clearDate()}>Clear Date</Button>}
+          {((songExists && artist && date) || location) && 
             <Box mx="0.25em" my="1em">
               <TextField
                 autoFocus
@@ -591,7 +623,7 @@ export default function AddVersion({
                 onChange={(e) => setLocation(e.target.value)}
               />
             </Box>
-          )}
+          }
           {locationErrorText && (
             <Alert severity="error" sx={{ my: "1em" }}>
               {locationErrorText}

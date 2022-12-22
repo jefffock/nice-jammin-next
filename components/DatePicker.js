@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -6,7 +6,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import Box from '@mui/material/Box';
 
-export default function DatePicker({ setDate, my }) {
+export default function DatePicker({ setDate, my, date }) {
   const [value, setValue] = useState(null);
 
   const handleChange = (newValue) => {
@@ -16,6 +16,12 @@ export default function DatePicker({ setDate, my }) {
       setDate(stringedDate)
     }
   };
+  
+  useEffect(() => {
+    if (!date) {
+      setValue(null)
+    }
+  })
 
   return (
     <Box my={my ? my : '0.25em'} sx={{ mx:'0.25em' }}>

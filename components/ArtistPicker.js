@@ -9,6 +9,8 @@ import Box from '@mui/material/Box'
 
 let artists = [
   'All Bands',
+  'Phish',
+  'Grateful Dead',
   'The Allman Brothers Band',
   'Aqueous',
   'Billy Strings',
