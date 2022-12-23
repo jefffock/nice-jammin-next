@@ -179,20 +179,24 @@ export default function AddVersion({
             const phishnetSetlist = responses[0].titlesInSetlist;
             const njVersions = responses[1];
             const location = responses[0].location
-            let comboSetlist = phishnetSetlist.map(song => {
-              if (njVersions.indexOf(song) === -1) {
-                return {
-                  song, alreadyAdded: false
+            if (!phishnetSetlist) {
+              setSetlist(null)
+              setLocation(null)
+              setLoadingSetlist(false)
+            } else {
+              let comboSetlist = phishnetSetlist.map(song => {
+                if (njVersions.indexOf(song) === -1) {
+                  return {
+                    song, alreadyAdded: false
+                  }
+                } else {
+                  return { song, alreadyAdded: true }
                 }
-              } else {
-                return { song, alreadyAdded: true }
-              }
-            })
-            setSetlist(comboSetlist)
-            if (comboSetlist && comboSetlist.length > 0) {
+              })
+              setSetlist(comboSetlist)
               setLocation(location)
+              setLoadingSetlist(false)
             }
-            setLoadingSetlist(false)
           })
         } catch (error) {
           setLoadingSetlist(false)
