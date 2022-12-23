@@ -1,58 +1,38 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-/*
-// all Phish shows
-
-https://api.phish.net/v5/shows/artist/phish.json?order_by=showdate&apikey=YOUR_API_KEY
-// just Trey shows
-
-https://api.phish.net/v5/shows/artistid/2.json?order_by=state&apikey=YOUR_API_KEY
-// all songs
-
-https://api.phish.net/v5/songs.json?apikey=YOUR_API_KEY
-// setlist for 11/22/97
-
-https://api.phish.net/v5/setlists/showdate/1997-11-22.json?apikey=YOUR_API_KEY
-// all venues in an HTML table
-
-https://api.phish.net/v5/venues.html?apikey=YOUR_API_KEY
-// all venues in an HTML table, with no header
-
-https://api.phish.net/v5/venues.html?no_header=1&apikey=YOUR_API_KEY
-// artists, in XML format
-
-https://api.phish.net/v5/artists.xml?apikey=YOUR_API_KEY
-// just one show, by ID
-
-https://api.phish.net/v5/shows/showid/1252683584.xml?apikey=YOUR_API_KEY
-// all shows from one state
-
-https://api.phish.net/v5/venues/state/CT.html?apikey=YOUR_API_KEY
-// jamcharts for one song, HTML format
-
-https://api.phish.net/v5/jamcharts/slug/makisupa-policeman.html?apikey=YOUR_API_KEY
-Remember that each call will require your API key appended to the query string (or in POST data).
-
-A full request might look like this: https://api.phish.net/v5/shows/showyear/1989.json?apikey=YOUR_API_KEY&order_by=showdate.
-
-Be careful. Requesting endpoints with no arguments, e.g. /setlists/ or /shows/, can create a result set that is both slow and very large. We recommend that you do not use these naked methods for embedding in a webpage or a synchronous application.
-*/
 export default async function handler(req, res) {
   const body = JSON.parse(req.body)
-  let url = `https://api.phish.net/v5/setlists/showdate/${body.date}.json?apikey=${process.env.PHISHNET_API_KEY}`
+  const date = body.date
+  const artist = body.artist
+  let artistId
+  switch(artist) {
+    case 'Phish':
+      artistId = '1'
+      break;
+    case 'Trey Anastasio, TAB':
+      artistId = '2'
+      break;
+    default:
+      artistId = '1'
+  }
+  let url = `https://api.phish.net/v5/setlists/showdate/${date}.json?apikey=${process.env.PHISHNET_API_KEY}`
   try {
-    fetch(url)
+    await fetch(url)
       .then(data => data.json())
       .then(setlist => {
-        const titlesInSetlist = setlist.data.map(({ song }) => {
-          if (song === 'Also Sprach Zarathustra') {
-            return (
-              'Also Sprach Zarathustra (2001)'
-            )
-          } return song
-        })
-        const location = `${setlist.data[0].venue}, ${setlist.data[0].city}, ${setlist.data[0].country === 'USA' ? setlist.data[0].state : setlist.data[0].country}`
-        console.log('test')
-        res.status(200).send({ titlesInSetlist, location});
+        if (setlist && setlist.data && setlist.data.length > 0) {
+          const titlesInSetlist = setlist.data
+          .filter(song => song.artistid === artistId)
+          .map(({ song }) => {
+            if (song === 'Also Sprach Zarathustra') {
+              return (
+                'Also Sprach Zarathustra (2001)'
+              )
+            } return song
+          })
+          const location = `${setlist.data[0].venue}, ${setlist.data[0].city}, ${setlist.data[0].country === 'USA' ? setlist.data[0].state : setlist.data[0].country}`
+          res.status(200).send({ titlesInSetlist, location});
+        } else {
+          res.status(500).send({message: 'No setlist found'})
+        }
       })
   }
   catch (error) {

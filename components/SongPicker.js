@@ -14,11 +14,6 @@ export default function SongPicker({ artist, songs, song, setSong, setlist, wide
   const [uniqueSongs, setUniqueSongs] = useState(null)
   const [songsByArtist, setSongsByArtist] = useState(null)
 
-
-  useEffect(() => {
-    console.log('setlist in song picker', setlist)
-  })
-
   useEffect(() => {
     let titlesOnly = new Set()
     let formattedSongs = []

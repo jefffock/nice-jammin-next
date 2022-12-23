@@ -64,8 +64,8 @@ export default function ArtistPicker({ artist, setArtist, size, my }) {
           label="Band"
           onChange={handleChange}
           >
-          {artists.map((artist) => (
-            <MenuItem key={artist} value={artist}>{artist}</MenuItem>
+          {artists.map((artist, index) => (
+            <MenuItem key={index} value={artist}>{artist}</MenuItem>
           ))}
         </Select>
       </FormControl>

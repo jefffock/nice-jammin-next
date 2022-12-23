@@ -151,8 +151,8 @@ export default function AddVersion({
   };
 
   useEffect(() => {
-    if (artist === "Phish") {
-      if (!song || song === '') {
+    if (artist === 'Phish' || artist === 'Trey Anastasio, TAB') {
+      if ((!song || song === '') && !date) {
         setShows(null)
       } if (!date && setlist) {
         setSetlist(null)
@@ -177,7 +177,9 @@ export default function AddVersion({
           )
           .then(responses => {
             const phishnetSetlist = responses[0].titlesInSetlist;
+            console.log('phishnet setlist', phishnetSetlist)
             const njVersions = responses[1];
+            console.log('nj versions', njVersions)
             const location = responses[0].location
             let comboSetlist = phishnetSetlist.map(song => {
               if (njVersions.indexOf(song) === -1) {
@@ -189,11 +191,14 @@ export default function AddVersion({
               }
             })
             console.log('combo setlist', comboSetlist)
-            setLoadingSetlist(false)
             setSetlist(comboSetlist)
-            setLocation(location)
+            if (comboSetlist && comboSetlist.length > 0) {
+              setLocation(location)
+            }
+            setLoadingSetlist(false)
           })
         } catch (error) {
+          console.log('error getting setlists')
           setLoadingSetlist(false)
           console.error(error);
         }
@@ -236,6 +241,9 @@ export default function AddVersion({
           console.error(error);
         }
       }
+    } else {
+      setLoadingSetlist(false)
+      setLoadingShows(false)
     }
   }, [artist, date, song, songExists]);
 
@@ -308,10 +316,16 @@ export default function AddVersion({
     setDate('')
     setShow(null)
     setLocation(null)
+    setLoadingSetlist(false)
+    setLoadingShows(false)
+    setLoading(false)
   }
 
   const clearSong = () => {
     setSong('')
+    setLoadingSetlist(false)
+    setLoadingShows(false)
+    setLoading(false)
   }
 
   const insertVersion = async () => {

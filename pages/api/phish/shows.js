@@ -1,14 +1,37 @@
-export default function handler(req, res) {
+import { supabase } from "../../../utils/supabaseClient";
+
+export default async function handler(req, res) {
   let data = JSON.parse(req.body)
-  let url = `https://api.phish.net/v5/setlists/showdate/${data.date}.json?apikey=${process.env.PHISHNET_API_KEY}`
+  let artist = data.artist
+  let artistName
+  if (artist === 'Phish') {
+    artistName = 'Phish'
+  } else if (artist === 'Trey Anastasio, TAB') {
+    artistName = 'Trey Anastasio'
+  }
   try {
-    fetch(url)
-      .then(data => data.json())
-      .then(setlist => {
-        res.status(200).send(JSON.stringify(setlist.data));
+    const { data, error } = await supabase
+      .from('phishnet_shows')
+      .select('showdate, venue, city, state, country')
+      .eq('artist_name', artistName)
+    if (error) {
+      console.error('error getting phishnet shows from supabase', error)
+      throw new Error(error)
+    } else {
+      if (data && data.length > 0) {
+        let formattedData = data.map(show => {
+          const date = new Date(show.showdate + 'T18:00:00Z')
+          return {
+            showdate: show.showdate,
+            location: `${show.venue}, ${show.city}, ${show.country === 'USA' ? show.state : show.country}`,
+            label: `${date.toLocaleDateString()} - ${show.venue}, ${show.city}, ${show.country === 'USA' ? show.state : show.country}`
+          }
       })
+        res.status(200).json(formattedData)
+      }
+    }
   }
   catch (error) {
-    res.status(500).send(error);
+    res.status(501).send(error);
   } 
 }

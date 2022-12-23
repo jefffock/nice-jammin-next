@@ -1,10 +1,10 @@
 import { supabase } from "../../../utils/supabaseClient";
 
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-//alumni-blues
 export default async function handler(req, res) {
   const body = JSON.parse(req.body);
   let songName = body.song;
+  let artist = body.artist
+  let artistId = (artist === 'Phish' ? '1' : '2')
   try {
     let songId
     switch (songName) {
@@ -19,7 +19,6 @@ export default async function handler(req, res) {
         if (error) {
           console.error("error getting phishnet songs from supabase", error);
           throw new Error(error);
-          res.status(500).send({ error })
         }
         songId = data[0]?.songid;
     }
@@ -29,9 +28,8 @@ export default async function handler(req, res) {
         .then((data) => data.json())
         .then((versions) => {
           const versionsLessData = versions.data
-            .filter((version) => version.artistid === "1")
+            .filter((version) => version.artistid === artistId)
             .map((version) => {
-              if (version.artistid === "1") {
                 const date = new Date(version.showdate + 'T18:00:00Z');
                 return {
                   showdate: version.showdate,
@@ -47,9 +45,6 @@ export default async function handler(req, res) {
                   }, ${version.state ?? ""}${
                     version.country === "USA" ? "" : version.country
                   }`,
-                };
-              } else {
-                return null;
               }
             });
           res.status(200).send(versionsLessData.reverse());
