@@ -18,7 +18,7 @@ export default async function handler(req, res) {
           .eq("song", songName);
         if (error) {
           console.error("error getting phishnet songs from supabase", error);
-          throw new Error(error);
+          res.status(500).send({message: 'Error getting song id'})
         }
         songId = data[0]?.songid;
     }

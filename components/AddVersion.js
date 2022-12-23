@@ -177,9 +177,7 @@ export default function AddVersion({
           )
           .then(responses => {
             const phishnetSetlist = responses[0].titlesInSetlist;
-            console.log('phishnet setlist', phishnetSetlist)
             const njVersions = responses[1];
-            console.log('nj versions', njVersions)
             const location = responses[0].location
             let comboSetlist = phishnetSetlist.map(song => {
               if (njVersions.indexOf(song) === -1) {
@@ -190,7 +188,6 @@ export default function AddVersion({
                 return { song, alreadyAdded: true }
               }
             })
-            console.log('combo setlist', comboSetlist)
             setSetlist(comboSetlist)
             if (comboSetlist && comboSetlist.length > 0) {
               setLocation(location)
@@ -198,12 +195,11 @@ export default function AddVersion({
             setLoadingSetlist(false)
           })
         } catch (error) {
-          console.log('error getting setlists')
           setLoadingSetlist(false)
           console.error(error);
         }
       } 
-      if (song && songExists && !setlist) {
+      if (song && songExists && !setlist && artist === 'Phish') {
         setLoadingShows(true)
         const data = JSON.stringify({
           song: song,
