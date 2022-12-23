@@ -16,12 +16,15 @@ import theme from '../styles/themes'
 import TopBar from './AppBar'
 import { useRouter } from 'next/router'
 import { supabase } from '../utils/supabaseClient'
+import Alert from '@mui/material/Alert';
 
 export default function SignIn() {
   const [loading, setLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
   const router = useRouter()
 
   const handleSubmit = async (event) => {
+    setErrorMessage(null)
     event.preventDefault();
     setLoading(true)
     const data = new FormData(event.currentTarget);
@@ -34,6 +37,7 @@ export default function SignIn() {
     if (error) {
       setLoading(false)
       console.error('error:', error)
+      setErrorMessage(error.message)
     } else {
       setLoading(false)
       router.push('/')
@@ -85,6 +89,8 @@ export default function SignIn() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             /> */}
+            {errorMessage &&
+            <Alert severity='error'>{errorMessage}</Alert>}
             <Button
               type="submit"
               fullWidth
