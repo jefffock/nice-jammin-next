@@ -734,7 +734,7 @@ export default function AddVersion({
             !successAlertText && (
               <Button
                 onClick={handleSubmit}
-                disabled={loading || !user || !profile}
+                disabled={loading || !user || !profile || !songExists}
                 sx={{ textTransform: "none" }}
               >
                 Add Version
