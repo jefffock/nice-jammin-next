@@ -10,6 +10,7 @@ let sortOptions = [
     'Oldest',
     'Rating',
     'Number of Ratings',
+    'Recently Added',
     'Song A-Z',
     'Artist A-Z',
     'Song Z-A',
@@ -18,10 +19,9 @@ let sortOptions = [
 
 export default function Sorter({ orderBy, setOrderBy, setOrder, size, my }) {
 
-  const [label, setLabel] = useState('Rating')
+  const [label, setLabel] = useState('Newest')
 
   const handleChange = (event) => {
-      console.log('event.target.value', event.target.value);
       setLabel(event.target.value);
       switch (event.target.value) {
         case 'Newest':
@@ -54,6 +54,10 @@ export default function Sorter({ orderBy, setOrderBy, setOrder, size, my }) {
           break;
         case 'Artist Z-A':
           setOrderBy('artist')
+          setOrder('desc')
+          break;
+        case 'Recently Added':
+          setOrderBy('id')
           setOrder('desc')
           break;
         }

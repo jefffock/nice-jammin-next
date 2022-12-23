@@ -52,7 +52,7 @@ export default function App({ jams }) {
   const [filteredJams, setFilteredJams] = useState(jams)
   const [sortedJams, setSortedJams] = useState(jams)
   const [order, setOrder] = useState('desc');
-  const [orderBy, setOrderBy] = useState('avg_rating');
+  const [orderBy, setOrderBy] = useState('date');
   const [beforeDate, setBeforeDate] = useState('')
   const [afterDate, setAfterDate] = useState('')
   const [tagsSelected, setTagsSelected] = useState([])
@@ -113,9 +113,6 @@ export default function App({ jams }) {
       : (a, b) => -descendingComparator(a, b, orderBy);
     }
     function sortJams() {
-      console.log('filteredJams', filteredJams[0]);
-      console.log('order', order);
-      console.log('orderBy', orderBy);
       let newSortedJams = filteredJams.slice().sort(getComparator(order, orderBy))
       setSortedJams(newSortedJams)
     }
@@ -216,9 +213,14 @@ export async function getStaticProps() {
       return data
     }
   }
-
-  const jams = await getJams()
-  return {
-    props: { jams }
+  try {
+    const jams = await getJams()
+    return {
+      props: { jams }
+    }
+  } catch {
+    return {
+      props: null
+    }
   }
 }

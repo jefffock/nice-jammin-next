@@ -9,6 +9,8 @@ import Box from '@mui/material/Box'
 
 let artists = [
   'All Bands',
+  'Phish',
+  'Grateful Dead',
   'The Allman Brothers Band',
   'Aqueous',
   'Billy Strings',
@@ -58,12 +60,12 @@ export default function ArtistPicker({ artist, setArtist, size, my }) {
         <InputLabel id="artist-select">Band</InputLabel>
         <Select
           labelId="artist-select"
-          value={artist ? artist : ''}
+          value={artist ?? 'All Bands'}
           label="Band"
           onChange={handleChange}
           >
-          {artists.map((artist) => (
-            <MenuItem key={artist} value={artist}>{artist}</MenuItem>
+          {artists.map((artist, index) => (
+            <MenuItem key={index} value={artist}>{artist}</MenuItem>
           ))}
         </Select>
       </FormControl>
