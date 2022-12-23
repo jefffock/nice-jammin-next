@@ -64,7 +64,7 @@ export default function SongPicker({ artist, songs, song, setSong, setlist, wide
 
   useEffect(() => {
     setSong(inputValue)
-  }, [inputValue, setValue, setSong])
+  }, [inputValue])
 
   useEffect(() => {
     if (!song) {
@@ -74,6 +74,7 @@ export default function SongPicker({ artist, songs, song, setSong, setlist, wide
   }, [song])
 
   const handleSetlistSongChange = (event) => {
+    setValue(event.target.value)
     setSong(event.target.value)
   }
 

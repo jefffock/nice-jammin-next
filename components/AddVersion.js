@@ -179,7 +179,7 @@ export default function AddVersion({
             const phishnetSetlist = responses[0].titlesInSetlist;
             const njVersions = responses[1];
             const location = responses[0].location
-            if (!phishnetSetlist) {
+            if (!phishnetSetlist || phishnetSetlist.length === 0) {
               setSetlist(null)
               setLocation(null)
               setLoadingSetlist(false)
@@ -194,7 +194,9 @@ export default function AddVersion({
                 }
               })
               setSetlist(comboSetlist)
-              setLocation(location)
+              if (location) {
+                setLocation(location)
+              }
               setLoadingSetlist(false)
             }
           })
@@ -203,7 +205,8 @@ export default function AddVersion({
           console.error(error);
         }
       } 
-      if (song && songExists && !setlist && artist === 'Phish') {
+      if (song && songExists && !setlist && !date) {
+        console.log('going to load shows')
         setLoadingShows(true)
         const data = JSON.stringify({
           song: song,
@@ -225,6 +228,7 @@ export default function AddVersion({
             .then(responses => {
               const phishnetVersions = responses[0];
               const nJVersions = responses[1];
+              console.log('phishnetversions', phishnetVersions)
               let comboVersions = phishnetVersions.map(
                 ({ showdate, isjamchart, location, artistid, label }) => {
                   if (nJVersions.indexOf(showdate) === -1) {
@@ -261,6 +265,10 @@ export default function AddVersion({
       }
     }
   }, [setlist])
+
+  useEffect(() => {
+    console.log('song', song)
+  }, [song])
 
   const handleRatingChange = (e) => {
     setRating(e.target.value);
@@ -331,6 +339,7 @@ export default function AddVersion({
     setDate('')
     setShow(null)
     setLocation(null)
+    setSetlist(null)
     setLoadingSetlist(false)
     setLoadingShows(false)
     setLoading(false)

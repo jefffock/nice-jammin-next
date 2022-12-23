@@ -12,15 +12,28 @@ export default async function handler(req, res) {
         songId = 21
         break;
       default:
-        const { data, error } = await supabase
-          .from("phishnet_songs")
-          .select("*")
-          .eq("song", songName);
-        if (error) {
-          console.error("error getting phishnet songs from supabase", error);
-          res.status(500).send({message: 'Error getting song id'})
+        if (artist === 'Phish') {
+          const { data, error } = await supabase
+            .from("phishnet_songs")
+            .select("songid")
+            .eq("song", songName);
+          if (error || data.length === 0) {
+            console.error("error getting phishnet songs from supabase", error);
+            res.status(500).send({message: 'Error getting song id'})
+          }
+          songId = data[0]?.songid;
+        } else {
+          const { data, error } = await supabase
+            .from("tab_songs")
+            .select("songid")
+            .eq("song", songName)
+            .limit(1)
+          if (error || data.length === 0) {
+            console.error("error getting tab_songs from supabase", error);
+            res.status(500).send({ message: 'Error getting song id', error })
+          }
+          songId = data[0]?.songid;
         }
-        songId = data[0]?.songid;
     }
     if (songId) {
       const url = `https://api.phish.net/v5/setlists/songid/${songId}.json?apikey=${process.env.PHISHNET_API_KEY}`;
@@ -49,6 +62,8 @@ export default async function handler(req, res) {
             });
           res.status(200).send(versionsLessData.reverse());
         });
+    } else {
+      res.status(400).send([])
     }
     //use song title to get phishnet songid from supabase, or just add phishnet songid to the song
     //use phishnet song id to get performances

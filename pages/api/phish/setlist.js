@@ -28,8 +28,14 @@ export default async function handler(req, res) {
               )
             } return song
           })
-          const location = `${setlist.data[0].venue}, ${setlist.data[0].city}, ${setlist.data[0].country === 'USA' ? setlist.data[0].state : setlist.data[0].country}`
-          res.status(200).send({ titlesInSetlist, location});
+          let location
+          for (var i = 0; i < setlist.data.length; i++) {
+            if (setlist.data[i].artistid === artistId) {
+              location = `${setlist.data[i].venue}, ${setlist.data[i].city}, ${setlist.data[i].country === 'USA' ? setlist.data[i].state : setlist.data[i].country}`
+              break;
+            }
+          }
+          res.status(200).send({ titlesInSetlist, location });
         } else {
           res.status(500).send({message: 'No setlist found'})
         }
