@@ -48,7 +48,7 @@ export default function AddVersion({
   const [date, setDate] = useState(null);
   const [location, setLocation] = useState(null);
   const [tagsText, setTagsText] = useState("");
-  const [rating, setRating] = useState(null);
+  const [rating, setRating] = useState(10);
   const [comment, setComment] = useState("");
   const [listenLink, setListenLink] = useState(null);
   const [funky, setFunky] = useState(false);
@@ -203,6 +203,7 @@ export default function AddVersion({
         setLoadingShows(true)
         const data = JSON.stringify({
           song: song,
+          artist: artist
         });
         const fetchPhishnetVersions = fetch("/api/phish/song", {
           method: "POST",
@@ -242,6 +243,20 @@ export default function AddVersion({
       setLoadingShows(false)
     }
   }, [artist, date, song, songExists]);
+
+  useEffect(() => {
+    if (song && setlist) {
+      let songInSetlist = false
+      setlist.forEach(songTitle => {
+        if (songTitle.song === song) {
+          songInSetlist = true
+        }
+      })
+      if (!songInSetlist) {
+        setSong(null)
+      }
+    }
+  }, [setlist])
 
   const handleRatingChange = (e) => {
     setRating(e.target.value);
