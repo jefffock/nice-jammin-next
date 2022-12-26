@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     default:
       artistId = '1'
   }
-  let url = `https://api.phish.net/v5/setlists/showdate/${date}.json?apikey=${process.env.PHISHNET_API_KEY}`
+  const url = `https://api.phish.net/v5/setlists/showdate/${date}.json?apikey=${process.env.PHISHNET_API_KEY}`
   try {
     await fetch(url)
       .then(data => data.json())

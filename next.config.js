@@ -16,4 +16,9 @@ module.exports = {
     locales: ['en'],
     defaultLocale: 'en',
   },
+  serverRuntimeConfig: {
+    eggyBaseUrl: 'https://thecarton.net/api/v1',
+    gooseBaseUrl: 'https://elgoose.net/api/v1',
+    umphreysBaseUrl: 'https://allthings.umphreys.com/api/v1',
+  }
 };
