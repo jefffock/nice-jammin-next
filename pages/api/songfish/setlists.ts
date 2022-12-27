@@ -9,16 +9,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   let baseUrl
   switch (artist) {
     case 'Goose':
-      baseUrl = serverRuntimeConfig.gooseBaseUrl
+      baseUrl = serverRuntimeConfig.baseUrls.gooseBaseUrl
       break;
     case 'Eggy':
-      baseUrl = serverRuntimeConfig.eggyBaseUrl
+      baseUrl = serverRuntimeConfig.baseUrls.eggyBaseUrl
       break;
     case "Umphrey's McGee":
-      baseUrl = serverRuntimeConfig.umphreysBaseUrl
+      baseUrl = serverRuntimeConfig.baseUrls.umphreysBaseUrl
       break;
     case 'Neighbor':
-      baseUrl = serverRuntimeConfig.neighborBaseUrl
+      baseUrl = serverRuntimeConfig.baseUrls.neighborBaseUrl
       break;
   }
   const url = `${baseUrl}/setlists/showdate/${date}`

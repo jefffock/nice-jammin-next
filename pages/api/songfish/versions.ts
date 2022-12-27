@@ -13,19 +13,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   switch (artist) {
     case 'Eggy':
       dbName = 'eggy_songs'
-      baseUrl = serverRuntimeConfig.eggyBaseUrl
+      baseUrl = serverRuntimeConfig.baseUrls.eggyBaseUrl
       break;
     case 'Goose':
       dbName = 'goose_songs'
-      baseUrl = serverRuntimeConfig.gooseBaseUrl
+      baseUrl = serverRuntimeConfig.baseUrls.gooseBaseUrl
       break;
     case "Umphrey's McGee":
       dbName = 'um_songs'
-      baseUrl = serverRuntimeConfig.umphreysBaseUrl
+      baseUrl = serverRuntimeConfig.baseUrls.umphreysBaseUrl
       break;
     case 'Neighbor':
       dbName = 'neighbor_songs'
-      baseUrl = serverRuntimeConfig.neighborBaseUrl
+      baseUrl = serverRuntimeConfig.baseUrls.neighborBaseUrl
   }
   try {
     let songId
