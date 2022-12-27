@@ -19,7 +19,7 @@ export default async function handler(req, res) {
       .then(data => data.json())
       .then(setlist => {
         if (setlist && setlist.data && setlist.data.length > 0) {
-          const titlesInSetlist = setlist.data
+          const titles = setlist.data
           .filter(song => song.artistid === artistId)
           .map(({ song }) => {
             if (song === 'Also Sprach Zarathustra') {
@@ -35,7 +35,7 @@ export default async function handler(req, res) {
               break;
             }
           }
-          res.status(200).send({ titlesInSetlist, location });
+          res.status(200).send({ titles, location });
         } else {
           res.status(500).send({message: 'No setlist found'})
         }

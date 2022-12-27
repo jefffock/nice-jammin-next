@@ -162,11 +162,11 @@ export default function AddVersion({
           date: date,
           artist: artist
         });
-        const fetchPhishnetSetlist = fetch("/api/phish/setlist", {
+        const fetchPhishnetSetlist = fetch("/api/phish/setlists", {
           method: "POST",
           body: data,
         })
-        const fetchNJVersionsByDate = fetch("/api/date", {
+        const fetchNJVersionsByDate = fetch("/api/versions", {
           method: "POST",
           body: data
         })
@@ -212,11 +212,11 @@ export default function AddVersion({
           song: song,
           artist: artist
         });
-        const fetchPhishnetVersions = fetch("/api/phish/song", {
+        const fetchPhishnetVersions = fetch("/api/phish/versions", {
           method: "POST",
           body: data,
         });
-        const fetchNJVersions = fetch("/api/song", {
+        const fetchNJVersions = fetch("/api/versions", {
           method: "POST",
           body: data,
         });
@@ -289,6 +289,13 @@ export default function AddVersion({
             body: data,
           })
           break;
+        case 'Squeaky Feet':
+          break;
+        default:
+          fetchSetlist = fetch('/api/setlistfm/setlists', {
+            method: 'POST',
+            body: data
+          });
       } if (fetchSetlist) {
         setLoadingSetlist(true)
         try {
@@ -354,10 +361,6 @@ export default function AddVersion({
       }
     }
   }, [setlist])
-
-  useEffect(() => {
-    console.log('song', song)
-  }, [song])
 
   const handleRatingChange = (e) => {
     setRating(e.target.value);
@@ -749,7 +752,7 @@ export default function AddVersion({
                 multiline
                 maxRows={2}
                 value={location}
-                onChange={(e) => setLocation(e.target.value)}
+                onChange={handleLocationChange}
               />
             </Box>
           }

@@ -64,7 +64,7 @@ export default async function handler(req, res) {
     //use song title to get phishnet songid from supabase, or just add phishnet songid to the song
     //use phishnet song id to get performances
   } catch (error) {
-    console.error("/song error", error);
+    console.error("/phish/versions error", error);
     res.status(500).send(error);
   }
 }

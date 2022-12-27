@@ -12,11 +12,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const transformedDate = [day, month, year].join('-')
   const mbid = serverRuntimeConfig.mbids[artist]
   const url = `https://api.setlist.fm/rest/1.0/search/setlists?artistMbid=${mbid}&date=${transformedDate}`
-  const url2 = ''
   console.log('url', url)
   let apiKey = process.env.SETLISTFM_API_KEY
   if (mbid && transformedDate) {
     try {
+      console.log('going to make setlistfm api call')
       await fetch(url, {
         headers: {
           'x-api-key': `${apiKey}`,
@@ -42,12 +42,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             //iterate through sets
               //iterate through songs
                 //push song title to titles array
-            res.status(200).send({ titles, location })
+            res.status(200).json({ titles, location })
           } else {
+            console.error('no setlist found')
             res.status(500).send({message: 'no setlist found or error'})
           }
         })
     } catch (error) {
+      console.error('in catch block')
       res.status(500).send(error)
     }
   }
