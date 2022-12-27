@@ -48,7 +48,7 @@ export default function AddVersion({
   const [date, setDate] = useState(null);
   const [location, setLocation] = useState(null);
   const [tagsText, setTagsText] = useState("");
-  const [rating, setRating] = useState(10);
+  const [rating, setRating] = useState('');
   const [comment, setComment] = useState("");
   const [listenLink, setListenLink] = useState(null);
   const [funky, setFunky] = useState(false);
@@ -251,6 +251,95 @@ export default function AddVersion({
       setLoadingShows(false)
     }
   }, [artist, date, song, songExists]);
+
+  //when artist changes
+  useEffect(() => {
+    //set date, location, song to null
+    setDate(null)
+    setLocation(null)
+    setSong(null)
+  }, [artist])
+  
+  //when date changes
+  useEffect(() => {
+    if (date) {
+      const data = JSON.stringify({
+        date: date,
+        artist: artist
+      });
+      let fetchSetlist
+      const fetchNJVersionsByDate = fetch("/api/versions", {
+        method: "POST",
+        body: data
+      })
+      switch (artist) {
+        case 'Phish':
+        case 'Trey Anastasio (TAB)':
+          fetchSetlist = fetch("/api/phish/setlists", {
+            method: "POST",
+            body: data,
+          })
+          break;
+        case 'Eggy':
+        case 'Goose':
+        case "Umphrey's McGee":
+        case 'Neighbor':
+          fetchSetlist = fetch("/api/songfish/setlists", {
+            method: "POST",
+            body: data,
+          })
+          break;
+      } if (fetchSetlist) {
+        setLoadingSetlist(true)
+        try {
+          Promise.all([fetchSetlist, fetchNJVersionsByDate])
+          .then(responses => 
+            Promise.all(responses.map((_res) => _res.json()))
+          )
+          .then(responses => {
+            const setlist = responses[0].titles;
+            const njVersions = responses[1];
+            const location = responses[0].location
+            console.log('results from changing date', setlist, njVersions, location)
+            if (!setlist || setlist.length === 0) {
+              setSetlist(null)
+              setLocation(null)
+              setLoadingSetlist(false)
+            } else {
+              const comboSetlist = setlist.map(song => {
+                if (njVersions.indexOf(song) === -1) {
+                  return {
+                    song, alreadyAdded: false
+                  }
+                } else {
+                  return { song, alreadyAdded: true }
+                }
+              })
+              console.log('comboSetlist', comboSetlist)
+              setSetlist(comboSetlist)
+              if (location) {
+                setLocation(location)
+              }
+              setLoadingSetlist(false)
+            }
+          })
+        } catch (error) {
+          setLoadingSetlist(false)
+          console.error('Error getting setlist', error)
+        }
+      }
+    } else {
+      setSetlist(null)
+      setLocation(null)
+    }
+  }, [date])
+
+    //when song changes
+      //if artist is supported
+        //get versions
+      //if no song
+        //clear versions
+
 
   useEffect(() => {
     if (song && setlist) {
@@ -506,6 +595,7 @@ export default function AddVersion({
     tags.indexOf("groovy") !== -1 ? setGroovy(true) : setGroovy(false);
     tags.indexOf("guest") !== -1 ? setGuest(true) : setGuest(false);
     tags.indexOf("happy") !== -1 ? setHappy(true) : setHappy(false);
+    tags.indexOf("heavy") !== -1 ? setHeavy(true) : setHeavy(false);
     tags.indexOf("jazzy") !== -1 ? setJazzy(true) : setJazzy(false);
     tags.indexOf("long") !== -1 ? setLong(true) : setLong(false);
     tags.indexOf("multi_part") !== -1
@@ -657,6 +747,7 @@ export default function AddVersion({
                 fullWidth
                 variant="standard"
                 multiline
+                maxRows={2}
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
               />
@@ -692,6 +783,7 @@ export default function AddVersion({
                 fullWidth
                 variant="standard"
                 multiline
+                maxRows={2}
                 onChange={(e) => setListenLink(e.target.value)}
               />
               <FormControl sx={{ my: "1em", mx: "0.25em" }}>

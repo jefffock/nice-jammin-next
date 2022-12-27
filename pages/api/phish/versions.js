@@ -49,15 +49,11 @@ export default async function handler(req, res) {
                   isjamchart: version.isjamchart,
                   location: `${version.venue}, ${
                     version.city
-                  }, ${version.state ?? ""}${
-                    version.country === "USA" ? "" : ' ' + version.country
-                  }`,
+                  }, ${version.country === "USA" ? version.state : version.country}`,
                   artistid: version.artistid,
                   label: `${date.toLocaleDateString()} - ${version.venue}, ${
                     version.city
-                  }, ${version.state ?? ""}${
-                    version.country === "USA" ? "" : version.country
-                  }`,
+                  }, ${version.country === "USA" ? version.state : version.country}`,
               }
             });
           res.status(200).send(versionsLessData.reverse());

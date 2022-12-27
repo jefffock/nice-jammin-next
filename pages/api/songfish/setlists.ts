@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 const { serverRuntimeConfig } = getConfig()
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const body = req.body
+  const body = JSON.parse(req.body)
   const artist = body.artist
   const date = body.date
   let baseUrl
@@ -17,14 +17,20 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case "Umphrey's McGee":
       baseUrl = serverRuntimeConfig.umphreysBaseUrl
       break;
+    case 'Neighbor':
+      baseUrl = serverRuntimeConfig.neighborBaseUrl
+      break;
   }
   const url = `${baseUrl}/setlists/showdate/${date}`
+  console.log('url', url)
   try {
     await fetch(url)
       .then(data => data.json())
       .then(setlist => {
         if (setlist && setlist.data && setlist.data.length > 0) {
+          console.log('setlist', setlist);
           const titles = setlist.data
+          .filter(song => song.artist_id === '1')
           .map(({ songname }) => {
             return songname
           })
