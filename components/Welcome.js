@@ -7,7 +7,7 @@ export default function Welcome() {
       <Typography textAlign="center" fontSize="22px" my="1em">
         So many jams, so little time:
         <br />
-        Let's make 🔥 easier to find!
+        Let&#39;s make 🔥 easier to find!
       </Typography>
       <Typography textAlign="center" fontSize="18px" my="1em">
         Click a row
