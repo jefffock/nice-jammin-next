@@ -48,7 +48,7 @@ export default function AddVersion({
   const [date, setDate] = useState(null);
   const [location, setLocation] = useState(null);
   const [tagsText, setTagsText] = useState("");
-  const [rating, setRating] = useState('');
+  const [rating, setRating] = useState("");
   const [comment, setComment] = useState("");
   const [listenLink, setListenLink] = useState(null);
   const [funky, setFunky] = useState(false);
@@ -98,8 +98,8 @@ export default function AddVersion({
   const [setlist, setSetlist] = useState(null);
   const [show, setShow] = useState(null);
   const [shows, setShows] = useState(null);
-  const [loadingShows, setLoadingShows] = useState(false)
-  const [loadingSetlist, setLoadingSetlist] = useState(false)
+  const [loadingShows, setLoadingShows] = useState(false);
+  const [loadingSetlist, setLoadingSetlist] = useState(false);
 
   useEffect(() => {
     setSuccessAlertText(null);
@@ -146,221 +146,188 @@ export default function AddVersion({
     setDate(null);
     setLocation(null);
     setOpen(false);
-    setShows(null)
-    setShow(null)
+    setShows(null);
+    setShow(null);
   };
 
   useEffect(() => {
-    if (artist === 'Phish' || artist === 'Trey Anastasio, TAB') {
-      if ((!song || song === '') && !date) {
-        setShows(null)
-      } if (!date && setlist) {
-        setSetlist(null)
-      } if (date) {
-        setLoadingSetlist(true)
-        const data = JSON.stringify({
-          date: date,
-          artist: artist
-        });
-        const fetchPhishnetSetlist = fetch("/api/phish/setlists", {
-          method: "POST",
-          body: data,
-        })
-        const fetchNJVersionsByDate = fetch("/api/versions", {
-          method: "POST",
-          body: data
-        })
-        try {
-          Promise.all([fetchPhishnetSetlist, fetchNJVersionsByDate])
-          .then(responses => 
-            Promise.all(responses.map((_res) => _res.json()))
-          )
-          .then(responses => {
-            const phishnetSetlist = responses[0].titlesInSetlist;
-            const njVersions = responses[1];
-            const location = responses[0].location
-            if (!phishnetSetlist || phishnetSetlist.length === 0) {
-              setSetlist(null)
-              setLocation(null)
-              setLoadingSetlist(false)
-            } else {
-              let comboSetlist = phishnetSetlist.map(song => {
-                if (njVersions.indexOf(song) === -1) {
-                  return {
-                    song, alreadyAdded: false
-                  }
-                } else {
-                  return { song, alreadyAdded: true }
-                }
-              })
-              setSetlist(comboSetlist)
-              if (location) {
-                setLocation(location)
-              }
-              setLoadingSetlist(false)
-            }
-          })
-        } catch (error) {
-          setLoadingSetlist(false)
-          console.error(error);
-        }
-      } 
-      if (song && songExists && !setlist && !date) {
-        console.log('going to load shows')
-        setLoadingShows(true)
-        const data = JSON.stringify({
-          song: song,
-          artist: artist
-        });
-        const fetchPhishnetVersions = fetch("/api/phish/versions", {
-          method: "POST",
-          body: data,
-        });
-        const fetchNJVersions = fetch("/api/versions", {
-          method: "POST",
-          body: data,
-        });
-        try {
-          Promise.all([fetchPhishnetVersions, fetchNJVersions])
-            .then(responses =>
-              Promise.all(responses.map((_res) => _res.json()))
-            )
-            .then(responses => {
-              const phishnetVersions = responses[0];
-              const nJVersions = responses[1];
-              console.log('phishnetversions', phishnetVersions)
-              let comboVersions = phishnetVersions.map(
-                ({ showdate, isjamchart, location, artistid, label }) => {
-                  if (nJVersions.indexOf(showdate) === -1) {
-                    return { showdate, label, location, isjamchart, alreadyAdded: false };
-                  } else {
-                    return { showdate, label, location, isjamchart, alreadyAdded: true };
-                  }
-                }
-              );
-              setLoadingShows(false)
-              setShows(comboVersions);
-            });
-        } catch (error) {
-          setLoadingShows(false)
-          console.error(error);
-        }
-      }
-    } else {
-      setLoadingSetlist(false)
-      setLoadingShows(false)
-    }
-  }, [artist, date, song, songExists]);
+    setDate(null);
+    setLocation(null);
+    setSong(null);
+  }, [artist]);
 
-  //when artist changes
-  useEffect(() => {
-    //set date, location, song to null
-    setDate(null)
-    setLocation(null)
-    setSong(null)
-  }, [artist])
-  
   //when date changes
+  //fetch setlist
   useEffect(() => {
     if (date) {
       const data = JSON.stringify({
         date: date,
-        artist: artist
+        artist: artist,
       });
-      let fetchSetlist
+      let fetchSetlist;
       const fetchNJVersionsByDate = fetch("/api/versions", {
         method: "POST",
-        body: data
-      })
+        body: data,
+      });
       switch (artist) {
-        case 'Phish':
-        case 'Trey Anastasio (TAB)':
+        case "Phish":
+        case "Trey Anastasio (TAB)":
           fetchSetlist = fetch("/api/phish/setlists", {
             method: "POST",
             body: data,
-          })
+          });
           break;
-        case 'Eggy':
-        case 'Goose':
+        case "Eggy":
+        case "Goose":
         case "Umphrey's McGee":
-        case 'Neighbor':
+        case "Neighbor":
           fetchSetlist = fetch("/api/songfish/setlists", {
             method: "POST",
             body: data,
-          })
+          });
           break;
-        case 'Squeaky Feet':
+        case "Squeaky Feet":
           break;
         default:
-          fetchSetlist = fetch('/api/setlistfm/setlists', {
-            method: 'POST',
-            body: data
+          fetchSetlist = fetch("/api/setlistfm/setlists", {
+            method: "POST",
+            body: data,
           });
-      } if (fetchSetlist) {
-        setLoadingSetlist(true)
+      }
+      if (fetchSetlist) {
+        setLoadingSetlist(true);
         try {
           Promise.all([fetchSetlist, fetchNJVersionsByDate])
-          .then(responses => 
-            Promise.all(responses.map((_res) => _res.json()))
-          )
-          .then(responses => {
-            const setlist = responses[0].titles;
-            const njVersions = responses[1];
-            const location = responses[0].location
-            console.log('results from changing date', setlist, njVersions, location)
-            if (!setlist || setlist.length === 0) {
-              setSetlist(null)
-              setLocation(null)
-              setLoadingSetlist(false)
-            } else {
-              const comboSetlist = setlist.map(song => {
-                if (njVersions.indexOf(song) === -1) {
-                  return {
-                    song, alreadyAdded: false
+            .then((responses) =>
+              Promise.all(responses.map((_res) => _res.json()))
+            )
+            .then((responses) => {
+              const setlist = responses[0].titles;
+              const njVersions = responses[1];
+              const location = responses[0].location;
+              console.log(
+                "results from changing date",
+                setlist,
+                njVersions,
+                location
+              );
+              if (!setlist || setlist.length === 0) {
+                setSetlist(null);
+                setLocation(null);
+                setLoadingSetlist(false);
+              } else {
+                const comboSetlist = setlist.map((song) => {
+                  if (njVersions.indexOf(song) === -1) {
+                    return {
+                      song,
+                      alreadyAdded: false,
+                    };
+                  } else {
+                    return { song, alreadyAdded: true };
                   }
-                } else {
-                  return { song, alreadyAdded: true }
+                });
+                console.log("comboSetlist", comboSetlist);
+                setSetlist(comboSetlist);
+                if (location) {
+                  setLocation(location);
                 }
-              })
-              console.log('comboSetlist', comboSetlist)
-              setSetlist(comboSetlist)
-              if (location) {
-                setLocation(location)
+                setLoadingSetlist(false);
               }
-              setLoadingSetlist(false)
-            }
-          })
+            });
         } catch (error) {
-          setLoadingSetlist(false)
-          console.error('Error getting setlist', error)
+          setLoadingSetlist(false);
+          console.error("Error getting setlist", error);
         }
       }
     } else {
-      setSetlist(null)
-      setLocation(null)
+      setSetlist(null);
+      setLocation(null);
     }
-  }, [date])
+  }, [date]);
 
-    //when song changes
-      //if artist is supported
-        //get versions
-      //if no song
-        //clear versions
+  //when song changes
+  //if artist is supported, fetch versions of that song
+  useEffect(() => {
+    if (song && songExists) {
+      setLoadingShows(true);
+      const data = JSON.stringify({ artist, song });
+      let url;
+      switch (artist) {
+        case "Phish":
+        case "Trey Anastasio (TAB)":
+          url = "/api/phish/versions";
+          break;
+        case "Eggy":
+        case "Goose":
+        case "Umphrey's McGee":
+        case "Neighbor":
+          url = "/api/songfish/versions";
+          break;
+      }
+      const fetchNJVersions = fetch("/api/versions", {
+        method: "POST",
+        body: data,
+      });
+      const fetchAllVersions = fetch(url, {
+        method: "POST",
+        body: data,
+      });
+      try {
+        Promise.all([fetchAllVersions, fetchNJVersions])
+          .then((responses) =>
+            Promise.all(responses.map((_res) => _res.json()))
+          )
+          .then((responses) => {
+            const allVersions = responses[0];
+            const nJVersions = responses[1];
+            console.log("phishnetversions", allVersions);
+            let comboVersions = allVersions.map(
+              ({ showdate, isjamchart, location, artistid, label }) => {
+                if (nJVersions.indexOf(showdate) === -1) {
+                  return {
+                    showdate,
+                    label,
+                    location,
+                    isjamchart,
+                    alreadyAdded: false,
+                  };
+                } else {
+                  return {
+                    showdate,
+                    label,
+                    location,
+                    isjamchart,
+                    alreadyAdded: true,
+                  };
+                }
+              }
+            );
+            setLoadingShows(false);
+            setShows(comboVersions);
+          });
+      } catch (error) {
+        setLoadingShows(false);
+        console.error(error);
+      }
+    } else {
+      setShows(null);
+    }
+  }, [song]);
 
-
+  //when setlist changes, make sure current song is in that setlist
   useEffect(() => {
     if (song && setlist) {
-      let songInSetlist = false
-      setlist.forEach(songTitle => {
+      let songInSetlist = false;
+      setlist.forEach((songTitle) => {
         if (songTitle.song === song) {
-          songInSetlist = true
+          songInSetlist = true;
         }
-      })
+      });
       if (!songInSetlist) {
-        setSong(null)
+        setSong(null);
       }
     }
-  }, [setlist])
+  }, [setlist]);
 
   const handleRatingChange = (e) => {
     setRating(e.target.value);
@@ -428,82 +395,80 @@ export default function AddVersion({
   };
 
   const clearDate = () => {
-    setDate('')
-    setShow(null)
-    setLocation(null)
-    setSetlist(null)
-    setLoadingSetlist(false)
-    setLoadingShows(false)
-    setLoading(false)
-  }
+    setDate("");
+    setShow(null);
+    setLocation(null);
+    setSetlist(null);
+    setLoadingSetlist(false);
+    setLoadingShows(false);
+    setLoading(false);
+  };
 
   const clearSong = () => {
-    setSong('')
-    setLoadingSetlist(false)
-    setLoadingShows(false)
-    setLoading(false)
-  }
+    setSong("");
+    setLoadingSetlist(false);
+    setLoadingShows(false);
+    setLoading(false);
+  };
 
   const insertVersion = async () => {
-    const { data, error } = await supabase
-      .from("versions")
-      .insert([
-        {
-          song_id: songObj.id,
-          song_name: song,
-          user_id: user.id,
-          submitter_name: profile.name,
-          song_submitter_name: songObj.submitter_name,
-          location: location,
-          artist: artist,
-          date: date,
-          funky: funky,
-          ambient: ambient,
-          fast: fast,
-          slow: slow,
-          bliss: bliss,
-          shred: shred,
-          dark: dark,
-          silly: silly,
-          guest: guest,
-          type2: type2,
-          groovy: groovy,
-          peaks: peaks,
-          reggae: reggae,
-          heavy: heavy,
-          jazzy: jazzy,
-          trippy: trippy,
-          soaring: soaring,
-          crunchy: crunchy,
-          happy: happy,
-          acoustic: acoustic,
-          soulful: soulful,
-          official_release: officialRelease,
-          sloppy: sloppy,
-          tease: tease,
-          listen_link: listenLink,
-          multi_part: multiPart,
-          sludgy: sludgy,
-          synthy: synthy,
-          chaotic: chaotic,
-          dissonant: dissonant,
-          bluesy: bluesy,
-          stop_start: stopStart,
-          segue: segue,
-          unusual: unusual,
-          long: long,
-          that_years_style: thatYearsStyle,
-          grimy: grimy,
-          historic: historic,
-          low_key: lowkey,
-          mellow: mellow,
-          melodic: melodic,
-          rocking: rocking,
-          tension_release: tensionRelease,
-          trance: trance,
-          upbeat: upbeat,
-        },
-      ]);
+    const { data, error } = await supabase.from("versions").insert([
+      {
+        song_id: songObj.id,
+        song_name: song,
+        user_id: user.id,
+        submitter_name: profile.name,
+        song_submitter_name: songObj.submitter_name,
+        location: location,
+        artist: artist,
+        date: date,
+        funky: funky,
+        ambient: ambient,
+        fast: fast,
+        slow: slow,
+        bliss: bliss,
+        shred: shred,
+        dark: dark,
+        silly: silly,
+        guest: guest,
+        type2: type2,
+        groovy: groovy,
+        peaks: peaks,
+        reggae: reggae,
+        heavy: heavy,
+        jazzy: jazzy,
+        trippy: trippy,
+        soaring: soaring,
+        crunchy: crunchy,
+        happy: happy,
+        acoustic: acoustic,
+        soulful: soulful,
+        official_release: officialRelease,
+        sloppy: sloppy,
+        tease: tease,
+        listen_link: listenLink,
+        multi_part: multiPart,
+        sludgy: sludgy,
+        synthy: synthy,
+        chaotic: chaotic,
+        dissonant: dissonant,
+        bluesy: bluesy,
+        stop_start: stopStart,
+        segue: segue,
+        unusual: unusual,
+        long: long,
+        that_years_style: thatYearsStyle,
+        grimy: grimy,
+        historic: historic,
+        low_key: lowkey,
+        mellow: mellow,
+        melodic: melodic,
+        rocking: rocking,
+        tension_release: tensionRelease,
+        trance: trance,
+        upbeat: upbeat,
+      },
+    ]);
     if (error) {
       console.error(error);
     } else {
@@ -676,8 +641,7 @@ export default function AddVersion({
               {artistErrorText}
             </Alert>
           )}
-          {loadingSetlist &&
-          <Typography>Loading Setlist...</Typography>}
+          {loadingSetlist && <Typography>Loading Setlist...</Typography>}
           {artist && (
             <SongPicker
               artist={artist}
@@ -692,8 +656,9 @@ export default function AddVersion({
               my={"1em"}
             />
           )}
-          {artist && song &&
-          <Button onClick={() => clearSong()}>Clear Song</Button>}
+          {artist && song && (
+            <Button onClick={() => clearSong()}>Clear Song</Button>
+          )}
           {!songExists && song && (
             <>
               <Alert severity="warning" sx={{ mb: "1em" }}>
@@ -716,11 +681,10 @@ export default function AddVersion({
               {songErrorText}
             </Alert>
           )}
-          {artist && !shows && !loadingShows &&
+          {artist && !shows && !loadingShows && (
             <DatePicker setDate={setDate} my={"1em"} date={date} />
-          }
-          {loadingShows &&
-          <Typography>Loading shows...</Typography>}
+          )}
+          {loadingShows && <Typography>Loading shows...</Typography>}
           {dateErrorText && (
             <Alert severity="error" sx={{ my: "1em" }}>
               {dateErrorText}
@@ -728,19 +692,22 @@ export default function AddVersion({
           )}
           {artist && shows && (
             <ShowPicker
-            show={show}
-            shows={shows}
-            setShow={setShow}
-            setDate={setDate}
-            setLocation={setLocation}
+              show={show}
+              shows={shows}
+              setShow={setShow}
+              setDate={setDate}
+              setLocation={setLocation}
             />
-            )}
-          {date && show &&
-          <Typography sx={{ mx: '0.25em', my: '1em' }}>Date: {new Date(date + 'T18:00:00Z').toLocaleDateString()}</Typography>
-          }
-          {artist && date &&
-          <Button onClick={() => clearDate()}>Clear Date</Button>}
-          {((songExists && artist && date) || location) && 
+          )}
+          {date && show && (
+            <Typography sx={{ mx: "0.25em", my: "1em" }}>
+              Date: {new Date(date + "T18:00:00Z").toLocaleDateString()}
+            </Typography>
+          )}
+          {artist && date && (
+            <Button onClick={() => clearDate()}>Clear Date</Button>
+          )}
+          {((songExists && artist && date) || location) && (
             <Box mx="0.25em" my="1em">
               <TextField
                 autoFocus
@@ -755,7 +722,7 @@ export default function AddVersion({
                 onChange={handleLocationChange}
               />
             </Box>
-          }
+          )}
           {locationErrorText && (
             <Alert severity="error" sx={{ my: "1em" }}>
               {locationErrorText}
