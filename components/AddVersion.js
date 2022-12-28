@@ -242,12 +242,10 @@ export default function AddVersion({
   //if artist is supported, fetch versions of that song
   useEffect(() => {
     if (song && songExists) {
-      setLoadingShows(true);
-      const data = JSON.stringify({ artist, song });
       let url;
       switch (artist) {
         case "Phish":
-        case "Trey Anastasio (TAB)":
+        case "Trey Anastasio, TAB":
           url = "/api/phish/versions";
           break;
         case "Eggy":
@@ -257,6 +255,7 @@ export default function AddVersion({
           url = "/api/songfish/versions";
           break;
       }
+      const data = JSON.stringify({ artist, song });
       const fetchNJVersions = fetch("/api/versions", {
         method: "POST",
         body: data,
@@ -265,41 +264,44 @@ export default function AddVersion({
         method: "POST",
         body: data,
       });
-      try {
-        Promise.all([fetchAllVersions, fetchNJVersions])
-          .then((responses) =>
-            Promise.all(responses.map((_res) => _res.json()))
-          )
-          .then((responses) => {
-            const allVersions = responses[0];
-            const nJVersions = responses[1];
-            const comboVersions = allVersions.map(
-              ({ showdate, isjamchart, location, artistid, label }) => {
-                if (nJVersions.indexOf(showdate) === -1) {
-                  return {
-                    showdate,
-                    label,
-                    location,
-                    isjamchart,
-                    alreadyAdded: false,
-                  };
-                } else {
-                  return {
-                    showdate,
-                    label,
-                    location,
-                    isjamchart,
-                    alreadyAdded: true,
-                  };
+      if (url) {
+        setLoadingShows(true)
+        try {
+          Promise.all([fetchAllVersions, fetchNJVersions])
+            .then((responses) =>
+              Promise.all(responses.map((_res) => _res.json()))
+            )
+            .then((responses) => {
+              const allVersions = responses[0];
+              const nJVersions = responses[1];
+              const comboVersions = allVersions.map(
+                ({ showdate, isjamchart, location, artistid, label }) => {
+                  if (nJVersions.indexOf(showdate) === -1) {
+                    return {
+                      showdate,
+                      label,
+                      location,
+                      isjamchart,
+                      alreadyAdded: false,
+                    };
+                  } else {
+                    return {
+                      showdate,
+                      label,
+                      location,
+                      isjamchart,
+                      alreadyAdded: true,
+                    };
+                  }
                 }
-              }
-            );
+              );
+              setLoadingShows(false);
+              setShows(comboVersions);
+            });
+          } catch (error) {
             setLoadingShows(false);
-            setShows(comboVersions);
-          });
-      } catch (error) {
-        setLoadingShows(false);
-        console.error(error);
+            console.error(error);
+          }
       }
     } else {
       setShows(null);
@@ -691,7 +693,7 @@ export default function AddVersion({
               setLocation={setLocation}
             />
           )}
-          {date && show && (
+          {date && shows && (
             <Typography sx={{ mx: "0.25em", my: "1em" }}>
               Date: {new Date(date + "T18:00:00Z").toLocaleDateString()}
             </Typography>
