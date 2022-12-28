@@ -19,7 +19,8 @@ let artists = [
   'Disco Biscuits',
   'Dizgo',
   'Dopapod',
-  'Frank Zappa (Mothers of Invention)',
+  'Eggy',
+  'Frank Zappa',
   'Furthur',
   'Ghost Light',
   'Goose',
@@ -33,8 +34,10 @@ let artists = [
   'Lotus',
   'Medeski Martin & Wood',
   'moe.',
+  'The Mothers of Invention',
   'Mungion',
   'My Morning Jacket',
+  'Neighbor',
   'Osees',
   'Phil Lesh & Friends',
   'Phish',
@@ -60,7 +63,7 @@ export default function ArtistPicker({ artist, setArtist, size, my }) {
         <InputLabel id="artist-select">Band</InputLabel>
         <Select
           labelId="artist-select"
-          value={artist ?? 'All Bands'}
+          value={artist ? artist : ''}
           label="Band"
           onChange={handleChange}
           >
