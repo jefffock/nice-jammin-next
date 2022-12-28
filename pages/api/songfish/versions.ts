@@ -9,7 +9,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const song = body.song
   let dbName
   let baseUrl
-  console.log('/songfish/versions', artist, song)
   switch (artist) {
     case 'Eggy':
       dbName = 'eggy_songs'
@@ -34,19 +33,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       .from(dbName)
       .select('id')
       .eq('name', song)
-    console.log(data)
-    console.log(error)
     if (error || data.length === 0) {
       console.error('error getting songfish songid from supabase', error)
       // res.status(500).send({message: 'Error getting song id'})
     } else {
       songId = data[0]?.id
       const url = `${baseUrl}/setlists/song_id/${songId}`
-      console.log('url', url)
       fetch(url)
         .then(data => data.json())
         .then(versions => {
-          console.log('versions', versions)
           if (versions && versions.data && versions.data.length > 0) {
             const versionsLessData = versions.data
             .map(version => {

@@ -205,12 +205,6 @@ export default function AddVersion({
               const setlist = responses[0].titles;
               const njVersions = responses[1];
               const location = responses[0].location;
-              console.log(
-                "results from changing date",
-                setlist,
-                njVersions,
-                location
-              );
               if (!setlist || setlist.length === 0) {
                 setSetlist(null);
                 setLocation(null);
@@ -226,7 +220,6 @@ export default function AddVersion({
                     return { song, alreadyAdded: true };
                   }
                 });
-                console.log("comboSetlist", comboSetlist);
                 setSetlist(comboSetlist);
                 if (location) {
                   setLocation(location);
@@ -280,8 +273,7 @@ export default function AddVersion({
           .then((responses) => {
             const allVersions = responses[0];
             const nJVersions = responses[1];
-            console.log("phishnetversions", allVersions);
-            let comboVersions = allVersions.map(
+            const comboVersions = allVersions.map(
               ({ showdate, isjamchart, location, artistid, label }) => {
                 if (nJVersions.indexOf(showdate) === -1) {
                   return {
@@ -312,7 +304,7 @@ export default function AddVersion({
     } else {
       setShows(null);
     }
-  }, [song]);
+  }, [song, songExists]);
 
   //when setlist changes, make sure current song is in that setlist
   useEffect(() => {

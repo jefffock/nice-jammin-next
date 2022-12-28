@@ -22,13 +22,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       break;
   }
   const url = `${baseUrl}/setlists/showdate/${date}`
-  console.log('url', url)
   try {
     await fetch(url)
       .then(data => data.json())
       .then(setlist => {
         if (setlist && setlist.data && setlist.data.length > 0) {
-          console.log('setlist', setlist);
           const titles = setlist.data
           .filter(song => song.artist_id === '1')
           .map(({ songname }) => {
