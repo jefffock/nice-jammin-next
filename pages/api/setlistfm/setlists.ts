@@ -12,11 +12,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const transformedDate = [day, month, year].join('-')
   const mbid = serverRuntimeConfig.mbids[artist]
   const url = `https://api.setlist.fm/rest/1.0/search/setlists?artistMbid=${mbid}&date=${transformedDate}`
-  console.log('url', url)
   let apiKey = process.env.SETLISTFM_API_KEY
   if (mbid && transformedDate) {
     try {
-      console.log('going to make setlistfm api call')
       await fetch(url, {
         headers: {
           'x-api-key': `${apiKey}`,
@@ -25,10 +23,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       })
         .then(data => data.json())
         .then(data => {
-          console.log('data', data)
           if (data && data.setlist && data.setlist.length > 0 && data.setlist[0].sets && data.setlist[0].sets.set && data.setlist[0].sets.set.length > 0) {
-            console.log('going to build location and titles')
-            //build location
             const venueInfo = data.setlist[0].venue
             const location = `${venueInfo.name}, ${venueInfo.city.name}, ${venueInfo.city.country.code === 'US' ? venueInfo.city.stateCode : venueInfo.city.country.name}`
             //build setlist titles
@@ -49,7 +44,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           }
         })
     } catch (error) {
-      console.error('in catch block')
+      console.error('error in /setlistfm/setlists')
       res.status(500).send(error)
     }
   }

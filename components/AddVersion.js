@@ -171,7 +171,7 @@ export default function AddVersion({
       });
       switch (artist) {
         case "Phish":
-        case "Trey Anastasio (TAB)":
+        case "Trey Anastasio, TAB":
           fetchSetlist = fetch("/api/phish/setlists", {
             method: "POST",
             body: data,

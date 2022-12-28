@@ -23,7 +23,6 @@ export default async function handler(req, res) {
         }
         songId = data[0]?.songid;
     }
-    console.log('songId', songId)
     if (songId) {
       const url = `https://api.phish.net/v5/setlists/songid/${songId}.json?apikey=${process.env.PHISHNET_API_KEY}`;
       fetch(url)
