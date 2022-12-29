@@ -82,7 +82,7 @@ export default function App({ jams }) {
       let index = songs.findIndex((item) => {
         return item.song === song;
       });
-      if (index > -1) {
+      if ((song && index > -1) || !song) {
         const data = JSON.stringify({
           artist,
           song,
