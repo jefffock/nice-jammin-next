@@ -106,7 +106,6 @@ export default function AddVersion({
     console.log('date', date, 'song', song)
     setSuccessAlertText(null);
     if (date) {
-      setDateErrorText(null);
       if (jams && song) {
         let index = jams.findIndex((jam) => {
           return jam.song_name === song && jam.date === date;
@@ -122,7 +121,7 @@ export default function AddVersion({
     } else {
       setDateErrorText(null)
     }
-  }, [date, song]);
+  }, [date, song, jams]);
 
   const handleClickOpen = () => {
     setOpen(true);
