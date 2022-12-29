@@ -22,7 +22,7 @@ export default function ShowPicker({ show, shows, setShow, setDate, setLocation,
         <InputLabel id="show-select">Show</InputLabel>
         <Select
           labelId="show-select"
-          value={show ?? ''}
+          value={show}
           label="Show"
           onChange={handleChange}
           MenuProps={{ PaperProps: { sx: { maxHeight: '80vh' } } }}

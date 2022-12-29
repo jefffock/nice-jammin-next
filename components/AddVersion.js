@@ -103,6 +103,7 @@ export default function AddVersion({
   const [njVersionsDatesOnly, setNjVersionsDatesOnly] = useState(null)
 
   useEffect(() => {
+    console.log('date', date, 'song', song)
     setSuccessAlertText(null);
     if (date) {
       setDateErrorText(null);
@@ -118,8 +119,10 @@ export default function AddVersion({
           setDateErrorText(null);
         }
       }
+    } else {
+      setDateErrorText(null)
     }
-  }, [date, jams, song]);
+  }, [date, song]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -145,12 +148,17 @@ export default function AddVersion({
     setDate(null);
     setLocation(null);
     setSong(null);
+    setShows(null)
+    setAllShows(null)
+    setSongErrorText(null)
   }, [artist]);
 
   //when date changes
   //fetch setlist
   useEffect(() => {
-    if (date && open) {
+    //make sure the date is from this millenium or the previous one before fetching versions from that date
+    if (date && (date.charAt(0) === '1' || date.charAt(0) === '2') && open) {
+      console.log('date.length', date, typeof date.charAt(0))
       const data = JSON.stringify({
         date: date,
         artist: artist,
@@ -226,7 +234,7 @@ export default function AddVersion({
     } else {
       setSetlist(null);
       setLocation(null);
-    }
+    } 
   }, [date, open]);
 
   //when song changes
