@@ -29,16 +29,15 @@ export default function AddVersion({
   user,
   profile,
   setSongs,
-  setUpdatedJams,
   artist,
   setArtist,
   song,
   setSong,
+  songObj,
+  songExists
 }) {
   const [loading, setLoading] = useState(null);
   const [open, setOpen] = useState(false);
-  const [songObj, setSongObj] = useState(null);
-  const [songExists, setSongExists] = useState(true);
   const [songErrorText, setSongErrorText] = useState(null);
   const [artistErrorText, setArtistErrorText] = useState(null);
   const [dateErrorText, setDateErrorText] = useState(null);
@@ -120,16 +119,6 @@ export default function AddVersion({
     }
   }, [date, jams, song]);
 
-  useEffect(() => {
-    if (songs) {
-      let index = songs.findIndex((item) => {
-        return item.song === song;
-      });
-      index === -1 ? setSongExists(false) : setSongExists(true);
-      setSongObj(songs[index]);
-    }
-  }, [song, songs]);
-
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -159,7 +148,7 @@ export default function AddVersion({
   //when date changes
   //fetch setlist
   useEffect(() => {
-    if (date) {
+    if (date && open) {
       const data = JSON.stringify({
         date: date,
         artist: artist,
@@ -241,7 +230,7 @@ export default function AddVersion({
   //when song changes
   //if artist is supported, fetch versions of that song
   useEffect(() => {
-    if (song && songExists) {
+    if (song && songExists && open) {
       let url;
       switch (artist) {
         case "Phish":

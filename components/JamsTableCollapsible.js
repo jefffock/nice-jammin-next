@@ -259,7 +259,7 @@ function Row({ row, user, profile, songs, showRatings }) {
     if (open && !comments) {
       async function getComments(versionId) {
         let newComments = await fetchComments(versionId)
-        if (newComments && newComments !== null) {
+        if (newComments && newComments !== null && newComments.length > 0) {
           for (var i = 0; i < newComments.length; i++) {
             if (newComments[i].comment.length > 0) {
               setHasComments(true)
@@ -339,19 +339,19 @@ export default function CollapsibleTable({ jams, sortedJams, sortJams, order, or
     setOrderBy(property);
   };
 
- useEffect(() => {
-  if (!jamsFetched && !fetchingJams) {
-    setFetchingJams(true)
-    const getAllJams = async () => {
-      let allJams = await fetchAllJams()
-      setJamsFetched(true)
-      setUpdatedJams(allJams)
-    }
-    getAllJams()
-  }
-  })
+//  useEffect(() => {
+//   if (!jamsFetched && !fetchingJams) {
+//     setFetchingJams(true)
+//     const getAllJams = async () => {
+//       let allJams = await fetchAllJams()
+//       setJamsFetched(true)
+//       setUpdatedJams(allJams)
+//     }
+//     getAllJams()
+//   }
+//   })
 
-  useEffect(() => {
+useEffect(() => {
   if (!songsFetched && !fetchingSongs) {
     setFetchingSongs(true)
     const getSongs = async () => {
@@ -363,21 +363,21 @@ export default function CollapsibleTable({ jams, sortedJams, sortJams, order, or
   }
  })
 
-  function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-      return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-      return 1;
-    }
-    return 0;
-  }
+  // function descendingComparator(a, b, orderBy) {
+  //   if (b[orderBy] < a[orderBy]) {
+  //     return -1;
+  //   }
+  //   if (b[orderBy] > a[orderBy]) {
+  //     return 1;
+  //   }
+  //   return 0;
+  // }
 
-  function getComparator(order, orderBy) {
-    return order === 'desc'
-      ? (a, b) => descendingComparator(a, b, orderBy)
-      : (a, b) => -descendingComparator(a, b, orderBy);
-  }
+  // function getComparator(order, orderBy) {
+  //   return order === 'desc'
+  //     ? (a, b) => descendingComparator(a, b, orderBy)
+  //     : (a, b) => -descendingComparator(a, b, orderBy);
+  // }
 
   return (
     <>
@@ -395,8 +395,8 @@ export default function CollapsibleTable({ jams, sortedJams, sortJams, order, or
           showRatings={showRatings}
           />
         <TableBody>
-          {sortedJams &&
-          sortedJams
+          {jams &&
+          jams
           .map((jam) => (
             <Row
             key={jam.id}

@@ -49,10 +49,12 @@ export default function App({ jams }) {
   const [artists, setArtists] = useState(null)
   const [artist, setArtist] = useState(null)
   const [song, setSong] = useState(null)
+  const [songObj, setSongObj] = useState(null);
+  const [songExists, setSongExists] = useState(true);
   const [filteredJams, setFilteredJams] = useState(jams)
   const [sortedJams, setSortedJams] = useState(jams)
   const [order, setOrder] = useState('desc');
-  const [orderBy, setOrderBy] = useState('date');
+  const [orderBy, setOrderBy] = useState('id');
   const [beforeDate, setBeforeDate] = useState('')
   const [afterDate, setAfterDate] = useState('')
   const [tagsSelected, setTagsSelected] = useState([])
@@ -74,50 +76,66 @@ export default function App({ jams }) {
   }, [session])
 
   useEffect(() => {
-    function filterFunc(item) {
-      if (artist && artist !== 'All Bands' && item.artist !== artist) {
-        return false
-      } if (song && !item.song_name?.toLowerCase().includes(song.toLowerCase())) {
-        return false
-      } if (tagsSelected) {
-        for (var i = 0; i < tagsSelected.length; i++) {
-          if (!item[tagsSelected[i]]) {
-            return false
-          }
-        }
-      } let itemDate = parseInt(item.date.slice(0,4))
-      if (beforeDate && beforeDate < itemDate) {
-        return false
-      } if (afterDate && afterDate > itemDate) {
-        return false
+    console.log('song', song)
+    if (!song || (song && songExists)) {
+      const data = JSON.stringify({
+        artist,
+        song,
+        afterDate: afterDate ? afterDate.toString() : null,
+        beforeDate: beforeDate ? beforeDate.toString() : null,
+        tags: tagsSelected,
+        orderBy,
+        order,
+        fetchFullJams: true
+      })
+      console.log('data', data)
+      try {
+        fetch("/api/versions", {
+          method: "POST",
+          body: data
+        })
+        .then(data => data.json())
+        .then(versions => {
+          console.log('versions', versions)
+          setUpdatedJams(versions)
+        })
+      } catch (error) {
+        console.error(error)
       }
-      return true
     }
-    let newFilteredJams = updatedJams?.filter(filterFunc)
-    setFilteredJams(newFilteredJams)
-  }, [artist, tagsSelected, beforeDate, afterDate, song, updatedJams])
+  }, [artist, tagsSelected, beforeDate, afterDate, song, songExists, order, orderBy])
 
   useEffect(() => {
-    function descendingComparator(a, b, orderBy) {
-      if (b[orderBy] < a[orderBy]) {
-        return -1;
-      }
-      if (b[orderBy] > a[orderBy]) {
-        return 1;
-      }
-      return 0;
+    if (songs) {
+      let index = songs.findIndex((item) => {
+        return item.song === song;
+      });
+      index === -1 ? setSongExists(false) : setSongExists(true);
+      setSongObj(songs[index]);
     }
-    function getComparator(order, orderBy) {
-      return order === 'desc'
-      ? (a, b) => descendingComparator(a, b, orderBy)
-      : (a, b) => -descendingComparator(a, b, orderBy);
-    }
-    function sortJams() {
-      let newSortedJams = filteredJams.slice().sort(getComparator(order, orderBy))
-      setSortedJams(newSortedJams)
-    }
-    sortJams()
-  }, [order, orderBy, filteredJams])
+  }, [song, songs]);
+
+  // useEffect(() => {
+  //   function descendingComparator(a, b, orderBy) {
+  //     if (b[orderBy] < a[orderBy]) {
+  //       return -1;
+  //     }
+  //     if (b[orderBy] > a[orderBy]) {
+  //       return 1;
+  //     }
+  //     return 0;
+  //   }
+  //   function getComparator(order, orderBy) {
+  //     return order === 'desc'
+  //     ? (a, b) => descendingComparator(a, b, orderBy)
+  //     : (a, b) => -descendingComparator(a, b, orderBy);
+  //   }
+  //   function sortJams() {
+  //     let newSortedJams = filteredJams.slice().sort(getComparator(order, orderBy))
+  //     setSortedJams(newSortedJams)
+  //   }
+  //   sortJams()
+  // }, [order, orderBy, filteredJams])
 
   useEffect(() => {
     if (user && !profile) {
@@ -163,10 +181,10 @@ export default function App({ jams }) {
       </>
       }
       {song && !artist &&
-      <><title>{song} Great Jams - NiceJammin.com</title></>
+      <><title>{song} Jams - NiceJammin.com</title></>
       }
       {artist && song &&
-      <><title>{artist} {song} Great Jams - NiceJammin.com</title></>
+      <><title>{artist} {song} Jams - NiceJammin.com</title></>
       }
     </Head>
     <Box sx={{ bgcolor: 'primary.graybg', minHeight: '100vh', maxWidth: '100vw', overflow: 'hidden'}}>
@@ -185,9 +203,9 @@ export default function App({ jams }) {
       <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} afterDate={afterDate} setBeforeDate={setBeforeDate} setAfterDate={setAfterDate} song={song} setSong={setSong}/>
       <Suspense fallback={<p>Loading....</p>}>
         {/* <DynamicJamsTableVirtualized jams={jams} sortedJams={sortedJams}  order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} setUpdatedJams={setUpdatedJams} songs={songs} setSongs={setSongs}/> */}
-        <DynamicJamsTable jams={jams} sortedJams={sortedJams}  order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} setUpdatedJams={setUpdatedJams} songs={songs} setSongs={setSongs} showRatings={showRatings}/>
+        <DynamicJamsTable jams={updatedJams} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} setUpdatedJams={setUpdatedJams} songs={songs} setSongs={setSongs} showRatings={showRatings}/>
         <br></br>
-        <DynamicAddVersion songs={songs} setSongs={setSongs} jams={updatedJams} user={user} profile={profile} setUpdatedJams={setUpdatedJams} artist={artist} setArtist={setArtist} song={song} setSong={setSong}/>
+        <DynamicAddVersion songs={songs} setSongs={setSongs} jams={updatedJams} user={user} profile={profile} setUpdatedJams={setUpdatedJams} artist={artist} setArtist={setArtist} song={song} setSong={setSong} songExists={songExists} songObj={songObj}/>
         <DynamicGratitude />
         <DynamicIdeasTable user={user} profile={profile}/>
         <DynamicContributorsTable />
@@ -203,10 +221,8 @@ export async function getStaticProps() {
     const { data, error } = await supabase
       .from('versions')
       .select('*')
-      // .gt('avg_rating', 0)
-      .limit(30)
-      .order('avg_rating', { ascending: false })
-      .order('num_ratings', { ascending: false })
+      .limit(50)
+      .order('id', { ascending: false })
     if (error) {
       console.error(error)
     } else if (data) {
