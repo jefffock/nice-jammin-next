@@ -87,7 +87,6 @@ export default function App({ jams }) {
           order,
           fetchFullJams: true
         })
-        console.log('data', data)
         try {
           fetch("/api/versions", {
             method: "POST",

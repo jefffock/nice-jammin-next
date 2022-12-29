@@ -103,7 +103,6 @@ export default function AddVersion({
   const [njVersionsDatesOnly, setNjVersionsDatesOnly] = useState(null)
 
   useEffect(() => {
-    console.log('date', date, 'song', song)
     setSuccessAlertText(null);
     if (date) {
       if (jams && song) {
@@ -117,8 +116,8 @@ export default function AddVersion({
         } else {
           setDateErrorText(null);
         }
-      }
-    } else {
+      } 
+    } if (!date || !song) {
       setDateErrorText(null)
     }
   }, [date, song, jams]);
@@ -157,7 +156,6 @@ export default function AddVersion({
   useEffect(() => {
     //make sure the date is from this millenium or the previous one before fetching versions from that date
     if (date && (date.charAt(0) === '1' || date.charAt(0) === '2') && open) {
-      console.log('date.length', date, typeof date.charAt(0))
       const data = JSON.stringify({
         date: date,
         artist: artist,
@@ -255,7 +253,6 @@ export default function AddVersion({
       }
       const data = JSON.stringify({ artist, song });
       if (url) {
-        console.log('url', url)
         setLoadingShows(true)
         try {
           fetch(url, {
@@ -264,7 +261,6 @@ export default function AddVersion({
           })
           .then(data => data.json())
           .then(allVersions => {
-            console.log('allversions', allVersions)
               setLoadingShows(false);
               setAllShows(allVersions);
             });
