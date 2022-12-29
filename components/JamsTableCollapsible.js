@@ -377,38 +377,45 @@ useEffect(() => {
   //     ? (a, b) => descendingComparator(a, b, orderBy)
   //     : (a, b) => -descendingComparator(a, b, orderBy);
   // }
-
-  return (
-    <>
-    {/* <Typography variant="h5" textAlign="center" mt="0.5em">Favorite Jams</Typography>
-    <Typography textAlign="center">Tap a row to listen and rate</Typography> */}
-    <TableContainer component={Paper} sx={{ height: '55vh', overflowY: 'auto', width: '96vw', maxWidth: '900px', mx: 'auto', borderRadius: '1em' }}>
-      <Table
-      aria-label="jams table"
-      stickyHeader
-      >
-        <JamsTableHead
-          order={order}
-          orderBy={orderBy}
-          onRequestSort={handleRequestSort}
-          showRatings={showRatings}
-          />
-        <TableBody>
-          {jams &&
-          jams
-          .map((jam) => (
-            <Row
-            key={jam.id}
-            row={jam}
-            user={user}
-            profile={profile}
-            songs={songs}
+  if (jams && jams.length > 0) {
+    return (
+      <>
+      {/* <Typography variant="h5" textAlign="center" mt="0.5em">Favorite Jams</Typography>
+      <Typography textAlign="center">Tap a row to listen and rate</Typography> */}
+      <TableContainer component={Paper} sx={{ maxHeight: '55vh', overflowY: 'auto', width: '96vw', maxWidth: '900px', mx: 'auto', borderRadius: '1em' }}>
+        <Table
+        aria-label="jams table"
+        stickyHeader
+        >
+          <JamsTableHead
+            order={order}
+            orderBy={orderBy}
+            onRequestSort={handleRequestSort}
             showRatings={showRatings}
             />
-            ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-    </>
-  );
+          <TableBody>
+            {jams &&
+            jams
+            .map((jam) => (
+              <Row
+              key={jam.id}
+              row={jam}
+              user={user}
+              profile={profile}
+              songs={songs}
+              showRatings={showRatings}
+              />
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      </>
+    );
+  } else {
+    return (
+      <Typography textAlign="center" fontSize="18px" m="1em">
+        No one has added a jam that matches those filters, yet!
+      </Typography>
+    )
+  }
 }

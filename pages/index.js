@@ -12,10 +12,6 @@ import Typography from '@mui/material/Typography';
 import TopBar from '../components/AppBar'
 import Welcome from '../components/Welcome'
 import dynamic from 'next/dynamic'
-import Checkbox from '@mui/material/Checkbox';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Sorter from '../components/Sorter';
 
 const DynamicContributorsTable = dynamic(() => import('../components/TopContributors'), {
   suspense: true
@@ -189,17 +185,13 @@ export default function App({ jams }) {
     <Box sx={{ bgcolor: 'primary.graybg', minHeight: '100vh', maxWidth: '100vw', overflow: 'hidden'}}>
       <TopBar showButton={true} user={user} session={session} router={router}/>
       <Welcome />
-      <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate} songs={songs} song={song} setSong={setSong}/>
-      <Sorter orderBy={orderBy} setOrderBy={setOrderBy} setOrder={setOrder}/>
-      <Typography fontSize="20px" textAlign="center" mt="1em">
+      <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate} songs={songs} song={song} setSong={setSong} orderBy={orderBy} setOrderBy={setOrderBy} setOrder={setOrder} showRatings={showRatings} handleShowRatingsChange={handleShowRatingsChange} jams={currentJams && currentJams.length > 0}/>
+      {/* <Sorter orderBy={orderBy} setOrderBy={setOrderBy} setOrder={setOrder}/> */}
+      {/* <Typography fontSize="20px" textAlign="center" mt="1em">
         {(!song && !artist && !beforeDate && !afterDate && tagsSelected.length === 0) ?
         'All Jams' : 'Filtered Jams'}
-      </Typography>
-      <FormControl sx={{ display: 'flex', alignItems:'center'}}>
-        <FormControlLabel control={<Checkbox checked={showRatings}
-        onChange={handleShowRatingsChange}/>} label="Show Ratings"/>
-      </FormControl>
-      <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} afterDate={afterDate} setBeforeDate={setBeforeDate} setAfterDate={setAfterDate} song={song} setSong={setSong}/>
+      </Typography> */}
+      <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} afterDate={afterDate} setBeforeDate={setBeforeDate} setAfterDate={setAfterDate} song={song} setSong={setSong} jams={currentJams.length > 0}/>
       <Suspense fallback={<p>Loading....</p>}>
         <DynamicJamsTable jams={currentJams} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} setCurrentJams={setCurrentJams} songs={songs} setSongs={setSongs} showRatings={showRatings}/>
         <br></br>

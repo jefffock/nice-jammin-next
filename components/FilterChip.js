@@ -49,9 +49,9 @@ export default function FilterChip({ tag, artist, setArtist, tagsSelected, setTa
     } if (tag) {
       setLabel(tags[tag])
     } if (beforeDate) {
-      setLabel(`Before ${beforeDate}`)
+      setLabel(`${beforeDate} or earlier`)
     } if (afterDate) {
-      setLabel(`After ${afterDate}`)
+      setLabel(`${afterDate} or later`)
     } if (song) {
       setLabel(song)
     }
