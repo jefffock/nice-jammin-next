@@ -19,7 +19,7 @@ let sortOptions = [
 
 export default function Sorter({ orderBy, setOrderBy, setOrder, size, my }) {
 
-  const [label, setLabel] = useState('Recently Added')
+  const [label, setLabel] = useState('Rating')
 
   const handleChange = (event) => {
       setLabel(event.target.value);

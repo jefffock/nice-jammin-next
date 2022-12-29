@@ -31,6 +31,11 @@ export default async function handler(req, res) {
       })
     } if (orderBy) {
       query = query.order(orderBy, {ascending: asc})
+      if (orderBy === 'avg_rating') {
+        query = query.order('num_ratings', {ascending: false})
+      } if (orderBy === 'num_ratings') {
+        query = query.order('avg_rating', {ascending: false})
+      }
     } query = query.limit(100)
     try {
       const { data, error } = await query

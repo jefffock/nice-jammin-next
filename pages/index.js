@@ -54,7 +54,7 @@ export default function App({ jams }) {
   const [filteredJams, setFilteredJams] = useState(jams)
   const [sortedJams, setSortedJams] = useState(jams)
   const [order, setOrder] = useState('desc');
-  const [orderBy, setOrderBy] = useState('id');
+  const [orderBy, setOrderBy] = useState('avg_rating');
   const [beforeDate, setBeforeDate] = useState('')
   const [afterDate, setAfterDate] = useState('')
   const [tagsSelected, setTagsSelected] = useState([])
@@ -77,7 +77,7 @@ export default function App({ jams }) {
 
   useEffect(() => {
     console.log('song', song)
-    if (!song || (song && songExists)) {
+    if ((!song || (song && songExists)) && songs) {
       //double check song exists - before, when you deleted a char from an existing song, songExists updated after the GET request for versions had been sent
       let index = songs.findIndex((item) => {
         return item.song === song;
@@ -227,8 +227,9 @@ export async function getStaticProps() {
     const { data, error } = await supabase
       .from('versions')
       .select('*')
-      .limit(50)
-      .order('id', { ascending: false })
+      .limit(100)
+      .order('avg_rating', { ascending: false })
+      .order('num_ratings', { ascending: false })
     if (error) {
       console.error(error)
     } else if (data) {
