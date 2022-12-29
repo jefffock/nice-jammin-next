@@ -22,7 +22,7 @@ export default function ShowPicker({ show, shows, setShow, setDate, setLocation,
         <InputLabel id="show-select">Show</InputLabel>
         <Select
           labelId="show-select"
-          value={show ?? ''}
+          value={show}
           label="Show"
           onChange={handleChange}
           MenuProps={{ PaperProps: { sx: { maxHeight: '80vh' } } }}
@@ -30,7 +30,7 @@ export default function ShowPicker({ show, shows, setShow, setDate, setLocation,
           {shows.map((show, index) => {
             const label = (show.isjamchart === '1' ? '☆ ' : '') + (show.alreadyAdded ? '(Added) ' : '') + show.label
             return (
-              <MenuItem key={index} value={show} disabled={show.alreadyAdded} sx={{ whiteSpace: 'normal'}}>{label}</MenuItem>
+              <MenuItem key={index} value={show} sx={{ whiteSpace: 'normal'}}>{label}</MenuItem>
             )}
           )}
         </Select>

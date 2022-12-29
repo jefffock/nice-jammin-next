@@ -131,7 +131,7 @@ export default function SongPicker({ artist, songs, song, setSong, setlist, wide
             {uniqueSongs?.map((song, index) => {
               const label = (song.alreadyAdded ? '(Added) ' : '') + song.label
                 return (
-                  <MenuItem key={index} value={song.label} disabled={song.alreadyAdded}>{label}</MenuItem>
+                  <MenuItem key={index} value={song.label}>{label}</MenuItem>
                 )
               })
             }

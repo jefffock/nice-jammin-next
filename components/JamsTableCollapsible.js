@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -21,7 +20,7 @@ import RateVersion from './RateVersion'
 import AddListenLink from './AddListenLink'
 import ListenLink from './ListenLink'
 import Comments from './Comments'
-import { fetchComments, fetchAllJams, fetchSongs } from '../utils/fetchData'
+import { fetchComments, fetchSongs } from '../utils/fetchData'
 import ReportIssue from './ReportIssue'
 
 function JamsTableHead({ order, orderBy, onRequestSort, showRatings }) {
@@ -259,9 +258,9 @@ function Row({ row, user, profile, songs, showRatings }) {
     if (open && !comments) {
       async function getComments(versionId) {
         let newComments = await fetchComments(versionId)
-        if (newComments && newComments !== null) {
+        if (newComments && newComments !== null && newComments.length > 0) {
           for (var i = 0; i < newComments.length; i++) {
-            if (newComments[i].comment.length > 0) {
+            if (newComments[i]?.comment?.length > 0) {
               setHasComments(true)
               break
             }
@@ -339,19 +338,19 @@ export default function CollapsibleTable({ jams, sortedJams, sortJams, order, or
     setOrderBy(property);
   };
 
- useEffect(() => {
-  if (!jamsFetched && !fetchingJams) {
-    setFetchingJams(true)
-    const getAllJams = async () => {
-      let allJams = await fetchAllJams()
-      setJamsFetched(true)
-      setUpdatedJams(allJams)
-    }
-    getAllJams()
-  }
-  })
+//  useEffect(() => {
+//   if (!jamsFetched && !fetchingJams) {
+//     setFetchingJams(true)
+//     const getAllJams = async () => {
+//       let allJams = await fetchAllJams()
+//       setJamsFetched(true)
+//       setUpdatedJams(allJams)
+//     }
+//     getAllJams()
+//   }
+//   })
 
-  useEffect(() => {
+useEffect(() => {
   if (!songsFetched && !fetchingSongs) {
     setFetchingSongs(true)
     const getSongs = async () => {
@@ -363,53 +362,60 @@ export default function CollapsibleTable({ jams, sortedJams, sortJams, order, or
   }
  })
 
-  function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-      return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-      return 1;
-    }
-    return 0;
-  }
+  // function descendingComparator(a, b, orderBy) {
+  //   if (b[orderBy] < a[orderBy]) {
+  //     return -1;
+  //   }
+  //   if (b[orderBy] > a[orderBy]) {
+  //     return 1;
+  //   }
+  //   return 0;
+  // }
 
-  function getComparator(order, orderBy) {
-    return order === 'desc'
-      ? (a, b) => descendingComparator(a, b, orderBy)
-      : (a, b) => -descendingComparator(a, b, orderBy);
-  }
-
-  return (
-    <>
-    {/* <Typography variant="h5" textAlign="center" mt="0.5em">Favorite Jams</Typography>
-    <Typography textAlign="center">Tap a row to listen and rate</Typography> */}
-    <TableContainer component={Paper} sx={{ height: '55vh', overflowY: 'auto', width: '96vw', maxWidth: '900px', mx: 'auto', borderRadius: '1em' }}>
-      <Table
-      aria-label="jams table"
-      stickyHeader
-      >
-        <JamsTableHead
-          order={order}
-          orderBy={orderBy}
-          onRequestSort={handleRequestSort}
-          showRatings={showRatings}
-          />
-        <TableBody>
-          {sortedJams &&
-          sortedJams
-          .map((jam) => (
-            <Row
-            key={jam.id}
-            row={jam}
-            user={user}
-            profile={profile}
-            songs={songs}
+  // function getComparator(order, orderBy) {
+  //   return order === 'desc'
+  //     ? (a, b) => descendingComparator(a, b, orderBy)
+  //     : (a, b) => -descendingComparator(a, b, orderBy);
+  // }
+  if (jams && jams.length > 0) {
+    return (
+      <>
+      {/* <Typography variant="h5" textAlign="center" mt="0.5em">Favorite Jams</Typography>
+      <Typography textAlign="center">Tap a row to listen and rate</Typography> */}
+      <TableContainer component={Paper} sx={{ maxHeight: '55vh', overflowY: 'auto', width: '96vw', maxWidth: '900px', mx: 'auto', borderRadius: '1em' }}>
+        <Table
+        aria-label="jams table"
+        stickyHeader
+        >
+          <JamsTableHead
+            order={order}
+            orderBy={orderBy}
+            onRequestSort={handleRequestSort}
             showRatings={showRatings}
             />
-            ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-    </>
-  );
+          <TableBody>
+            {jams &&
+            jams
+            .map((jam) => (
+              <Row
+              key={jam.id}
+              row={jam}
+              user={user}
+              profile={profile}
+              songs={songs}
+              showRatings={showRatings}
+              />
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      </>
+    );
+  } else {
+    return (
+      <Typography textAlign="center" fontSize="18px" m="1em">
+        No one has added a jam that matches those filters, yet!
+      </Typography>
+    )
+  }
 }

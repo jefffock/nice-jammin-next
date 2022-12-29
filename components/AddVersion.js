@@ -29,16 +29,15 @@ export default function AddVersion({
   user,
   profile,
   setSongs,
-  setUpdatedJams,
   artist,
   setArtist,
   song,
   setSong,
+  songObj,
+  songExists
 }) {
   const [loading, setLoading] = useState(null);
   const [open, setOpen] = useState(false);
-  const [songObj, setSongObj] = useState(null);
-  const [songExists, setSongExists] = useState(true);
   const [songErrorText, setSongErrorText] = useState(null);
   const [artistErrorText, setArtistErrorText] = useState(null);
   const [dateErrorText, setDateErrorText] = useState(null);
@@ -100,11 +99,12 @@ export default function AddVersion({
   const [shows, setShows] = useState(null);
   const [loadingShows, setLoadingShows] = useState(false);
   const [loadingSetlist, setLoadingSetlist] = useState(false);
+  const [allShows, setAllShows] = useState(null)
+  const [njVersionsDatesOnly, setNjVersionsDatesOnly] = useState(null)
 
   useEffect(() => {
     setSuccessAlertText(null);
     if (date) {
-      setDateErrorText(null);
       if (jams && song) {
         let index = jams.findIndex((jam) => {
           return jam.song_name === song && jam.date === date;
@@ -116,19 +116,11 @@ export default function AddVersion({
         } else {
           setDateErrorText(null);
         }
-      }
+      } 
+    } if (!date || !song) {
+      setDateErrorText(null)
     }
-  }, [date, jams, song]);
-
-  useEffect(() => {
-    if (songs) {
-      let index = songs.findIndex((item) => {
-        return item.song === song;
-      });
-      index === -1 ? setSongExists(false) : setSongExists(true);
-      setSongObj(songs[index]);
-    }
-  }, [song, songs]);
+  }, [date, song, jams]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -154,12 +146,16 @@ export default function AddVersion({
     setDate(null);
     setLocation(null);
     setSong(null);
+    setShows(null)
+    setAllShows(null)
+    setSongErrorText(null)
   }, [artist]);
 
   //when date changes
   //fetch setlist
   useEffect(() => {
-    if (date) {
+    //make sure the date is from this millenium or the previous one before fetching versions from that date
+    if (date && (date.charAt(0) === '1' || date.charAt(0) === '2') && open) {
       const data = JSON.stringify({
         date: date,
         artist: artist,
@@ -235,13 +231,13 @@ export default function AddVersion({
     } else {
       setSetlist(null);
       setLocation(null);
-    }
-  }, [date]);
+    } 
+  }, [date, open]);
 
   //when song changes
-  //if artist is supported, fetch versions of that song
+  //if artist is supported, fetch all versions of that song
   useEffect(() => {
-    if (song && songExists) {
+    if (song && songExists && open) {
       let url;
       switch (artist) {
         case "Phish":
@@ -256,47 +252,17 @@ export default function AddVersion({
           break;
       }
       const data = JSON.stringify({ artist, song });
-      const fetchNJVersions = fetch("/api/versions", {
-        method: "POST",
-        body: data,
-      });
-      const fetchAllVersions = fetch(url, {
-        method: "POST",
-        body: data,
-      });
       if (url) {
         setLoadingShows(true)
         try {
-          Promise.all([fetchAllVersions, fetchNJVersions])
-            .then((responses) =>
-              Promise.all(responses.map((_res) => _res.json()))
-            )
-            .then((responses) => {
-              const allVersions = responses[0];
-              const nJVersions = responses[1];
-              const comboVersions = allVersions.map(
-                ({ showdate, isjamchart, location, artistid, label }) => {
-                  if (nJVersions.indexOf(showdate) === -1) {
-                    return {
-                      showdate,
-                      label,
-                      location,
-                      isjamchart,
-                      alreadyAdded: false,
-                    };
-                  } else {
-                    return {
-                      showdate,
-                      label,
-                      location,
-                      isjamchart,
-                      alreadyAdded: true,
-                    };
-                  }
-                }
-              );
+          fetch(url, {
+            method: "POST",
+            body: data,
+          })
+          .then(data => data.json())
+          .then(allVersions => {
               setLoadingShows(false);
-              setShows(comboVersions);
+              setAllShows(allVersions);
             });
           } catch (error) {
             setLoadingShows(false);
@@ -306,7 +272,45 @@ export default function AddVersion({
     } else {
       setShows(null);
     }
-  }, [song, songExists]);
+  }, [song, songExists, open]);
+
+  //when NJ jams list changes, get dates and store them in state
+  useEffect(() => {
+    if (jams) {
+      let datesOnly = []
+      jams.forEach(jam => {
+        datesOnly.push(jam.date)
+      })
+      setNjVersionsDatesOnly(datesOnly)
+    }
+  }, [jams])
+
+  //when allShows changes, compare it to versions on NJ
+  useEffect(() => {
+    if (allShows && njVersionsDatesOnly) {
+      const showsWithAlreadyAdded = allShows.map(
+      ({ showdate, isjamchart, location, label }) => {
+        if (njVersionsDatesOnly.indexOf(showdate) === -1) {
+          return {
+            showdate,
+            label,
+            location,
+            isjamchart,
+            alreadyAdded: false,
+          };
+        } else {
+          return {
+            showdate,
+            label,
+            location,
+            isjamchart,
+            alreadyAdded: true,
+          };
+        }
+      })
+      setShows(showsWithAlreadyAdded)
+    }
+  }, [allShows, njVersionsDatesOnly])
 
   //when setlist changes, make sure current song is in that setlist
   useEffect(() => {
