@@ -5,16 +5,13 @@ import { supabase } from '../utils/supabaseClient'
 import { fetchSongs, fetchAllJams } from '../utils/fetchData';
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import CollapsibleTable from '../components/JamsTableCollapsible'
 import Box from '@mui/material/Box'
 import FilterBar from '../components/FilterBar'
 import FilterList from '../components/FilterList'
-import AddVersion from '../components/AddVersion'
 import Typography from '@mui/material/Typography';
 import TopBar from '../components/AppBar'
 import Welcome from '../components/Welcome'
 import dynamic from 'next/dynamic'
-import JamsTableVirtualized from '../components/JamsTableVirtualized'
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -26,9 +23,7 @@ const DynamicContributorsTable = dynamic(() => import('../components/TopContribu
 const DynamicJamsTable = dynamic(() => import('../components/JamsTableCollapsible'), {
   suspense: true
 })
-const DynamicJamsTableVirtualized = dynamic(() => import('../components/JamsTableVirtualized'), {
-  suspense: true
-})
+
 const DynamicAddVersion = dynamic(() => import('../components/AddVersion'), {
   suspense: true
 })
@@ -41,7 +36,7 @@ const DynamicIdeasTable = dynamic(() => import('../components/IdeasTable'), {
 const DynamicFooter = dynamic(() => import('../components/Footer'), { suspense: true})
 
 export default function App({ jams }) {
-  const [updatedJams, setUpdatedJams] = useState(jams)
+  const [currentJams, setCurrentJams] = useState(jams)
   const [songs, setSongs] = useState(null)
   const [session, setSession] = useState(null)
   const [user, setUser] = useState(null)
@@ -76,7 +71,6 @@ export default function App({ jams }) {
   }, [session])
 
   useEffect(() => {
-    console.log('song', song)
     if ((!song || (song && songExists)) && songs) {
       //double check song exists - before, when you deleted a char from an existing song, songExists updated after the GET request for versions had been sent
       let index = songs.findIndex((item) => {
@@ -101,8 +95,8 @@ export default function App({ jams }) {
           })
           .then(data => data.json())
           .then(versions => {
-            console.log('versions', versions)
-            setUpdatedJams(versions)
+            console.table('versions', versions)
+            setCurrentJams(versions)
           })
         } catch (error) {
           console.error(error)
@@ -208,10 +202,9 @@ export default function App({ jams }) {
       </FormControl>
       <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} afterDate={afterDate} setBeforeDate={setBeforeDate} setAfterDate={setAfterDate} song={song} setSong={setSong}/>
       <Suspense fallback={<p>Loading....</p>}>
-        {/* <DynamicJamsTableVirtualized jams={jams} sortedJams={sortedJams}  order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} setUpdatedJams={setUpdatedJams} songs={songs} setSongs={setSongs}/> */}
-        <DynamicJamsTable jams={updatedJams} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} setUpdatedJams={setUpdatedJams} songs={songs} setSongs={setSongs} showRatings={showRatings}/>
+        <DynamicJamsTable jams={currentJams} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} setCurrentJams={setCurrentJams} songs={songs} setSongs={setSongs} showRatings={showRatings}/>
         <br></br>
-        <DynamicAddVersion songs={songs} setSongs={setSongs} jams={updatedJams} user={user} profile={profile} setUpdatedJams={setUpdatedJams} artist={artist} setArtist={setArtist} song={song} setSong={setSong} songExists={songExists} songObj={songObj}/>
+        <DynamicAddVersion songs={songs} setSongs={setSongs} jams={currentJams} user={user} profile={profile} setCurrentJams={setCurrentJams} artist={artist} setArtist={setArtist} song={song} setSong={setSong} songExists={songExists} songObj={songObj}/>
         <DynamicGratitude />
         <DynamicIdeasTable user={user} profile={profile}/>
         <DynamicContributorsTable />
