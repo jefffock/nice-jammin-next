@@ -78,29 +78,35 @@ export default function App({ jams }) {
   useEffect(() => {
     console.log('song', song)
     if (!song || (song && songExists)) {
-      const data = JSON.stringify({
-        artist,
-        song,
-        afterDate: afterDate ? afterDate.toString() : null,
-        beforeDate: beforeDate ? beforeDate.toString() : null,
-        tags: tagsSelected,
-        orderBy,
-        order,
-        fetchFullJams: true
-      })
-      console.log('data', data)
-      try {
-        fetch("/api/versions", {
-          method: "POST",
-          body: data
+      //double check song exists - before, when you deleted a char from an existing song, songExists updated after the GET request for versions had been sent
+      let index = songs.findIndex((item) => {
+        return item.song === song;
+      });
+      if (index > -1) {
+        const data = JSON.stringify({
+          artist,
+          song,
+          afterDate: afterDate ? afterDate.toString() : null,
+          beforeDate: beforeDate ? beforeDate.toString() : null,
+          tags: tagsSelected,
+          orderBy,
+          order,
+          fetchFullJams: true
         })
-        .then(data => data.json())
-        .then(versions => {
-          console.log('versions', versions)
-          setUpdatedJams(versions)
-        })
-      } catch (error) {
-        console.error(error)
+        console.log('data', data)
+        try {
+          fetch("/api/versions", {
+            method: "POST",
+            body: data
+          })
+          .then(data => data.json())
+          .then(versions => {
+            console.log('versions', versions)
+            setUpdatedJams(versions)
+          })
+        } catch (error) {
+          console.error(error)
+        }
       }
     }
   }, [artist, tagsSelected, beforeDate, afterDate, song, songExists, order, orderBy])

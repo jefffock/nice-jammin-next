@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -21,7 +20,7 @@ import RateVersion from './RateVersion'
 import AddListenLink from './AddListenLink'
 import ListenLink from './ListenLink'
 import Comments from './Comments'
-import { fetchComments, fetchAllJams, fetchSongs } from '../utils/fetchData'
+import { fetchComments, fetchSongs } from '../utils/fetchData'
 import ReportIssue from './ReportIssue'
 
 function JamsTableHead({ order, orderBy, onRequestSort, showRatings }) {
@@ -261,7 +260,7 @@ function Row({ row, user, profile, songs, showRatings }) {
         let newComments = await fetchComments(versionId)
         if (newComments && newComments !== null && newComments.length > 0) {
           for (var i = 0; i < newComments.length; i++) {
-            if (newComments[i].comment.length > 0) {
+            if (newComments[i]?.comment?.length > 0) {
               setHasComments(true)
               break
             }

@@ -225,7 +225,7 @@ export default function AddVersion({
       setSetlist(null);
       setLocation(null);
     }
-  }, [date]);
+  }, [date, open]);
 
   //when song changes
   //if artist is supported, fetch versions of that song
@@ -295,7 +295,7 @@ export default function AddVersion({
     } else {
       setShows(null);
     }
-  }, [song, songExists]);
+  }, [song, songExists, open]);
 
   //when setlist changes, make sure current song is in that setlist
   useEffect(() => {
