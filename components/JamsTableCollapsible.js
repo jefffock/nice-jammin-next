@@ -101,6 +101,8 @@ function JamsTableHead({ order, orderBy, onRequestSort, showRatings }) {
               padding={headCell.disablePadding ? "none" : "normal"}
               sortDirection={orderBy === headCell.id ? order : false}
               aria-hidden={headCell.label === "arrow"}
+              visuallyHidden={headCell.label === "arrow"}
+              focusable={headCell.id !== "arrow"}
             >
               <TableSortLabel
                 active={orderBy === headCell.id}
@@ -110,6 +112,9 @@ function JamsTableHead({ order, orderBy, onRequestSort, showRatings }) {
                     ? createSortHandler(headCell.id)
                     : () => {}
                 }
+                aria-hidden={headCell.label === "arrow"}
+                visuallyHidden={headCell.label === "arrow"}
+                focusable={headCell.id !== "arrow"}
               >
                 {headCell.label !== "arrow" ? headCell.label : ""}
                 {orderBy === headCell.id ? (
@@ -131,6 +136,8 @@ function JamsTableHead({ order, orderBy, onRequestSort, showRatings }) {
               padding={headCell.disablePadding ? "none" : "normal"}
               sortDirection={orderBy === headCell.id ? order : false}
               aria-hidden={headCell.label === "arrow"}
+              visuallyHidden={headCell.label === "arrow"}
+              focusable={headCell.id !== "arrow"}
             >
               <TableSortLabel
                 active={orderBy === headCell.id}
@@ -141,6 +148,8 @@ function JamsTableHead({ order, orderBy, onRequestSort, showRatings }) {
                     : () => {}
                 }
                 aria-hidden={headCell.label === "arrow"}
+                visuallyHidden={headCell.label === "arrow"}
+                focusable={headCell.id !== "arrow"}
               >
                 {headCell.label !== "arrow" ? headCell.label : ""}
                 {orderBy === headCell.id ? (
@@ -424,18 +433,6 @@ export default function CollapsibleTable({
     setOrderBy(property);
   };
 
-  //  useEffect(() => {
-  //   if (!jamsFetched && !fetchingJams) {
-  //     setFetchingJams(true)
-  //     const getAllJams = async () => {
-  //       let allJams = await fetchAllJams()
-  //       setJamsFetched(true)
-  //       setUpdatedJams(allJams)
-  //     }
-  //     getAllJams()
-  //   }
-  //   })
-
   useEffect(() => {
     if (!songsFetched && !fetchingSongs) {
       setFetchingSongs(true);
@@ -466,8 +463,6 @@ export default function CollapsibleTable({
   if (jams && jams.length > 0) {
     return (
       <>
-        {/* <Typography variant="h5" textAlign="center" mt="0.5em">Favorite Jams</Typography>
-      <Typography textAlign="center">Tap a row to listen and rate</Typography> */}
         <TableContainer
           component={Paper}
           sx={{
