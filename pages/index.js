@@ -215,7 +215,7 @@ export async function getStaticProps() {
     const { data, error } = await supabase
       .from('versions')
       .select('*')
-      .limit(30)
+      .limit(20)
       .order('avg_rating', { ascending: false })
       .order('num_ratings', { ascending: false })
     if (error) {
