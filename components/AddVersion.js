@@ -22,6 +22,8 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
+import RateVersion from "./RateVersion";
+import { version } from "uuid";
 
 export default function AddVersion({
   songs,
@@ -101,6 +103,8 @@ export default function AddVersion({
   const [loadingSetlist, setLoadingSetlist] = useState(false);
   const [allShows, setAllShows] = useState(null);
   const [njVersionsDatesOnly, setNjVersionsDatesOnly] = useState(null);
+  const [versionExists, setVersionExists] = useState(false)
+  const [jam, setJam] = useState(null)
 
   useEffect(() => {
     setSuccessAlertText(null);
@@ -110,18 +114,26 @@ export default function AddVersion({
           return jam.song_name === song && jam.date === date;
         });
         if (index !== -1) {
+          setVersionExists(true)
+          setJam(jams[index])
           setDateErrorText(
-            `${song} from ${date} has already been added. Great minds think alike!`
+            `You have good taste: ${song} from ${new Date(date + "T18:00:00Z").toDateString()} has already been added. Click the button below to add your rating.`
           );
         } else {
+          setVersionExists(false)
           setDateErrorText(null);
         }
       }
     }
     if (!date || !song) {
+      setVersionExists(false)
       setDateErrorText(null);
     }
   }, [date, song, jams]);
+
+  useEffect(() => {
+    console.log('jam', jam)
+  }, [jam])
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -686,11 +698,6 @@ export default function AddVersion({
             <DatePicker setDate={setDate} my={"1em"} date={date} />
           )}
           {loadingShows && <Typography>Loading shows...</Typography>}
-          {dateErrorText && (
-            <Alert severity="error" sx={{ my: "1em" }}>
-              {dateErrorText}
-            </Alert>
-          )}
           {artist && shows && (
             <ShowPicker
               show={show}
@@ -708,7 +715,15 @@ export default function AddVersion({
           {artist && date && (
             <Button onClick={() => clearDate()}>Clear Date</Button>
           )}
-          {((songExists && artist && date) || location) && (
+          {dateErrorText && (
+            <Alert severity="warning" sx={{ my: "1em" }}>
+              {dateErrorText}
+            </Alert>
+          )}
+          {versionExists && (
+            <RateVersion song={song} date={date} location={location} tags={tags} user={user} profile={profile} jam={jam} songs={songs} />
+          )}
+          {!versionExists && ((songExists && artist && date) || location) && (
             <Box mx="0.25em" my="1em">
               <TextField
                 autoFocus
@@ -729,7 +744,7 @@ export default function AddVersion({
               {locationErrorText}
             </Alert>
           )}
-          {song && artist && date && location && location.length > 2 && (
+          {!versionExists && song && artist && date && location && location.length > 2 && (
             <>
               <Typography mx="0.25em" my="1em">
                 Optional:
