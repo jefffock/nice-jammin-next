@@ -99,8 +99,8 @@ export default function AddVersion({
   const [shows, setShows] = useState(null);
   const [loadingShows, setLoadingShows] = useState(false);
   const [loadingSetlist, setLoadingSetlist] = useState(false);
-  const [allShows, setAllShows] = useState(null)
-  const [njVersionsDatesOnly, setNjVersionsDatesOnly] = useState(null)
+  const [allShows, setAllShows] = useState(null);
+  const [njVersionsDatesOnly, setNjVersionsDatesOnly] = useState(null);
 
   useEffect(() => {
     setSuccessAlertText(null);
@@ -116,9 +116,10 @@ export default function AddVersion({
         } else {
           setDateErrorText(null);
         }
-      } 
-    } if (!date || !song) {
-      setDateErrorText(null)
+      }
+    }
+    if (!date || !song) {
+      setDateErrorText(null);
     }
   }, [date, song, jams]);
 
@@ -146,31 +147,32 @@ export default function AddVersion({
     setDate(null);
     setLocation(null);
     setSong(null);
-    setShows(null)
-    setAllShows(null)
-    setSongErrorText(null)
+    setShows(null);
+    setAllShows(null);
+    setSongErrorText(null);
   }, [artist]);
 
   //when date changes
   //fetch setlist
   useEffect(() => {
+    console.log('date', date)
     //make sure the date is from this millenium or the previous one before fetching versions from that date
-    if (date && (date.charAt(0) === '1' || date.charAt(0) === '2') && open) {
+    if (date && (date.charAt(0) === "1" || date.charAt(0) === "2") && open) {
       const data = JSON.stringify({
         date: date,
-        artist: artist,
+        artist: artist
       });
       let fetchSetlist;
       const fetchNJVersionsByDate = fetch("/api/versions", {
         method: "POST",
-        body: data,
+        body: data
       });
       switch (artist) {
         case "Phish":
         case "Trey Anastasio, TAB":
           fetchSetlist = fetch("/api/phish/setlists", {
             method: "POST",
-            body: data,
+            body: data
           });
           break;
         case "Eggy":
@@ -179,7 +181,7 @@ export default function AddVersion({
         case "Neighbor":
           fetchSetlist = fetch("/api/songfish/setlists", {
             method: "POST",
-            body: data,
+            body: data
           });
           break;
         case "Squeaky Feet":
@@ -187,7 +189,7 @@ export default function AddVersion({
         default:
           fetchSetlist = fetch("/api/setlistfm/setlists", {
             method: "POST",
-            body: data,
+            body: data
           });
       }
       if (fetchSetlist) {
@@ -210,7 +212,7 @@ export default function AddVersion({
                   if (njVersions.indexOf(song) === -1) {
                     return {
                       song,
-                      alreadyAdded: false,
+                      alreadyAdded: false
                     };
                   } else {
                     return { song, alreadyAdded: true };
@@ -231,7 +233,7 @@ export default function AddVersion({
     } else {
       setSetlist(null);
       setLocation(null);
-    } 
+    }
   }, [date, open]);
 
   //when song changes
@@ -253,21 +255,21 @@ export default function AddVersion({
       }
       const data = JSON.stringify({ artist, song });
       if (url) {
-        setLoadingShows(true)
+        setLoadingShows(true);
         try {
           fetch(url, {
             method: "POST",
-            body: data,
+            body: data
           })
-          .then(data => data.json())
-          .then(allVersions => {
+            .then((data) => data.json())
+            .then((allVersions) => {
               setLoadingShows(false);
               setAllShows(allVersions);
             });
-          } catch (error) {
-            setLoadingShows(false);
-            console.error(error);
-          }
+        } catch (error) {
+          setLoadingShows(false);
+          console.error(error);
+        }
       }
     } else {
       setShows(null);
@@ -277,40 +279,41 @@ export default function AddVersion({
   //when NJ jams list changes, get dates and store them in state
   useEffect(() => {
     if (jams) {
-      let datesOnly = []
-      jams.forEach(jam => {
-        datesOnly.push(jam.date)
-      })
-      setNjVersionsDatesOnly(datesOnly)
+      let datesOnly = [];
+      jams.forEach((jam) => {
+        datesOnly.push(jam.date);
+      });
+      setNjVersionsDatesOnly(datesOnly);
     }
-  }, [jams])
+  }, [jams]);
 
   //when allShows changes, compare it to versions on NJ
   useEffect(() => {
     if (allShows && njVersionsDatesOnly) {
       const showsWithAlreadyAdded = allShows.map(
-      ({ showdate, isjamchart, location, label }) => {
-        if (njVersionsDatesOnly.indexOf(showdate) === -1) {
-          return {
-            showdate,
-            label,
-            location,
-            isjamchart,
-            alreadyAdded: false,
-          };
-        } else {
-          return {
-            showdate,
-            label,
-            location,
-            isjamchart,
-            alreadyAdded: true,
-          };
+        ({ showdate, isjamchart, location, label }) => {
+          if (njVersionsDatesOnly.indexOf(showdate) === -1) {
+            return {
+              showdate,
+              label,
+              location,
+              isjamchart,
+              alreadyAdded: false
+            };
+          } else {
+            return {
+              showdate,
+              label,
+              location,
+              isjamchart,
+              alreadyAdded: true
+            };
+          }
         }
-      })
-      setShows(showsWithAlreadyAdded)
+      );
+      setShows(showsWithAlreadyAdded);
     }
-  }, [allShows, njVersionsDatesOnly])
+  }, [allShows, njVersionsDatesOnly]);
 
   //when setlist changes, make sure current song is in that setlist
   useEffect(() => {
@@ -464,8 +467,8 @@ export default function AddVersion({
         rocking: rocking,
         tension_release: tensionRelease,
         trance: trance,
-        upbeat: upbeat,
-      },
+        upbeat: upbeat
+      }
     ]);
     if (error) {
       console.error(error);
@@ -540,7 +543,7 @@ export default function AddVersion({
       trippy: "Trippy",
       type2: "Type II",
       unusual: "Unusual",
-      upbeat: "Upbeat",
+      upbeat: "Upbeat"
     };
     let newTagsText = "";
     for (var i = 0; i < tags.length; i++) {
@@ -613,8 +616,9 @@ export default function AddVersion({
           borderRadius: "50px",
           bgcolor: "third.main",
           mx: "auto",
-          textTransform: "none",
+          textTransform: "none"
         }}
+        aria-label="add a jam"
       >
         Add a Jam
       </Button>
@@ -655,7 +659,7 @@ export default function AddVersion({
             />
           )}
           {artist && song && (
-            <Button onClick={() => clearSong()}>Clear Song</Button>
+            <Button onClick={() => clearSong()} aria-label="clear song">Clear Song</Button>
           )}
           {!songExists && song && (
             <>
@@ -703,7 +707,7 @@ export default function AddVersion({
             </Typography>
           )}
           {artist && date && (
-            <Button onClick={() => clearDate()}>Clear Date</Button>
+            <Button onClick={() => clearDate()} aria-label="clear date">Clear Date</Button>
           )}
           {((songExists && artist && date) || location) && (
             <Box mx="0.25em" my="1em">
@@ -795,7 +799,7 @@ export default function AddVersion({
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} sx={{ textTransform: "none" }}>
+          <Button onClick={handleClose} sx={{ textTransform: "none" }} aria-label="close add a jam popup">
             Close
           </Button>
           {artist &&
@@ -809,6 +813,7 @@ export default function AddVersion({
                 onClick={handleSubmit}
                 disabled={loading || !user || !profile || !songExists}
                 sx={{ textTransform: "none" }}
+                aria-label="submit new jam"
               >
                 Add Version
               </Button>

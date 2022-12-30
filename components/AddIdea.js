@@ -123,6 +123,7 @@ export default function AddIdea({ user, profile, setIdeas }) {
           variant="contained"
           onClick={handleClickOpen}
           sx={{ borderRadius: '50px', textTransform: 'none', my: '.5em' }}
+          aria-label="add a suggestion"
           >
           Add Your Suggestion
         </Button>
@@ -169,10 +170,10 @@ export default function AddIdea({ user, profile, setIdeas }) {
             }
         </DialogContent>
         <DialogActions>
-            <Button onClick={handleClose}
+            <Button aria-label="close" onClick={handleClose}
             sx={{ textTransform: 'none' }}>Close</Button>
           {!success &&
-            <Button onClick={handleSubmit}
+            <Button aria-label="submit" onClick={handleSubmit}
               disabled={loading || !user || !profile || !idea || !ideaType}
               sx={{ textTransform: 'none' }}>
             Add suggestion</Button>
