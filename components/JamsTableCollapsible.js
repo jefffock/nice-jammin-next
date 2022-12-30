@@ -108,21 +108,13 @@ function JamsTableHead({ order, orderBy, onRequestSort, showRatings }) {
                 <TableSortLabel
                   active={orderBy === headCell.id}
                   direction={orderBy === headCell.id ? order : "asc"}
-                  onClick={
-                    headCell.id !== "arrow"
-                      ? createSortHandler(headCell.id)
-                      : () => {}
-                  }
-                  aria-hidden={headCell.label === "arrow"}
-                  visuallyHidden={headCell.label === "arrow"}
-                  focusable={headCell.id !== "arrow"}
+                  onClick={createSortHandler(headCell.id)}
                 >
-                  {headCell.label !== "arrow" ? headCell.label : ""}
+                  {headCell.label}
                   {orderBy === headCell.id ? (
                     <Box
                       component="span"
                       sx={visuallyHidden}
-                      aria-hidden={headCell.id === "arrow"}
                     >
                       {order === "desc"
                         ? "sorted descending"
@@ -149,22 +141,11 @@ function JamsTableHead({ order, orderBy, onRequestSort, showRatings }) {
                 <TableSortLabel
                   active={orderBy === headCell.id}
                   direction={orderBy === headCell.id ? order : "asc"}
-                  onClick={
-                    headCell.id !== "arrow"
-                      ? createSortHandler(headCell.id)
-                      : () => {}
-                  }
-                  aria-hidden={headCell.label === "arrow"}
-                  visuallyHidden={headCell.label === "arrow"}
-                  focusable={headCell.id !== "arrow"}
+                  onClick={createSortHandler(headCell.id)}
                 >
-                  {headCell.label !== "arrow" ? headCell.label : ""}
+                  {headCell.label}
                   {orderBy === headCell.id ? (
-                    <Box
-                      component="span"
-                      sx={visuallyHidden}
-                      aria-hidden={headCell.id === "arrow"}
-                    >
+                    <Box component="span" sx={visuallyHidden}>
                       {order === "desc"
                         ? "sorted descending"
                         : "sorted ascending"}
