@@ -292,7 +292,7 @@ export default function AddVersion({
   useEffect(() => {
     if (jams) {
       let datesOnly = [];
-      jams.forEach((jam) => {
+      jams?.forEach((jam) => {
         datesOnly.push(jam.date);
       });
       setNjVersionsDatesOnly(datesOnly);
@@ -721,7 +721,9 @@ export default function AddVersion({
             </Alert>
           )}
           {versionExists && (
-            <RateVersion song={song} date={date} location={location} tags={tags} user={user} profile={profile} jam={jam} songs={songs} />
+            <Box display="flex" justifyContent="center">
+              <RateVersion song={song} date={date} location={location} tags={tags} user={user} profile={profile} jam={jam} songs={songs} />
+            </Box>
           )}
           {!versionExists && ((songExists && artist && date) || location) && (
             <Box mx="0.25em" my="1em">
