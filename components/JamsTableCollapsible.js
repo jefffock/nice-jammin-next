@@ -153,7 +153,7 @@ function JamsTableHead({ order, orderBy, onRequestSort, showRatings }) {
               >
                 {headCell.label !== "arrow" ? headCell.label : ""}
                 {orderBy === headCell.id ? (
-                  <Box component="span" sx={visuallyHidden}>
+                  <Box component="span" focusable={false} sx={visuallyHidden}>
                     {order === "desc"
                       ? "sorted descending"
                       : "sorted ascending"}
