@@ -12,7 +12,7 @@ export default function DatePicker({ setDate, my, date }) {
   const handleChange = (newValue) => {
     if (newValue) {
       setValue(newValue);
-      let stringedDate = newValue.toISOString().slice(0, 10)
+      let stringedDate = newValue.toJSON().slice(0, 10)
       setDate(stringedDate)
     }
   };

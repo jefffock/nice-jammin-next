@@ -6,8 +6,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const body = JSON.parse(req.body)
   const artist = body.artist
   const date = body.date
+  console.log('date', date)
   const [year, month, day] = date.split('-')
   const transformedDate = [day, month, year].join('-')
+  console.log('transformed date', transformedDate)
   const mbid = serverRuntimeConfig.mbids[artist]
   const url = `https://api.setlist.fm/rest/1.0/search/setlists?artistMbid=${mbid}&date=${transformedDate}`
   let apiKey = process.env.SETLISTFM_API_KEY
