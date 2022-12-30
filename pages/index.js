@@ -1,8 +1,7 @@
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../styles/themes'
-import { useState, useEffect, createContext, useContext, useMemo, Suspense } from 'react'
+import { useState, useEffect, useRef, Suspense } from 'react'
 import { supabase } from '../utils/supabaseClient'
-import { fetchSongs, fetchAllJams } from '../utils/fetchData';
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Box from '@mui/material/Box'
@@ -51,6 +50,7 @@ export default function App({ jams }) {
   const [tagsSelected, setTagsSelected] = useState([])
   const router = useRouter()
   const [showRatings, setShowRatings] = useState(false)
+  const isMounted = useRef(false)
 
   useEffect(() => {
     setSession(supabase.auth.session())
@@ -67,37 +67,38 @@ export default function App({ jams }) {
   }, [session])
 
   useEffect(() => {
-    if ((!song || (song && songExists)) && songs) {
-      //double check song exists - before, when you deleted a char from an existing song, songExists updated after the GET request for versions had been sent
-      let index = songs.findIndex((item) => {
-        return item.song === song;
-      });
-      if ((song && index > -1) || !song) {
-        const data = JSON.stringify({
-          artist,
-          song,
-          afterDate: afterDate ? afterDate.toString() : null,
-          beforeDate: beforeDate ? beforeDate.toString() : null,
-          tags: tagsSelected,
-          orderBy,
-          order,
-          fetchFullJams: true
-        })
-        try {
-          fetch("/api/versions", {
-            method: "POST",
-            body: data
+    if (isMounted.current) {
+      if ((!song || (song && songExists)) && songs) {
+        //double check song exists - before, when you deleted a char from an existing song, songExists updated after the GET request for versions had been sent
+        let index = songs.findIndex((item) => {
+          return item.song === song;
+        });
+        if ((song && index > -1) || !song) {
+          const data = JSON.stringify({
+            artist,
+            song,
+            afterDate: afterDate ? afterDate.toString() : null,
+            beforeDate: beforeDate ? beforeDate.toString() : null,
+            tags: tagsSelected,
+            orderBy,
+            order,
+            fetchFullJams: true
           })
-          .then(data => data.json())
-          .then(versions => {
-            console.table('versions', versions)
-            setCurrentJams(versions)
-          })
-        } catch (error) {
-          console.error(error)
+          try {
+            fetch("/api/versions", {
+              method: "POST",
+              body: data
+            })
+            .then(data => data.json())
+            .then(versions => {
+              setCurrentJams(versions)
+            })
+          } catch (error) {
+            console.error(error)
+          }
         }
       }
-    }
+    } 
   }, [artist, tagsSelected, beforeDate, afterDate, song, songExists, order, orderBy])
 
   useEffect(() => {
@@ -110,6 +111,14 @@ export default function App({ jams }) {
     }
   }, [song, songs]);
 
+
+  useEffect(() => {
+    setTimeout(() => {
+      isMounted.current = true
+    }, 2000)
+  }, [])
+  //to do: if jams length is less than 100 and order/orderby changes,
+    //sort the jams client side instead of fetching them
   // useEffect(() => {
   //   function descendingComparator(a, b, orderBy) {
   //     if (b[orderBy] < a[orderBy]) {
@@ -186,11 +195,6 @@ export default function App({ jams }) {
       <TopBar showButton={true} user={user} session={session} router={router}/>
       <Welcome />
       <FilterBar setArtist={setArtist} artist={artist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} setBeforeDate={setBeforeDate} afterDate={afterDate} setAfterDate={setAfterDate} songs={songs} song={song} setSong={setSong} orderBy={orderBy} setOrderBy={setOrderBy} setOrder={setOrder} showRatings={showRatings} handleShowRatingsChange={handleShowRatingsChange} jams={currentJams && currentJams.length > 0}/>
-      {/* <Sorter orderBy={orderBy} setOrderBy={setOrderBy} setOrder={setOrder}/> */}
-      {/* <Typography fontSize="20px" textAlign="center" mt="1em">
-        {(!song && !artist && !beforeDate && !afterDate && tagsSelected.length === 0) ?
-        'All Jams' : 'Filtered Jams'}
-      </Typography> */}
       <FilterList artist={artist} setArtist={setArtist} tagsSelected={tagsSelected} setTagsSelected={setTagsSelected} beforeDate={beforeDate} afterDate={afterDate} setBeforeDate={setBeforeDate} setAfterDate={setAfterDate} song={song} setSong={setSong} jams={currentJams.length > 0}/>
       <Suspense fallback={<p>Loading....</p>}>
         <DynamicJamsTable jams={currentJams} order={order} orderBy={orderBy} setOrder={setOrder} setOrderBy={setOrderBy} user={user} profile={profile} setCurrentJams={setCurrentJams} songs={songs} setSongs={setSongs} showRatings={showRatings}/>
@@ -211,7 +215,7 @@ export async function getStaticProps() {
     const { data, error } = await supabase
       .from('versions')
       .select('*')
-      .limit(100)
+      .limit(20)
       .order('avg_rating', { ascending: false })
       .order('num_ratings', { ascending: false })
     if (error) {

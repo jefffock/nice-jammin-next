@@ -122,7 +122,6 @@ export default function AddSong({
           variant="contained"
           onClick={handleClickOpen}
           sx={{ borderRadius: "50px", textTransform: "none", my: ".5em" }}
-          aria-label="show add song pop up"
         >
           Add {song}
         </Button>
@@ -165,7 +164,6 @@ export default function AddSong({
           <Button
             onClick={handleClose}
             sx={{ textTransform: "none" }}
-            aria-label="close add song pop up"
           >
             Close
           </Button>
@@ -176,7 +174,6 @@ export default function AddSong({
                 loading || !song || !user || !artist || artist === "All Bands"
               }
               sx={{ textTransform: "none" }}
-              aria-label="submit new song button"
             >
               Add song
             </Button>

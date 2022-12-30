@@ -69,7 +69,6 @@ export default function AddListenLink({
         variant="contained"
         onClick={handleClickOpen}
         sx={{ borderRadius: "50px", textTransform: "none", my: ".5em" }}
-        aria-label="add link to this jam button"
       >
         Add a link to this jam
       </Button>
@@ -111,7 +110,6 @@ export default function AddListenLink({
         </DialogContent>
         <DialogActions>
           <Button
-            aria-label="close button"
             sx={{ textTransform: "none" }}
             onClick={handleClose}
           >
@@ -121,7 +119,6 @@ export default function AddListenLink({
             onClick={handleSubmit}
             disabled={loading || !link || !user || !profile || success}
             sx={{ borderRadius: "50px", textTransform: "none" }}
-            aria-label="submit button"
           >
             Add Link
           </Button>

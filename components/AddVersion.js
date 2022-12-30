@@ -155,7 +155,7 @@ export default function AddVersion({
   //when date changes
   //fetch setlist
   useEffect(() => {
-    console.log('date', date)
+    console.log("date", date);
     //make sure the date is from this millenium or the previous one before fetching versions from that date
     if (date && (date.charAt(0) === "1" || date.charAt(0) === "2") && open) {
       const data = JSON.stringify({
@@ -618,7 +618,6 @@ export default function AddVersion({
           mx: "auto",
           textTransform: "none"
         }}
-        aria-label="add a jam"
       >
         Add a Jam
       </Button>
@@ -659,7 +658,7 @@ export default function AddVersion({
             />
           )}
           {artist && song && (
-            <Button onClick={() => clearSong()} aria-label="clear song">Clear Song</Button>
+            <Button onClick={() => clearSong()}>Clear Song</Button>
           )}
           {!songExists && song && (
             <>
@@ -707,7 +706,7 @@ export default function AddVersion({
             </Typography>
           )}
           {artist && date && (
-            <Button onClick={() => clearDate()} aria-label="clear date">Clear Date</Button>
+            <Button onClick={() => clearDate()}>Clear Date</Button>
           )}
           {((songExists && artist && date) || location) && (
             <Box mx="0.25em" my="1em">
@@ -799,7 +798,7 @@ export default function AddVersion({
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} sx={{ textTransform: "none" }} aria-label="close add a jam popup">
+          <Button onClick={handleClose} sx={{ textTransform: "none" }}>
             Close
           </Button>
           {artist &&
@@ -813,7 +812,6 @@ export default function AddVersion({
                 onClick={handleSubmit}
                 disabled={loading || !user || !profile || !songExists}
                 sx={{ textTransform: "none" }}
-                aria-label="submit new jam"
               >
                 Add Version
               </Button>

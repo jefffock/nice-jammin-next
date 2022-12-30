@@ -1,70 +1,81 @@
-import { useState } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import theme from '../styles/themes'
-import TopBar from './AppBar'
-import { useRouter } from 'next/router'
-import { supabase } from '../utils/supabaseClient'
-import Alert from '@mui/material/Alert';
+import { useState } from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import theme from "../styles/themes";
+import TopBar from "./AppBar";
+import { useRouter } from "next/router";
+import { supabase } from "../utils/supabaseClient";
+import Alert from "@mui/material/Alert";
 
 export default function SignIn() {
-  const [loading, setLoading] = useState(false)
-  const [errorMessage, setErrorMessage] = useState(null)
-  const router = useRouter()
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const router = useRouter();
 
   const handleSubmit = async (event) => {
-    setErrorMessage(null)
+    setErrorMessage(null);
     event.preventDefault();
-    setLoading(true)
+    setLoading(true);
     const data = new FormData(event.currentTarget);
-    const  email = data.get('email');
-    const password = data.get('password')
+    const email = data.get("email");
+    const password = data.get("password");
     const { error } = await supabase.auth.signIn({
       email: email,
-      password: password,
-    })
+      password: password
+    });
     if (error) {
-      setLoading(false)
-      console.error('error:', error)
-      setErrorMessage(error.message)
+      setLoading(false);
+      console.error("error:", error);
+      setErrorMessage(error.message);
     } else {
-      setLoading(false)
-      router.push('/')
+      setLoading(false);
+      router.push("/");
     }
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <TopBar showButton={false}/>
-      <Container component="main" maxWidth="xs" bgcolor="white" width="100vw" height="100vh">
+      <TopBar showButton={false} />
+      <Container
+        component="main"
+        maxWidth="xs"
+        bgcolor="white"
+        width="100vw"
+        height="100vh"
+      >
         <CssBaseline />
         <Box
           sx={{
             marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            bgcolor: 'white'
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            bgcolor: "white"
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{ mt: 1 }}
+          >
             <TextField
               margin="normal"
               required
@@ -89,14 +100,13 @@ export default function SignIn() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             /> */}
-            {errorMessage &&
-            <Alert severity='error'>{errorMessage}</Alert>}
+            {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
             <Button
               type="submit"
               fullWidth
               variant="contained"
               disabled={loading}
-              sx={{ mt: 3, mb: 2, borderRadius: '3em', textTransform: 'none' }}
+              sx={{ mt: 3, mb: 2, borderRadius: "3em", textTransform: "none" }}
             >
               Sign In
             </Button>

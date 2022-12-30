@@ -1,18 +1,17 @@
-import { useState, useEffect, forwardRef } from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import ListItemText from '@mui/material/ListItemText';
-import ListItem from '@mui/material/ListItem';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import CloseIcon from '@mui/icons-material/Close';
-import Slide from '@mui/material/Slide';
-import Box from '@mui/material/Box';
-
+import { useState, useEffect, forwardRef } from "react";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import ListItemText from "@mui/material/ListItemText";
+import ListItem from "@mui/material/ListItem";
+import List from "@mui/material/List";
+import Divider from "@mui/material/Divider";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import CloseIcon from "@mui/icons-material/Close";
+import Slide from "@mui/material/Slide";
+import Box from "@mui/material/Box";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -20,7 +19,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 export default function ListenLink({ link, jam }) {
   const [open, setOpen] = useState(false);
-  const [newLink, setNewLink] = useState(null)
+  const [newLink, setNewLink] = useState(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -31,30 +30,33 @@ export default function ListenLink({ link, jam }) {
   };
 
   useEffect(() => {
-    let reformattedLink
+    let reformattedLink;
     if (!newLink && link) {
-      if (link.includes('youtu')) {
-        if (link.includes('watch?v=')) {
-          reformattedLink = link.replace('watch?v=', 'embed/')
-        } if (link.includes('youtu.be')) {
+      if (link.includes("youtu")) {
+        if (link.includes("watch?v=")) {
+          reformattedLink = link.replace("watch?v=", "embed/");
+        }
+        if (link.includes("youtu.be")) {
           let youTubeId;
-          let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+          let regExp =
+            /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
           let match = link.match(regExp);
           if (match && match[2].length == 11) {
             youTubeId = match[2];
-           reformattedLink = `//www.youtube.com/embed/${youTubeId}`
+            reformattedLink = `//www.youtube.com/embed/${youTubeId}`;
           }
         }
       }
     }
-    setNewLink(reformattedLink ? reformattedLink : link)
-  }, [link])
+    setNewLink(reformattedLink ? reformattedLink : link);
+  }, [link]);
 
   return (
     <div>
-      <Button variant="contained"
-      onClick={handleClickOpen}
-      sx={{ textTransform: 'none', borderRadius: '50px', my:'0.5em' }}
+      <Button
+        variant="contained"
+        onClick={handleClickOpen}
+        sx={{ textTransform: "none", borderRadius: "50px", my: "0.5em" }}
       >
         Listen
       </Button>
@@ -64,7 +66,7 @@ export default function ListenLink({ link, jam }) {
         onClose={handleClose}
         TransitionComponent={Transition}
       >
-        <AppBar sx={{ position: 'relative' }}>
+        <AppBar sx={{ position: "relative" }}>
           <Toolbar>
             <IconButton
               edge="start"
@@ -74,18 +76,22 @@ export default function ListenLink({ link, jam }) {
             >
               <CloseIcon />
             </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div"
-            onClick={handleClose}>
+            <Typography
+              sx={{ ml: 2, flex: 1 }}
+              variant="h6"
+              component="div"
+              onClick={handleClose}
+            >
               Back to Nice Jammin&apos;
             </Typography>
           </Toolbar>
         </AppBar>
-        <Box sx={{ height: '100vh', width: '100vw', bgcolor: '#000000'}}>
+        <Box sx={{ height: "100vh", width: "100vw", bgcolor: "#000000" }}>
           <iframe
-          src={newLink ? newLink : link}
-          title={`Listen to ${jam.song_name} from ${jam.date}`}
-          height={'99%'}
-          width={'100%'}
+            src={newLink ? newLink : link}
+            title={`Listen to ${jam.song_name} from ${jam.date}`}
+            height={"99%"}
+            width={"100%"}
           ></iframe>
         </Box>
       </Dialog>
