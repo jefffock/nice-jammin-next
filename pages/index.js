@@ -115,7 +115,7 @@ export default function App({ jams }) {
   useEffect(() => {
     setTimeout(() => {
       isMounted.current = true
-    }, 2000)
+    }, 1000)
   }, [])
   //to do: if jams length is less than 100 and order/orderby changes,
     //sort the jams client side instead of fetching them
