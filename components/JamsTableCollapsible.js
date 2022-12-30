@@ -57,7 +57,7 @@ function JamsTableHead({ order, orderBy, onRequestSort, showRatings }) {
       id: "arrow",
       numeric: false,
       disablePadding: true,
-      label: ""
+      label: "arrow"
     }
   ];
 
@@ -85,7 +85,7 @@ function JamsTableHead({ order, orderBy, onRequestSort, showRatings }) {
       id: "arrow",
       numeric: false,
       disablePadding: true,
-      label: ""
+      label: "arrow"
     }
   ];
 
@@ -104,20 +104,15 @@ function JamsTableHead({ order, orderBy, onRequestSort, showRatings }) {
               <TableSortLabel
                 active={orderBy === headCell.id}
                 direction={orderBy === headCell.id ? order : "asc"}
-                onClick={createSortHandler(headCell.id)}
+                onClick={
+                  headCell.id !== "arrow"
+                    ? createSortHandler(headCell.id)
+                    : () => {}
+                }
               >
-                {headCell.label === "Rating" ? (
-                  <>
-                    <StarRateIcon />
-                    <p>Rating</p>
-                  </>
-                ) : headCell.label === "Date" ? (
-                  <CalendarMonthIcon />
-                ) : (
-                  headCell.label
-                )}
+                {headCell.label}
                 {orderBy === headCell.id ? (
-                  <Box component="span" sx={visuallyHidden}>
+                  <Box component="span" sx={visuallyHidden} aria-hidden="true">
                     {order === "desc"
                       ? "sorted descending"
                       : "sorted ascending"}
@@ -146,7 +141,7 @@ function JamsTableHead({ order, orderBy, onRequestSort, showRatings }) {
                     <p>Rating</p>
                   </>
                 ) : headCell.label === "Date" ? (
-                  <CalendarMonthIcon aria-label="sort by date"/>
+                  <CalendarMonthIcon aria-label="sort by date button" />
                 ) : (
                   headCell.label
                 )}
