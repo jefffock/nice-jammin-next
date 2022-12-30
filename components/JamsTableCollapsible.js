@@ -140,6 +140,7 @@ function JamsTableHead({ order, orderBy, onRequestSort, showRatings }) {
                     ? createSortHandler(headCell.id)
                     : () => {}
                 }
+                aria-hidden={headCell.label === "arrow"}
               >
                 {headCell.label !== "arrow" ? headCell.label : ""}
                 {orderBy === headCell.id ? (
