@@ -32,6 +32,7 @@ export default function RateVersion({
   const [rating, setRating] = useState(10);
   const [comment, setComment] = useState("");
   const [newTags, setNewTags] = useState([]);
+  const [existingTags, setExistingTags] = useState(null)
   const [tagsToAddText, setTagsToAddText] = useState("");
   const [tagsObj, setTagsObj] = useState(null);
   const [songSubmitter, setSongSubmitter] = useState(null);
@@ -113,6 +114,144 @@ export default function RateVersion({
   };
 
   useEffect(() => {
+    if (!tags) {
+        let allTags = "";
+        if (jam.acoustic) {
+          allTags += "Acoustic, ";
+        }
+        if (jam.ambient) {
+          allTags += "Ambient/Space, ";
+        }
+        if (jam.bliss) {
+          allTags += "Bliss, ";
+        }
+        if (jam.bluesy) {
+          allTags += "Bluesy, ";
+        }
+        if (jam.chaotic) {
+          allTags += "Chaotic, ";
+        }
+        if (jam.crunchy) {
+          allTags += "Crunchy, ";
+        }
+        if (jam.dark) {
+          allTags += "Dark, ";
+        }
+        if (jam.dissonant) {
+          allTags += "Dissonant, ";
+        }
+        if (jam.fast) {
+          allTags += "Fast, ";
+        }
+        if (jam.funky) {
+          allTags += "Funky, ";
+        }
+        if (jam.grimy) {
+          allTags += "Grimy, ";
+        }
+        if (jam.groovy) {
+          allTags += "Groovy, ";
+        }
+        if (jam.guest) {
+          allTags += "Guest, ";
+        }
+        if (jam.happy) {
+          allTags += "Happy, ";
+        }
+        if (jam.heavy) {
+          allTags += "Heavy, ";
+        }
+        if (jam.historic) {
+          allTags += "Historic, ";
+        }
+        if (jam.jazzy) {
+          allTags += "Jazzy, ";
+        }
+        if (jam.long) {
+          allTags += "Long, ";
+        }
+        if (jam.low_key) {
+          allTags += "Low-key, ";
+        }
+        if (jam.mellow) {
+          allTags += "Mellow, ";
+        }
+        if (jam.melodic) {
+          allTags += "Melodic, ";
+        }
+        if (jam.multi_part) {
+          allTags += "Multi-part, ";
+        }
+        if (jam.official_release) {
+          allTags += "Official Release, ";
+        }
+        if (jam.peaks) {
+          allTags += "Peaks, ";
+        }
+        if (jam.reggae) {
+          allTags += "Reggae, ";
+        }
+        if (jam.rocking) {
+          allTags += "Rocking, ";
+        }
+        if (jam.segue) {
+          allTags += "Segue, ";
+        }
+        if (jam.shred) {
+          allTags += "Shred, ";
+        }
+        if (jam.silly) {
+          allTags += "Silly, ";
+        }
+        if (jam.sloppy) {
+          allTags += "Sloppy, ";
+        }
+        if (jam.slow) {
+          allTags += "Slow, ";
+        }
+        if (jam.sludgy) {
+          allTags += "Sludgy, ";
+        }
+        if (jam.soaring) {
+          allTags += "Soaring, ";
+        }
+        if (jam.soulful) {
+          allTags += "Soulful, ";
+        }
+        if (jam.stop_start) {
+          allTags += "Stop-start, ";
+        }
+        if (jam.synthy) {
+          allTags += "Synthy, ";
+        }
+        if (jam.tease) {
+          allTags += "Teases, ";
+        }
+        if (jam.tension_release) {
+          allTags += "Tension and Release, ";
+        }
+        if (jam.trance) {
+          allTags += "Trance, ";
+        }
+        if (jam.trippy) {
+          allTags += "Trippy, ";
+        }
+        if (jam.type2) {
+          allTags += "Type II, ";
+        }
+        if (jam.unusual) {
+          allTags += "Unusual, ";
+        }
+        if (jam.upbeat) {
+          allTags += "Upbeat, ";
+        }
+        let trimmed =
+          allTags.length > 2 ? allTags.slice(0, allTags.length - 2) : "";
+        setExistingTags(trimmed);
+    }
+  }, [jam])
+
+  useEffect(() => {
     let index = songs.findIndex((item) => {
       return item.song === song;
     });
@@ -125,7 +264,7 @@ export default function RateVersion({
     if (valid) {
       let data;
       if (userAlreadyRated) {
-        await updateRating(jam.id, profile.name, rating, comment);
+        await updateRating(jam?.id, profile.name, rating, comment);
         if (newTags.length > 0) {
           let updatedTags = await updateTags(
             tagsObj,
@@ -333,11 +472,11 @@ export default function RateVersion({
         onClick={handleClickOpen}
         sx={{ borderRadius: "50px", textTransform: "none", my: ".5em" }}
       >
-        Rate
+        Rate this Jam
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
-          {song} - {location} - {date}
+          Add your rating for {song} by {jam?.artist} from {location} on {new Date(date + "T18:00:00Z").toDateString()}
         </DialogTitle>
         <DialogContent>
           {!user && (
