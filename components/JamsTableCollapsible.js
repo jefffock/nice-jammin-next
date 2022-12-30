@@ -104,27 +104,33 @@ function JamsTableHead({ order, orderBy, onRequestSort, showRatings }) {
               visuallyHidden={headCell.label === "arrow"}
               focusable={headCell.id !== "arrow"}
             >
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : "asc"}
-                onClick={
-                  headCell.id !== "arrow"
-                    ? createSortHandler(headCell.id)
-                    : () => {}
-                }
-                aria-hidden={headCell.label === "arrow"}
-                visuallyHidden={headCell.label === "arrow"}
-                focusable={headCell.id !== "arrow"}
-              >
-                {headCell.label !== "arrow" ? headCell.label : ""}
-                {orderBy === headCell.id ? (
-                  <Box component="span" sx={visuallyHidden} aria-hidden="true">
-                    {order === "desc"
-                      ? "sorted descending"
-                      : "sorted ascending"}
-                  </Box>
-                ) : null}
-              </TableSortLabel>
+              {headCell.id !== "arrow" ? (
+                <TableSortLabel
+                  active={orderBy === headCell.id}
+                  direction={orderBy === headCell.id ? order : "asc"}
+                  onClick={
+                    headCell.id !== "arrow"
+                      ? createSortHandler(headCell.id)
+                      : () => {}
+                  }
+                  aria-hidden={headCell.label === "arrow"}
+                  visuallyHidden={headCell.label === "arrow"}
+                  focusable={headCell.id !== "arrow"}
+                >
+                  {headCell.label !== "arrow" ? headCell.label : ""}
+                  {orderBy === headCell.id ? (
+                    <Box
+                      component="span"
+                      sx={visuallyHidden}
+                      aria-hidden={headCell.id === "arrow"}
+                    >
+                      {order === "desc"
+                        ? "sorted descending"
+                        : "sorted ascending"}
+                    </Box>
+                  ) : null}
+                </TableSortLabel>
+              ) : null}
             </TableCell>
           ))}
         {!showRatings &&
@@ -139,27 +145,33 @@ function JamsTableHead({ order, orderBy, onRequestSort, showRatings }) {
               visuallyHidden={headCell.label === "arrow"}
               focusable={headCell.id !== "arrow"}
             >
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : "asc"}
-                onClick={
-                  headCell.id !== "arrow"
-                    ? createSortHandler(headCell.id)
-                    : () => {}
-                }
-                aria-hidden={headCell.label === "arrow"}
-                visuallyHidden={headCell.label === "arrow"}
-                focusable={headCell.id !== "arrow"}
-              >
-                {headCell.label !== "arrow" ? headCell.label : ""}
-                {orderBy === headCell.id ? (
-                  <Box component="span" focusable={false} sx={visuallyHidden}>
-                    {order === "desc"
-                      ? "sorted descending"
-                      : "sorted ascending"}
-                  </Box>
-                ) : null}
-              </TableSortLabel>
+              {headCell.id !== "arrow" ? (
+                <TableSortLabel
+                  active={orderBy === headCell.id}
+                  direction={orderBy === headCell.id ? order : "asc"}
+                  onClick={
+                    headCell.id !== "arrow"
+                      ? createSortHandler(headCell.id)
+                      : () => {}
+                  }
+                  aria-hidden={headCell.label === "arrow"}
+                  visuallyHidden={headCell.label === "arrow"}
+                  focusable={headCell.id !== "arrow"}
+                >
+                  {headCell.label !== "arrow" ? headCell.label : ""}
+                  {orderBy === headCell.id ? (
+                    <Box
+                      component="span"
+                      sx={visuallyHidden}
+                      aria-hidden={headCell.id === "arrow"}
+                    >
+                      {order === "desc"
+                        ? "sorted descending"
+                        : "sorted ascending"}
+                    </Box>
+                  ) : null}
+                </TableSortLabel>
+              ) : null}
             </TableCell>
           ))}
       </TableRow>
