@@ -117,7 +117,7 @@ export default function AddVersion({
           setVersionExists(true)
           setJam(jams[index])
           setDateErrorText(
-            `You have good taste: ${song} from ${new Date(date + "T18:00:00Z").toDateString()} has already been added. Click the button below to add your rating.`
+            `You have good taste: ${song} from ${new Date(date + 'T18:00:00Z').toDateString()} has already been added. Click the button below to add your rating.`
           );
         } else {
           setVersionExists(false)
