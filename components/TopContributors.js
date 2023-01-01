@@ -10,6 +10,7 @@ import { supabase } from '../utils/supabaseClient'
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { fetchLeaders } from '../utils/fetchData'
+import Link from 'next/link';
 
 
 export default function TopContributors() {
@@ -47,7 +48,11 @@ export default function TopContributors() {
               <TableCell align="right" component="th" scope="row">
                 {index + 1}
               </TableCell>
-              <TableCell>{row.name}</TableCell>
+              <TableCell>
+                <Link href={`/fans/${row.name}`}>
+                {row.name}
+                </Link>
+                </TableCell>
               <TableCell align="right">{row.points}</TableCell>
             </TableRow>
           ))}
