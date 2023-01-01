@@ -154,7 +154,7 @@ export default function Contributor() {
 								textAlign={'center'}
 								mt={'1em'}
 							>
-								{username}'s Contributions
+								{username}&apos;s Contributions
 							</Typography>
 							<Typography
 								textAlign={'center'}
