@@ -27,12 +27,12 @@ export default function DateFilter({ before, beforeDate, setBeforeDate, afterDat
     <Select
       labelId={ before ? "before-date-select" : "after-date-select"}
       value={before ? beforeDate : afterDate}
-      label={before ? 'Before' : 'After'}
+      label={before ? 'Jams Before' : 'Jams After'}
       onChange={handleChange}
       // sx={{ bgcolor: 'primary.main' }}
       >
       {dates.map((date) => (
-        <MenuItem key={date} value={date}>{date}</MenuItem>
+        <MenuItem key={date} value={date}>From {date} or {before ? 'earlier' : 'later'}</MenuItem>
         ))}
     </Select>
   </FormControl>

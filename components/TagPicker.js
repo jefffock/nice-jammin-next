@@ -126,7 +126,7 @@ export default function TagPicker({ tagsSelected, setTagsSelected, size, mx, my 
   return (
     <Box mx={mx ? mx : '0.25em'} my={my ? my : '0.25em'} minWidth="120px">
       <FormControl sx={{ minWidth: 120 }} size={size ? size : "small"}>
-        <InputLabel id="tag-filter-select-label">Tags</InputLabel>
+        <InputLabel id="tag-filter-select-label">Sounds</InputLabel>
         <Select
           labelId="tag-filter-select-label"
           id="tag-filter-select-checkbox"
