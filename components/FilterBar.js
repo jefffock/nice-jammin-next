@@ -136,7 +136,7 @@ export default function FilterBar({
 										onChange={handleShowRatingsChange}
 									/>
 								}
-								label='Show Ratings'
+								label='Show ratings'
 							/>
 						</FormControl>
 					</Box>

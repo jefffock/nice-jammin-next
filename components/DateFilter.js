@@ -32,7 +32,7 @@ export default function DateFilter({ before, beforeDate, setBeforeDate, afterDat
       // sx={{ bgcolor: 'primary.main' }}
       >
       {dates.map((date) => (
-        <MenuItem key={date} value={date}>From {date} or {before ? 'earlier' : 'later'}</MenuItem>
+        <MenuItem key={date} value={date}>{date} or {before ? 'before' : 'after'}</MenuItem>
         ))}
     </Select>
   </FormControl>

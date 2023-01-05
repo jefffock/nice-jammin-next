@@ -55,6 +55,9 @@ module.exports = {
       'String Cheese Incident': 'cff95140-6d57-498a-8834-10eb72865b29',
       'Tedeschi Trucks Band': 'e33e1ccf-a3b9-4449-a66a-0091e8f55a60',
       'Widespread Panic': '3797a6d0-7700-44bf-96fb-f44386bc9ab2'
-    }
+    },
+  },
+  publicRuntimeConfig: {
+    server: process.env.NODE_ENV !== 'production' ? 'http://localhost:3000' : 'https://nicejammin.com',
   }
 };
