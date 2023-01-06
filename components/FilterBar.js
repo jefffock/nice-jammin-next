@@ -46,7 +46,6 @@ export default function FilterBar({
 					boxShadow: 1,
 				}}
 			>
-				{/* <Typography textAlign="center" fontSize={22}>What would you like to hear?</Typography> */}
 				<Typography
 					textAlign='center'
 					fontSize={20}
@@ -84,6 +83,11 @@ export default function FilterBar({
 						size={'small'}
 						artist={artist}
 					/>
+          <Sorter
+							orderBy={orderBy}
+							setOrderBy={setOrderBy}
+							setOrder={setOrder}
+						/>
 				</Box>
 				<Typography
 					textAlign={'center'}
@@ -122,11 +126,6 @@ export default function FilterBar({
 							before={true}
 							beforeDate={beforeDate}
 							setBeforeDate={setBeforeDate}
-						/>
-						<Sorter
-							orderBy={orderBy}
-							setOrderBy={setOrderBy}
-							setOrder={setOrder}
 						/>
 						<FormControl sx={{ display: 'flex', alignItems: 'center' }}>
 							<FormControlLabel

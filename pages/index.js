@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import TopBar from '../components/AppBar';
 import Welcome from '../components/Welcome';
 import dynamic from 'next/dynamic';
-import getConfig from 'next/config'
+import getConfig from 'next/config';
 
 const DynamicContributorsTable = dynamic(
 	() => import('../components/TopContributors'),
@@ -323,48 +323,20 @@ export default function App({ jams, ideas }) {
 	);
 }
 
-export async function getStaticProps() {
-  // const server = publicRuntimeConfig.server;
-	const getIdeas = await fetch('http://localhost:3000/api/ideas', {
-		method: 'GET',
-	});
-  const ideas = await getIdeas.json();
-	// const ideas = await getIdeas.json();
-  const data = JSON.stringify({
-    fetchFullJams: true
-  })
-	const getJams = await fetch('http://localhost:3000/api/versions', {
-		method: 'POST',
-    body: data
-	});
-	const jams = await getJams.json();
+export async function getServerSideProps() {
+	const ideas = await supabase
+		.from('ideas')
+		.select('idea_body, done, votes, id')
+		.order('id', { ascending: false });
+	const jams = await supabase
+		.from('versions')
+		.select('*')
+		.limit(20)
+		.order('id', { ascending: false });
 	return {
 		props: {
-			jams,
-			ideas,
+			jams: jams.body,
+			ideas: ideas.body,
 		},
 	};
-	// async function getJams() {
-	// 	const { data, error } = await supabase
-	// 		.from('versions')
-	// 		.select('*')
-	// 		.limit(20)
-	// 		.order('avg_rating', { ascending: false })
-	// 		.order('num_ratings', { ascending: false });
-	// 	if (error) {
-	// 		console.error(error);
-	// 	} else if (data) {
-	// 		return data;
-	// 	}
-	// }
-	// try {
-	// 	const jams = await getJams();
-	// 	return {
-	// 		props: { jams },
-	// 	};
-	// } catch {
-	// 	return {
-	// 		props: null,
-	// 	};
-	// }
 }

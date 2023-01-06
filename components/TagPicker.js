@@ -134,7 +134,7 @@ export default function TagPicker({ tagsSelected, setTagsSelected, size, mx, my 
           // sx={{ bgcolor: 'primary.main' }}
           value={tagsSelected}
           onChange={handleChange}
-          input={<OutlinedInput label="Tag" />}
+          input={<OutlinedInput label="Sounds" />}
           renderValue={() => (`${tagsSelected.length} selected`)}
           MenuProps={MenuProps}
         >
