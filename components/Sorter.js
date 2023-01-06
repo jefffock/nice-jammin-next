@@ -19,7 +19,7 @@ let sortOptions = [
 
 export default function Sorter({ orderBy, setOrderBy, setOrder, size, my }) {
 
-  const [label, setLabel] = useState('Rating')
+  const [label, setLabel] = useState('Recently Added')
 
   const handleChange = (event) => {
       setLabel(event.target.value);
@@ -65,12 +65,13 @@ export default function Sorter({ orderBy, setOrderBy, setOrder, size, my }) {
 
   return (
     <div>
-      <Box my={my ? my : '1em'} sx={{
+      <Box sx={{
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        my: '0.25em'
 
       }}>
-        <FormControl sx={{ minWidth: 120, mx:'0.25em' }} size={size ? size : 'small' }>
+        <FormControl sx={{ minWidth: 180, mx:'0.25em' }} size={size ? size : 'small' }>
           <InputLabel id="sorter">Sort by</InputLabel>
           <Select
             labelId="sorter"

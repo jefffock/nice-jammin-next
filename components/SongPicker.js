@@ -81,7 +81,7 @@ export default function SongPicker({ artist, songs, song, setSong, setlist, wide
   if (!setlist || setlist.length === 0) {
     return (
       <Box mx={mx ? mx : '0.25em'}  my={my ? my : '0.25em'} sx={{ 
-        minWidth: '240px',
+        minWidth: '180px',
         maxWidth: '240px',
       }}>
         <Autocomplete

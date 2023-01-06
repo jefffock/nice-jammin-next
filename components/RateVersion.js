@@ -279,7 +279,7 @@ export default function RateVersion({
 						newTags.length
 					);
 					setSuccessAlertText(
-						'Successfully updated your rating and added tags. Thank you for contributing!'
+						'Successfully updated your rating and added sound tags. Thank you for contributing!'
 					);
 				} else {
 					setSuccessAlertText(
@@ -306,7 +306,7 @@ export default function RateVersion({
 						newTags.length
 					);
 					setSuccessAlertText(
-						'Successfully added your rating and tags. Thank you for contributing!'
+						'Successfully added your rating and sound tags. Thank you for contributing!'
 					);
 				} else {
 					setSuccessAlertText(
@@ -553,9 +553,9 @@ export default function RateVersion({
 						setTagsSelected={setNewTags}
 						size={'normal'}
 					/>
-					{tags && <Typography>Current Tags: {tags}</Typography>}
+					{tags && <Typography>Current Sounds: {tags}</Typography>}
 					{tagsToAddText && (
-						<Typography>Tags to Add: {tagsToAddText}</Typography>
+						<Typography>Sounds to Add: {tagsToAddText}</Typography>
 					)}
 					{successAlertText && (
 						<Alert

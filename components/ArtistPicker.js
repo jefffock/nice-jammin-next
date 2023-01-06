@@ -48,18 +48,20 @@ let artists = [
   'Tedeschi Trucks Band',
   'Trey Anastasio, TAB',
   "Umphrey's McGee",
-  'Widespread Panic'
+  'Widespread Panic',
+  'All Bands',
 ]
 
 export default function ArtistPicker({ artist, setArtist, size, my }) {
 
   const handleChange = (event) => {
-      setArtist(event.target.value);
+      const artist = event.target.value === 'All Bands' ? '' : event.target.value
+      setArtist(artist);
   };
 
   return (
     <Box my={my ? my : '0.25em'}>
-      <FormControl sx={{ minWidth: 120, mx:'0.25em' }} size={size ? size : 'small' }>
+      <FormControl sx={{ minWidth: 180, mx:'0.25em' }} size={size ? size : 'small' }>
         <InputLabel id="artist-select">Band</InputLabel>
         <Select
           labelId="artist-select"

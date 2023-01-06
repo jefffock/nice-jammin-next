@@ -14,7 +14,7 @@ export default function Footer({ profile, user }) {
 			{profile && profile.points && (
         <>
 				<Typography>
-					{profile.name}&nbsp;-&nbsp;{profile.points} points. Thank you!
+					You have {profile.points} points. Thank you 🙏
 				</Typography>
         <Link href={`/fans/${profile.name}`}>View your contributions</Link>
         </>
