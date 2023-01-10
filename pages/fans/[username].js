@@ -96,7 +96,7 @@ export default function Contributor({
 				}}
 			>
 				<TopBar
-					showButton={true}
+					showButton={false}
 					user={user}
 					router={router}
 				/>
