@@ -17,6 +17,7 @@ import TopBar from "./AppBar";
 import { useRouter } from "next/router";
 import { supabase } from "../utils/supabaseClient";
 import Alert from "@mui/material/Alert";
+import GoogleButton from "react-google-button";
 
 export default function SignIn() {
   const [loading, setLoading] = useState(false);
@@ -30,7 +31,7 @@ export default function SignIn() {
     const data = new FormData(event.currentTarget);
     const email = data.get("email");
     const password = data.get("password");
-    const { error } = await supabase.auth.signIn({
+    const { error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password
     });
@@ -43,6 +44,17 @@ export default function SignIn() {
       router.push("/");
     }
   };
+
+  async function signInWithGoogle() {
+		const { data, error } = await supabase.auth.signInWithOAuth({
+			provider: 'google',
+		});
+    if (error) {
+      console.error('sign in with google error', error);
+    } else {
+      console.log('data', data);
+    }
+	}
 
   return (
     <ThemeProvider theme={theme}>
@@ -70,6 +82,10 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+          {/* <Box mx={'auto'} my={'2em'}>
+          <GoogleButton onClick={() => signInWithGoogle()}/>
+          </Box> */}
+          <Typography>Or</Typography>
           <Box
             component="form"
             onSubmit={handleSubmit}
@@ -117,7 +133,7 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/signup" variant="body2">
+                <Link href="/join" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

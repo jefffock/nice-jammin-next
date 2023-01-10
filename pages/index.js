@@ -9,9 +9,9 @@ import FilterBar from '../components/FilterBar';
 import FilterList from '../components/FilterList';
 import Typography from '@mui/material/Typography';
 import TopBar from '../components/AppBar';
-import Welcome from '../components/Welcome';
 import dynamic from 'next/dynamic';
 import getConfig from 'next/config';
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
 const DynamicContributorsTable = dynamic(
 	() => import('../components/TopContributors'),
@@ -39,11 +39,18 @@ const DynamicFooter = dynamic(() => import('../components/Footer'), {
 	suspense: true,
 });
 
-export default function App({ jams, ideas }) {
+export default function App({
+	jams,
+	ideas,
+	initialSession,
+	initialUser,
+	leaders,
+	initialSongs,
+}) {
 	const [currentJams, setCurrentJams] = useState(jams);
-	const [songs, setSongs] = useState(null);
-	const [session, setSession] = useState(null);
-	const [user, setUser] = useState(null);
+	const [songs, setSongs] = useState(initialSongs);
+	const [user, setUser] = useState(initialUser);
+	const [session, setSession] = useState(initialSession);
 	const [profile, setProfile] = useState(null);
 	const [artists, setArtists] = useState(null);
 	const [artist, setArtist] = useState(null);
@@ -60,20 +67,6 @@ export default function App({ jams, ideas }) {
 	const router = useRouter();
 	const [showRatings, setShowRatings] = useState(false);
 	const isMounted = useRef(false);
-
-	useEffect(() => {
-		setSession(supabase.auth.session());
-		supabase.auth.onAuthStateChange((_event, session) => {
-			setSession(session);
-			if (session !== null) {
-				setUser(session.user);
-			}
-		});
-	}, []);
-
-	useEffect(() => {
-		setUser(supabase.auth.user());
-	}, [session]);
 
 	useEffect(() => {
 		if (isMounted.current) {
@@ -133,7 +126,44 @@ export default function App({ jams, ideas }) {
 		setTimeout(() => {
 			isMounted.current = true;
 		}, 1000);
+		const getUser = async () => {
+			const {
+				data: { user },
+			} = await supabase.auth.getUser();
+			console.log('user', user);
+			setUser(user);
+		};
+		if (!user) {
+			getUser();
+		}
 	}, []);
+
+  useEffect(() => {
+    console.log('user', user)
+    console.log('profile', profile)
+    if (user && !profile) {
+      const getProfile = async () => {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+        if (error) {
+          console.log('error', error);
+        }
+        console.log('data from profile', data)
+        if (data) {
+          console.log('data', data)
+          setProfile(data);
+        } 
+        else {
+          router.push('/welcome');
+        }
+      };
+      getProfile();
+    }
+  }, [user]);
+  
 	//to do: if jams length is less than 100 and order/orderby changes,
 	//sort the jams client side instead of fetching them
 	// useEffect(() => {
@@ -172,7 +202,7 @@ export default function App({ jams, ideas }) {
 						console.error('error getting profile', error);
 					}
 					if (data) {
-						setProfile(data[0]);
+						setProfile(data[0] ?? null);
 					}
 				}
 			}
@@ -240,11 +270,27 @@ export default function App({ jams, ideas }) {
 			>
 				<TopBar
 					showButton={true}
-					user={user}
 					session={session}
 					router={router}
-				/>
-				<Welcome />
+					user={user}
+          setUser={setUser}
+          setSession={setSession}/>
+				<Box
+					my='3em'
+					mx='auto'
+					px='0.5em'
+					width='96vw'
+					maxWidth='fit-content'
+				>
+					<Typography
+						textAlign='center'
+						fontSize='32px'
+						my='1em'
+						fontWeight={300}
+					>
+						Making it easier to find 🔥 jams
+					</Typography>
+				</Box>
 				<FilterBar
 					setArtist={setArtist}
 					artist={artist}
@@ -312,7 +358,7 @@ export default function App({ jams, ideas }) {
 						profile={profile}
 						ideas={ideas}
 					/>
-					<DynamicContributorsTable />
+					<DynamicContributorsTable leaders={leaders} />
 					<DynamicFooter
 						user={user}
 						profile={profile}
@@ -323,7 +369,12 @@ export default function App({ jams, ideas }) {
 	);
 }
 
-export async function getServerSideProps() {
+export const getServerSideProps = async (ctx) => {
+	const supabase = createServerSupabaseClient(ctx);
+	const {
+		data: { session },
+	} = await supabase.auth.getSession();
+
 	const ideas = await supabase
 		.from('ideas')
 		.select('idea_body, done, votes, id')
@@ -333,10 +384,26 @@ export async function getServerSideProps() {
 		.select('*')
 		.limit(20)
 		.order('id', { ascending: false });
+	const leaders = await supabase
+		.from('profiles')
+		.select('name, points')
+		.not('name', 'eq', 'Henrietta')
+		.limit(20)
+		.order('points', { ascending: false });
+	const songs = await supabase
+		.from('songs')
+		.select('*')
+		// .gt('avg_rating', 0)
+		// .limit(100)
+		.order('song', { ascending: true });
 	return {
 		props: {
-			jams: jams.body,
-			ideas: ideas.body,
+			initialSession: session ?? null,
+			initialUser: session?.user ?? null,
+			jams: jams.data,
+			ideas: ideas.data,
+			leaders: leaders.data,
+			initialSongs: songs.data,
 		},
 	};
-}
+};

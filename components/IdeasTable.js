@@ -120,7 +120,7 @@ export default function IdeasTable({ user, profile, ideas }) {
 		} else {
 			setIdeasToShow(ideas);
 		}
-	}, [showCompleted, ideas, ideasToShow]);
+	}, [showCompleted]);
 
 	async function checkAlreadyVotedHelpful() {
 		if (props.username && props.ideaData.user_name !== props.username) {
