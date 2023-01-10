@@ -1,6 +1,7 @@
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../styles/themes';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 export default function Privacy() {
 	return (
@@ -23,7 +24,7 @@ export default function Privacy() {
 					my='2em'
 				>
 					<h1>Privacy Policy</h1>
-					<p>
+					<Typography>
 						At nicejammin.com, we are committed to protecting the privacy of our
 						users. <br />
 						<br />
@@ -42,7 +43,7 @@ export default function Privacy() {
 						<br />
 						If you have any questions or concerns about our privacy policy,
 						please contact us at nicejammin@nicejammin.com
-					</p>
+					</Typography>
 				</Box>
 			</Box>
 		</ThemeProvider>

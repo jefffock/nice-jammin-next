@@ -1,6 +1,7 @@
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../styles/themes';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 export default function Terms() {
 	return (
@@ -23,17 +24,17 @@ export default function Terms() {
 					my='2em'
 				>
 					<h1>Terms of Service</h1>
-					<p>
+					<Typography>
 						By using nicejammin.com, you agree to the following terms of
 						service: <br />
 						<br />
 						1. Community Resource: This site is a community resource, and we are
-						grateful for your contribution by adding ratings, jams, and ideas.{' '}
+						grateful for your contribution by adding ratings, jams, and ideas.
 						<br />
 						<br />
 						2. Accuracy of Information: You agree to provide accurate
 						information when adding a jam to the website. This includes the
-						title, artist, and any other relevant details. <br />
+						title, date, artist, and any other relevant details. <br />
 						<br />
 						3. Civil Discourse: You agree to be respectful and civil in the
 						comments section of the website. This includes refraining from using
@@ -49,16 +50,16 @@ export default function Terms() {
 						but not limited to the jams and comments, for any purpose. <br />
 						<br />
 						6. Changes to Terms of Service: nicejammin.com reserves the right to
-						update and change these terms of service at any time without notice.{' '}
+						update and change these terms of service at any time without notice.
 						<br />
 						<br />
 						7. Love and Gratitude: We are all here because we love this music.
-						Let's approach our use of the website with love and gratitude.{' '}
+						Let&apos;s approach our use of the website with love and gratitude.
 						<br />
 						<br />
 						If you have any questions or concerns about these terms of service,
 						please contact us at nicejammin@nicejammin.com
-					</p>
+					</Typography>
 				</Box>
 			</Box>
 		</ThemeProvider>
