@@ -173,6 +173,7 @@ export default function SignUp({ setSession }) {
           <Box mx={'auto'} my={'2em'}>
           <GoogleButton onClick={() => signInWithGoogle()}/>
           </Box>
+          <Alert severity='info'><Typography variant='body2'>If you choose to sign in with Google, the next screen will say "Sign In to continue to noopmmxtheyulbowvkcd.supabase.co"<br/>I'm working on getting that to say NiceJammin. Thank you for your patience - Jeff - 1-10-23</Typography></Alert>
           <Typography>Or</Typography>
 					<Box
 						component='form'

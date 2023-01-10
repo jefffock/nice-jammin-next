@@ -9,6 +9,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from '../styles/themes';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
+import Image from 'next/image'
 
 export default function Welcome({ initialSession, initialUser }) {
 	const [username, setUsername] = useState('');
@@ -52,7 +53,7 @@ export default function Welcome({ initialSession, initialUser }) {
 					checkProfile(user);
 				} else {
 					console.log('no user');
-					router.push('/');
+					// router.push('/join');
 				}
 			});
 		}
@@ -105,7 +106,7 @@ export default function Welcome({ initialSession, initialUser }) {
 				});
 		} else {
 			console.log('no user');
-			router.push('/join');
+			// router.push('/join');
 		}
 	}
 
@@ -113,7 +114,7 @@ export default function Welcome({ initialSession, initialUser }) {
 		<ThemeProvider theme={theme}>
 			<Box
 				sx={{
-					bgcolor: 'primary.graybg',
+					bgcolor: 'white',
 					minHeight: '100vh',
 					maxWidth: '100vw',
 					overflow: 'hidden',
@@ -128,9 +129,12 @@ export default function Welcome({ initialSession, initialUser }) {
 					mx='0.25em'
 					my='2em'
 				>
-					<Typography my='2em'>Welcome</Typography>
-					<Typography my='2em'>Choose a username</Typography>
-					<img src='/public/icon-circle.png'></img>
+					<Typography fontSize={22} my='2em'>Welcome to Nice Jammin!</Typography>
+					<Image src='/../public/icon-circle.png'
+          width={75}
+          height={75}
+          alt='nice-jammin-logo'/>
+					<Typography fontSize={16} my='2em'>Choose a username to start contributing:</Typography>
 					<TextField
 						autoFocus
 						my='2em'
@@ -143,12 +147,12 @@ export default function Welcome({ initialSession, initialUser }) {
 					/>
 					{usernameTaken && <Typography my='2em'>Username taken</Typography>}
 					<Button
-						my='2em'
+						sx={{
+              my: '2em',
+            }}
 						onClick={() => handleSubmit()}
 						disabled={usernameTaken}
-					>
-						<Typography>Submit</Typography>
-					</Button>
+					>Submit</Button>
 				</Box>
 			</Box>
 		</ThemeProvider>
