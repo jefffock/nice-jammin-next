@@ -37,7 +37,6 @@ export default function Contributor({
 			const {
 				data: { user },
 			} = await supabase.auth.getUser();
-			console.log('user', user);
 			setUser(user);
 		};
 		if (!user) {
@@ -96,7 +95,7 @@ export default function Contributor({
 				}}
 			>
 				<TopBar
-					showButton={true}
+					showButton={false}
 					user={user}
 					router={router}
 				/>

@@ -9,12 +9,13 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from '../styles/themes';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
-import Image from 'next/image'
+import Image from 'next/image';
+import TopBar from '../components/AppBar';
 
 export default function Welcome({ initialSession, initialUser }) {
 	const [username, setUsername] = useState('');
 	const [usernameTaken, setUsernameTaken] = useState(false);
-  const router = useRouter();
+	const router = useRouter();
 	//check if profile exists
 	useEffect(() => {
 		async function checkProfile(user) {
@@ -25,35 +26,29 @@ export default function Welcome({ initialSession, initialUser }) {
 			if (error) {
 				console.error(error);
 			}
-			console.log('data in checkProfile', data);
 			if (data.length === 0) {
-				console.log('setting showAddUsername to true');
 				//create profile
 				setShowAddUsername(true);
 			}
 			if (data.length > 0) {
 				router.push('/');
 			}
-			if (initialUser) {
-				checkProfile(initialUser);
-			}
+		}
+		if (initialUser) {
+			checkProfile(initialUser);
 		}
 		if (!initialUser) {
-			console.log('getting user');
 			const getUser = async () => {
 				const {
 					data: { user },
 				} = await supabase.auth.getUser();
-				console.log('user if not initial', user);
 				return user;
 			};
 			getUser().then((user) => {
 				if (user) {
-					console.log('user before checkProfile', user);
 					checkProfile(user);
 				} else {
-					console.log('no user');
-					// router.push('/join');
+					router.push('/join');
 				}
 			});
 		}
@@ -70,23 +65,16 @@ export default function Welcome({ initialSession, initialUser }) {
 			data: { user },
 		} = await supabase.auth.getUser();
 		if (user) {
-			console.log('user', user);
-      //check if user has a profile
-      supabase
-      .from('profiles')
-      .select('id')
-      .eq('id', user.id)
+			//check if user has a profile
+			supabase.from('profiles').select('id').eq('id', user.id);
 			supabase
 				.from('profiles')
 				.select('name')
 				.eq('name', username)
 				.then((res) => {
 					if (res.data.length > 0) {
-						console.log('username taken');
 						setUsernameTaken(true);
 					} else if (res.data.length === 0) {
-						console.log('username not taken');
-						console.log('submitting');
 						supabase
 							.from('profiles')
 							.insert([
@@ -95,8 +83,7 @@ export default function Welcome({ initialSession, initialUser }) {
 									name: username,
 								},
 							])
-							.then((res) => {
-								console.log(res);
+							.then(() => {
 								router.push('/');
 							});
 					}
@@ -106,7 +93,7 @@ export default function Welcome({ initialSession, initialUser }) {
 				});
 		} else {
 			console.log('no user');
-			// router.push('/join');
+			router.push('/join');
 		}
 	}
 
@@ -120,6 +107,7 @@ export default function Welcome({ initialSession, initialUser }) {
 					overflow: 'hidden',
 				}}
 			>
+				<TopBar showButton={false} />
 				<Box
 					sx={{
 						flexDirection: 'column',
@@ -129,14 +117,28 @@ export default function Welcome({ initialSession, initialUser }) {
 					mx='0.25em'
 					my='2em'
 				>
-					<Typography fontSize={22} my='2em'>Welcome to Nice Jammin!</Typography>
-					<Image src='/../public/icon-circle.png'
-          width={75}
-          height={75}
-          alt='nice-jammin-logo'/>
-					<Typography fontSize={16} my='2em'>Choose a username to start contributing:</Typography>
+					<Typography
+						fontSize={22}
+						my='2em'
+					>
+						Welcome to Nice Jammin!
+					</Typography>
+					<Image
+						alt='Nice Jammin Logo'
+						src='/icon-circle.png'
+						quality={100}
+						priority
+						width={75}
+						height={75}
+					/>
+					<Typography
+						fontSize={16}
+						my='2em'
+					>
+						Choose a username to start contributing:
+					</Typography>
 					<TextField
-						autoFocus
+						autoFocus={true}
 						my='2em'
 						id='name'
 						label='Username'
@@ -148,11 +150,13 @@ export default function Welcome({ initialSession, initialUser }) {
 					{usernameTaken && <Typography my='2em'>Username taken</Typography>}
 					<Button
 						sx={{
-              my: '2em',
-            }}
+							my: '2em',
+						}}
 						onClick={() => handleSubmit()}
 						disabled={usernameTaken}
-					>Submit</Button>
+					>
+						Submit
+					</Button>
 				</Box>
 			</Box>
 		</ThemeProvider>

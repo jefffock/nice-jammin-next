@@ -130,7 +130,6 @@ export default function App({
 			const {
 				data: { user },
 			} = await supabase.auth.getUser();
-			console.log('user', user);
 			setUser(user);
 		};
 		if (!user) {
@@ -139,8 +138,6 @@ export default function App({
 	}, []);
 
   useEffect(() => {
-    console.log('user', user)
-    console.log('profile', profile)
     if (user && !profile) {
       const getProfile = async () => {
         const { data, error } = await supabase
@@ -149,7 +146,7 @@ export default function App({
           .eq('id', user.id)
           .single();
         if (error) {
-          console.log('error', error);
+          console.error(error);
         }
         if (data) {
           setProfile(data);
