@@ -151,9 +151,7 @@ export default function App({
         if (error) {
           console.log('error', error);
         }
-        console.log('data from profile', data)
         if (data) {
-          console.log('data', data)
           setProfile(data);
         } 
         else {

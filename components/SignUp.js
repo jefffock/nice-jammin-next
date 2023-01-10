@@ -17,7 +17,7 @@ import theme from '../styles/themes';
 import { useRouter } from 'next/router';
 import Alert from '@mui/material/Alert';
 import { supabase } from '../utils/supabaseClient';
-import GoogleButton from 'react-google-button'
+import GoogleButton from 'react-google-button';
 
 // import { createClient } from '@supabase/supabase-js'
 
@@ -127,38 +127,45 @@ export default function SignUp({ setSession }) {
 			console.error('create profile error', error);
 		} else {
 			setLoading(false);
-      router.push('/');
+			router.push('/');
 		}
 	}
 
 	async function signInWithGoogle() {
 		const { data, error } = await supabase.auth.signInWithOAuth({
 			provider: 'google',
-      options: {
-        redirectTo: 'https://nicejammin.com/welcome'
-      }
+			options: {
+				redirectTo: 'https://nicejammin.com/welcome',
+			},
 		});
-    if (error) {
-      console.error('sign in with google error', error);
-    } else {
-      console.log('data', data);
-    }
+		if (error) {
+			console.error('sign in with google error', error);
+		} else {
+			console.log('data', data);
+		}
 	}
 
 	return (
 		<ThemeProvider theme={theme}>
-			<TopBar showButton={false} />
-			<Container
-				component='main'
-				maxWidth='xs'
+			<Box
+				sx={{
+					mt: 0,
+					pt: 0,
+					width: '100vw',
+					height: '100vh',
+					bgcolor: 'white',
+          overflow: 'scroll'
+				}}
 			>
-				<CssBaseline />
+				<TopBar showButton={false} />
 				<Box
 					sx={{
-						marginTop: 8,
 						display: 'flex',
 						flexDirection: 'column',
 						alignItems: 'center',
+						maxWidth: '400px',
+						mx: 'auto',
+						p: '1em',
 					}}
 				>
 					<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -170,11 +177,22 @@ export default function SignUp({ setSession }) {
 					>
 						Sign up
 					</Typography>
-          <Box mx={'auto'} my={'2em'}>
-          <GoogleButton onClick={() => signInWithGoogle()}/>
-          </Box>
-          <Alert severity='info'><Typography variant='body2'>If you choose to sign in with Google, the next screen will say "Sign In to continue to noopmmxtheyulbowvkcd.supabase.co"<br/>I'm working on getting that to say NiceJammin. Thank you for your patience - Jeff - 1-10-23</Typography></Alert>
-          <Typography>Or</Typography>
+					<Box
+						mx={'auto'}
+						my={'2em'}
+					>
+						<GoogleButton onClick={() => signInWithGoogle()} />
+					</Box>
+					<Alert severity='info'>
+						<Typography variant='body2'>
+							Heads up: for Google, the next screen will say &quot;Sign In to
+							continue to noopmmxtheyulbowvkcd.supabase.co&quot;
+							<br />
+							I&apos;m working on getting that to say NiceJammin. Thank you for
+							your patience - Jeff - 1-10-23
+						</Typography>
+					</Alert>
+					<Typography mt={'1em'}>Or</Typography>
 					<Box
 						component='form'
 						noValidate
@@ -297,7 +315,7 @@ export default function SignUp({ setSession }) {
 						</Grid>
 					</Box>
 				</Box>
-			</Container>
+			</Box>
 		</ThemeProvider>
 	);
 }
