@@ -134,6 +134,9 @@ export default function SignUp({ setSession }) {
 	async function signInWithGoogle() {
 		const { data, error } = await supabase.auth.signInWithOAuth({
 			provider: 'google',
+      options: {
+        redirectTo: 'https://nicejammin.com/welcome'
+      }
 		});
     if (error) {
       console.error('sign in with google error', error);
