@@ -170,9 +170,9 @@ export default function SignUp({ setSession }) {
 					>
 						Sign up
 					</Typography>
-          {/* <Box mx={'auto'} my={'2em'}>
+          <Box mx={'auto'} my={'2em'}>
           <GoogleButton onClick={() => signInWithGoogle()}/>
-          </Box> */}
+          </Box>
           <Typography>Or</Typography>
 					<Box
 						component='form'
