@@ -12,37 +12,38 @@ import RateVersion from '../../components/RateVersion';
 import { supabase } from '../../utils/supabaseClient';
 import Stack from '@mui/material/Stack';
 import AddListenLink from '../../components/AddListenLink';
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
-export default function Contributor() {
+export default function Contributor({
+	ratings,
+	songs,
+	versions,
+	ideas,
+	allSongs,
+	versionsRated,
+}) {
 	const router = useRouter();
 	const { username } = router.query;
-	const [ratings, setRatings] = useState(null);
-	const [songs, setSongs] = useState(null);
-	const [versions, setVersions] = useState(null);
-	const [ideas, setIdeas] = useState(null);
 	const [fetchedData, setFetchedData] = useState(false);
-	const [session, setSession] = useState(null);
 	const [user, setUser] = useState(null);
 	const [profile, setProfile] = useState(null);
 	const [showRatings, setShowRatings] = useState(false);
 	const [showVersions, setShowVersions] = useState(false);
 	const [showIdeas, setShowIdeas] = useState(false);
 	const [showSongs, setShowSongs] = useState(false);
-	const [allSongs, setAllSongs] = useState(null);
 
 	useEffect(() => {
-		setSession(supabase.auth.session());
-		supabase.auth.onAuthStateChange((_event, session) => {
-			setSession(session);
-			if (session !== null) {
-				setUser(session.user);
-			}
-		});
-	}, []);
-
-	useEffect(() => {
-		setUser(supabase.auth.user());
-	}, [session]);
+		const getUser = async () => {
+			const {
+				data: { user },
+			} = await supabase.auth.getUser();
+			console.log('user', user);
+			setUser(user);
+		};
+		if (!user) {
+			getUser();
+		}
+	});
 
 	useEffect(() => {
 		if (user && !profile) {
@@ -65,47 +66,6 @@ export default function Contributor() {
 			fetchProfile();
 		}
 	}, [user, profile]);
-
-	useEffect(() => {
-		if (!fetchedData && username) {
-			const data = JSON.stringify({ username });
-			console.log('data', data);
-			try {
-				fetch('/api/contributions', {
-					method: 'POST',
-					body: data,
-				})
-					.then((contributions) => contributions.json())
-					.then((contributions) => {
-						console.log('contributions', contributions);
-						setRatings(contributions.ratings);
-						setSongs(contributions.songs);
-						setVersions(contributions.versions);
-						setIdeas(contributions.ideas);
-						setAllSongs(contributions.allSongs);
-						setFetchedData(true);
-					});
-			} catch (error) {
-				console.error(error);
-			}
-		}
-	}, [username]);
-
-	useEffect(() => {
-		console.log('ratings', ratings);
-	}, [ratings]);
-
-	useEffect(() => {
-		console.log('songs', songs);
-	}, [songs]);
-
-	useEffect(() => {
-		console.log('ideas', ideas);
-	}, [ideas]);
-
-	useEffect(() => {
-		console.log('versions', versions);
-	}, [versions]);
 
 	function handleShowHide(category) {
 		switch (category) {
@@ -138,7 +98,6 @@ export default function Contributor() {
 				<TopBar
 					showButton={true}
 					user={user}
-					session={session}
 					router={router}
 				/>
 				<Box
@@ -381,3 +340,87 @@ export default function Contributor() {
 		</ThemeProvider>
 	);
 }
+
+export const getServerSideProps = async (ctx) => {
+	const supabase = createServerSupabaseClient(ctx);
+	const {
+		data: { session },
+	} = await supabase.auth.getSession();
+	const username = ctx.params.username;
+	const songs = supabase
+		.from('songs')
+		.select('*')
+		.order('id', { ascending: false })
+		.eq('submitter_name', username);
+	const versions = supabase
+		.from('versions')
+		.select('*')
+		.order('id', { ascending: false })
+		.eq('submitter_name', username);
+	const ratings = supabase
+		.from('ratings')
+		.select('rating, comment, version_id, id')
+		.order('id', { ascending: false })
+		.eq('submitter_name', username);
+	const ideas = supabase
+		.from('ideas')
+		.select('idea_body, done, votes, id')
+		.order('id', { ascending: false })
+		.eq('user_name', username);
+	const allSongs = supabase.from('songs').select('*');
+	let fetchedSongs,
+		fetchedVersions,
+		fetchedRatings,
+		fetchedIdeas,
+		fetchedAllSongs;
+	await Promise.all([songs, versions, ratings, ideas, allSongs]).then(
+		([songsObj, versionsObj, ratingsObj, ideasObj, allSongsObj]) => {
+			fetchedSongs = songsObj.data;
+			fetchedVersions = versionsObj.data;
+			fetchedRatings = ratingsObj.data;
+			fetchedIdeas = ideasObj.data;
+			fetchedAllSongs = allSongsObj.data;
+		}
+	);
+	if (!fetchedRatings) {
+		return {
+			props: {
+				songs: fetchedSongs,
+				versions: fetchedVersions,
+				ratings: fetchedRatings,
+				ideas: fetchedIdeas,
+				allSongs: fetchedAllSongs,
+			},
+		};
+	}
+	const versionsUserHasRated = fetchedRatings.map(
+		(rating) => rating.version_id
+	);
+	const ratedVersions = await supabase
+		.from('versions')
+		.select('*')
+		.in('id', versionsUserHasRated);
+	const versionsRated = ratedVersions.data;
+	const ratingsWithVersions = fetchedRatings.map((rating) => {
+		const index = versionsRated.findIndex(
+			(version) => version.id === rating.version_id
+		);
+		let versionInfo;
+		if (versionsRated && (index || index === 0)) {
+			versionInfo = versionsRated[index];
+		}
+		return {
+			rating,
+			versionInfo,
+		};
+	});
+	return {
+		props: {
+			ratings: ratingsWithVersions,
+			songs: fetchedSongs,
+			versions: fetchedVersions,
+			ideas: fetchedIdeas,
+			allSongs: fetchedAllSongs,
+		},
+	};
+};

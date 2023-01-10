@@ -152,10 +152,11 @@ export default function App({
           console.log('error', error);
         }
         console.log('data from profile', data)
-        if (data && data.length > 0) {
+        if (data) {
           console.log('data', data)
-          // setProfile(data);
-        } else {
+          setProfile(data);
+        } 
+        else {
           router.push('/welcome');
         }
       };
