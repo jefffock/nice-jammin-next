@@ -13,19 +13,19 @@ import { fetchLeaders } from '../utils/fetchData'
 import Link from 'next/link';
 
 
-export default function TopContributors() {
-  const [leaders, setLeaders] = useState(null)
+export default function TopContributors({ leaders }) {
+  // const [leaders, setLeaders] = useState(leaders)
   const [fetchingLeaders, setFetchingLeaders] = useState(false)
 
-  useEffect(() => {
-    if (!leaders && !fetchingLeaders) {
-      setFetchingLeaders(true)
-      async function getLeaders() {
-        let data = await fetchLeaders()
-        setLeaders(data)
-      } getLeaders()
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (!leaders && !fetchingLeaders) {
+  //     setFetchingLeaders(true)
+  //     async function getLeaders() {
+  //       let data = await fetchLeaders()
+  //       setLeaders(data)
+  //     } getLeaders()
+  //   }
+  // }, [])
 
   return (
     <Box mx="auto" my="1em" width='96vw' maxWidth='400px'>

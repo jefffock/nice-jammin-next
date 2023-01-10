@@ -5,15 +5,22 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import { supabase } from "../utils/supabaseClient";
 import Image from "next/image";
+import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useEffect } from "react";
 
-export default function TopBar({ showButton, user, session, router }) {
+export default function TopBar({ showButton, session, user, router, setUser, setSession }) {
+  const supabase = useSupabaseClient()
+
   const handleLogout = async () => {
+    console.log('clicked logout')
     const { error } = await supabase.auth.signOut();
     if (error) {
       console.error(error);
     } else {
+      console.log('successfully logged out')
+      setUser(null);
+      setSession(null)
       router.push("/");
     }
   };
@@ -64,7 +71,7 @@ export default function TopBar({ showButton, user, session, router }) {
             <Box>
               {!user && (
                 <>
-                  <Button
+                  {/* <Button
                     href="/signup"
                     sx={{
                       bgcolor: "third.main",
@@ -75,7 +82,7 @@ export default function TopBar({ showButton, user, session, router }) {
                     }}
                   >
                     Sign Up
-                  </Button>
+                  </Button> */}
                   <Button
                     href="/login"
                     sx={{

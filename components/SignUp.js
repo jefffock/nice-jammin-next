@@ -19,10 +19,6 @@ import Alert from '@mui/material/Alert';
 import { supabase } from '../utils/supabaseClient';
 import GoogleButton from 'react-google-button'
 
-<GoogleButton
-  onClick={() => { console.log('Google button clicked') }}
-/>
-
 // import { createClient } from '@supabase/supabase-js'
 
 // const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -131,9 +127,7 @@ export default function SignUp({ setSession }) {
 			console.error('create profile error', error);
 		} else {
 			setLoading(false);
-			setSuccessText(`Welcome, ${username}!
-      Please check for an email from nicejammin@nicejammin.com.
-      Once you verify your email, you can start contributing!`);
+      router.push('/');
 		}
 	}
 
@@ -173,6 +167,10 @@ export default function SignUp({ setSession }) {
 					>
 						Sign up
 					</Typography>
+          <Box mx={'auto'} my={'2em'}>
+          <GoogleButton onClick={() => signInWithGoogle()}/>
+          </Box>
+          <Typography>Or</Typography>
 					<Box
 						component='form'
 						noValidate
@@ -187,7 +185,6 @@ export default function SignUp({ setSession }) {
 								item
 								xs={12}
 							>
-                <GoogleButton onClick={() => signInWithGoogle()}/>
 								<TextField
 									required
 									fullWidth
