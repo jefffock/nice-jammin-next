@@ -82,9 +82,9 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box mx={'auto'} my={'2em'}>
+          {/* <Box mx={'auto'} my={'2em'}>
           <GoogleButton onClick={() => signInWithGoogle()}/>
-          </Box>
+          </Box> */}
           <Typography>Or</Typography>
           <Box
             component="form"
