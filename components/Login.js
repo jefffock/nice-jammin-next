@@ -52,7 +52,6 @@ export default function SignIn() {
     if (error) {
       console.error('sign in with google error', error);
     } else {
-      console.log('data', data);
     }
 	}
 

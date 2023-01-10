@@ -6,8 +6,6 @@ import Select from '@mui/material/Select';
 import Box from '@mui/material/Box'
 import ListItem from '@mui/material/ListItem';
 
-
-
 export default function ShowPicker({ show, shows, setShow, setDate, setLocation, size, my }) {
 
   const handleChange = (event) => {

@@ -38,7 +38,6 @@ export default function Welcome({ initialSession, initialUser }) {
 			checkProfile(initialUser);
 		}
 		if (!initialUser) {
-			console.log('getting user');
 			const getUser = async () => {
 				const {
 					data: { user },
@@ -49,7 +48,7 @@ export default function Welcome({ initialSession, initialUser }) {
 				if (user) {
 					checkProfile(user);
 				} else {
-					// router.push('/join');
+					router.push('/join');
 				}
 			});
 		}
@@ -66,7 +65,6 @@ export default function Welcome({ initialSession, initialUser }) {
 			data: { user },
 		} = await supabase.auth.getUser();
 		if (user) {
-			console.log('user', user);
 			//check if user has a profile
 			supabase.from('profiles').select('id').eq('id', user.id);
 			supabase
@@ -75,11 +73,8 @@ export default function Welcome({ initialSession, initialUser }) {
 				.eq('name', username)
 				.then((res) => {
 					if (res.data.length > 0) {
-						console.log('username taken');
 						setUsernameTaken(true);
 					} else if (res.data.length === 0) {
-						console.log('username not taken');
-						console.log('submitting');
 						supabase
 							.from('profiles')
 							.insert([
@@ -88,8 +83,7 @@ export default function Welcome({ initialSession, initialUser }) {
 									name: username,
 								},
 							])
-							.then((res) => {
-								console.log(res);
+							.then(() => {
 								router.push('/');
 							});
 					}

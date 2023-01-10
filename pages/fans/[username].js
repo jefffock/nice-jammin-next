@@ -37,7 +37,6 @@ export default function Contributor({
 			const {
 				data: { user },
 			} = await supabase.auth.getUser();
-			console.log('user', user);
 			setUser(user);
 		};
 		if (!user) {
