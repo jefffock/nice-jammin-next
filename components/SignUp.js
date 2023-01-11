@@ -184,7 +184,7 @@ export default function SignUp({ setSession }) {
 					</Box>
 					<Alert severity='info'>
 						<Typography variant='body2'>
-							Heads up: for Google, the next screen will say &quot;Sign In to
+							If you sign in with Google, the consent screen will say &quot;Sign In to
 							continue to noopmmxtheyulbowvkcd.supabase.co&quot;
 							<br />
 							I&apos;m working on getting that to say NiceJammin. Thank you for
@@ -312,6 +312,11 @@ export default function SignUp({ setSession }) {
 								</Link>
 							</Grid>
 						</Grid>
+            <Box mt='2em'>
+              <Typography>
+                By signing up, you agree to our <Link href='terms'>Terms of Service</Link> and <Link href='privacy'>Privacy Policy</Link>
+              </Typography>
+            </Box>
 					</Box>
 				</Box>
 			</Box>
