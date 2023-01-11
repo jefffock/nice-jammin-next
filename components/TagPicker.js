@@ -112,19 +112,20 @@ const tags = [
 ];
 
 export default function TagPicker({ tagsSelected, setTagsSelected, size, mx, my }) {
+  const [prelimTagsSelected, setPrelimTagsSelected] = useState(tagsSelected);
 
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setTagsSelected(
+    setPrelimTagsSelected(
       // On autofill we get a stringified value.
       typeof value === 'string' ? value.split(',') : value,
     );
   };
 
   return (
-    <Box mx={mx ? mx : '0.25em'} my={my ? my : '0.25em'} minWidth="120px">
+    <Box mx={mx ? mx : '0.5em'} my={my ? my : '0.5em'} minWidth="120px">
       <FormControl sx={{ minWidth: 180 }} size={size ? size : "small"}>
         <InputLabel id="tag-filter-select-label">Sounds</InputLabel>
         <Select
@@ -132,15 +133,16 @@ export default function TagPicker({ tagsSelected, setTagsSelected, size, mx, my 
           id="tag-filter-select-checkbox"
           multiple
           // sx={{ bgcolor: 'primary.main' }}
-          value={tagsSelected}
+          value={prelimTagsSelected}
           onChange={handleChange}
           input={<OutlinedInput label="Sounds" />}
-          renderValue={() => (`${tagsSelected.length} selected`)}
+          renderValue={() => (`${prelimTagsSelected.length} selected`)}
           MenuProps={MenuProps}
+          onClose={() => setTagsSelected(prelimTagsSelected)}
         >
           {tags.map((tag) => (
             <MenuItem key={tag.value} value={tag.value}>
-              <Checkbox checked={tagsSelected.indexOf(tag.value) > -1} />
+              <Checkbox checked={prelimTagsSelected.indexOf(tag.value) > -1} />
               <ListItemText primary={tag.label} />
             </MenuItem>
           ))}

@@ -132,10 +132,6 @@ export default function AddVersion({
 		}
 	}, [date, song, jams]);
 
-	useEffect(() => {
-		console.log('jam', jam);
-	}, [jam]);
-
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
@@ -157,18 +153,19 @@ export default function AddVersion({
 	};
 
 	useEffect(() => {
-		setDate(null);
-		setLocation(null);
-		setSong(null);
-		setShows(null);
-		setAllShows(null);
-		setSongErrorText(null);
+    if (open) {
+      setDate(null);
+      setLocation(null);
+      setSong(null);
+      setShows(null);
+      setAllShows(null);
+      setSongErrorText(null);
+    }
 	}, [artist]);
 
 	//when date changes
 	//fetch setlist
 	useEffect(() => {
-		console.log('date', date);
 		//make sure the date is from this millenium or the previous one before fetching versions from that date
 		if (date && (date.charAt(0) === '1' || date.charAt(0) === '2') && open) {
 			const data = JSON.stringify({

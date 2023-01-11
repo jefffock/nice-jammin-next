@@ -25,6 +25,7 @@ export default function FilterBar({
 	song,
 	setSong,
 	songs,
+	order,
 	orderBy,
 	setOrderBy,
 	setOrder,
@@ -56,11 +57,11 @@ export default function FilterBar({
 				<Box
 					sx={{
 						display: 'flex',
-            flexDirection: 'column',
+						flexDirection: 'column',
 						flexWrap: 'wrap',
 						alignItems: 'center',
 						mx: 'auto',
-						mt: '0.1em',
+						mt: '0.5em',
 						justifyContent: 'center',
 						bgcolor: 'white',
 						borderRadius: '0.25em',
@@ -76,18 +77,12 @@ export default function FilterBar({
 						setArtist={setArtist}
 						artist={artist}
 					/>
-					<SongPicker
-						songs={songs}
-						setSong={setSong}
-						song={song}
-						size={'small'}
-						artist={artist}
+					<Sorter
+						orderBy={orderBy}
+						setOrderBy={setOrderBy}
+						setOrder={setOrder}
+						order={order}
 					/>
-          <Sorter
-							orderBy={orderBy}
-							setOrderBy={setOrderBy}
-							setOrder={setOrder}
-						/>
 				</Box>
 				<Typography
 					textAlign={'center'}
@@ -117,6 +112,13 @@ export default function FilterBar({
 							p: '0.3em',
 						}}
 					>
+						<SongPicker
+							songs={songs}
+							setSong={setSong}
+							song={song}
+							size={'small'}
+							artist={artist}
+						/>
 						<DateFilter
 							before={false}
 							afterDate={afterDate}

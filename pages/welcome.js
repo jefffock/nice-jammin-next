@@ -92,7 +92,6 @@ export default function Welcome({ initialSession, initialUser }) {
 					console.error(err);
 				});
 		} else {
-			console.log('no user');
 			router.push('/join');
 		}
 	}

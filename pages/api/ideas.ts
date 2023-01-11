@@ -6,7 +6,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const { data, error } = await supabase
       .from('ideas')
       .select('*')
-    console.log('ideas', data)
     if (error) {
       console.error('error getting ideas', error)
     } else {

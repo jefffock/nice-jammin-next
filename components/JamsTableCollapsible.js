@@ -114,7 +114,7 @@ function JamsTableHead({ order, orderBy, onRequestSort, showRatings }) {
 									{orderBy === headCell.id ? (
 										<Box
 											component='span'
-											// sx={visuallyHidden}
+											sx={visuallyHidden}
 										>
 											{order === 'desc'
 												? 'sorted descending'
@@ -147,7 +147,7 @@ function JamsTableHead({ order, orderBy, onRequestSort, showRatings }) {
 									{orderBy === headCell.id ? (
 										<Box
 											component='span'
-											// sx={visuallyHidden}
+											sx={visuallyHidden}
 										>
 											{order === 'desc'
 												? 'sorted descending'
@@ -442,18 +442,6 @@ export default function CollapsibleTable({
 		}
 		setOrderBy(property);
 	};
-
-	useEffect(() => {
-		if (!songsFetched && !fetchingSongs) {
-			setFetchingSongs(true);
-			const getSongs = async () => {
-				let songs = await fetchSongs();
-				setSongsFetched(true);
-				setSongs(songs);
-			};
-			getSongs();
-		}
-	});
 
 	// function descendingComparator(a, b, orderBy) {
 	//   if (b[orderBy] < a[orderBy]) {
