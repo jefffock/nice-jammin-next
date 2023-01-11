@@ -2,6 +2,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from '../styles/themes';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import TopBar from '../components/AppBar';
 
 export default function Terms() {
 	return (
@@ -14,6 +15,7 @@ export default function Terms() {
 					overflow: 'hidden',
 				}}
 			>
+        <TopBar showButton={false} />
 				<Box
 					sx={{
 						flexDirection: 'column',
@@ -22,6 +24,7 @@ export default function Terms() {
 					}}
 					mx='0.25em'
 					my='2em'
+          p="1em"
 				>
 					<h1>Terms of Service</h1>
 					<Typography>
