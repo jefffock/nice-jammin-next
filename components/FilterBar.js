@@ -50,9 +50,9 @@ export default function FilterBar({
 				<Typography
 					textAlign='center'
 					fontSize={20}
-					sx={{ mt: '1em' }}
+					sx={{ mt: '1em', mx: '1em' }}
 				>
-					1. Choose your filters:
+					1. Choose the sounds you want to hear:
 				</Typography>
 				<Box
 					sx={{
@@ -72,16 +72,6 @@ export default function FilterBar({
 					<TagPicker
 						tagsSelected={tagsSelected}
 						setTagsSelected={setTagsSelected}
-					/>
-					<ArtistPicker
-						setArtist={setArtist}
-						artist={artist}
-					/>
-					<Sorter
-						orderBy={orderBy}
-						setOrderBy={setOrderBy}
-						setOrder={setOrder}
-						order={order}
 					/>
 				</Box>
 				<Typography
@@ -112,6 +102,16 @@ export default function FilterBar({
 							p: '0.3em',
 						}}
 					>
+						<Sorter
+							orderBy={orderBy}
+							setOrderBy={setOrderBy}
+							setOrder={setOrder}
+							order={order}
+						/>
+						<ArtistPicker
+							setArtist={setArtist}
+							artist={artist}
+						/>
 						<SongPicker
 							songs={songs}
 							setSong={setSong}
@@ -143,15 +143,23 @@ export default function FilterBar({
 					</Box>
 				)}
 				{jams && (
-					<Typography
-						textAlign='center'
-						fontSize='20px'
-						m='1em'
-					>
-						2. Click a row to listen or rate
-						<br />
-						❤️
-					</Typography>
+					<>
+						<Typography
+							textAlign='center'
+							fontSize='20px'
+							m='.5em'
+						>
+							2. Click a row
+						</Typography>
+						<Typography
+            textAlign='center'
+            fontSize='20px'
+            m='.5em'>
+							3. Listen, comment, and be merry!
+							<br />
+							❤️
+						</Typography>
+					</>
 				)}
 			</Box>
 		</Box>
