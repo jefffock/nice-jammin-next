@@ -54,8 +54,8 @@ export default function App({
 	initialOrder,
 	initialOrderBy,
 	initialLimit,
-  initialShowMoreFilters,
-  initialShowListenable,
+	initialShowMoreFilters,
+	initialShowListenable,
 }) {
 	// const [currentJams, setCurrentJams] = useState(jams);
 	const [songs, setSongs] = useState(initialSongs);
@@ -77,14 +77,16 @@ export default function App({
 	const router = useRouter();
 	const [showRatings, setShowRatings] = useState(false);
 	const isMounted = useRef(false);
-  const [showMoreFilters, setShowMoreFilters] = useState(initialShowMoreFilters);
-  const [showListenable, setShowListenable] = useState(initialShowListenable);
-  const [limit, setLimit] = useState(initialLimit);
+	const [showMoreFilters, setShowMoreFilters] = useState(
+		initialShowMoreFilters
+	);
+	const [showListenable, setShowListenable] = useState(initialShowListenable);
+	const [limit, setLimit] = useState(initialLimit);
 
 	useEffect(() => {
 		if (isMounted.current) {
-      //check song exists or no song before reloading
-			if ((!song || (song && songExists))) {
+			//check song exists or no song before reloading
+			if (!song || (song && songExists)) {
 				let index = songs.findIndex((item) => {
 					return item.song === song;
 				});
@@ -97,17 +99,17 @@ export default function App({
 					if (afterDate) query.afterDate = afterDate;
 					if (order !== 'desc') query.order = order;
 					if (orderBy !== 'id') query.orderBy = orderBy;
-          query.showMoreFilters = showMoreFilters;
-          query.showListenable = showListenable;
-          query.limit = limit;
+					if (showMoreFilters) query.showMoreFilters = showMoreFilters;
+					if (showListenable) query.showListenable = showListenable;
+					if (limit !== 20) query.limit = limit;
 					const params = new URLSearchParams(query).toString();
 					if (params.length > 0) {
 						router.push(`/?${params}`, null, {
-              scroll: false
-            });
+							scroll: false,
+						});
 					} else {
-            router.push('/');
-          }
+						router.push('/');
+					}
 				}
 			}
 		}
@@ -120,8 +122,8 @@ export default function App({
 		songExists,
 		order,
 		orderBy,
-    showListenable,
-    limit
+		showListenable,
+		limit,
 	]);
 
 	useEffect(() => {
@@ -310,20 +312,20 @@ export default function App({
 					songs={songs}
 					song={song}
 					setSong={setSong}
-          order={order}
+					order={order}
 					orderBy={orderBy}
 					setOrderBy={setOrderBy}
 					setOrder={setOrder}
 					showRatings={showRatings}
 					handleShowRatingsChange={handleShowRatingsChange}
 					jams={jams && jams.length > 0}
-          showMoreFilters={showMoreFilters}
-          setShowMoreFilters={setShowMoreFilters}
-          showListenable={showListenable}
-          setShowListenable={setShowListenable}
-          limit={limit}
-          setLimit={setLimit}
-          />
+					showMoreFilters={showMoreFilters}
+					setShowMoreFilters={setShowMoreFilters}
+					showListenable={showListenable}
+					setShowListenable={setShowListenable}
+					limit={limit}
+					setLimit={setLimit}
+				/>
 				<FilterList
 					artist={artist}
 					setArtist={setArtist}
@@ -389,7 +391,7 @@ export const getServerSideProps = async (ctx) => {
 		data: { session },
 	} = await supabase.auth.getSession();
 	const params = ctx.query;
-  console.log('params', params)
+	console.log('params', params);
 	const artist = params?.artist;
 	const song = params?.song;
 	const sounds = params?.sounds;
@@ -399,8 +401,8 @@ export const getServerSideProps = async (ctx) => {
 	const orderBy = params?.orderBy ?? 'id';
 	const asc = params?.order === 'asc' ? true : false;
 	const limit = params?.limit ?? 20;
-  const showMoreFilters = params?.showMoreFilters === 'true';
-  const showListenable = params?.showListenable === 'true';
+	const showMoreFilters = params?.showMoreFilters === 'true';
+	const showListenable = params?.showListenable === 'true';
 	let jams = supabase.from('versions').select('*');
 	if (artist) {
 		jams = jams.eq('artist', artist);
@@ -421,9 +423,9 @@ export const getServerSideProps = async (ctx) => {
 			jams = jams.eq(tag, true);
 		});
 	}
-  if (showListenable) {
-    jams = jams.not('listen_link', 'is', null);
-  }
+	if (showListenable) {
+		jams = jams.not('listen_link', 'is', null);
+	}
 	jams = jams.order(orderBy, { ascending: asc });
 	if (orderBy === 'avg_rating') {
 		jams = jams.order('num_ratings', { ascending: false });
@@ -479,7 +481,7 @@ export const getServerSideProps = async (ctx) => {
 			initialOrder: asc ? 'asc' : 'desc',
 			initialLimit: limit,
 			initialShowListenable: showListenable,
-      initialShowMoreFilters: showMoreFilters,
+			initialShowMoreFilters: showMoreFilters,
 		},
 	};
 };
