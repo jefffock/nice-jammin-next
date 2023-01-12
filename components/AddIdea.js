@@ -101,7 +101,7 @@ export default function AddIdea({ user, profile, setIdeas }) {
 
   async function insertIdea() {
     let ideaToAdd = {
-      user_name: profile.name,
+      user_name: profile?.name || 'Anonymous',
       idea_body: idea,
       tag_idea: ideaType === "tag",
       artist_idea: ideaType === "artist",
@@ -132,11 +132,11 @@ export default function AddIdea({ user, profile, setIdeas }) {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add Suggestion</DialogTitle>
         <DialogContent>
-          {!user && (
+          {/* {!user && (
             <Alert severity="warning" sx={{ mb: "1em" }}>
               Please log in to add a suggestion - thank you!
             </Alert>
-          )}
+          )} */}
           <FormControl sx={{ minWidth: 120, mx: "0.25em", my: "1em" }}>
             <InputLabel id="idea-type">Type</InputLabel>
             <Select
@@ -185,7 +185,7 @@ export default function AddIdea({ user, profile, setIdeas }) {
           {!success && (
             <Button
               onClick={handleSubmit}
-              disabled={loading || !user || !profile || !idea || !ideaType}
+              disabled={loading || !idea || !ideaType}
               sx={{ textTransform: "none" }}
             >
               Add suggestion

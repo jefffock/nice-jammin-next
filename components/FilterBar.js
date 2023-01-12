@@ -9,8 +9,7 @@ import Sorter from './Sorter';
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import SettingsIcon from '@mui/icons-material/Settings';
-import { color } from '@mui/system';
+import JamLimitPicker from './JamLimitPicker';
 
 export default function FilterBar({
 	setDates,
@@ -25,14 +24,28 @@ export default function FilterBar({
 	song,
 	setSong,
 	songs,
+	order,
 	orderBy,
 	setOrderBy,
 	setOrder,
 	showRatings,
 	handleShowRatingsChange,
+  showMoreFilters,
+  setShowMoreFilters,
 	jams,
+  showListenable,
+  setShowListenable,
+  limit,
+  setLimit
 }) {
-	const [showMore, setShowMore] = useState(false);
+
+  function handleListenableChange(e) {
+    setShowListenable(e.target.checked);
+  }
+
+  function handleShowMoreChange() {
+    setShowMoreFilters(!showMoreFilters);
+  }
 
 	return (
 		<Box sx={{ mx: '0.5em', mt: '1em' }}>
@@ -49,18 +62,18 @@ export default function FilterBar({
 				<Typography
 					textAlign='center'
 					fontSize={20}
-					sx={{ mt: '1em' }}
+					sx={{ mt: '1em', mx: '1em' }}
 				>
-					1. Choose your filters:
+					1. Choose the sounds you want to hear:
 				</Typography>
 				<Box
 					sx={{
 						display: 'flex',
-            flexDirection: 'column',
+						flexDirection: 'column',
 						flexWrap: 'wrap',
 						alignItems: 'center',
 						mx: 'auto',
-						mt: '0.1em',
+						mt: '0.5em',
 						justifyContent: 'center',
 						bgcolor: 'white',
 						borderRadius: '0.25em',
@@ -72,22 +85,6 @@ export default function FilterBar({
 						tagsSelected={tagsSelected}
 						setTagsSelected={setTagsSelected}
 					/>
-					<ArtistPicker
-						setArtist={setArtist}
-						artist={artist}
-					/>
-					<SongPicker
-						songs={songs}
-						setSong={setSong}
-						song={song}
-						size={'small'}
-						artist={artist}
-					/>
-          <Sorter
-							orderBy={orderBy}
-							setOrderBy={setOrderBy}
-							setOrder={setOrder}
-						/>
 				</Box>
 				<Typography
 					textAlign={'center'}
@@ -98,14 +95,15 @@ export default function FilterBar({
 							color: 'black',
 						},
 					}}
-					onClick={() => setShowMore(!showMore)}
+					onClick={handleShowMoreChange}
 				>
-					{showMore ? '✌️ Less' : '⚙️ More'}
+					{showMoreFilters ? '✌️ Less' : '⚙️ More'}
 				</Typography>
-				{showMore && (
+				{showMoreFilters && (
 					<Box
 						sx={{
 							display: 'flex',
+              flexDirection: 'column',
 							flexWrap: 'wrap',
 							alignItems: 'center',
 							mx: 'auto',
@@ -117,6 +115,17 @@ export default function FilterBar({
 							p: '0.3em',
 						}}
 					>
+						<ArtistPicker
+							setArtist={setArtist}
+							artist={artist}
+						/>
+						<SongPicker
+							songs={songs}
+							setSong={setSong}
+							song={song}
+							size={'small'}
+							artist={artist}
+						/>
 						<DateFilter
 							before={false}
 							afterDate={afterDate}
@@ -127,6 +136,13 @@ export default function FilterBar({
 							beforeDate={beforeDate}
 							setBeforeDate={setBeforeDate}
 						/>
+            <JamLimitPicker limit={limit} setLimit={setLimit} />
+            <Sorter
+							orderBy={orderBy}
+							setOrderBy={setOrderBy}
+							setOrder={setOrder}
+							order={order}
+						/>
 						<FormControl sx={{ display: 'flex', alignItems: 'center' }}>
 							<FormControlLabel
 								control={
@@ -135,21 +151,41 @@ export default function FilterBar({
 										onChange={handleShowRatingsChange}
 									/>
 								}
-								label='Show ratings'
+								label='Show ratings in table'
 							/>
 						</FormControl>
+            <FormControl sx={{ display: 'flex', alignItems: 'center' }}>
+							<FormControlLabel
+								control={
+									<Checkbox
+										checked={showListenable}
+										onChange={handleListenableChange}
+									/>
+								}
+								label='Only show jams with links'
+							/>
+						</FormControl>
+            
 					</Box>
 				)}
 				{jams && (
-					<Typography
-						textAlign='center'
-						fontSize='20px'
-						m='1em'
-					>
-						2. Click a row to listen or rate
-						<br />
-						❤️
-					</Typography>
+					<>
+						<Typography
+							textAlign='center'
+							fontSize='20px'
+							m='.5em'
+						>
+							2. Click a row
+						</Typography>
+						<Typography
+            textAlign='center'
+            fontSize='20px'
+            m='.5em'>
+							3. Listen, comment, and be merry!
+							<br />
+							❤️
+						</Typography>
+					</>
 				)}
 			</Box>
 		</Box>

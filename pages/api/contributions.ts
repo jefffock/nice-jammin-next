@@ -40,8 +40,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 				const ratings = ratingsObj.data;
 				const ideas = ideasObj.data;
         const allSongs = allSongsObj.data;
-				console.log('ratings', ratings);
-				console.log('versions', versions);
 				if (ratings) {
 					const versionsUserHasRated = ratings.map(
 						(rating) => rating.version_id
@@ -53,26 +51,20 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 					Promise.all([fetchVersionsRated])
 						.then(([ratedVersions]) => {
 							const versionsRated: Array<any> | null = ratedVersions.data;
-							console.log('ratings', ratings);
-							console.log('versionsRated', versionsRated);
 							if (versionsRated) {
 								const ratingsWithVersions = ratings.map((rating) => {
 									const index: number = versionsRated.findIndex(
 										(version) => version.id === rating.version_id
 									);
-									console.log('index', index);
 									let versionInfo;
 									if (versionsRated && (index || index === 0)) {
 										versionInfo = versionsRated[index];
 									}
-									console.log('versionInfo', versionInfo);
 									return {
 										rating,
 										versionInfo,
 									};
 								});
-								console.log('ratings with versions', ratingsWithVersions);
-								console.log('versions before sending', versions);
 								res.status(200).send({
 									ratings: ratingsWithVersions,
 									songs,
@@ -83,7 +75,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 							}
 						})
 						.catch((error) => {
-							console.log(error);
+							console.error(error);
 							res
 								.status(500)
 								.send({ message: 'fetch rated versions rejected' });
@@ -99,7 +91,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 				}
 			})
 			.catch((error) => {
-				console.log(error);
+				console.error(error);
 				res
 					.status(500)
 					.send({ message: 'one of the initial promises rejected' });

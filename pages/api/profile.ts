@@ -9,7 +9,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       .from('profiles')
       .select('*')
       .eq('id', id)
-    console.log('profiles', data)
     if (error) {
       console.error('error getting ideas', error)
     } else {

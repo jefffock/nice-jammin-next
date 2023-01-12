@@ -14,6 +14,7 @@ const tags = {
   'fast': 'Fast',
   'funky': 'Funky',
   'groovy': 'Groovy',
+  'grimy': 'Grimy',
   'guest': 'Guest',
   'happy': 'Happy',
   'heavy': 'Heavy',

@@ -24,7 +24,7 @@ export default function DatePicker({ setDate, my, date }) {
   })
 
   return (
-    <Box my={my ? my : '0.25em'} sx={{ mx:'0.25em' }}>
+    <Box my={my ? my : '0.5em'} sx={{ mx:'0.5em' }}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
           <MobileDatePicker
             label="Date"

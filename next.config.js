@@ -12,10 +12,10 @@ module.exports = withBundleAnalyzer({})
 module.exports = nextConfig
 
 module.exports = {
-  // i18n: {
-  //   locales: ['en'],
-  //   defaultLocale: 'en',
-  // },
+  i18n: {
+    locales: ['en'],
+    defaultLocale: 'en',
+  },
   serverRuntimeConfig: {
     baseUrls: {
       eggyBaseUrl: 'https://thecarton.net/api/v1',

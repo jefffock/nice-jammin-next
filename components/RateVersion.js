@@ -16,6 +16,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
+import Link from 'next/link';
 
 export default function RateVersion({
 	song,
@@ -256,11 +257,11 @@ export default function RateVersion({
 		let index = songs.findIndex((item) => {
 			return item.song === song;
 		});
-    if (index !==-1) {
-      setSongSubmitter(songs[index].submitter_name);
-    } else {
-      setSongSubmitter(null)
-    }
+		if (index !== -1) {
+			setSongSubmitter(songs[index].submitter_name);
+		} else {
+			setSongSubmitter(null);
+		}
 	}, []);
 
 	const handleSubmit = async () => {
@@ -353,7 +354,9 @@ export default function RateVersion({
 					setButtonText('Update');
 				}
 			};
-			checkRated();
+      if (profile) {
+        checkRated();
+      }
 		}
 	}, [user, profile, jam, open]);
 
@@ -493,77 +496,81 @@ export default function RateVersion({
 							severity='warning'
 							sx={{ mb: '1em' }}
 						>
-							Please log in to rate this jam - thank you!
+							Please <Link href='/login'>log in</Link> to rate this jam - thank you!
 						</Alert>
 					)}
-					<Box sx={{ minWidth: '120px', mx: '0.25em', my: '1em' }}>
-						<FormControl>
-							<InputLabel id='rating-select-label'>Rating</InputLabel>
-							<Select
-								sx={{ minWidth: '120px' }}
-								size='normal'
-								labelId='rating-select-label'
-								id='rating-select'
-								value={rating}
-								label='Rating'
-								onChange={handleRatingChange}
+					{user && (
+						<>
+							<Box sx={{ minWidth: '120px', mx: '0.25em', my: '1em' }}>
+								<FormControl>
+									<InputLabel id='rating-select-label'>Rating</InputLabel>
+									<Select
+										sx={{ minWidth: '120px' }}
+										size='normal'
+										labelId='rating-select-label'
+										id='rating-select'
+										value={rating}
+										label='Rating'
+										onChange={handleRatingChange}
+									>
+										<MenuItem value={10}>10</MenuItem>
+										<MenuItem value={9}>9</MenuItem>
+										<MenuItem value={8}>8</MenuItem>
+										<MenuItem value={7}>7</MenuItem>
+										<MenuItem value={6}>6</MenuItem>
+										<MenuItem value={5}>5</MenuItem>
+										<MenuItem value={4}>4</MenuItem>
+										<MenuItem value={3}>3</MenuItem>
+										<MenuItem value={2}>2</MenuItem>
+										<MenuItem value={1}>1</MenuItem>
+									</Select>
+								</FormControl>
+								{ratingErrorText && (
+									<Alert
+										severity='error'
+										sx={{ mb: '1em' }}
+									>
+										{ratingErrorText}
+									</Alert>
+								)}
+							</Box>
+							<Typography
+								mx='0.25em'
+								mt='1em'
 							>
-								<MenuItem value={10}>10</MenuItem>
-								<MenuItem value={9}>9</MenuItem>
-								<MenuItem value={8}>8</MenuItem>
-								<MenuItem value={7}>7</MenuItem>
-								<MenuItem value={6}>6</MenuItem>
-								<MenuItem value={5}>5</MenuItem>
-								<MenuItem value={4}>4</MenuItem>
-								<MenuItem value={3}>3</MenuItem>
-								<MenuItem value={2}>2</MenuItem>
-								<MenuItem value={1}>1</MenuItem>
-							</Select>
-						</FormControl>
-						{ratingErrorText && (
-							<Alert
-								severity='error'
-								sx={{ mb: '1em' }}
-							>
-								{ratingErrorText}
-							</Alert>
-						)}
-					</Box>
-					<Typography
-						mx='0.25em'
-						mt='1em'
-					>
-						Optional:
-					</Typography>
-					<TextField
-						autoFocus
-						sx={{ mx: '0.25em', mb: '1em' }}
-						margin='dense'
-						id='comment'
-						label='Comments'
-						value={comment}
-						type='text'
-						fullWidth
-						variant='standard'
-						multiline
-						onChange={handleCommentChange}
-					/>
-					<TagPicker
-						tagsSelected={newTags}
-						setTagsSelected={setNewTags}
-						size={'normal'}
-					/>
-					{tags && <Typography>Current Sounds: {tags}</Typography>}
-					{tagsToAddText && (
-						<Typography>Sounds to Add: {tagsToAddText}</Typography>
-					)}
-					{successAlertText && (
-						<Alert
-							severity='success'
-							sx={{ my: '1em' }}
-						>
-							{successAlertText}
-						</Alert>
+								Optional:
+							</Typography>
+							<TextField
+								autoFocus
+								sx={{ mx: '0.25em', mb: '1em' }}
+								margin='dense'
+								id='comment'
+								label='Comments'
+								value={comment}
+								type='text'
+								fullWidth
+								variant='standard'
+								multiline
+								onChange={handleCommentChange}
+							/>
+							<TagPicker
+								tagsSelected={newTags}
+								setTagsSelected={setNewTags}
+								size={'normal'}
+							/>
+							{tags && <Typography>Current Sounds: {tags}</Typography>}
+							{tagsToAddText && (
+								<Typography>Sounds to Add: {tagsToAddText}</Typography>
+							)}
+							{successAlertText && (
+								<Alert
+									severity='success'
+									sx={{ my: '1em' }}
+								>
+									{successAlertText}
+								</Alert>
+							)}
+						</>
 					)}
 				</DialogContent>
 				<DialogActions>

@@ -46,57 +46,69 @@ export default function App({
 	initialUser,
 	leaders,
 	initialSongs,
+	initialArtist,
+	initialSong,
+	initialBeforeDate,
+	initialAfterDate,
+	initialTags,
+	initialOrder,
+	initialOrderBy,
+	initialLimit,
+	initialShowMoreFilters,
+	initialShowListenable,
 }) {
-	const [currentJams, setCurrentJams] = useState(jams);
+	// const [currentJams, setCurrentJams] = useState(jams);
 	const [songs, setSongs] = useState(initialSongs);
 	const [user, setUser] = useState(initialUser);
 	const [session, setSession] = useState(initialSession);
 	const [profile, setProfile] = useState(null);
 	const [artists, setArtists] = useState(null);
-	const [artist, setArtist] = useState(null);
-	const [song, setSong] = useState(null);
+	const [artist, setArtist] = useState(initialArtist);
+	const [song, setSong] = useState(initialSong);
 	const [songObj, setSongObj] = useState(null);
 	const [songExists, setSongExists] = useState(true);
-	const [filteredJams, setFilteredJams] = useState(jams);
-	const [sortedJams, setSortedJams] = useState(jams);
-	const [order, setOrder] = useState('desc');
-	const [orderBy, setOrderBy] = useState('id');
-	const [beforeDate, setBeforeDate] = useState('');
-	const [afterDate, setAfterDate] = useState('');
-	const [tagsSelected, setTagsSelected] = useState([]);
+	// const [filteredJams, setFilteredJams] = useState(jams);
+	// const [sortedJams, setSortedJams] = useState(jams);
+	const [order, setOrder] = useState(initialOrder);
+	const [orderBy, setOrderBy] = useState(initialOrderBy);
+	const [beforeDate, setBeforeDate] = useState(initialBeforeDate);
+	const [afterDate, setAfterDate] = useState(initialAfterDate);
+	const [tagsSelected, setTagsSelected] = useState(initialTags);
 	const router = useRouter();
 	const [showRatings, setShowRatings] = useState(false);
 	const isMounted = useRef(false);
+	const [showMoreFilters, setShowMoreFilters] = useState(
+		initialShowMoreFilters
+	);
+	const [showListenable, setShowListenable] = useState(initialShowListenable);
+	const [limit, setLimit] = useState(initialLimit);
 
 	useEffect(() => {
 		if (isMounted.current) {
-			if ((!song || (song && songExists)) && songs) {
-				//double check song exists - before, when you deleted a char from an existing song, songExists updated after the GET request for versions had been sent
+			//check song exists or no song before reloading
+			if (!song || (song && songExists)) {
 				let index = songs.findIndex((item) => {
 					return item.song === song;
 				});
 				if ((song && index > -1) || !song) {
-					const data = JSON.stringify({
-						artist,
-						song,
-						afterDate: afterDate ? afterDate.toString() : null,
-						beforeDate: beforeDate ? beforeDate.toString() : null,
-						tags: tagsSelected,
-						orderBy,
-						order,
-						fetchFullJams: true,
-					});
-					try {
-						fetch('/api/versions', {
-							method: 'POST',
-							body: data,
-						})
-							.then((data) => data.json())
-							.then((versions) => {
-								setCurrentJams(versions);
-							});
-					} catch (error) {
-						console.error(error);
+					let query = {};
+					if (artist) query.artist = artist;
+					if (song) query.song = song;
+					if (tagsSelected.length > 0) query.sounds = tagsSelected;
+					if (beforeDate) query.beforeDate = beforeDate;
+					if (afterDate) query.afterDate = afterDate;
+					if (order !== 'desc') query.order = order;
+					if (orderBy !== 'id') query.orderBy = orderBy;
+					if (showMoreFilters) query.showMoreFilters = showMoreFilters;
+					if (showListenable) query.showListenable = showListenable;
+					if (limit !== 20) query.limit = limit;
+					const params = new URLSearchParams(query).toString();
+					if (params.length > 0) {
+						router.push(`/?${params}`, null, {
+							scroll: false,
+						});
+					} else {
+						router.push('/');
 					}
 				}
 			}
@@ -110,6 +122,8 @@ export default function App({
 		songExists,
 		order,
 		orderBy,
+		showListenable,
+		limit,
 	]);
 
 	useEffect(() => {
@@ -137,28 +151,27 @@ export default function App({
 		}
 	}, []);
 
-  useEffect(() => {
-    if (user && !profile) {
-      const getProfile = async () => {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', user.id)
-          .single();
-        if (error) {
-          console.error(error);
-        }
-        if (data) {
-          setProfile(data);
-        } 
-        else {
-          router.push('/welcome');
-        }
-      };
-      getProfile();
-    }
-  }, [user]);
-  
+	useEffect(() => {
+		if (user && !profile) {
+			const getProfile = async () => {
+				const { data, error } = await supabase
+					.from('profiles')
+					.select('*')
+					.eq('id', user.id)
+					.single();
+				if (error) {
+					console.error(error);
+				}
+				if (data) {
+					setProfile(data);
+				} else {
+					router.push('/welcome');
+				}
+			};
+			getProfile();
+		}
+	}, [user]);
+
 	//to do: if jams length is less than 100 and order/orderby changes,
 	//sort the jams client side instead of fetching them
 	// useEffect(() => {
@@ -233,7 +246,7 @@ export default function App({
 						/>
 					</>
 				)}
-				{artist && !song && (
+				{/* {artist && !song && (
 					<>
 						<title>{artist} Great Jams - NiceJammin.com</title>
 						<meta
@@ -253,7 +266,7 @@ export default function App({
 							{artist} {song} Jams - NiceJammin.com
 						</title>
 					</>
-				)}
+				)} */}
 			</Head>
 			<Box
 				sx={{
@@ -268,8 +281,9 @@ export default function App({
 					session={session}
 					router={router}
 					user={user}
-          setUser={setUser}
-          setSession={setSession}/>
+					setUser={setUser}
+					setSession={setSession}
+				/>
 				<Box
 					my='3em'
 					mx='auto'
@@ -298,12 +312,19 @@ export default function App({
 					songs={songs}
 					song={song}
 					setSong={setSong}
+					order={order}
 					orderBy={orderBy}
 					setOrderBy={setOrderBy}
 					setOrder={setOrder}
 					showRatings={showRatings}
 					handleShowRatingsChange={handleShowRatingsChange}
-					jams={currentJams && currentJams.length > 0}
+					jams={jams && jams.length > 0}
+					showMoreFilters={showMoreFilters}
+					setShowMoreFilters={setShowMoreFilters}
+					showListenable={showListenable}
+					setShowListenable={setShowListenable}
+					limit={limit}
+					setLimit={setLimit}
 				/>
 				<FilterList
 					artist={artist}
@@ -316,18 +337,18 @@ export default function App({
 					setAfterDate={setAfterDate}
 					song={song}
 					setSong={setSong}
-					jams={currentJams.length > 0}
+					jams={jams && jams.length > 0}
 				/>
 				<Suspense fallback={<p>Loading....</p>}>
 					<DynamicJamsTable
-						jams={currentJams}
+						jams={jams}
 						order={order}
 						orderBy={orderBy}
 						setOrder={setOrder}
 						setOrderBy={setOrderBy}
 						user={user}
 						profile={profile}
-						setCurrentJams={setCurrentJams}
+						// setCurrentJams={setCurrentJams}
 						songs={songs}
 						setSongs={setSongs}
 						showRatings={showRatings}
@@ -336,10 +357,10 @@ export default function App({
 					<DynamicAddVersion
 						songs={songs}
 						setSongs={setSongs}
-						jams={currentJams}
+						jams={jams}
 						user={user}
 						profile={profile}
-						setCurrentJams={setCurrentJams}
+						// setCurrentJams={setCurrentJams}
 						artist={artist}
 						setArtist={setArtist}
 						song={song}
@@ -369,36 +390,98 @@ export const getServerSideProps = async (ctx) => {
 	const {
 		data: { session },
 	} = await supabase.auth.getSession();
-
-	const ideas = await supabase
+	const params = ctx.query;
+	console.log('params', params);
+	const artist = params?.artist;
+	const song = params?.song;
+	const sounds = params?.sounds;
+	let tags = sounds?.split(',') ?? [];
+	const beforeDate = params?.beforeDate;
+	const afterDate = params?.afterDate;
+	const orderBy = params?.orderBy ?? 'id';
+	const asc = params?.order === 'asc' ? true : false;
+	const limit = params?.limit ?? 20;
+	const showMoreFilters = params?.showMoreFilters === 'true';
+	const showListenable = params?.showListenable === 'true';
+	let jams = supabase.from('versions').select('*');
+	if (artist) {
+		jams = jams.eq('artist', artist);
+	}
+	if (song) {
+		jams = jams.eq('song_name', song);
+	}
+	if (afterDate) {
+		let after = afterDate + '-01-01';
+		jams = jams.gte('date', after);
+	}
+	if (beforeDate) {
+		let before = beforeDate + '-12-31';
+		jams = jams.lte('date', before);
+	}
+	if (tags) {
+		tags.forEach((tag) => {
+			jams = jams.eq(tag, true);
+		});
+	}
+	if (showListenable) {
+		jams = jams.not('listen_link', 'is', null);
+	}
+	jams = jams.order(orderBy, { ascending: asc });
+	if (orderBy === 'avg_rating') {
+		jams = jams.order('num_ratings', { ascending: false });
+	}
+	if (orderBy === 'num_ratings') {
+		jams = jams.order('avg_rating', { ascending: false });
+	}
+	jams = jams.limit(limit);
+	const ideas = supabase
 		.from('ideas')
 		.select('idea_body, done, votes, id')
 		.order('id', { ascending: false });
-	const jams = await supabase
-		.from('versions')
-		.select('*')
-		.limit(20)
-		.order('id', { ascending: false });
-	const leaders = await supabase
+	// const jams = await supabase
+	// 	.from('versions')
+	// 	.select('*')
+	// 	.limit(20)
+	// 	.order('id', { ascending: false });
+	const leaders = supabase
 		.from('profiles')
 		.select('name, points')
 		.not('name', 'eq', 'Henrietta')
 		.limit(20)
 		.order('points', { ascending: false });
-	const songs = await supabase
+	const songs = supabase
 		.from('songs')
 		.select('*')
 		// .gt('avg_rating', 0)
 		// .limit(100)
 		.order('song', { ascending: true });
+	let fetchedJams, fetchedIdeas, fetchedLeaders, fetchedSongs;
+	await Promise.all([jams, ideas, leaders, songs]).then(
+		([jams, ideas, leaders, songs]) => {
+			fetchedJams = jams;
+			fetchedIdeas = ideas;
+			fetchedLeaders = leaders;
+			fetchedSongs = songs;
+		}
+	);
 	return {
 		props: {
 			initialSession: session ?? null,
 			initialUser: session?.user ?? null,
-			jams: jams.data,
-			ideas: ideas.data,
-			leaders: leaders.data,
-			initialSongs: songs.data,
+			jams: fetchedJams.data,
+			ideas: fetchedIdeas.data,
+			leaders: fetchedLeaders.data,
+			initialSongs: fetchedSongs.data,
+			initialArtist: artist || null,
+			initialSong: song || null,
+			initialTags: tags || [],
+			initialBeforeDate: beforeDate || '',
+			initialAfterDate: afterDate || '',
+			initialOrderBy: orderBy,
+			initialOrder: asc ? 'asc' : 'desc',
+			initialLimit: limit,
+			initialShowListenable: showListenable,
+			initialShowMoreFilters: showMoreFilters,
 		},
 	};
 };

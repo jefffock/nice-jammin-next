@@ -8,7 +8,7 @@ export default async function handler(req, res) {
 	const beforeDate = body.beforeDate;
 	const afterDate = body.afterDate;
 	const tags = body.tags;
-	const orderBy = body.orderBy ?? 'avg_rating';
+	const orderBy = body.orderBy ?? 'id';
 	const asc = body.order === 'asc' ? true : false;
 	const fetchFullJams = body.fetchFullJams;
 	const limit = body.limit ?? 20;
@@ -62,7 +62,6 @@ export default async function handler(req, res) {
 					artist: artist,
 					date: date,
 				});
-			console.log('versions', data);
 			if (error) {
 				console.error(error);
 				res.status(500).send(error);

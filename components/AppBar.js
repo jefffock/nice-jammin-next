@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useEffect } from 'react';
 import { supabase } from '../utils/supabaseClient';
+import Link from 'next/link';
 
 export default function TopBar({
 	showButton,
@@ -20,7 +21,6 @@ export default function TopBar({
 }) {
 
 	const handleLogout = async () => {
-		console.log('clicked logout');
 		const { error } = await supabase.auth.signOut();
 		if (error) {
 			console.error(error);
@@ -42,6 +42,7 @@ export default function TopBar({
 						direction='row'
 						sx={{ flexGrow: 1 }}
 					>
+            <Link href='/'>
 						<Image
 							alt='Nice Jammin Logo'
 							src='/icon-circle.png'
@@ -49,9 +50,8 @@ export default function TopBar({
 							priority
 							width={45}
 							height={45}
-							component='a'
-							href='/'
 						/>
+            </Link>
 						<Typography
 							variant='h6'
 							noWrap
