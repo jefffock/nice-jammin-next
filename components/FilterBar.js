@@ -115,12 +115,6 @@ export default function FilterBar({
 							p: '0.3em',
 						}}
 					>
-						<Sorter
-							orderBy={orderBy}
-							setOrderBy={setOrderBy}
-							setOrder={setOrder}
-							order={order}
-						/>
 						<ArtistPicker
 							setArtist={setArtist}
 							artist={artist}
@@ -142,6 +136,13 @@ export default function FilterBar({
 							beforeDate={beforeDate}
 							setBeforeDate={setBeforeDate}
 						/>
+            <JamLimitPicker limit={limit} setLimit={setLimit} />
+            <Sorter
+							orderBy={orderBy}
+							setOrderBy={setOrderBy}
+							setOrder={setOrder}
+							order={order}
+						/>
 						<FormControl sx={{ display: 'flex', alignItems: 'center' }}>
 							<FormControlLabel
 								control={
@@ -150,7 +151,7 @@ export default function FilterBar({
 										onChange={handleShowRatingsChange}
 									/>
 								}
-								label='Show ratings'
+								label='Show ratings in table'
 							/>
 						</FormControl>
             <FormControl sx={{ display: 'flex', alignItems: 'center' }}>
@@ -161,10 +162,10 @@ export default function FilterBar({
 										onChange={handleListenableChange}
 									/>
 								}
-								label='Only show jams with listenable links'
+								label='Only show jams with links'
 							/>
 						</FormControl>
-            <JamLimitPicker limit={limit} setLimit={setLimit} />
+            
 					</Box>
 				)}
 				{jams && (

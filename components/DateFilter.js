@@ -30,7 +30,7 @@ export default function DateFilter({
 	return (
 		<>
 			<FormControl
-				sx={{ minWidth: 120, m: '0.4em' }}
+				sx={{ minWidth: 180, m: '0.4em' }}
 				size='small'
 			>
 				<InputLabel id={before ? 'before-date-select' : 'after-date-select'}>
