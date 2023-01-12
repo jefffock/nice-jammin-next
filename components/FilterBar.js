@@ -91,6 +91,7 @@ export default function FilterBar({
 					<Box
 						sx={{
 							display: 'flex',
+              flexDirection: 'column',
 							flexWrap: 'wrap',
 							alignItems: 'center',
 							mx: 'auto',

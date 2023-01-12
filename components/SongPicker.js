@@ -80,7 +80,7 @@ export default function SongPicker({ artist, songs, song, setSong, setlist, wide
 
   if (!setlist || setlist.length === 0) {
     return (
-      <Box mx={mx ? mx : '0.25em'}  my={my ? my : '0.25em'} sx={{ 
+      <Box mx={mx ? mx : '0.5em'}  my={my ? my : '0.4em'} sx={{ 
         minWidth: '180px',
         maxWidth: '240px',
       }}>

@@ -90,12 +90,12 @@ export default function Sorter({ orderBy, order, setOrderBy, setOrder, size, my 
 	};
 
 	return (
-		<div>
+		<>
 			<Box
 				sx={{
 					display: 'flex',
 					justifyContent: 'center',
-					my: '0.5em',
+					my: '0.3em',
 				}}
 			>
 				<FormControl
@@ -120,6 +120,6 @@ export default function Sorter({ orderBy, order, setOrderBy, setOrder, size, my 
 					</Select>
 				</FormControl>
 			</Box>
-		</div>
+		</>
 	);
 }
