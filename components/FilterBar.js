@@ -9,8 +9,7 @@ import Sorter from './Sorter';
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import SettingsIcon from '@mui/icons-material/Settings';
-import { color } from '@mui/system';
+import JamLimitPicker from './JamLimitPicker';
 
 export default function FilterBar({
 	setDates,
@@ -31,9 +30,22 @@ export default function FilterBar({
 	setOrder,
 	showRatings,
 	handleShowRatingsChange,
+  showMoreFilters,
+  setShowMoreFilters,
 	jams,
+  showListenable,
+  setShowListenable,
+  limit,
+  setLimit
 }) {
-	const [showMore, setShowMore] = useState(false);
+
+  function handleListenableChange(e) {
+    setShowListenable(e.target.checked);
+  }
+
+  function handleShowMoreChange() {
+    setShowMoreFilters(!showMoreFilters);
+  }
 
 	return (
 		<Box sx={{ mx: '0.5em', mt: '1em' }}>
@@ -83,11 +95,11 @@ export default function FilterBar({
 							color: 'black',
 						},
 					}}
-					onClick={() => setShowMore(!showMore)}
+					onClick={handleShowMoreChange}
 				>
-					{showMore ? '✌️ Less' : '⚙️ More'}
+					{showMoreFilters ? '✌️ Less' : '⚙️ More'}
 				</Typography>
-				{showMore && (
+				{showMoreFilters && (
 					<Box
 						sx={{
 							display: 'flex',
@@ -141,6 +153,18 @@ export default function FilterBar({
 								label='Show ratings'
 							/>
 						</FormControl>
+            <FormControl sx={{ display: 'flex', alignItems: 'center' }}>
+							<FormControlLabel
+								control={
+									<Checkbox
+										checked={showListenable}
+										onChange={handleListenableChange}
+									/>
+								}
+								label='Only show jams with listenable links'
+							/>
+						</FormControl>
+            <JamLimitPicker limit={limit} setLimit={setLimit} />
 					</Box>
 				)}
 				{jams && (

@@ -427,11 +427,11 @@ export default function CollapsibleTable({
 	songs,
 	showRatings,
 }) {
-	const [orderedSongs, setOrderedSongs] = useState(null);
-	const [jamsFetched, setJamsFetched] = useState(false);
-	const [songsFetched, setSongsFetched] = useState(false);
-	const [fetchingJams, setFetchingJams] = useState(false);
-	const [fetchingSongs, setFetchingSongs] = useState(false);
+	// const [orderedSongs, setOrderedSongs] = useState(null);
+	// const [jamsFetched, setJamsFetched] = useState(false);
+	// const [songsFetched, setSongsFetched] = useState(false);
+	// const [fetchingJams, setFetchingJams] = useState(false);
+	// const [fetchingSongs, setFetchingSongs] = useState(false);
 
 	const handleRequestSort = (event, property) => {
 		if (property === 'avg_rating' && orderBy !== 'avg_rating') {

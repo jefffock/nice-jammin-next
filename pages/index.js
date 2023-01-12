@@ -54,9 +54,10 @@ export default function App({
 	initialOrder,
 	initialOrderBy,
 	initialLimit,
-	initialHasLink,
+  initialShowMoreFilters,
+  initialShowListenable,
 }) {
-	const [currentJams, setCurrentJams] = useState(jams);
+	// const [currentJams, setCurrentJams] = useState(jams);
 	const [songs, setSongs] = useState(initialSongs);
 	const [user, setUser] = useState(initialUser);
 	const [session, setSession] = useState(initialSession);
@@ -76,11 +77,14 @@ export default function App({
 	const router = useRouter();
 	const [showRatings, setShowRatings] = useState(false);
 	const isMounted = useRef(false);
+  const [showMoreFilters, setShowMoreFilters] = useState(initialShowMoreFilters);
+  const [showListenable, setShowListenable] = useState(initialShowListenable);
+  const [limit, setLimit] = useState(initialLimit);
 
 	useEffect(() => {
 		if (isMounted.current) {
-			if ((!song || (song && songExists)) && songs) {
-				//double check song exists - before, when you deleted a char from an existing song, songExists updated after the GET request for versions had been sent
+      //check song exists or no song before reloading
+			if ((!song || (song && songExists))) {
 				let index = songs.findIndex((item) => {
 					return item.song === song;
 				});
@@ -93,8 +97,10 @@ export default function App({
 					if (afterDate) query.afterDate = afterDate;
 					if (order !== 'desc') query.order = order;
 					if (orderBy !== 'id') query.orderBy = orderBy;
+          query.showMoreFilters = showMoreFilters;
+          query.showListenable = showListenable;
+          query.limit = limit;
 					const params = new URLSearchParams(query).toString();
-					console.log('params before push', params);
 					if (params.length > 0) {
 						router.push(`/?${params}`, null, {
               scroll: false
@@ -102,41 +108,6 @@ export default function App({
 					} else {
             router.push('/');
           }
-					// 	const data = JSON.stringify({
-					// 		artist,
-					// 		song,
-					// 		afterDate: afterDate ? afterDate.toString() : null,
-					// 		beforeDate: beforeDate ? beforeDate.toString() : null,
-					// 		tags: tagsSelected,
-					// 		orderBy,
-					// 		order,
-					// 		fetchFullJams: true,
-					// 	});
-					// 	try {
-					// 		fetch('/api/versions', {
-					// 			method: 'POST',
-					// 			body: data,
-					// 		})
-					// 			.then((data) => data.json())
-					// 			.then((versions) => {
-					// 				setCurrentJams(versions);
-					//         let query = {};
-					// 				if (artist) query.artist = artist;
-					// 				if (song) query.song = song;
-					// 				if (tagsSelected.length > 0) query.sounds = tagsSelected;
-					// 				if (beforeDate) query.beforeDate = beforeDate;
-					// 				if (afterDate) query.afterDate = afterDate;
-					// 				if (order !== 'desc') query.order = order;
-					// 				if (orderBy !== 'id') query.orderBy = orderBy;
-					// 				const params = new URLSearchParams(query).toString();
-					// 				console.log(params);
-					//         if (params.length > 0) {
-					//           router.push(`/?${params}`, `/?${params}`, { shallow: true });
-					//         }
-					// 			})
-					// 	} catch (error) {
-					// 		console.error(error);
-					// 	}
 				}
 			}
 		}
@@ -149,25 +120,9 @@ export default function App({
 		songExists,
 		order,
 		orderBy,
+    showListenable,
+    limit
 	]);
-
-  useEffect(() => {
-    console.log('song in uE', song)
-  }, [song])
-
-	// useEffect(() => {
-	// 	let query = {};
-	// 	if (artist) query.artist = artist;
-	// 	if (song) query.song = song;
-	// 	if (tagsSelected.length > 0) query.sounds = tagsSelected;
-	// 	if (beforeDate) query.beforeDate = beforeDate;
-	// 	if (afterDate) query.afterDate = afterDate;
-	// 	if (order !== 'desc') query.order = order;
-	// 	if (orderBy !== 'id') query.orderBy = orderBy;
-	// 	let params = new URLSearchParams(query).toString();
-	// 	console.log(params);
-	// 	router.push(`/?${params}`, undefined, { shallow: true });
-	// }, [artist, song, tagsSelected, beforeDate, afterDate, order, orderBy]);
 
 	useEffect(() => {
 		if (songs) {
@@ -361,8 +316,14 @@ export default function App({
 					setOrder={setOrder}
 					showRatings={showRatings}
 					handleShowRatingsChange={handleShowRatingsChange}
-					jams={currentJams && currentJams.length > 0}
-				/>
+					jams={jams && jams.length > 0}
+          showMoreFilters={showMoreFilters}
+          setShowMoreFilters={setShowMoreFilters}
+          showListenable={showListenable}
+          setShowListenable={setShowListenable}
+          limit={limit}
+          setLimit={setLimit}
+          />
 				<FilterList
 					artist={artist}
 					setArtist={setArtist}
@@ -374,18 +335,18 @@ export default function App({
 					setAfterDate={setAfterDate}
 					song={song}
 					setSong={setSong}
-					jams={currentJams.length > 0}
+					jams={jams && jams.length > 0}
 				/>
 				<Suspense fallback={<p>Loading....</p>}>
 					<DynamicJamsTable
-						jams={currentJams}
+						jams={jams}
 						order={order}
 						orderBy={orderBy}
 						setOrder={setOrder}
 						setOrderBy={setOrderBy}
 						user={user}
 						profile={profile}
-						setCurrentJams={setCurrentJams}
+						// setCurrentJams={setCurrentJams}
 						songs={songs}
 						setSongs={setSongs}
 						showRatings={showRatings}
@@ -394,10 +355,10 @@ export default function App({
 					<DynamicAddVersion
 						songs={songs}
 						setSongs={setSongs}
-						jams={currentJams}
+						jams={jams}
 						user={user}
 						profile={profile}
-						setCurrentJams={setCurrentJams}
+						// setCurrentJams={setCurrentJams}
 						artist={artist}
 						setArtist={setArtist}
 						song={song}
@@ -428,18 +389,18 @@ export const getServerSideProps = async (ctx) => {
 		data: { session },
 	} = await supabase.auth.getSession();
 	const params = ctx.query;
+  console.log('params', params)
 	const artist = params?.artist;
 	const song = params?.song;
-  console.log('song in gSSP', song, typeof song)
 	const sounds = params?.sounds;
 	let tags = sounds?.split(',') ?? [];
-  console.log('tags in gSSP', tags)
 	const beforeDate = params?.beforeDate;
 	const afterDate = params?.afterDate;
 	const orderBy = params?.orderBy ?? 'id';
 	const asc = params?.order === 'asc' ? true : false;
 	const limit = params?.limit ?? 20;
-	const hasLink = params?.hasLink ?? false;
+  const showMoreFilters = params?.showMoreFilters === 'true';
+  const showListenable = params?.showListenable === 'true';
 	let jams = supabase.from('versions').select('*');
 	if (artist) {
 		jams = jams.eq('artist', artist);
@@ -460,15 +421,15 @@ export const getServerSideProps = async (ctx) => {
 			jams = jams.eq(tag, true);
 		});
 	}
+  if (showListenable) {
+    jams = jams.not('listen_link', 'is', null);
+  }
 	jams = jams.order(orderBy, { ascending: asc });
 	if (orderBy === 'avg_rating') {
 		jams = jams.order('num_ratings', { ascending: false });
 	}
 	if (orderBy === 'num_ratings') {
 		jams = jams.order('avg_rating', { ascending: false });
-	}
-	if (hasLink) {
-		jams = jams.neq('listen_link', null);
 	}
 	jams = jams.limit(limit);
 	const ideas = supabase
@@ -517,7 +478,8 @@ export const getServerSideProps = async (ctx) => {
 			initialOrderBy: orderBy,
 			initialOrder: asc ? 'asc' : 'desc',
 			initialLimit: limit,
-			initialHasLink: hasLink,
+			initialShowListenable: showListenable,
+      initialShowMoreFilters: showMoreFilters,
 		},
 	};
 };
