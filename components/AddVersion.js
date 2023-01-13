@@ -24,9 +24,9 @@ import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import RateVersion from './RateVersion';
 
-export default function AddVersion({ songs, jams, user, profile, setSongs }) {
-	const [artist, setArtist] = useState('');
-	const [song, setSong] = useState('');
+export default function AddVersion({ songs, jams, user, profile, setSongs, initialArtist, initialSong }) {
+	const [artist, setArtist] = useState(initialArtist);
+	const [song, setSong] = useState(initialSong ?? '');
 	const [songObj, setSongObj] = useState(null);
 	const [songExists, setSongExists] = useState(false);
 	const [loading, setLoading] = useState(null);
@@ -133,6 +133,11 @@ export default function AddVersion({ songs, jams, user, profile, setSongs }) {
 			setDateErrorText(null);
 		}
 	}, [date, song, jams]);
+
+  useEffect(() => {
+    console.log('artist in add verison', artist)
+    console.log('song in add version', song)
+  }, [artist, song])
 
 	const handleClickOpen = () => {
 		setOpen(true);
