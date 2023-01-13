@@ -134,11 +134,6 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 		}
 	}, [date, song, jams]);
 
-  useEffect(() => {
-    console.log('artist in add verison', artist)
-    console.log('song in add version', song)
-  }, [artist, song])
-
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
