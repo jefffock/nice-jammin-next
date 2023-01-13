@@ -222,6 +222,10 @@ export default function App({
 		setShowRatings(e.target.checked);
 	}
 
+  useEffect(() => {
+    console.log('artist in index', artist)
+  }, [artist])
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Head>
@@ -360,13 +364,8 @@ export default function App({
 						jams={jams}
 						user={user}
 						profile={profile}
-						// setCurrentJams={setCurrentJams}
-						artist={artist}
-						setArtist={setArtist}
-						song={song}
-						setSong={setSong}
-						songExists={songExists}
-						songObj={songObj}
+            initialArtist={artist}
+            initialSong={song}
 					/>
 					<DynamicGratitude />
 					<DynamicIdeasTable
