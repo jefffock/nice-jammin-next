@@ -154,14 +154,11 @@ export default function App({
 	useEffect(() => {
 		if (user && !profile) {
 			const getProfile = async () => {
-				const { data, error } = await supabase
+				const { data } = await supabase
 					.from('profiles')
 					.select('*')
 					.eq('id', user.id)
 					.single();
-				if (error) {
-					console.error(error);
-				}
 				if (data) {
 					setProfile(data);
 				} else {
@@ -201,14 +198,11 @@ export default function App({
 			async function fetchProfile() {
 				if (user) {
 					let id = user.id;
-					let { data, error } = await supabase
+					let { data } = await supabase
 						.from('profiles')
 						.select('*')
 						.eq('id', id)
 						.limit(1);
-					if (error) {
-						console.error('error getting profile', error);
-					}
 					if (data) {
 						setProfile(data[0] ?? null);
 					}
@@ -221,10 +215,6 @@ export default function App({
 	function handleShowRatingsChange(e) {
 		setShowRatings(e.target.checked);
 	}
-
-  useEffect(() => {
-    console.log('artist in index', artist)
-  }, [artist])
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -390,7 +380,6 @@ export const getServerSideProps = async (ctx) => {
 		data: { session },
 	} = await supabase.auth.getSession();
 	const params = ctx.query;
-	console.log('params', params);
 	const artist = params?.artist;
 	const song = params?.song;
 	const sounds = params?.sounds;
