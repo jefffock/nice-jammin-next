@@ -24,19 +24,11 @@ import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import RateVersion from './RateVersion';
 
-export default function AddVersion({
-	songs,
-	jams,
-	user,
-	profile,
-	setSongs,
-	artist,
-	setArtist,
-	song,
-	setSong,
-	songObj,
-	songExists,
-}) {
+export default function AddVersion({ songs, jams, user, profile, setSongs }) {
+	const [artist, setArtist] = useState('');
+	const [song, setSong] = useState('');
+	const [songObj, setSongObj] = useState(null);
+	const [songExists, setSongExists] = useState(false);
 	const [loading, setLoading] = useState(null);
 	const [open, setOpen] = useState(false);
 	const [songErrorText, setSongErrorText] = useState(null);
@@ -106,6 +98,16 @@ export default function AddVersion({
 	const [jam, setJam] = useState(null);
 
 	useEffect(() => {
+		if (songs) {
+			let index = songs.findIndex((item) => {
+				return item.song === song;
+			});
+			index === -1 ? setSongExists(false) : setSongExists(true);
+			setSongObj(songs[index]);
+		}
+	}, [song, songs]);
+
+	useEffect(() => {
 		setSuccessAlertText(null);
 		if (date) {
 			if (jams && song) {
@@ -153,14 +155,14 @@ export default function AddVersion({
 	};
 
 	useEffect(() => {
-    if (open) {
-      setDate(null);
-      setLocation(null);
-      setSong(null);
-      setShows(null);
-      setAllShows(null);
-      setSongErrorText(null);
-    }
+		if (open) {
+			setDate(null);
+			setLocation(null);
+			setSong(null);
+			setShows(null);
+			setAllShows(null);
+			setSongErrorText(null);
+		}
 	}, [artist]);
 
 	//when date changes

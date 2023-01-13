@@ -360,13 +360,6 @@ export default function App({
 						jams={jams}
 						user={user}
 						profile={profile}
-						// setCurrentJams={setCurrentJams}
-						artist={artist}
-						setArtist={setArtist}
-						song={song}
-						setSong={setSong}
-						songExists={songExists}
-						songObj={songObj}
 					/>
 					<DynamicGratitude />
 					<DynamicIdeasTable

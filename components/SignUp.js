@@ -182,15 +182,6 @@ export default function SignUp({ setSession }) {
 					>
 						<GoogleButton onClick={() => signInWithGoogle()} />
 					</Box>
-					<Alert severity='info'>
-						<Typography variant='body2'>
-							If you sign in with Google, the consent screen will say &quot;Sign In to
-							continue to noopmmxtheyulbowvkcd.supabase.co&quot;
-							<br />
-							I&apos;m working on getting that to say NiceJammin. Thank you for
-							your patience - Jeff - 1-10-23
-						</Typography>
-					</Alert>
 					<Typography mt={'1em'}>Or</Typography>
 					<Box
 						component='form'
