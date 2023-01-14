@@ -57,6 +57,7 @@ export default function App({
 	initialLimit,
 	initialShowMoreFilters,
 	initialShowListenable,
+  initialShowRatings,
 }) {
 	// const [currentJams, setCurrentJams] = useState(jams);
 	const [songs, setSongs] = useState(initialSongs);
@@ -78,7 +79,7 @@ export default function App({
 	const [afterDate, setAfterDate] = useState(initialAfterDate);
 	const [tagsSelected, setTagsSelected] = useState(initialTags);
 	const router = useRouter();
-	const [showRatings, setShowRatings] = useState(false);
+	const [showRatings, setShowRatings] = useState(initialShowRatings);
 	const isMounted = useRef(false);
 	const showMoreFilters = useRef(initialShowMoreFilters);
 	const [showListenable, setShowListenable] = useState(initialShowListenable);
@@ -103,6 +104,7 @@ export default function App({
 					if (showMoreFilters) query.showMoreFilters = true;
 					if (showListenable) query.showListenable = showListenable;
 					if (limit !== 20) query.limit = limit;
+          if (showRatings) query.showRatings = true;
 					const params = new URLSearchParams(query).toString();
 					if (params.length > 0) {
 						router.push(`/?${params}`, null, {
@@ -394,6 +396,7 @@ export const getServerSideProps = async (ctx) => {
 	const limit = params?.limit ?? 20;
 	const showMoreFilters = params?.showMoreFilters === 'true';
 	const showListenable = params?.showListenable === 'true';
+  const showRatings = params?.showRatings === 'true';
 	let jams = supabase.from('versions').select('*');
 	if (artist) {
 		jams = jams.eq('artist', artist);
@@ -473,6 +476,7 @@ export const getServerSideProps = async (ctx) => {
 			initialLimit: limit,
 			initialShowListenable: showListenable,
 			initialShowMoreFilters: showMoreFilters,
+      initialShowRatings: showRatings,
 		},
 	};
 };
