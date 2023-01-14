@@ -12,7 +12,7 @@ import TopBar from '../components/AppBar';
 import dynamic from 'next/dynamic';
 import getConfig from 'next/config';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 
 const DynamicContributorsTable = dynamic(
 	() => import('../components/TopContributors'),
@@ -60,8 +60,8 @@ export default function App({
 }) {
 	// const [currentJams, setCurrentJams] = useState(jams);
 	const [songs, setSongs] = useState(initialSongs);
-  // const user = useUser()
-  const [user, setUser] = useState(initialUser)
+	// const user = useUser()
+	const [user, setUser] = useState(initialUser);
 
 	const [session, setSession] = useState(initialSession);
 	const [profile, setProfile] = useState(null);
@@ -80,15 +80,9 @@ export default function App({
 	const router = useRouter();
 	const [showRatings, setShowRatings] = useState(false);
 	const isMounted = useRef(false);
-	const [showMoreFilters, setShowMoreFilters] = useState(
-		initialShowMoreFilters
-	);
+	const showMoreFilters = useRef(initialShowMoreFilters);
 	const [showListenable, setShowListenable] = useState(initialShowListenable);
 	const [limit, setLimit] = useState(initialLimit);
-
-  useEffect(() => {
-    console.log('users in index', user)
-  })
 
 	useEffect(() => {
 		if (isMounted.current) {
@@ -106,7 +100,7 @@ export default function App({
 					if (afterDate) query.afterDate = afterDate;
 					if (order !== 'desc') query.order = order;
 					if (orderBy !== 'id') query.orderBy = orderBy;
-					if (showMoreFilters) query.showMoreFilters = showMoreFilters;
+					if (showMoreFilters) query.showMoreFilters = true;
 					if (showListenable) query.showListenable = showListenable;
 					if (limit !== 20) query.limit = limit;
 					const params = new URLSearchParams(query).toString();
@@ -155,11 +149,11 @@ export default function App({
 		}
 	});
 
-  useEffect(() => {
-    setTimeout(() => {
+	useEffect(() => {
+		setTimeout(() => {
 			isMounted.current = true;
 		}, 1000);
-  }, [])
+	}, []);
 
 	useEffect(() => {
 		if (user && !profile) {
@@ -285,8 +279,8 @@ export default function App({
 					session={session}
 					router={router}
 					user={user}
-          setUser={setUser}
-          setProfile={setProfile}
+					setUser={setUser}
+					setProfile={setProfile}
 				/>
 				<Box
 					my='3em'
@@ -324,7 +318,6 @@ export default function App({
 					handleShowRatingsChange={handleShowRatingsChange}
 					jams={jams && jams.length > 0}
 					showMoreFilters={showMoreFilters}
-					setShowMoreFilters={setShowMoreFilters}
 					showListenable={showListenable}
 					setShowListenable={setShowListenable}
 					limit={limit}
@@ -364,8 +357,8 @@ export default function App({
 						jams={jams}
 						user={user}
 						profile={profile}
-            initialArtist={artist}
-            initialSong={song}
+						initialArtist={artist}
+						initialSong={song}
 					/>
 					<DynamicGratitude />
 					<DynamicIdeasTable

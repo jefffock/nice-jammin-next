@@ -272,7 +272,7 @@ export default function RateVersion({
 			if (userAlreadyRated) {
 				await updateRating(jam?.id, profile.name, rating, comment);
 				if (newTags.length > 0) {
-					let updatedTags = await updateTags(
+					await updateTags(
 						tagsObj,
 						jam.id,
 						profile.name,
@@ -299,7 +299,7 @@ export default function RateVersion({
 					user.id
 				);
 				if (newTags.length > 0) {
-					let updatedTags = await updateTags(
+					await updateTags(
 						tagsObj,
 						jam.id,
 						profile.name,
@@ -320,16 +320,6 @@ export default function RateVersion({
 	};
 
 	const validateRatingData = () => {
-		if (!rating) {
-			setRatingErrorText(
-				`Please add your rating to rate this version of ${song}`
-			);
-			return false;
-		}
-		if (rating < 1 || rating > 10) {
-			setRatingErrorText('Rating must be between 1 and 10');
-			return false;
-		}
 		if (comment?.length > 10000) {
 			return false;
 		}
@@ -519,10 +509,7 @@ export default function RateVersion({
 										<MenuItem value={7}>7</MenuItem>
 										<MenuItem value={6}>6</MenuItem>
 										<MenuItem value={5}>5</MenuItem>
-										<MenuItem value={4}>4</MenuItem>
-										<MenuItem value={3}>3</MenuItem>
-										<MenuItem value={2}>2</MenuItem>
-										<MenuItem value={1}>1</MenuItem>
+                    <MenuItem value={null}>No rating</MenuItem>
 									</Select>
 								</FormControl>
 								{ratingErrorText && (
@@ -583,7 +570,7 @@ export default function RateVersion({
 					<Button
 						onClick={handleSubmit}
 						disabled={
-							loading || !rating || commentWarningText || !user || !profile
+							loading || commentWarningText || !user || !profile || (!rating && !comment && newTags?.length === 0)
 						}
 						sx={{ textTransform: 'none' }}
 						aria-label='submit'

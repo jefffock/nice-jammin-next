@@ -31,20 +31,21 @@ export default function FilterBar({
 	showRatings,
 	handleShowRatingsChange,
   showMoreFilters,
-  setShowMoreFilters,
 	jams,
   showListenable,
   setShowListenable,
   limit,
   setLimit
 }) {
+  const [showMore, setShowMore] = useState(showMoreFilters.current);
 
   function handleListenableChange(e) {
     setShowListenable(e.target.checked);
   }
 
   function handleShowMoreChange() {
-    setShowMoreFilters(!showMoreFilters);
+    showMoreFilters.current = !showMore
+    setShowMore(!showMore);
   }
 
 	return (
@@ -97,9 +98,9 @@ export default function FilterBar({
 					}}
 					onClick={handleShowMoreChange}
 				>
-					{showMoreFilters ? '✌️ Less' : '⚙️ More'}
+					{showMore ? '✌️ Less' : '⚙️ More'}
 				</Typography>
-				{showMoreFilters && (
+				{showMore && (
 					<Box
 						sx={{
 							display: 'flex',
