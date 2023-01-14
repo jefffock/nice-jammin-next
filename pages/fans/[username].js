@@ -13,6 +13,7 @@ import { supabase } from '../../utils/supabaseClient';
 import Stack from '@mui/material/Stack';
 import AddListenLink from '../../components/AddListenLink';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { useUser } from '@supabase/auth-helpers-react';
 
 export default function Contributor({
 	ratings,
@@ -25,38 +26,36 @@ export default function Contributor({
 	const router = useRouter();
 	const { username } = router.query;
 	const [fetchedData, setFetchedData] = useState(false);
-	const [user, setUser] = useState(null);
 	const [profile, setProfile] = useState(null);
 	const [showRatings, setShowRatings] = useState(false);
 	const [showVersions, setShowVersions] = useState(false);
 	const [showIdeas, setShowIdeas] = useState(false);
 	const [showSongs, setShowSongs] = useState(false);
+  const user = useUser()
+  console.log('user', user)
 
-	useEffect(() => {
-		const getUser = async () => {
-			const {
-				data: { user },
-			} = await supabase.auth.getUser();
-			setUser(user);
-		};
-		if (!user) {
-			getUser();
-		}
-	});
+	// useEffect(() => {
+	// 	const getUser = async () => {
+	// 		const {
+	// 			data: { user },
+	// 		} = await supabase.auth.getUser();
+	// 		setUser(user);
+	// 	};
+	// 	if (!user) {
+	// 		getUser();
+	// 	}
+	// });
 
 	useEffect(() => {
 		if (user && !profile) {
 			async function fetchProfile() {
 				if (user) {
 					let id = user.id;
-					let { data, error } = await supabase
+					let { data } = await supabase
 						.from('profiles')
 						.select('*')
 						.eq('id', id)
 						.limit(1);
-					if (error) {
-						console.error('error getting profile', error);
-					}
 					if (data) {
 						setProfile(data[0]);
 					}
