@@ -63,6 +63,7 @@ export default function AddSong({
   };
 
   const handleSubmit = async (event) => {
+    setSongToAdd(songToAdd.trim());
     event.preventDefault();
     setLoading(true);
     const valid = validate();
