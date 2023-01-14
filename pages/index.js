@@ -12,7 +12,7 @@ import TopBar from '../components/AppBar';
 import dynamic from 'next/dynamic';
 import getConfig from 'next/config';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 
 const DynamicContributorsTable = dynamic(
 	() => import('../components/TopContributors'),
@@ -57,11 +57,12 @@ export default function App({
 	initialLimit,
 	initialShowMoreFilters,
 	initialShowListenable,
+  initialShowRatings,
 }) {
 	// const [currentJams, setCurrentJams] = useState(jams);
 	const [songs, setSongs] = useState(initialSongs);
-  // const user = useUser()
-  const [user, setUser] = useState(initialUser)
+	// const user = useUser()
+	const [user, setUser] = useState(initialUser);
 
 	const [session, setSession] = useState(initialSession);
 	const [profile, setProfile] = useState(null);
@@ -78,17 +79,11 @@ export default function App({
 	const [afterDate, setAfterDate] = useState(initialAfterDate);
 	const [tagsSelected, setTagsSelected] = useState(initialTags);
 	const router = useRouter();
-	const [showRatings, setShowRatings] = useState(false);
+	const [showRatings, setShowRatings] = useState(initialShowRatings);
 	const isMounted = useRef(false);
-	const [showMoreFilters, setShowMoreFilters] = useState(
-		initialShowMoreFilters
-	);
+	const showMoreFilters = useRef(initialShowMoreFilters);
 	const [showListenable, setShowListenable] = useState(initialShowListenable);
 	const [limit, setLimit] = useState(initialLimit);
-
-  useEffect(() => {
-    console.log('users in index', user)
-  })
 
 	useEffect(() => {
 		if (isMounted.current) {
@@ -106,9 +101,10 @@ export default function App({
 					if (afterDate) query.afterDate = afterDate;
 					if (order !== 'desc') query.order = order;
 					if (orderBy !== 'id') query.orderBy = orderBy;
-					if (showMoreFilters) query.showMoreFilters = showMoreFilters;
+					if (showMoreFilters) query.showMoreFilters = true;
 					if (showListenable) query.showListenable = showListenable;
 					if (limit !== 20) query.limit = limit;
+          if (showRatings) query.showRatings = true;
 					const params = new URLSearchParams(query).toString();
 					if (params.length > 0) {
 						router.push(`/?${params}`, null, {
@@ -155,11 +151,11 @@ export default function App({
 		}
 	});
 
-  useEffect(() => {
-    setTimeout(() => {
+	useEffect(() => {
+		setTimeout(() => {
 			isMounted.current = true;
 		}, 1000);
-  }, [])
+	}, []);
 
 	useEffect(() => {
 		if (user && !profile) {
@@ -285,8 +281,8 @@ export default function App({
 					session={session}
 					router={router}
 					user={user}
-          setUser={setUser}
-          setProfile={setProfile}
+					setUser={setUser}
+					setProfile={setProfile}
 				/>
 				<Box
 					my='3em'
@@ -324,7 +320,6 @@ export default function App({
 					handleShowRatingsChange={handleShowRatingsChange}
 					jams={jams && jams.length > 0}
 					showMoreFilters={showMoreFilters}
-					setShowMoreFilters={setShowMoreFilters}
 					showListenable={showListenable}
 					setShowListenable={setShowListenable}
 					limit={limit}
@@ -364,8 +359,8 @@ export default function App({
 						jams={jams}
 						user={user}
 						profile={profile}
-            initialArtist={artist}
-            initialSong={song}
+						initialArtist={artist}
+						initialSong={song}
 					/>
 					<DynamicGratitude />
 					<DynamicIdeasTable
@@ -401,6 +396,7 @@ export const getServerSideProps = async (ctx) => {
 	const limit = params?.limit ?? 20;
 	const showMoreFilters = params?.showMoreFilters === 'true';
 	const showListenable = params?.showListenable === 'true';
+  const showRatings = params?.showRatings === 'true';
 	let jams = supabase.from('versions').select('*');
 	if (artist) {
 		jams = jams.eq('artist', artist);
@@ -480,6 +476,7 @@ export const getServerSideProps = async (ctx) => {
 			initialLimit: limit,
 			initialShowListenable: showListenable,
 			initialShowMoreFilters: showMoreFilters,
+      initialShowRatings: showRatings,
 		},
 	};
 };

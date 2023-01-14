@@ -40,7 +40,6 @@ export default function SignIn() {
       console.error("error:", error);
       setErrorMessage(error.message);
     } else {
-      console.log('data:', data)
       setLoading(false);
       router.push("/");
     }
