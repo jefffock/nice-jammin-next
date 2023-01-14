@@ -28,10 +28,10 @@ export default function SignIn() {
     setErrorMessage(null);
     event.preventDefault();
     setLoading(true);
-    const data = new FormData(event.currentTarget);
-    const email = data.get("email");
-    const password = data.get("password");
-    const { error } = await supabase.auth.signInWithPassword({
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get("email");
+    const password = formData.get("password");
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password
     });
@@ -40,6 +40,7 @@ export default function SignIn() {
       console.error("error:", error);
       setErrorMessage(error.message);
     } else {
+      console.log('data:', data)
       setLoading(false);
       router.push("/");
     }

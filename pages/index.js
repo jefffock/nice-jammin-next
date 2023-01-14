@@ -12,6 +12,7 @@ import TopBar from '../components/AppBar';
 import dynamic from 'next/dynamic';
 import getConfig from 'next/config';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 
 const DynamicContributorsTable = dynamic(
 	() => import('../components/TopContributors'),
@@ -59,7 +60,9 @@ export default function App({
 }) {
 	// const [currentJams, setCurrentJams] = useState(jams);
 	const [songs, setSongs] = useState(initialSongs);
-	const [user, setUser] = useState(initialUser);
+  // const user = useUser()
+  const [user, setUser] = useState(initialUser)
+
 	const [session, setSession] = useState(initialSession);
 	const [profile, setProfile] = useState(null);
 	const [artists, setArtists] = useState(null);
@@ -82,6 +85,10 @@ export default function App({
 	);
 	const [showListenable, setShowListenable] = useState(initialShowListenable);
 	const [limit, setLimit] = useState(initialLimit);
+
+  useEffect(() => {
+    console.log('users in index', user)
+  })
 
 	useEffect(() => {
 		if (isMounted.current) {
@@ -137,9 +144,6 @@ export default function App({
 	}, [song, songs]);
 
 	useEffect(() => {
-		setTimeout(() => {
-			isMounted.current = true;
-		}, 1000);
 		const getUser = async () => {
 			const {
 				data: { user },
@@ -149,7 +153,13 @@ export default function App({
 		if (!user) {
 			getUser();
 		}
-	}, []);
+	});
+
+  useEffect(() => {
+    setTimeout(() => {
+			isMounted.current = true;
+		}, 1000);
+  }, [])
 
 	useEffect(() => {
 		if (user && !profile) {
@@ -275,8 +285,8 @@ export default function App({
 					session={session}
 					router={router}
 					user={user}
-					setUser={setUser}
-					setSession={setSession}
+          setUser={setUser}
+          setProfile={setProfile}
 				/>
 				<Box
 					my='3em'
