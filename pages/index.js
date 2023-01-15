@@ -82,6 +82,7 @@ export default function App({
 	const router = useRouter();
 	const [showRatings, setShowRatings] = useState(initialShowRatings);
 	const isMounted = useRef(false);
+  const newUrls = useRef(0)
 	const showMoreFilters = useRef(initialShowMoreFilters);
 	const [showListenable, setShowListenable] = useState(initialShowListenable);
 	const [limit, setLimit] = useState(initialLimit);
@@ -102,18 +103,23 @@ export default function App({
 					if (afterDate) query.afterDate = afterDate;
 					if (order !== 'desc') query.order = order;
 					if (orderBy !== 'id') query.orderBy = orderBy;
-					if (showMoreFilters) query.showMoreFilters = true;
+					if (showMoreFilters.current) query.showMoreFilters = true;
 					if (showListenable) query.showListenable = showListenable;
 					if (limit !== 20) query.limit = limit;
           if (showRatings) query.showRatings = true;
 					const params = new URLSearchParams(query).toString();
-					if (params.length > 0) {
-						router.push(`/?${params}`, null, {
-							scroll: false,
-						});
-					} else {
-						router.push('/');
-					}
+          console.log('params', params)
+          if (params.length > 0 && params === 'showMoreFilters=true' && newUrls.current === 0) {
+            newUrls.current = 1
+          } else {
+            if (params.length > 0) {
+              router.push(`/?${params}`, null, {
+                scroll: false,
+              });
+            } else {
+              router.push('/');
+            }
+          }
 				}
 			}
 		}
