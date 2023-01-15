@@ -5,7 +5,16 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Box from '@mui/material/Box'
 
-
+const ITEM_HEIGHT = 40;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 10,
+      width: 300,
+    },
+  },
+};
 
 let artists = [
   'All Bands',
@@ -68,6 +77,7 @@ export default function ArtistPicker({ artist, setArtist, size, my }) {
           value={artist ? artist : ''}
           label="Band"
           onChange={handleChange}
+          MenuProps={MenuProps}
           >
           {artists.map((artist, index) => (
             <MenuItem key={index} value={artist}>{artist}</MenuItem>

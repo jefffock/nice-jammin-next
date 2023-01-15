@@ -26,7 +26,6 @@ export default function Welcome({ initialSession, initialUser }) {
 			if (error) {
 				console.error(error);
 			}
-      console.log('data in checkProfile', data)
 			if (data.length > 0) {
 				router.push('/');
 			}
@@ -39,7 +38,6 @@ export default function Welcome({ initialSession, initialUser }) {
 				const {
 					data: { user },
 				} = await supabase.auth.getUser();
-        console.log('user in welcome', user)
 				return user;
 			};
 			getUser().then((user) => {
@@ -63,7 +61,6 @@ export default function Welcome({ initialSession, initialUser }) {
 			data: { user },
 		} = await supabase.auth.getUser();
 		if (user) {
-      console.log('user in handle submit', user)
 			//check if user has a profile
       const id = user.id
 			supabase.from('profiles').select('id').eq('id', user.id);

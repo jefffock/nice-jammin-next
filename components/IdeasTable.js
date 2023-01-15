@@ -41,7 +41,7 @@ function IdeaRow({
 	}
 
 	async function validate() {
-		if (profile && profile.name) {
+		if (profile && profile && profile.name) {
 			const { data, error } = await supabase
 				.from('helpful_votes_ideas')
 				.select('*')

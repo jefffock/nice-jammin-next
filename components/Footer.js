@@ -24,12 +24,12 @@ export default function Footer({ profile, user }) {
 				version={null}
 			/>
 			<Box display={'flex'}>
-				<Link href='/privacy'>
-					<Typography fontSize={12}>Privacy Policy</Typography>
-				</Link>
-        <pre>  </pre>
 				<Link href='/terms'>
 					<Typography fontSize={12}>Terms of Service</Typography>
+				</Link>
+				<pre>  </pre>
+				<Link href='/privacy'>
+					<Typography fontSize={12}>Privacy Policy</Typography>
 				</Link>
 			</Box>
 		</Stack>

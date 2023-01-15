@@ -58,6 +58,7 @@ export default function App({
 	initialShowMoreFilters,
 	initialShowListenable,
   initialShowRatings,
+  initialProfile
 }) {
 	// const [currentJams, setCurrentJams] = useState(jams);
 	const [songs, setSongs] = useState(initialSongs);
@@ -65,7 +66,7 @@ export default function App({
 	const [user, setUser] = useState(initialUser);
 
 	const [session, setSession] = useState(initialSession);
-	const [profile, setProfile] = useState(null);
+	const [profile, setProfile] = useState(initialProfile);
 	const [artists, setArtists] = useState(null);
 	const [artist, setArtist] = useState(initialArtist);
 	const [song, setSong] = useState(initialSong);
@@ -202,6 +203,7 @@ export default function App({
 	useEffect(() => {
 		if (user && !profile) {
 			async function fetchProfile() {
+        console.log('fetching profile')
 				if (user) {
 					let id = user.id;
 					let { data } = await supabase
@@ -282,7 +284,7 @@ export default function App({
 					router={router}
 					user={user}
 					setUser={setUser}
-					setProfile={setProfile}
+          profile={profile}
 				/>
 				<Box
 					my='3em'
@@ -380,10 +382,10 @@ export default function App({
 }
 
 export const getServerSideProps = async (ctx) => {
-	const supabase = createServerSupabaseClient(ctx);
-	const {
-		data: { session },
-	} = await supabase.auth.getSession();
+	// const supabase = createServerSupabaseClient(ctx);
+	// const {
+	// 	data: { session },
+	// } = await supabase.auth.getSession();
 	const params = ctx.query;
 	const artist = params?.artist;
 	const song = params?.song;
@@ -428,6 +430,12 @@ export const getServerSideProps = async (ctx) => {
 		jams = jams.order('avg_rating', { ascending: false });
 	}
 	jams = jams.limit(limit);
+  // let profile = supabase.from('profiles').select('*')
+  // if (session) {
+  //   profile = profile.eq('id', session.user.id)
+  // } else {
+  //   profile = profile.limit(0)
+  // }
 	const ideas = supabase
 		.from('ideas')
 		.select('idea_body, done, votes, id')
@@ -449,7 +457,8 @@ export const getServerSideProps = async (ctx) => {
 		// .gt('avg_rating', 0)
 		// .limit(100)
 		.order('song', { ascending: true });
-	let fetchedJams, fetchedIdeas, fetchedLeaders, fetchedSongs;
+  
+	let fetchedJams, fetchedIdeas, fetchedLeaders, fetchedSongs, fetchedProfile;
 	await Promise.all([jams, ideas, leaders, songs]).then(
 		([jams, ideas, leaders, songs]) => {
 			fetchedJams = jams;
@@ -460,8 +469,8 @@ export const getServerSideProps = async (ctx) => {
 	);
 	return {
 		props: {
-			initialSession: session ?? null,
-			initialUser: session?.user ?? null,
+			// initialSession: session ?? null,
+			// initialUser: session?.user ?? null,
 			jams: fetchedJams.data,
 			ideas: fetchedIdeas.data,
 			leaders: fetchedLeaders.data,
