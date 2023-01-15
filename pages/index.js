@@ -108,7 +108,6 @@ export default function App({
 					if (limit !== 20) query.limit = limit;
           if (showRatings) query.showRatings = true;
 					const params = new URLSearchParams(query).toString();
-          console.log('params', params)
           if (params.length > 0 && params === 'showMoreFilters=true' && newUrls.current === 0) {
             newUrls.current = 1
           } else {
@@ -209,7 +208,6 @@ export default function App({
 	useEffect(() => {
 		if (user && !profile) {
 			async function fetchProfile() {
-        console.log('fetching profile')
 				if (user) {
 					let id = user.id;
 					let { data } = await supabase

@@ -47,7 +47,6 @@ export default function Contributor({
 	useEffect(() => {
 		if (user && !profile) {
 			async function fetchProfile() {
-        console.log('fetchingProfile')
 				if (user) {
 					let id = user.id;
 					let { data } = await supabase
