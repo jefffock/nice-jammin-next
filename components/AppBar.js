@@ -17,26 +17,21 @@ export default function TopBar({
 	session,
 	user,
   setUser,
-  setProfile,
+  profile,
 	router,
 	setSession,
 }) {
 
 	const handleLogout = async () => {
-    console.log('logging out')
 		const { error } = await supabase.auth.signOut();
 		if (error) {
 			console.error(error);
 		} else {
       setUser(null)
-      setProfile(null)
+      profile = null
       router.push('/')
     }
 	};
-
-  useEffect(() => {
-    console.log('user in app bar', user)
-  })
 
 	return (
 		<AppBar position='static'>

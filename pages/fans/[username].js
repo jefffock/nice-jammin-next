@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Typography from '@mui/material/Typography';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../styles/themes';
@@ -13,7 +13,6 @@ import { supabase } from '../../utils/supabaseClient';
 import Stack from '@mui/material/Stack';
 import AddListenLink from '../../components/AddListenLink';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { useUser } from '@supabase/auth-helpers-react';
 
 export default function Contributor({
 	ratings,
@@ -26,25 +25,24 @@ export default function Contributor({
 	const router = useRouter();
 	const { username } = router.query;
 	const [fetchedData, setFetchedData] = useState(false);
-	const [profile, setProfile] = useState(null);
+	const profile = useRef(null);
 	const [showRatings, setShowRatings] = useState(false);
 	const [showVersions, setShowVersions] = useState(false);
 	const [showIdeas, setShowIdeas] = useState(false);
 	const [showSongs, setShowSongs] = useState(false);
-  const user = useUser()
-  console.log('user', user)
+  const [user, setUser] = useState(null)
 
-	// useEffect(() => {
-	// 	const getUser = async () => {
-	// 		const {
-	// 			data: { user },
-	// 		} = await supabase.auth.getUser();
-	// 		setUser(user);
-	// 	};
-	// 	if (!user) {
-	// 		getUser();
-	// 	}
-	// });
+	useEffect(() => {
+		const getUser = async () => {
+			const {
+				data: { user },
+			} = await supabase.auth.getUser();
+			setUser(user);
+		};
+		if (!user) {
+			getUser();
+		}
+	});
 
 	useEffect(() => {
 		if (user && !profile) {
@@ -57,13 +55,13 @@ export default function Contributor({
 						.eq('id', id)
 						.limit(1);
 					if (data) {
-						setProfile(data[0]);
+						profile = data[0];
 					}
 				}
 			}
 			fetchProfile();
 		}
-	}, [user, profile]);
+	}, [user]);
 
 	function handleShowHide(category) {
 		switch (category) {
@@ -181,7 +179,7 @@ export default function Contributor({
 													date={rating.versionInfo.date}
 													location={rating.versionInfo.location}
 													user={user}
-													profile={profile}
+													profile={profile.current}
 													jam={rating.versionInfo}
 													initialButtonText={'Rate, Comment'}
 													songs={allSongs}
@@ -199,7 +197,7 @@ export default function Contributor({
 													date={rating.versionInfo.date}
 													location={rating.versionInfo.location}
 													user={user}
-													profile={profile}
+													profile={profile.current}
 													jam={rating.versionInfo}
 												/>
 												<RateVersion
@@ -207,7 +205,7 @@ export default function Contributor({
 													date={rating.versionInfo.date}
 													location={rating.versionInfo.location}
 													user={user}
-													profile={profile}
+													profile={profile.current}
 													jam={rating.versionInfo}
 													initialButtonText={'Rate, Comment'}
 													songs={allSongs}
@@ -269,7 +267,7 @@ export default function Contributor({
 												date={version.date}
 												location={version.location}
 												user={user}
-												profile={profile}
+												profile={profile.current}
 												jam={version}
 												initialButtonText={'Rate, Comment'}
 												songs={allSongs}
@@ -287,7 +285,7 @@ export default function Contributor({
 												date={version.date}
 												location={version.location}
 												user={user}
-												profile={profile}
+												profile={profile.current}
 												jam={version}
 											/>
 											<RateVersion
@@ -295,7 +293,7 @@ export default function Contributor({
 												date={version.date}
 												location={version.location}
 												user={user}
-												profile={profile}
+												profile={profile.current}
 												jam={version}
 												initialButtonText={'Rate, Comment'}
 												songs={allSongs}
@@ -341,9 +339,10 @@ export default function Contributor({
 
 export const getServerSideProps = async (ctx) => {
 	const supabase = createServerSupabaseClient(ctx);
-	const {
-		data: { session },
-	} = await supabase.auth.getSession();
+	// const {
+	// 	data: { session },
+	// } = await supabase.auth.getSession();
+  
 	const username = ctx.params.username;
 	const songs = supabase
 		.from('songs')

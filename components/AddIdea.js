@@ -108,9 +108,7 @@ export default function AddIdea({ user, profile, setIdeas }) {
       other_idea: ideaType === "other"
     };
     const { error } = await supabase.from("ideas").insert(ideaToAdd);
-    if (error) {
-      console.error("error adding idea", error);
-    } else {
+    if (!error) {
       setSuccess(true);
       addTenPoints(profile.name);
       let newIdeas = await fetchIdeas();
