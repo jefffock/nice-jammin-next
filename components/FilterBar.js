@@ -10,6 +10,7 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import JamLimitPicker from './JamLimitPicker';
+import { on } from 'process';
 
 export default function FilterBar({
 	setDates,
@@ -30,23 +31,24 @@ export default function FilterBar({
 	setOrder,
 	showRatings,
 	handleShowRatingsChange,
-  showMoreFilters,
+	showMoreFilters,
 	jams,
-  showListenable,
-  setShowListenable,
-  limit,
-  setLimit
+	showListenable,
+	setShowListenable,
+	limit,
+	setLimit,
+	lowerFilterBar,
 }) {
-  const [showMore, setShowMore] = useState(showMoreFilters.current);
+	const [showMore, setShowMore] = useState(showMoreFilters.current);
 
-  function handleListenableChange(e) {
-    setShowListenable(e.target.checked);
-  }
+	function handleListenableChange(e) {
+		setShowListenable(e.target.checked);
+	}
 
-  function handleShowMoreChange() {
-    showMoreFilters.current = !showMore
-    setShowMore(!showMore);
-  }
+	function handleShowMoreChange() {
+		showMoreFilters.current = !showMore;
+		setShowMore(!showMore);
+	}
 
 	return (
 		<Box sx={{ mx: '0.5em', mt: '1em' }}>
@@ -60,12 +62,21 @@ export default function FilterBar({
 					boxShadow: 1,
 				}}
 			>
+				{lowerFilterBar && (
+					<Typography
+						textAlign='center'
+						fontSize={24}
+						sx={{ mt: '1em', mx: '1em' }}
+					>
+						Want to see another list?
+					</Typography>
+				)}
 				<Typography
 					textAlign='center'
 					fontSize={20}
 					sx={{ mt: '1em', mx: '1em' }}
 				>
-					1. Choose the sounds you want to hear:
+					1. Choose what you want to hear:
 				</Typography>
 				<Box
 					sx={{
@@ -104,7 +115,7 @@ export default function FilterBar({
 					<Box
 						sx={{
 							display: 'flex',
-              flexDirection: 'column',
+							flexDirection: 'column',
 							flexWrap: 'wrap',
 							alignItems: 'center',
 							mx: 'auto',
@@ -137,8 +148,11 @@ export default function FilterBar({
 							beforeDate={beforeDate}
 							setBeforeDate={setBeforeDate}
 						/>
-            <JamLimitPicker limit={limit} setLimit={setLimit} />
-            <Sorter
+						<JamLimitPicker
+							limit={limit}
+							setLimit={setLimit}
+						/>
+						<Sorter
 							orderBy={orderBy}
 							setOrderBy={setOrderBy}
 							setOrder={setOrder}
@@ -155,7 +169,7 @@ export default function FilterBar({
 								label='Show ratings in table'
 							/>
 						</FormControl>
-            <FormControl sx={{ display: 'flex', alignItems: 'center' }}>
+						<FormControl sx={{ display: 'flex', alignItems: 'center' }}>
 							<FormControlLabel
 								control={
 									<Checkbox
@@ -166,7 +180,6 @@ export default function FilterBar({
 								label='Only show jams with links'
 							/>
 						</FormControl>
-            
 					</Box>
 				)}
 				{jams && (
@@ -176,12 +189,15 @@ export default function FilterBar({
 							fontSize='20px'
 							m='.5em'
 						>
-							2. Click a row
+							{lowerFilterBar
+								? '2. Scroll up and click a row'
+								: '2. Click a row'}
 						</Typography>
 						<Typography
-            textAlign='center'
-            fontSize='20px'
-            m='.5em'>
+							textAlign='center'
+							fontSize='20px'
+							m='.5em'
+						>
 							3. Listen, comment, and be merry!
 							<br />
 							❤️

@@ -10,9 +10,6 @@ import FilterList from '../components/FilterList';
 import Typography from '@mui/material/Typography';
 import TopBar from '../components/AppBar';
 import dynamic from 'next/dynamic';
-import getConfig from 'next/config';
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import TableTitle from '../components/TableTitle';
 
 const DynamicContributorsTable = dynamic(
@@ -60,7 +57,7 @@ export default function Home({
 	initialShowListenable,
 	initialShowRatings,
 	initialProfile,
-  fullUrl,
+	fullUrl,
 	urlToShow,
 }) {
 	// const [currentJams, setCurrentJams] = useState(jams);
@@ -92,6 +89,8 @@ export default function Home({
 	const [limit, setLimit] = useState(initialLimit);
 	const prevParamsRef = useRef('/');
 
+	console.log('fullUrl', fullUrl);
+
 	useEffect(() => {
 		if (isMounted.current) {
 			//check song exists or no song before reloading
@@ -110,19 +109,19 @@ export default function Home({
 					if (orderBy !== 'id') query.orderBy = orderBy;
 					if (showMoreFilters.current) query.showMoreFilters = true;
 					if (showListenable) query.showListenable = showListenable;
-					if (limit !== 20) query.limit = limit;
+					if (limit !== 50) query.limit = limit;
 					if (showRatings) query.showRatings = true;
 					const params = new URLSearchParams(query).toString();
 					let reducedParams = params
 						.replace('&showMoreFilters=true', '')
 						.replace('showMoreFilters=true', '');
 					console.log('reducedParams', reducedParams, typeof reducedParams);
-          console.log('fullUrl', fullUrl);
-          if (fullUrl === '/' && reducedParams === '') {
-            return
-          }
+					console.log('fullUrl', fullUrl);
+					if (fullUrl === '/' && reducedParams === '') {
+						return;
+					}
 					if ('/?' + reducedParams !== fullUrl) {
-            prevParamsRef.current = reducedParams;
+						prevParamsRef.current = reducedParams;
 						if (params.length > 0) {
 							router.push(`/?${params}`, null, {
 								scroll: false,
@@ -173,12 +172,11 @@ export default function Home({
 		setTimeout(() => {
 			isMounted.current = true;
 		}, 1000);
-		// if (urlToShow) {
-		console.log('urlToShow', urlToShow);
-		window.history.replaceState(null, null, urlToShow);
-		// router.replace('/xyz','/xyz', { shallow: true })
-		//   // history.replaceState(null, null, urlToShow)
-		// }
+		if (urlToShow) {
+			window.history.replaceState(null, null, urlToShow);
+			// router.replace('/xyz','/xyz', { shallow: true })
+			// history.replaceState(null, null, urlToShow)
+		}
 	}, []);
 
 	useEffect(() => {
@@ -308,61 +306,74 @@ export default function Home({
 					setUser={setUser}
 					profile={profile}
 				/>
-				<Box
-					my='3em'
-					mx='auto'
-					px='0.5em'
-					width='96vw'
-					maxWidth='fit-content'
-				>
-					<Typography
-						textAlign='center'
-						fontSize='32px'
-						my='1em'
-						fontWeight={300}
-					>
-						Making it easier to find 🔥 jams
-					</Typography>
-				</Box>
-				<FilterBar
-					setArtist={setArtist}
+				{fullUrl === '/' && (
+					<>
+						<Box
+							my='3em'
+							mx='auto'
+							px='0.5em'
+							width='96vw'
+							maxWidth='fit-content'
+						>
+							<Typography
+								textAlign='center'
+								fontSize='32px'
+								my='1em'
+								fontWeight={300}
+							>
+								Making it easier to find 🔥 jams
+							</Typography>
+						</Box>
+						<FilterBar
+							setArtist={setArtist}
+							artist={artist}
+							tagsSelected={tagsSelected}
+							setTagsSelected={setTagsSelected}
+							beforeDate={beforeDate}
+							setBeforeDate={setBeforeDate}
+							afterDate={afterDate}
+							setAfterDate={setAfterDate}
+							songs={songs}
+							song={song}
+							setSong={setSong}
+							order={order}
+							orderBy={orderBy}
+							setOrderBy={setOrderBy}
+							setOrder={setOrder}
+							showRatings={showRatings}
+							handleShowRatingsChange={handleShowRatingsChange}
+							jams={jams && jams.length > 0}
+							showMoreFilters={showMoreFilters}
+							showListenable={showListenable}
+							setShowListenable={setShowListenable}
+							limit={limit}
+							setLimit={setLimit}
+						/>
+						<FilterList
+							artist={artist}
+							setArtist={setArtist}
+							tagsSelected={tagsSelected}
+							setTagsSelected={setTagsSelected}
+							beforeDate={beforeDate}
+							afterDate={afterDate}
+							setBeforeDate={setBeforeDate}
+							setAfterDate={setAfterDate}
+							song={song}
+							setSong={setSong}
+							jams={jams && jams.length > 0}
+						/>
+					</>
+				)}
+				<TableTitle
 					artist={artist}
-					tagsSelected={tagsSelected}
-					setTagsSelected={setTagsSelected}
-					beforeDate={beforeDate}
-					setBeforeDate={setBeforeDate}
-					afterDate={afterDate}
-					setAfterDate={setAfterDate}
-					songs={songs}
 					song={song}
-					setSong={setSong}
+					beforeDate={beforeDate}
+					afterDate={afterDate}
+					tags={tagsSelected}
 					order={order}
 					orderBy={orderBy}
-					setOrderBy={setOrderBy}
-					setOrder={setOrder}
-					showRatings={showRatings}
-					handleShowRatingsChange={handleShowRatingsChange}
-					jams={jams && jams.length > 0}
-					showMoreFilters={showMoreFilters}
-					showListenable={showListenable}
-					setShowListenable={setShowListenable}
 					limit={limit}
-					setLimit={setLimit}
 				/>
-				<FilterList
-					artist={artist}
-					setArtist={setArtist}
-					tagsSelected={tagsSelected}
-					setTagsSelected={setTagsSelected}
-					beforeDate={beforeDate}
-					afterDate={afterDate}
-					setBeforeDate={setBeforeDate}
-					setAfterDate={setAfterDate}
-					song={song}
-					setSong={setSong}
-					jams={jams && jams.length > 0}
-				/>
-        <TableTitle artist={artist} song={song} beforeDate={beforeDate} afterDate={afterDate} tags={tagsSelected}/>
 				<Suspense fallback={<Typography>Loading jams...</Typography>}>
 					<DynamicJamsTable
 						jams={jams}
@@ -376,6 +387,46 @@ export default function Home({
 						songs={songs}
 						setSongs={setSongs}
 						showRatings={showRatings}
+					/>
+					<br></br>
+					<FilterList
+						artist={artist}
+						setArtist={setArtist}
+						tagsSelected={tagsSelected}
+						setTagsSelected={setTagsSelected}
+						beforeDate={beforeDate}
+						afterDate={afterDate}
+						setBeforeDate={setBeforeDate}
+						setAfterDate={setAfterDate}
+						song={song}
+						setSong={setSong}
+						jams={jams && jams.length > 0}
+					/>
+					<FilterBar
+						setArtist={setArtist}
+						artist={artist}
+						tagsSelected={tagsSelected}
+						setTagsSelected={setTagsSelected}
+						beforeDate={beforeDate}
+						setBeforeDate={setBeforeDate}
+						afterDate={afterDate}
+						setAfterDate={setAfterDate}
+						songs={songs}
+						song={song}
+						setSong={setSong}
+						order={order}
+						orderBy={orderBy}
+						setOrderBy={setOrderBy}
+						setOrder={setOrder}
+						showRatings={showRatings}
+						handleShowRatingsChange={handleShowRatingsChange}
+						jams={jams && jams.length > 0}
+						showMoreFilters={showMoreFilters}
+						showListenable={showListenable}
+						setShowListenable={setShowListenable}
+						limit={limit}
+						setLimit={setLimit}
+						lowerFilterBar={true}
 					/>
 					<br></br>
 					<DynamicAddVersion
@@ -402,4 +453,4 @@ export default function Home({
 			</Box>
 		</ThemeProvider>
 	);
-};
+}

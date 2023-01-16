@@ -8,7 +8,7 @@ export default function FilterList({ artist, setArtist, tagsSelected, setTagsSel
 
   return (
     //justifyContent="center"
-    <Box display="flex" mx="auto" maxWidth='900px'>
+    <Box display="flex" mx="auto" maxWidth='900px' my={-2}>
       <Box sx={{ p:'0.5em' }}>
       {artist && artist !== 'All Bands' &&
       <FilterChip artist={artist} setArtist={setArtist} key={artist}></FilterChip>}
