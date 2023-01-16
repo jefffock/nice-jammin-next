@@ -343,6 +343,9 @@ export default function Home({
 				break;
 		}
 	}
+  title.trim()
+  subtitle.trim()
+  const fullTitle = title + ': ' + subtitle + ' on NiceJammin - Join Today!'
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -351,14 +354,14 @@ export default function Home({
 					rel='shortcut icon'
 					href='/favicon.ico'
 				/>
-				<title>{title}: {subtitle} on NiceJammin</title>
+				<title>{fullTitle}</title>
 				<meta
 					name='keywords'
 					content='best jam jams jambands phish grateful dead sci goose umphreys um tab jrad jgb moe.'
 				></meta>
 				<meta
 					name='description'
-					content="Discover and Rate Great Jams By Phish, Grateful Dead, Goose, String Cheese Incident, Umphrey's McGee, Widespread Panic, Billy Strings, JRAD, and many more!"
+					content="Discover, Add and Rate Great Jams By Phish, Grateful Dead, Goose, String Cheese Incident, Umphrey's McGee, Widespread Panic, Billy Strings, JRAD, and many more!"
 				></meta>
 				<meta
 					name='viewport'
