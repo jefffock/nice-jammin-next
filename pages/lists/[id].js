@@ -24,51 +24,7 @@ export default function App({
 	fullUrl,
 	urlToShow,
 }) {
-  // let title = '';
-	// if (initialTags) {
-	// 	for (var i = 0; i < initialTags.length; i++) {
-	// 		title += initialTags[i][0].toUpperCase() + initialTags[i].substring(1);
-	// 		if (i < initialTags.length - 1) title += ', ';
-	// 	}
-	// }
-	// if (initialSong) {
-	// 	title += ' ' + initialSong + ' ';
-	// }
-	// title += ' Jams';
-	// if (initialArtist) {
-	// 	title += ' by ' + initialArtist;
-	// }
-	// if (initialBeforeDate && initialAfterDate) {
-	// 	title += ' from ' + initialAfterDate + ' to ' + initialBeforeDate;
-	// }
-	// if (initialBeforeDate && !initialfAterDate) {
-	// 	title += ' from ' + initialBeforeDate + ' and before ';
-	// }
-	// if (initialAfterDate && !initialBeforeDate) {
-	// 	title += ' from ' + initialAfterDate + ' and after ';
-	// }
-  // console.log('title', title)
 	return (
-		<>
-			{/* <Head>
-				<link
-					rel='shortcut icon'
-					href='/favicon.ico'
-				/>
-				<title>{title}</title>
-				<meta
-					name='keywords'
-					content='best jam jams phish grateful dead sci goose umphreys tab jrad jgb'
-				></meta>
-				<meta
-					name='description'
-					content={title + "Discover and Rate Great Jams By Phish, Grateful Dead, Goose, String Cheese Incident, Umphrey's McGee, Widespread Panic, Billy Strings, JRAD, and many more!"}
-				></meta>
-				<meta
-					name='viewport'
-					content='initial-scale=1, width=device-width'
-				/>
-			</Head> */}
 			<Home
 				jams={jams}
 				ideas={ideas}
@@ -91,7 +47,6 @@ export default function App({
 				fullUrl={fullUrl}
 				urlToShow={urlToShow}
 			/>
-		</>
 	);
 }
 
@@ -113,7 +68,7 @@ export const getServerSideProps = async (ctx) => {
 		const afterDate = params?.afterDate;
 		const orderBy = params?.orderBy ?? 'id';
 		const asc = params?.order === 'asc' ? true : false;
-		const limit = params?.limit ?? 50;
+		const limit = params?.limit ?? 100;
 		const showMoreFilters = params?.showMoreFilters === 'true';
 		const showListenable = params?.showListenable === 'true';
 		const showRatings = params?.showRatings === 'true';

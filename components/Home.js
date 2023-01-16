@@ -107,7 +107,7 @@ export default function Home({
 					if (orderBy !== 'id') query.orderBy = orderBy;
 					if (showMoreFilters.current) query.showMoreFilters = true;
 					if (showListenable) query.showListenable = showListenable;
-					if (limit !== 50) query.limit = limit;
+					if (limit !== 100) query.limit = limit;
 					if (showRatings) query.showRatings = true;
 					const params = new URLSearchParams(query).toString();
 					let reducedParams = params
