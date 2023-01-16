@@ -45,7 +45,6 @@ export default function Sorter({ orderBy, order, setOrderBy, setOrder, size, my 
 	}
 
 	const handleChange = (event) => {
-    console.log('sorter change')
 		label = event.target.value;
 		switch (event.target.value) {
 			case 'Newest':

@@ -124,6 +124,11 @@ export default function TagPicker({ tagsSelected, setTagsSelected, size, mx, my 
     );
   };
 
+  const handleClose = () => {
+    prelimTagsSelected.sort()
+    setTagsSelected(prelimTagsSelected);
+  }
+
   return (
     <Box mx={mx ? mx : '0.5em'} my={my ? my : '0.5em'} minWidth="120px">
       <FormControl sx={{ minWidth: 180 }} size={size ? size : "small"}>
@@ -138,7 +143,7 @@ export default function TagPicker({ tagsSelected, setTagsSelected, size, mx, my 
           input={<OutlinedInput label="Sounds" />}
           renderValue={() => (`${prelimTagsSelected.length} selected`)}
           MenuProps={MenuProps}
-          onClose={() => setTagsSelected(prelimTagsSelected)}
+          onClose={handleClose}
         >
           {tags.map((tag) => (
             <MenuItem key={tag.value} value={tag.value}>
