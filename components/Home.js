@@ -123,8 +123,9 @@ export default function Home({
 					if ('/?' + reducedParams !== fullUrl) {
 						prevParamsRef.current = reducedParams;
 						if (params.length > 0) {
+
 							router.push(`/?${params}`, null, {
-								scroll: false,
+								scroll: fullUrl === '/',
 							});
 						} else {
 							router.push('/');
