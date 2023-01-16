@@ -89,8 +89,6 @@ export default function Home({
 	const [limit, setLimit] = useState(initialLimit);
 	const prevParamsRef = useRef('/');
 
-	console.log('fullUrl', fullUrl);
-
 	useEffect(() => {
 		if (isMounted.current) {
 			//check song exists or no song before reloading
@@ -115,8 +113,6 @@ export default function Home({
 					let reducedParams = params
 						.replace('&showMoreFilters=true', '')
 						.replace('showMoreFilters=true', '');
-					console.log('reducedParams', reducedParams, typeof reducedParams);
-					console.log('fullUrl', fullUrl);
 					if (fullUrl === '/' && reducedParams === '') {
 						return;
 					}
@@ -245,6 +241,109 @@ export default function Home({
 		setShowRatings(e.target.checked);
 	}
 
+  const tagsList = {
+    acoustic: 'Acoustic',
+    ambient: 'Ambient/Space',
+    bliss: 'Bliss',
+    bluesy: 'Bluesy',
+    chaotic: 'Chaotic',
+    crunchy: 'Crunchy',
+    dark: 'Dark',
+    dissonant: 'Dissonant',
+    fast: 'Fast',
+    funky: 'Funky',
+    grimy: 'Grimy',
+    groovy: 'Groovy',
+    guest: 'Guest',
+    happy: 'Happy',
+    heavy: 'Heavy',
+    historic: 'Historic',
+    jazzy: 'Jazzy',
+    long: 'Long',
+    low_key: 'Low-key',
+    mellow: 'Mellow',
+    melodic: 'Melodic',
+    multi_part: 'Multi-part',
+    official_release: 'Official Release',
+    peaks: 'Peaks',
+    reggae: 'Reggae',
+    rocking: 'Rocking',
+    segue: 'Segue',
+    shred: 'Shred',
+    silly: 'Silly',
+    sloppy: 'Sloppy',
+    slow: 'Slow',
+    sludgy: 'Sludgy',
+    soaring: 'Soaring',
+    soulful: 'Soulful',
+    stop_start: 'Stop-start',
+    synthy: 'Synthy',
+    tease: 'Teases',
+    tension_release: 'Tension and Release',
+    that_years_style: "That Year's Style",
+    trance: 'Trance',
+    trippy: 'Trippy',
+    type2: 'Type II',
+    unusual: 'Unusual',
+    upbeat: 'Upbeat',
+  };
+
+	let title = '';
+	if (initialTags) {
+		for (var i = 0; i < initialTags.length; i++) {
+			title += tagsList[initialTags[i]];
+			if (i < initialTags.length - 1) title += ', ';
+		}
+	}
+	if (initialSong) {
+		title += ' ' + initialSong + ' ';
+	}
+	title += ' Jams';
+	if (initialArtist) {
+		title += ' by ' + initialArtist;
+	}
+	if (initialBeforeDate && initialAfterDate) {
+		title += ' from ' + initialAfterDate + ' to ' + initialBeforeDate;
+	}
+	if (initialBeforeDate && !initialAfterDate) {
+		title += ' from ' + initialBeforeDate + ' and before ';
+	}
+	if (initialAfterDate && !initialBeforeDate) {
+		title += ' from ' + initialAfterDate + ' and after ';
+	}
+  let subtitle = ''
+  let newLimit = initialLimit !== 'null' ? initialLimit : 'All';
+  if (initialOrderBy) {
+		switch (initialOrderBy) {
+			case 'id':
+				subtitle += newLimit + ' recently added';
+				break;
+			case 'artist':
+				subtitle += newLimit !== 'All' ? 'First ' + newLimit : 'All';
+				subtitle += 'by artist name';
+				order === 'asc' ? (subtitle += ' (A-Z)') : (subtitle += ' (Z-A)');
+				break;
+			case 'song_name':
+				subtitle += newLimit !== 'All' ? 'First ' + newLimit : 'All';
+				subtitle += 'by song name';
+				order === 'asc' ? (subtitle += ' (A-Z)') : (subtitle += ' (Z-A)');
+				break;
+			case 'date':
+				if (order === 'asc') {
+					subtitle += newLimit + ' oldest';
+				} else {
+					subtitle += newLimit + ' newest';
+				}
+				break;
+			case 'avg_rating':
+				subtitle += newLimit + ' highest rated';
+				break;
+			case 'num_ratings':
+				subtitle += newLimit + ' most rated';
+				break;
+		}
+	}
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Head>
@@ -252,44 +351,19 @@ export default function Home({
 					rel='shortcut icon'
 					href='/favicon.ico'
 				/>
-				{!artist && !song && (
-					<>
-						<title>Discover Great Jams by All Jam Bands</title>
-						<meta
-							name='keywords'
-							content='best jam jams phish grateful dead sci goose umphreys tab jrad jgb'
-						></meta>
-						<meta
-							name='description'
-							content="Discover and Rate Great Jams By Phish, Grateful Dead, Goose, String Cheese Incident, Umphrey's McGee, Widespread Panic, Billy Strings, JRAD, and many more!"
-						></meta>
-						<meta
-							name='viewport'
-							content='initial-scale=1, width=device-width'
-						/>
-					</>
-				)}
-				{/* {artist && !song && (
-					<>
-						<title>{artist} Great Jams - NiceJammin.com</title>
-						<meta
-							name='keywords'
-							content='best jam jams {artist}'
-						></meta>
-					</>
-				)}
-				{song && !artist && (
-					<>
-						<title>{song} Jams - NiceJammin.com</title>
-					</>
-				)}
-				{artist && song && (
-					<>
-						<title>
-							{artist} {song} Jams - NiceJammin.com
-						</title>
-					</>
-				)} */}
+				<title>{title}: {subtitle} on NiceJammin</title>
+				<meta
+					name='keywords'
+					content='best jam jams jambands phish grateful dead sci goose umphreys um tab jrad jgb moe.'
+				></meta>
+				<meta
+					name='description'
+					content="Discover and Rate Great Jams By Phish, Grateful Dead, Goose, String Cheese Incident, Umphrey's McGee, Widespread Panic, Billy Strings, JRAD, and many more!"
+				></meta>
+				<meta
+					name='viewport'
+					content='initial-scale=1, width=device-width'
+				/>
 			</Head>
 			<Box
 				sx={{
@@ -403,6 +477,7 @@ export default function Home({
 						setSong={setSong}
 						jams={jams && jams.length > 0}
 					/>
+          {fullUrl !== '/' && 
 					<FilterBar
 						setArtist={setArtist}
 						artist={artist}
@@ -429,6 +504,7 @@ export default function Home({
 						setLimit={setLimit}
 						lowerFilterBar={true}
 					/>
+          }
 					<br></br>
 					<DynamicAddVersion
 						songs={songs}

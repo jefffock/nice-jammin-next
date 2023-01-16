@@ -11,15 +11,60 @@ export default function TableTitle({
 	order,
 	orderBy,
 }) {
+  const tagsList = {
+    acoustic: 'Acoustic',
+    ambient: 'Ambient/Space',
+    bliss: 'Bliss',
+    bluesy: 'Bluesy',
+    chaotic: 'Chaotic',
+    crunchy: 'Crunchy',
+    dark: 'Dark',
+    dissonant: 'Dissonant',
+    fast: 'Fast',
+    funky: 'Funky',
+    grimy: 'Grimy',
+    groovy: 'Groovy',
+    guest: 'Guest',
+    happy: 'Happy',
+    heavy: 'Heavy',
+    historic: 'Historic',
+    jazzy: 'Jazzy',
+    long: 'Long',
+    low_key: 'Low-key',
+    mellow: 'Mellow',
+    melodic: 'Melodic',
+    multi_part: 'Multi-part',
+    official_release: 'Official Release',
+    peaks: 'Peaks',
+    reggae: 'Reggae',
+    rocking: 'Rocking',
+    segue: 'Segue',
+    shred: 'Shred',
+    silly: 'Silly',
+    sloppy: 'Sloppy',
+    slow: 'Slow',
+    sludgy: 'Sludgy',
+    soaring: 'Soaring',
+    soulful: 'Soulful',
+    stop_start: 'Stop-start',
+    synthy: 'Synthy',
+    tease: 'Teases',
+    tension_release: 'Tension and Release',
+    that_years_style: "That Year's Style",
+    trance: 'Trance',
+    trippy: 'Trippy',
+    type2: 'Type II',
+    unusual: 'Unusual',
+    upbeat: 'Upbeat',
+  };
+
 	let preTitle = '';
 	let title = '';
 	let subtitle = '';
-	console.log('limit in title', limit, typeof limit === 'string');
 	let newLimit = limit !== 'null' ? limit : 'All';
 	if (tags) {
-		console.log('tags', tags);
 		for (var i = 0; i < tags.length; i++) {
-			title += tags[i][0].toUpperCase() + tags[i].substring(1);
+			title += tagsList[tags[i]]
 			if (i < tags.length - 1) title += ', ';
 		}
 	}
@@ -31,13 +76,13 @@ export default function TableTitle({
 		title += ' by ' + artist;
 	}
 	if (beforeDate && afterDate) {
-		title += ' from ' + afterDate + ' to ' + beforeDate;
+		subtitle += ' from ' + afterDate + ' to ' + beforeDate;
 	}
 	if (beforeDate && !afterDate) {
-		title += ' from ' + beforeDate + ' and before ';
+		subtitle += ' from ' + beforeDate + ' and before';
 	}
 	if (afterDate && !beforeDate) {
-		title += ' from ' + afterDate + ' and after ';
+		subtitle += ' from ' + afterDate + ' and after';
 	}
 	if (orderBy) {
 		switch (orderBy) {
@@ -46,11 +91,13 @@ export default function TableTitle({
 				break;
 			case 'artist':
 				preTitle += newLimit !== 'All' ? 'First ' + newLimit : 'All';
+        beforeDate || afterDate ? (subtitle += ', sorted ') : '';
 				subtitle += 'by artist name';
 				order === 'asc' ? (subtitle += ' (A-Z)') : (subtitle += ' (Z-A)');
 				break;
 			case 'song_name':
 				preTitle += newLimit !== 'All' ? 'First ' + newLimit : 'All';
+        beforeDate || afterDate ? (subtitle += ', sorted ') : '';
 				subtitle += 'by song name';
 				order === 'asc' ? (subtitle += ' (A-Z)') : (subtitle += ' (Z-A)');
 				break;
