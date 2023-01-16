@@ -109,10 +109,10 @@ export default function TableTitle({
 				}
 				break;
 			case 'avg_rating':
-				preTitle += newLimit + ' highest rated';
+				preTitle += newLimit + ' highest-rated';
 				break;
 			case 'num_ratings':
-				preTitle += newLimit + ' most rated';
+				preTitle += newLimit + ' most-rated';
 				break;
 		}
 	}

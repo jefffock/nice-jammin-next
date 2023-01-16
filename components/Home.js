@@ -336,10 +336,10 @@ export default function Home({
 				}
 				break;
 			case 'avg_rating':
-				subtitle += newLimit + ' highest rated';
+				subtitle += newLimit + ' highest-rated';
 				break;
 			case 'num_ratings':
-				subtitle += newLimit + ' most rated';
+				subtitle += newLimit + ' most-rated';
 				break;
 		}
 	}
