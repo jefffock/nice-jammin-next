@@ -1,42 +1,44 @@
+//use getserversideprops to parse the id from the url
+//use id to query the db for the url and redirect to the url
 import { ThemeProvider } from '@mui/material/styles';
-import theme from '../styles/themes';
+import theme from '../../styles/themes';
 import { useState, useEffect, useRef, Suspense } from 'react';
-import { supabase } from '../utils/supabaseClient';
+import { supabase } from '../../utils/supabaseClient';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Box from '@mui/material/Box';
-import FilterBar from '../components/FilterBar';
-import FilterList from '../components/FilterList';
+import FilterBar from '../../components/FilterBar';
+import FilterList from '../../components/FilterList';
 import Typography from '@mui/material/Typography';
-import TopBar from '../components/AppBar';
+import TopBar from '../../components/AppBar';
 import dynamic from 'next/dynamic';
 import getConfig from 'next/config';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 
 const DynamicContributorsTable = dynamic(
-	() => import('../components/TopContributors'),
+	() => import('../../components/TopContributors'),
 	{
 		suspense: true,
 	}
 );
 const DynamicJamsTable = dynamic(
-	() => import('../components/JamsTableCollapsible'),
+	() => import('../../components/JamsTableCollapsible'),
 	{
 		suspense: true,
 	}
 );
 
-const DynamicAddVersion = dynamic(() => import('../components/AddVersion'), {
+const DynamicAddVersion = dynamic(() => import('../../components/AddVersion'), {
 	suspense: true,
 });
-const DynamicGratitude = dynamic(() => import('../components/Gratitude'), {
+const DynamicGratitude = dynamic(() => import('../../components/Gratitude'), {
 	suspense: true,
 });
-const DynamicIdeasTable = dynamic(() => import('../components/IdeasTable'), {
+const DynamicIdeasTable = dynamic(() => import('../../components/IdeasTable'), {
 	suspense: true,
 });
-const DynamicFooter = dynamic(() => import('../components/Footer'), {
+const DynamicFooter = dynamic(() => import('../../components/Footer'), {
 	suspense: true,
 });
 
@@ -59,8 +61,7 @@ export default function App({
 	initialShowListenable,
 	initialShowRatings,
 	initialProfile,
-  fullUrl,
-	urlToShow,
+	fullUrl,
 }) {
 	// const [currentJams, setCurrentJams] = useState(jams);
 	const [songs, setSongs] = useState(initialSongs);
@@ -81,7 +82,6 @@ export default function App({
 	const [beforeDate, setBeforeDate] = useState(initialBeforeDate);
 	const [afterDate, setAfterDate] = useState(initialAfterDate);
 	const [tagsSelected, setTagsSelected] = useState(initialTags);
-	const tagsSelectedString = tagsSelected.join(',');
 	const router = useRouter();
 	const [showRatings, setShowRatings] = useState(initialShowRatings);
 	const isMounted = useRef(false);
@@ -89,7 +89,6 @@ export default function App({
 	const showMoreFilters = useRef(initialShowMoreFilters);
 	const [showListenable, setShowListenable] = useState(initialShowListenable);
 	const [limit, setLimit] = useState(initialLimit);
-	const prevParamsRef = useRef('/');
 
 	useEffect(() => {
 		if (isMounted.current) {
@@ -115,27 +114,24 @@ export default function App({
 					let reducedParams = params
 						.replace('&showMoreFilters=true', '')
 						.replace('showMoreFilters=true', '');
-					console.log('reducedParams', reducedParams, typeof reducedParams);
-          console.log('fullUrl', fullUrl);
-          if (fullUrl === '/' && reducedParams === '') {
-            return
-          }
-					if ('/?' + reducedParams !== fullUrl) {
-            prevParamsRef.current = reducedParams;
-						if (params.length > 0) {
-							router.push(`/?${params}`, null, {
-								scroll: false,
-							});
-						} else {
-							router.push('/');
-						}
+					console.log('reducedParams', reducedParams);
+					console.log('fullUrl', fullUrl);
+					if ('/?' + reducedParams === fullUrl) {
+						return;
+					}
+					if (params.length > 0) {
+						router.push(`/?${params}`, null, {
+							scroll: false,
+						});
+					} else {
+						router.push('/');
 					}
 				}
 			}
 		}
 	}, [
 		artist,
-		tagsSelectedString,
+		tagsSelected,
 		beforeDate,
 		afterDate,
 		song,
@@ -172,12 +168,6 @@ export default function App({
 		setTimeout(() => {
 			isMounted.current = true;
 		}, 1000);
-		// if (urlToShow) {
-		console.log('urlToShow', urlToShow);
-		window.history.replaceState(null, null, urlToShow);
-		// router.replace('/xyz','/xyz', { shallow: true })
-		//   // history.replaceState(null, null, urlToShow)
-		// }
 	}, []);
 
 	useEffect(() => {
@@ -403,162 +393,123 @@ export default function App({
 }
 
 export const getServerSideProps = async (ctx) => {
-	// const supabase = createServerSupabaseClient(ctx);
-	// const {
-	// 	data: { session },
-	// } = await supabase.auth.getSession();
-	const fullUrl = ctx.resolvedUrl
-	const query = ctx.query;
-	let showMore;
-	let urlToShow = '/';
-	if (query?.showMoreFilters) {
-    console.log('query.showMore', query)
-		showMore = JSON.parse(JSON.stringify(query.showMoreFilters));
-		delete query.showMoreFilters;
-	}
-  console.log('showMore', showMore)
-	const url = ctx.resolvedUrl.replaceAll('&showMoreFilters=true', '').replaceAll('?showMoreFilters=true', '');
-  console.log('url', url)
-	if (url !== '/') {
-		const list = await supabase
-			.from('lists')
-			.select('*')
-			.eq('url', url)
-			.single();
-		if (list.data) {
-			console.log('list', list);
-      urlToShow = '/lists/' + list.data.id;
-			// return {
-			// 	redirect: {
-			// 		destination: `lists/${list.data.id}`,
-			// 		permanent: true,
-			// 	},
-			// };
-		} else {
-			console.log(
-				'no list, inserting new, query',
-				query,
-				'ctx.resolvedUrl',
-				url
-			);
-			let newList = await supabase
-				.from('lists')
-				.insert([{ url: url, query: JSON.stringify(query) }])
-				.select();
-			console.log('list after insert', newList);
-			urlToShow = '/lists/' + newList.data[0].id;
-		}
-	}
-	// return {
-	//   redirect: {
-	//     destination: `lists/${id}`,
-	//     permanent: true,
-	//   }
-	// }
-	const params = ctx.query;
-	const artist = params?.artist;
-	const song = params?.song;
-	const sounds = params?.sounds;
-	let tags = sounds?.split(',') ?? [];
-	const beforeDate = params?.beforeDate;
-	const afterDate = params?.afterDate;
-	const orderBy = params?.orderBy ?? 'id';
-	const asc = params?.order === 'asc' ? true : false;
-	const limit = params?.limit ?? 20;
-	const showMoreFilters = params?.showMoreFilters === 'true';
-	const showListenable = params?.showListenable === 'true';
-	const showRatings = params?.showRatings === 'true';
-	let jams = supabase.from('versions').select('*');
-	if (artist) {
-		jams = jams.eq('artist', artist);
-	}
-	if (song) {
-		jams = jams.eq('song_name', song);
-	}
-	if (afterDate) {
-		let after = afterDate + '-01-01';
-		jams = jams.gte('date', after);
-	}
-	if (beforeDate) {
-		let before = beforeDate + '-12-31';
-		jams = jams.lte('date', before);
-	}
-	if (tags) {
-		tags.forEach((tag) => {
-			jams = jams.eq(tag, true);
-		});
-	}
-	if (showListenable) {
-		jams = jams.not('listen_link', 'is', null);
-	}
-	jams = jams.order(orderBy, { ascending: asc });
-	if (orderBy === 'avg_rating') {
-		jams = jams.order('num_ratings', { ascending: false });
-	}
-	if (orderBy === 'num_ratings') {
-		jams = jams.order('avg_rating', { ascending: false });
-	}
-	jams = jams.limit(limit);
-	const ideas = supabase
-		.from('ideas')
-		.select('idea_body, done, votes, id')
-		.order('id', { ascending: false });
-	const leaders = supabase
-		.from('profiles')
-		.select('name, points')
-		.not('name', 'eq', 'Henrietta')
-		.limit(20)
-		.order('points', { ascending: false });
-	const songs = supabase
-		.from('songs')
+	const id = ctx.query.id;
+	console.log('ctx', ctx);
+	console.log('id', id);
+	const { data } = await supabase
+		.from('lists')
 		.select('*')
-		// .gt('avg_rating', 0)
-		// .limit(100)
-		.order('song', { ascending: true });
-	const list = supabase.from('lists').select('*').eq('url', url).single();
-	let fetchedJams, fetchedIdeas, fetchedLeaders, fetchedSongs;
-	// fetchedList;
-	await Promise.all([jams, ideas, leaders, songs]).then(
-		([jams, ideas, leaders, songs]) => {
-			fetchedJams = jams;
-			fetchedIdeas = ideas;
-			fetchedLeaders = leaders;
-			fetchedSongs = songs;
-			// fetchedList = list;
+		.eq('id', id)
+		.single();
+	console.log('data', data);
+	if (data) {
+		const supabase = createServerSupabaseClient(ctx);
+		console.log('resolvedurl in /lists/[id]', ctx.resolvedUrl);
+		const params = JSON.parse(data.query);
+    const url = data.url
+    console.log('url in [id]', url)
+		console.log('params', params);
+		const artist = params?.artist;
+		const song = params?.song;
+		const sounds = params?.sounds;
+		let tags = sounds?.split(',') ?? [];
+		const beforeDate = params?.beforeDate;
+		const afterDate = params?.afterDate;
+		const orderBy = params?.orderBy ?? 'id';
+		const asc = params?.order === 'asc' ? true : false;
+		const limit = params?.limit ?? 20;
+		const showMoreFilters = params?.showMoreFilters === 'true';
+		const showListenable = params?.showListenable === 'true';
+		const showRatings = params?.showRatings === 'true';
+		let jams = supabase.from('versions').select('*');
+		if (artist) {
+			jams = jams.eq('artist', artist);
 		}
-	);
-	// let id = fetchedList.data?.id
-	// console.log('list', fetchedList)
-	// if (!fetchedList.data) {
-	//   const list = await supabase.from('lists').insert([
-	//     { url: ctx.resolvedUrl, params: JSON.stringify(params) },
-	//   ]).select();
-	//   console.log('list after inset', list)
-	//   id = list.data[0].id
-	// }
-	// let urlToShow = '/lists/' + id
-	// if (id === 1) urlToShow = null
-	return {
-		props: {
-			// initialSession: session ?? null,
-			// initialUser: session?.user ?? null,
-			jams: fetchedJams.data,
-			ideas: fetchedIdeas.data,
-			leaders: fetchedLeaders.data,
-			initialSongs: fetchedSongs.data,
-			initialArtist: artist || null,
-			initialSong: song || null,
-			initialTags: tags || [],
-			initialBeforeDate: beforeDate || '',
-			initialAfterDate: afterDate || '',
-			initialOrderBy: orderBy,
-			initialOrder: asc ? 'asc' : 'desc',
-			initialLimit: limit,
-			initialShowListenable: showListenable,
-			initialShowMoreFilters: showMore ?? false,
-			initialShowRatings: showRatings,
-      fullUrl: fullUrl,
-			urlToShow: urlToShow,
-		},
-	};
+		if (song) {
+			jams = jams.eq('song_name', song);
+		}
+		if (afterDate) {
+			let after = afterDate + '-01-01';
+			jams = jams.gte('date', after);
+		}
+		if (beforeDate) {
+			let before = beforeDate + '-12-31';
+			jams = jams.lte('date', before);
+		}
+		if (tags) {
+			tags.forEach((tag) => {
+				jams = jams.eq(tag, true);
+			});
+		}
+		if (showListenable) {
+			jams = jams.not('listen_link', 'is', null);
+		}
+		jams = jams.order(orderBy, { ascending: asc });
+		if (orderBy === 'avg_rating') {
+			jams = jams.order('num_ratings', { ascending: false });
+		}
+		if (orderBy === 'num_ratings') {
+			jams = jams.order('avg_rating', { ascending: false });
+		}
+		jams = jams.limit(limit);
+		// let profile = supabase.from('profiles').select('*')
+		// if (session) {
+		//   profile = profile.eq('id', session.user.id)
+		// } else {
+		//   profile = profile.limit(0)
+		// }
+		const ideas = supabase
+			.from('ideas')
+			.select('idea_body, done, votes, id')
+			.order('id', { ascending: false });
+		// const jams = await supabase
+		// 	.from('versions')
+		// 	.select('*')
+		// 	.limit(20)
+		// 	.order('id', { ascending: false });
+		const leaders = supabase
+			.from('profiles')
+			.select('name, points')
+			.not('name', 'eq', 'Henrietta')
+			.limit(20)
+			.order('points', { ascending: false });
+		const songs = supabase
+			.from('songs')
+			.select('*')
+			// .gt('avg_rating', 0)
+			// .limit(100)
+			.order('song', { ascending: true });
+
+		let fetchedJams, fetchedIdeas, fetchedLeaders, fetchedSongs, fetchedProfile;
+		await Promise.all([jams, ideas, leaders, songs]).then(
+			([jams, ideas, leaders, songs]) => {
+				fetchedJams = jams;
+				fetchedIdeas = ideas;
+				fetchedLeaders = leaders;
+				fetchedSongs = songs;
+			}
+		);
+		return {
+			props: {
+				// initialSession: session ?? null,
+				// initialUser: session?.user ?? null,
+				jams: fetchedJams.data,
+				ideas: fetchedIdeas.data,
+				leaders: fetchedLeaders.data,
+				initialSongs: fetchedSongs.data,
+				initialArtist: artist || null,
+				initialSong: song || null,
+				initialTags: tags || [],
+				initialBeforeDate: beforeDate || '',
+				initialAfterDate: afterDate || '',
+				initialOrderBy: orderBy,
+				initialOrder: asc ? 'asc' : 'desc',
+				initialLimit: limit,
+				initialShowListenable: showListenable,
+				initialShowMoreFilters: showMoreFilters,
+				initialShowRatings: showRatings,
+				fullUrl: url,
+			},
+		};
+	}
 };
