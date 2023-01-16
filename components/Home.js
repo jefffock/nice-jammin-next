@@ -343,6 +343,8 @@ export default function Home({
 				break;
 		}
 	}
+  title.trim()
+  subtitle.trim()
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -351,7 +353,7 @@ export default function Home({
 					rel='shortcut icon'
 					href='/favicon.ico'
 				/>
-				<title>{title}: {subtitle} on NiceJammin</title>
+				<title>{title}&#58; {subtitle} on NiceJammin</title>
 				<meta
 					name='keywords'
 					content='best jam jams jambands phish grateful dead sci goose umphreys um tab jrad jgb moe.'
