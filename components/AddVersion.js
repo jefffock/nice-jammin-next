@@ -23,6 +23,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import RateVersion from './RateVersion';
+import Link from 'next/link';
 
 export default function AddVersion({ songs, jams, user, profile, setSongs, initialArtist, initialSong }) {
 	const [artist, setArtist] = useState(initialArtist);
@@ -648,7 +649,7 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 							severity='error'
 							sx={{ mb: '1em' }}
 						>
-							Please <a href='login'>log in</a> to contribute - thank you!
+							Please <Link href='/login'>log in</Link> to contribute - thank you!
 						</Alert>
 					)}
 					{user && (

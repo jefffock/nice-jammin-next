@@ -79,7 +79,7 @@ export default function TopContributors({ leaders }) {
 									<TableCell>
 										<Link
 											href={{
-												pathname: 'fans/[username]',
+												pathname: '/fans/[username]',
 												query: { username: `${row.name}` },
 											}}
 										>{`${row.name}`}

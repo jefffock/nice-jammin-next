@@ -296,7 +296,7 @@ export default function SignUp({ setSession }) {
 						>
 							<Grid item>
 								<Link
-									href='login'
+									href='/login'
 									variant='body2'
 								>
 									Already have an account? Sign in
@@ -305,7 +305,7 @@ export default function SignUp({ setSession }) {
 						</Grid>
             <Box mt='2em'>
               <Typography>
-                By signing up, you agree to our <Link href='terms'>Terms of Service</Link> and <Link href='privacy'>Privacy Policy</Link>
+                By signing up, you agree to our <Link href='/terms'>Terms of Service</Link> and <Link href='/privacy'>Privacy Policy</Link>
               </Typography>
             </Box>
 					</Box>
