@@ -24,8 +24,17 @@ import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import RateVersion from './RateVersion';
 import Link from 'next/link';
+import YearPicker from './YearPicker';
 
-export default function AddVersion({ songs, jams, user, profile, setSongs, initialArtist, initialSong }) {
+export default function AddVersion({
+	songs,
+	jams,
+	user,
+	profile,
+	setSongs,
+	initialArtist,
+	initialSong,
+}) {
 	const [artist, setArtist] = useState(initialArtist);
 	const [song, setSong] = useState(initialSong ?? '');
 	const [songObj, setSongObj] = useState(null);
@@ -97,6 +106,7 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 	const [njVersionsDatesOnly, setNjVersionsDatesOnly] = useState(null);
 	const [versionExists, setVersionExists] = useState(false);
 	const [jam, setJam] = useState(null);
+	const [year, setYear] = useState('');
 
 	useEffect(() => {
 		if (songs) {
@@ -343,6 +353,10 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 		}
 	}, [setlist]);
 
+	useEffect(() => {
+		console.log('show', show);
+	}, [show]);
+
 	const handleRatingChange = (e) => {
 		setRating(e.target.value);
 	};
@@ -408,6 +422,17 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 		return true;
 	};
 
+	const clearArtist = () => {
+		setArtist(null);
+		setSong(null);
+		setDate('');
+		setLocation(null);
+		setSetlist(null);
+		setLoadingSetlist(false);
+		setLoadingShows(false);
+		setLoading(false);
+	};
+
 	const clearDate = () => {
 		setDate('');
 		setShow(null);
@@ -423,6 +448,17 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 		setLoadingSetlist(false);
 		setLoadingShows(false);
 		setLoading(false);
+	};
+
+	const clearYear = () => {
+    setLocation(null)
+		setYear(null);
+		setShows(null);
+		setLoadingShows(false);
+		setLoading(false);
+    setSetlist(null)
+    setLoadingSetlist(false)
+    setDate('')
 	};
 
 	const insertVersion = async () => {
@@ -642,23 +678,30 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 				onClose={handleClose}
 				sx={{ minHeight: '50vh' }}
 			>
-				<DialogTitle>Add a Great Jam</DialogTitle>
+				<DialogTitle fontSize={26}>Add a Great Jam</DialogTitle>
 				<DialogContent sx={{ minHeight: '300px', minWidth: '300px' }}>
 					{!user && (
 						<Alert
 							severity='error'
 							sx={{ mb: '1em' }}
 						>
-							Please <Link href='/login'>log in</Link> to contribute - thank you!
+							Please <Link href='/login'>log in</Link> to contribute - thank
+							you!
 						</Alert>
 					)}
-					{user && (
+					{user && (!artist || artist === 'All Bands') && (
 						<ArtistPicker
 							artist={artist}
 							setArtist={setArtist}
 							size={'normal'}
 							my={'1em'}
 						/>
+					)}
+					{artist && artist !== 'All Bands' && (
+						<>
+							<Typography fontSize={22}>{artist}</Typography>
+							<Button onClick={() => clearArtist()}>Clear Artist</Button>
+						</>
 					)}
 					{artistErrorText && (
 						<Alert
@@ -669,7 +712,21 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 						</Alert>
 					)}
 					{loadingSetlist && <Typography>Loading Setlist...</Typography>}
-					{artist && (
+					{artist &&
+						!song &&
+						!year &&
+						(artist === 'Goose' ||
+							artist === 'Eggy' ||
+							artist === 'Neighbor' ||
+							artist === "Umphrey's McGee") &&
+						!location &&
+						!date && (
+							<Typography>Choose a song or year to view shows</Typography>
+						)}
+					{artist && !song && (date || location) && (
+						<Typography>Choose a song</Typography>
+					)}
+					{artist && !song && (
 						<SongPicker
 							artist={artist}
 							songs={songs}
@@ -684,7 +741,10 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 						/>
 					)}
 					{artist && song && (
-						<Button onClick={() => clearSong()}>Clear Song</Button>
+						<>
+							<Typography fontSize={22}>{song}</Typography>
+							<Button onClick={() => clearSong()}>Clear Song</Button>
+						</>
 					)}
 					{!songExists && song && (
 						<>
@@ -714,29 +774,58 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 							{songErrorText}
 						</Alert>
 					)}
-					{artist && !shows && !loadingShows && (
-						<DatePicker
-							setDate={setDate}
-							my={'1em'}
-							date={date}
-						/>
-					)}
+					{artist &&
+						!song &&
+						(artist === 'Goose' ||
+							artist === 'Eggy' ||
+							artist === 'Neighbor' ||
+							artist === "Umphrey's McGee") && (
+							<YearPicker
+								artist={artist}
+								setShows={setShows}
+								year={year}
+								setYear={setYear}
+                clearYear={clearYear}
+                date={date}
+							/>
+						)}
+					{artist &&
+						!shows &&
+						!loadingShows &&
+						artist !== 'Goose' &&
+						artist !== 'Eggy' &&
+						artist !== 'Neighbor' &&
+						artist !== "Umphrey's McGee" && (
+							<DatePicker
+								setDate={setDate}
+								my={'1em'}
+								date={date}
+							/>
+						)}
 					{loadingShows && <Typography>Loading shows...</Typography>}
-					{artist && shows && (
-						<ShowPicker
-							show={show}
-							shows={shows}
-							setShow={setShow}
-							setDate={setDate}
-							setLocation={setLocation}
-						/>
+					{artist && shows && !location && !date && (
+						<Typography>Choose a show</Typography>
+					)}
+					{artist && shows && (!location || !date) && (
+						<>
+							<ShowPicker
+								show={show}
+								shows={shows}
+								setShow={setShow}
+								setDate={setDate}
+								setLocation={setLocation}
+							/>
+						</>
 					)}
 					{date && shows && (
-						<Typography sx={{ mx: '0.25em', my: '1em' }}>
-							Date: {new Date(date + 'T18:00:00Z').toLocaleDateString()}
+						<Typography
+							fontSize={22}
+							// sx={{ mx: '0.25em', my: '1em' }}
+						>
+							{new Date(date + 'T18:00:00Z').toLocaleDateString()}
 						</Typography>
 					)}
-					{artist && date && (
+					{artist && date && shows && (
 						<Button onClick={() => clearDate()}>Clear Date</Button>
 					)}
 					{dateErrorText && (
@@ -847,9 +936,6 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 										<MenuItem value={6}>6</MenuItem>
 										<MenuItem value={5}>5</MenuItem>
 										<MenuItem value={4}>4</MenuItem>
-										<MenuItem value={3}>3</MenuItem>
-										<MenuItem value={2}>2</MenuItem>
-										<MenuItem value={1}>1</MenuItem>
 									</Select>
 									<TextField
 										sx={{ mt: '1em' }}

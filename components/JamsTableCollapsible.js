@@ -458,6 +458,7 @@ export default function CollapsibleTable({
 	//     ? (a, b) => descendingComparator(a, b, orderBy)
 	//     : (a, b) => -descendingComparator(a, b, orderBy);
 	// }
+
 	if (jams && jams.length > 0) {
 		return (
 			<>

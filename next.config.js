@@ -21,7 +21,8 @@ module.exports = {
       eggyBaseUrl: 'https://thecarton.net/api/v1',
       gooseBaseUrl: 'https://elgoose.net/api/v1',
       umphreysBaseUrl: 'https://allthings.umphreys.com/api/v1',
-      neighborBaseUrl: 'https://neighbortunes.net/api/v1'
+      neighborBaseUrl: 'https://neighbortunes.net/api/v1',
+      phishBaseUrl: 'https://api.phish.net/v5'
     },
     mbids: {
       'The Allman Brothers Band': '72359492-22be-4ed9-aaa0-efa434fb2b01',

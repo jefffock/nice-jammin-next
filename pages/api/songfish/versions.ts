@@ -46,14 +46,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             const versionsLessData = versions.data
             .map(version => {
               const date = new Date(version.showdate + 'T18:00:00Z');
+              const location = `${version.venuename}, ${
+                version.city
+              }, ${version.country === "USA" ? version.state : version.country}`
               return {
                 showdate: version.showdate,
-                location: `${version.venuename}, ${
-                  version.city
-                }, ${version.country === "USA" ? version.state : version.country}`,
-                label: `${date.toLocaleDateString()} - ${version.venuename}, ${
-                  version.city
-                }, ${version.country === "USA" ? version.state : version.country}`
+                location: location,
+                label: `${date.toLocaleDateString()} - ${location}`
               }
             })
             res.status(200).send(versionsLessData.reverse())

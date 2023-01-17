@@ -22,6 +22,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       break;
   }
   const url = `${baseUrl}/setlists/showdate/${date}`
+  console.log('url in setlists', url)
   try {
     await fetch(url)
       .then(data => data.json())
