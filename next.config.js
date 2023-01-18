@@ -58,7 +58,4 @@ module.exports = {
       'Widespread Panic': '3797a6d0-7700-44bf-96fb-f44386bc9ab2'
     },
   },
-  publicRuntimeConfig: {
-    server: process.env.NODE_ENV !== 'production' ? 'http://localhost:3000' : 'https://nicejammin.com',
-  }
 };
