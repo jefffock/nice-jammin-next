@@ -34,9 +34,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               label: `${date.toLocaleDateString()} - ${location}`
             }
           })
-          res.status(200).send(showsRes)
+          res.status(200).send({shows: showsRes})
+        } else {
+          res.status(500).send({error: 'No shows found'});
         }
-				res.status(200).send(shows.data);
 			});
 	} catch (error) {
 		console.error(error);

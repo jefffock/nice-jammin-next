@@ -19,11 +19,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       })
         .then(data => data.json())
         .then(data => {
-            res.status(200).json(data)
+            res.status(200).json({shows: data})
         })
     } catch (error) {
       console.error('error in /setlistfm/shows')
-      res.status(500).send(error)
+      res.status(500).send({error: true})
     }
   }
 }

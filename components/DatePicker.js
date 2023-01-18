@@ -8,8 +8,8 @@ import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 
 export default function DatePicker({ setDate, my, date }) {
-	const [value, setValue] = useState(null);
-	const [dateInput, setDateInput] = useState(null);
+	const [value, setValue] = useState('');
+	const [dateInput, setDateInput] = useState('');
 	const [dateInputError, setDateInputError] = useState(false);
 	const [dateErrorText, setDateErrorText] = useState('');
 

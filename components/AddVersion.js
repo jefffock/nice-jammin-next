@@ -26,6 +26,7 @@ import RateVersion from './RateVersion';
 import Link from 'next/link';
 import YearPicker from './YearPicker';
 import Stack from '@mui/material/Stack';
+import {spinner} from '../public/spinner.gif';
 
 export default function AddVersion({
 	songs,
@@ -778,7 +779,15 @@ export default function AddVersion({
 							{artistErrorText}
 						</Alert>
 					)}
-					{loadingSetlist && <Typography>Loading Setlist...</Typography>}
+					{loadingSetlist && 
+          <Box sx={{
+            display: 'flex',
+          }}>
+          <img src='/spinner.gif' alt='loading'
+          height={'30px'} width={'30px'}/>
+          <Typography>Loading Setlist...</Typography>
+          </Box>
+          }
 					{artist &&
 						!song &&
 						!year &&
