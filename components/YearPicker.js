@@ -24,6 +24,7 @@ export default function YearPicker({
 	setYear,
 	clearYear,
 	date,
+  setLoadingShows
 }) {
 	const [years, setYears] = useState(null);
 	const [artistStartYear, setArtistStartYear] = useState(1960);
@@ -78,11 +79,11 @@ export default function YearPicker({
 					body: body,
 				});
 				const data = await response.json();
-        console.log('data', data.shows)
 				setShows(data.shows);
-			}
+			} setLoadingShows(false)
 		};
 		if (artist && year) {
+      setLoadingShows(true);
 			fetchShows();
 		}
 	}, [artist, year]);
