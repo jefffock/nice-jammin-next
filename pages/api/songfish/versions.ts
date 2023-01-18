@@ -54,13 +54,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 								label: `${date.toLocaleDateString()} - ${location}`,
 							};
 						});
+            console.log('found shows for song', song)
 						res.status(200).send(versionsLessData.reverse());
 					} else {
+            console.log('no shows found for song', song)
 						res.status(500).send([]);
 					}
 				});
 		}
 	} catch (error) {
+    console.error('error getting songfish versions', song, error)
 		res.status(500).send([]);
 	}
 };
