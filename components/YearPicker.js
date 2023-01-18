@@ -30,7 +30,6 @@ export default function YearPicker({ setShows, artist, year, setYear, clearYear,
         body: body,
       });
       const data = await response.json();
-      console.log(data)
       setArtistStartYear(data.start_year)
       const endYear = data.end_year || new Date().getFullYear()
       setArtistEndYear(endYear)
@@ -72,7 +71,6 @@ export default function YearPicker({ setShows, artist, year, setYear, clearYear,
           body: body,
         });
         const data = await response.json();
-        console.log('data', data)
         setShows(data);
       }
     }
@@ -94,7 +92,7 @@ export default function YearPicker({ setShows, artist, year, setYear, clearYear,
         mb: '1em'
       }}>
         <FormControl
-          sx={{ minWidth: 180, mx: '0.25em' }}
+          sx={{ minWidth: 180 }}
         >
           <InputLabel id='year-select'>Year</InputLabel>
           <Select

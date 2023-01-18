@@ -108,7 +108,8 @@ export default function AddVersion({
 	const [versionExists, setVersionExists] = useState(false);
 	const [jam, setJam] = useState(null);
 	const [year, setYear] = useState('');
-  const [showLocationInput, setShowLocationInput] = useState(true);
+	const [showLocationInput, setShowLocationInput] = useState(true);
+	const [noSetlistFound, setNoSetlistFound] = useState(false);
 
 	useEffect(() => {
 		if (songs) {
@@ -228,9 +229,10 @@ export default function AddVersion({
 							const setlist = responses[0].titles;
 							const njVersions = responses[1];
 							const location = responses[0].location;
-							if (!setlist || setlist.length === 0) {
+							if (responses.error || !setlist || setlist.length === 0) {
 								setSetlist(null);
-								setLocation(null);
+								setNoSetlistFound(true);
+								setShowLocationInput(true);
 								setLoadingSetlist(false);
 							} else {
 								const comboSetlist = setlist.map((song) => {
@@ -246,6 +248,7 @@ export default function AddVersion({
 								setSetlist(comboSetlist);
 								if (location) {
 									setLocation(location);
+									setShowLocationInput(false);
 								}
 								setLoadingSetlist(false);
 							}
@@ -336,7 +339,9 @@ export default function AddVersion({
 					}
 				}
 			);
-			setShows(showsWithAlreadyAdded);
+			showsWithAlreadyAdded.length > 0
+				? setShows(showsWithAlreadyAdded)
+				: setShows(null);
 		}
 	}, [allShows, njVersionsDatesOnly]);
 
@@ -354,10 +359,6 @@ export default function AddVersion({
 			}
 		}
 	}, [setlist]);
-
-	useEffect(() => {
-		console.log('show', show);
-	}, [show]);
 
 	const handleRatingChange = (e) => {
 		setRating(e.target.value);
@@ -463,9 +464,9 @@ export default function AddVersion({
 		setDate('');
 	};
 
-  const changeLocation = () => {
-    setShowLocationInput(true);
-  };
+	const changeLocation = () => {
+		setShowLocationInput(true);
+	};
 
 	const insertVersion = async () => {
 		const { data, error } = await supabase.from('versions').insert([
@@ -677,19 +678,22 @@ export default function AddVersion({
 					textTransform: 'none',
 				}}
 			>
-				Add a Jam
+				Add a 🔥 Jam
 			</Button>
 			<Dialog
 				open={open}
 				onClose={handleClose}
 				sx={{ minHeight: '50vh' }}
 			>
-				<DialogTitle fontSize={26}>Add a Jam</DialogTitle>
+				<DialogTitle fontSize={26}>Add a 🔥 Jam</DialogTitle>
 				<DialogContent sx={{ minHeight: '300px', minWidth: '300px' }}>
+					<Typography sx={{ mb: '1em' }}>
+						Thanks for helping this jam reach more ears 🙏 You rock! 🎸
+					</Typography>
 					{!user && (
 						<Alert
-							severity='error'
-							sx={{ mb: '1em' }}
+							severity='info'
+							sx={{ my: '1em' }}
 						>
 							Please <Link href='/login'>log in</Link> to contribute - thank
 							you!
@@ -704,13 +708,67 @@ export default function AddVersion({
 						/>
 					)}
 					{artist && artist !== 'All Bands' && (
-            <Box sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-            }}>
-							<Typography fontSize={22}>{artist}</Typography>
-							<Button sx={{ textTransform: 'none'}} onClick={clearArtist}>Change Artist</Button>
-            </Box>
+						<Box
+							sx={{
+								display: 'flex',
+								justifyContent: 'space-between',
+							}}
+						>
+							<Typography fontSize={18}>
+								{artist}
+								{artist === 'Phish'
+									? ' 🐟 ⭕'
+									: artist === 'Grateful Dead' ||
+									  artist === 'Dead & Company' ||
+									  artist === "Joe Russo's Almost Dead" ||
+									  artist === 'Phil Lesh & Friends' ||
+									  artist === 'Furthur'
+									? ' ⚡'
+									: artist === 'Lettuce'
+									? ' 🥬'
+									: artist === 'Eggy'
+									? ' 🥚'
+									: artist === 'Lotus'
+									? ' 🪷'
+									: artist === 'Railroad Earth'
+									? ' 🚂🌎'
+									: artist === 'String Cheese Incident'
+									? ' 🧀'
+									: artist === 'Disco Biscuits'
+									? ' 🪩'
+									: artist === 'Ghost Light'
+									? ' 👻'
+									: artist === 'Aqueous'
+									? ' 💧'
+									: artist === 'King Gizzard & the Lizard Wizard'
+									? ' 🦎🧙‍♂️'
+									: artist === 'Billy Strings'
+									? ' 🎻'
+									: artist === 'Greensky Bluegrass'
+									? ' 🪕'
+									: artist === 'My Morning Jacket'
+									? ' 🧥'
+									: artist === 'Neighbor'
+									? ' 🏡'
+									: artist === 'Tedeschi Trucks Band'
+									? ' 🚚 🚛'
+									: artist === 'Squeaky Feet'
+									? ' 🦶🏻'
+									: artist === 'Medeski Martin & Wood'
+									? ' 🪵'
+									: artist === 'Goose'
+									? ' 🦢'
+									: artist === 'Trey Anastasio, TAB'
+									? ' ▫️'
+									: ' ❤️'}
+							</Typography>
+							<Button
+								sx={{ textTransform: 'none' }}
+								onClick={clearArtist}
+							>
+								Change Artist
+							</Button>
+						</Box>
 					)}
 					{artistErrorText && (
 						<Alert
@@ -737,27 +795,71 @@ export default function AddVersion({
 					{artist && !song && (date || location) && (
 						<Typography>Choose a song</Typography>
 					)}
-					{artist && !song && (
-						<SongPicker
-							artist={artist}
-							songs={songs}
-							song={song}
-							setSong={setSong}
-							setlist={setlist}
-							setSetlist={setSetlist}
-							wide={true}
-							size={'normal'}
-							mx={'0.25em'}
-							my={'1em'}
-						/>
-					)}
+					{artist &&
+						!songExists &&
+						(date ||
+							artist === 'Goose' ||
+							artist === 'Eggy' ||
+							artist === 'Neighbor' ||
+							artist === "Umphrey's McGee" ||
+							artist === 'Phish' ||
+							artist === 'Trey Anastasio (TAB)') && (
+							<SongPicker
+								artist={artist}
+								songs={songs}
+								song={song}
+								setSong={setSong}
+								setlist={setlist}
+								setSetlist={setSetlist}
+								wide={true}
+								size={'normal'}
+								mx={'0em'}
+								my={'1em'}
+							/>
+						)}
 					{artist && song && (
-						<Box sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-            }}>
-							<Typography fontSize={22}>{song}</Typography>
-							<Button sx={{ textTransform: 'none'}} onClick={clearSong}>Change Song</Button>
+						<Box
+							sx={{
+								display: 'flex',
+								justifyContent: 'space-between',
+							}}
+						>
+							<Typography fontSize={18}>
+								{song}
+								{song === 'Ghost'
+									? ' 👻'
+									: song === 'Deal'
+									? ' 🤝'
+									: song === 'Fire on the Mountain'
+									? ' 🔥⛰️'
+									: song === "Wolfman's Brother"
+									? ' 🐺'
+                  : song === 'Tube'
+                  ? ' 🧪'
+                  : song === 'Simple' || song === 'Cities'
+                  ? ' 🌆'
+                  : song === 'The Sloth'
+                  ? ' 🦥'
+                  : song === 'Turtle in the Clouds'
+                  ? ' 🐢☁️'
+                  : song === 'The Lizards'
+                  ? ' 🦎'
+                  : song === 'Bathtub Gin'
+                  ? ' 🛁🍸'
+                  : song === 'Sand'
+                  ? ' ⏳'
+                  : song === 'Waves' || song === 'A Wave of Hope' || song === 'Ruby Waves'
+                  ? ' 🌊'
+                  : song === 'Split Open and Melt'
+                  ? ' 🫠'
+									: ''}
+							</Typography>
+							<Button
+								sx={{ textTransform: 'none' }}
+								onClick={clearSong}
+							>
+								Change Song
+							</Button>
 						</Box>
 					)}
 					{!songExists && song && (
@@ -766,7 +868,7 @@ export default function AddVersion({
 								severity='warning'
 								sx={{ mb: '1em' }}
 							>
-								{song} hasn&apos;t been added yet.
+								{song} hasn&apos;t been added yet. Can you believe it?
 							</Alert>
 							<AddSong
 								song={song}
@@ -805,26 +907,11 @@ export default function AddVersion({
 								date={date}
 							/>
 						)}
-					{artist &&
-						!shows &&
-						!loadingShows &&
-						artist !== 'Goose' &&
-						artist !== 'Eggy' &&
-						artist !== 'Neighbor' &&
-						artist !== "Umphrey's McGee" &&
-						artist === 'Phish' &&
-						artist === 'Trey Anastasio (TAB)' && (
-							<DatePicker
-								setDate={setDate}
-								my={'1em'}
-								date={date}
-							/>
-						)}
 					{loadingShows && <Typography>Loading shows...</Typography>}
-					{artist && shows && !location && !date && (
+					{artist && shows && shows.length > 0 && !location && !date && (
 						<Typography>Choose a show</Typography>
 					)}
-					{artist && shows && (!location || !date) && (
+					{artist && shows && shows.length > 0 && (!location || !date) && (
 						<>
 							<ShowPicker
 								show={show}
@@ -832,22 +919,41 @@ export default function AddVersion({
 								setShow={setShow}
 								setDate={setDate}
 								setLocation={setLocation}
-                setShowLocationInput={setShowLocationInput}
+								setShowLocationInput={setShowLocationInput}
 							/>
+							<Typography>or</Typography>
 						</>
 					)}
+					{artist && !date && (
+						// artist !== 'Goose' &&
+						// artist !== 'Eggy' &&
+						// artist !== 'Neighbor' &&
+						// artist !== "Umphrey's McGee" &&
+						// artist === 'Phish' &&
+						// artist === 'Trey Anastasio (TAB)' &&
+						<DatePicker
+							setDate={setDate}
+							my={'1em'}
+							date={date}
+						/>
+					)}
 					{date && (
-            <Box sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-            }}>
-						<Typography
-							fontSize={22}
+						<Box
+							sx={{
+								display: 'flex',
+								justifyContent: 'space-between',
+							}}
 						>
-							{new Date(date + 'T12:00:00Z').toLocaleDateString()}
-						</Typography>
-            <Button sx={{textTransform: 'none' }} onClick={() => clearDate()}>Change Date</Button>
-            </Box>
+							<Typography fontSize={18}>
+								{new Date(date + 'T12:00:00Z').toLocaleDateString()}
+							</Typography>
+							<Button
+								sx={{ textTransform: 'none' }}
+								onClick={() => clearDate()}
+							>
+								Change Date
+							</Button>
+						</Box>
 					)}
 					{dateErrorText && (
 						<Alert
@@ -874,34 +980,43 @@ export default function AddVersion({
 							/>
 						</Box>
 					)}
-          {location &&
-            <Box sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-            }}>
-              <Typography fontSize={22}>{location}</Typography>
-              <Button sx={{textTransform: 'none' }} onClick={() => changeLocation()}>Change Location</Button>
-            </Box>
-            }
-					{!versionExists && ((songExists && artist && date) || location) && showLocationInput && (
+					{location && (
 						<Box
-							mx='0.25em'
-							my='1em'
+							sx={{
+								display: 'flex',
+								justifyContent: 'space-between',
+							}}
 						>
-							<TextField
-								autoFocus
-								id='name'
-								label='Location'
-								type='text'
-								fullWidth
-								variant='standard'
-								multiline
-								maxRows={2}
-								value={location}
-								onChange={handleLocationChange}
-							/>
+							<Typography fontSize={18}>{location}</Typography>
+							<Button
+								sx={{ textTransform: 'none' }}
+								onClick={() => changeLocation()}
+							>
+								Change Location
+							</Button>
 						</Box>
 					)}
+					{!versionExists &&
+						((songExists && artist && date) || location || noSetlistFound) &&
+						showLocationInput && (
+							<Box
+								mx='0.25em'
+								my='1em'
+							>
+								<TextField
+									autoFocus
+									id='name'
+									label='Location'
+									type='text'
+									fullWidth
+									variant='standard'
+									multiline
+									maxRows={2}
+									value={location}
+									onChange={handleLocationChange}
+								/>
+							</Box>
+						)}
 					{locationErrorText && (
 						<Alert
 							severity='error'
@@ -917,28 +1032,17 @@ export default function AddVersion({
 						location &&
 						location.length > 2 && (
 							<>
-								<Typography
-									mx='0.25em'
-									my='1em'
-								>
-									Optional:
-								</Typography>
+								<Typography my='1em'>Optional:</Typography>
 								<TagPicker
 									tagsSelected={tags}
 									setTagsSelected={setTags}
 									size={'normal'}
 									my={'1em'}
+									mx={0}
 								/>
-								{tagsText && (
-									<Typography
-										mx='0.25em'
-										my='1em'
-									>
-										{tagsText}
-									</Typography>
-								)}
+								{tagsText && <Typography my='1em'>{tagsText}</Typography>}
 								<TextField
-									sx={{ mb: '1em', mx: '0.25em' }}
+									sx={{ mb: '1em' }}
 									// margin="dense"
 									id='listen_link'
 									label='Link (Relisten, YouTube)'
@@ -949,34 +1053,43 @@ export default function AddVersion({
 									maxRows={2}
 									onChange={(e) => setListenLink(e.target.value)}
 								/>
-								<FormControl sx={{ my: '1em', mx: '0.25em' }}>
-									<InputLabel id='rating-select-label'>Rating</InputLabel>
-									<Select
-										size='normal'
-										labelId='rating-select-label'
-										id='rating-select'
-										value={rating}
-										label='Rating'
-										onChange={handleRatingChange}
-									>
-										<MenuItem value={10}>10</MenuItem>
-										<MenuItem value={9}>9</MenuItem>
-										<MenuItem value={8}>8</MenuItem>
-										<MenuItem value={7}>7</MenuItem>
-										<MenuItem value={6}>6</MenuItem>
-										<MenuItem value={5}>5</MenuItem>
-										<MenuItem value={4}>4</MenuItem>
-									</Select>
-									<TextField
-										sx={{ mt: '1em', mx: '0.25em' }}
-										id='comment'
-										label='Comments'
-										type='text'
-										fullWidth
-										variant='standard'
-										multiline
-										onChange={handleCommentChange}
-									/>
+								<FormControl
+									fullWidth
+									sx={{ my: '1em' }}
+								>
+									<Stack>
+										<InputLabel id='rating-select-label'>Rating</InputLabel>
+										<Select
+											size='normal'
+											sx={{
+												maxWidth: '100px',
+											}}
+											labelId='rating-select-label'
+											id='rating-select'
+											value={rating}
+											label='Rating'
+											onChange={handleRatingChange}
+										>
+											<MenuItem value={10}>10</MenuItem>
+											<MenuItem value={9}>9</MenuItem>
+											<MenuItem value={8}>8</MenuItem>
+											<MenuItem value={7}>7</MenuItem>
+											<MenuItem value={6}>6</MenuItem>
+											<MenuItem value={5}>5</MenuItem>
+											<MenuItem value={4}>4</MenuItem>
+											<MenuItem value={null}>No rating</MenuItem>
+										</Select>
+										<TextField
+											sx={{ mt: '1em', mx: '0.25em' }}
+											id='comment'
+											label='Comments'
+											type='text'
+											fullWidth
+											variant='standard'
+											multiline
+											onChange={handleCommentChange}
+										/>
+									</Stack>
 								</FormControl>
 							</>
 						)}
@@ -997,15 +1110,16 @@ export default function AddVersion({
 						location.length > 2 &&
 						!dateErrorText &&
 						!successAlertText && (
-							<Button variant='contained'
+							<Button
+								variant='contained'
 								onClick={handleSubmit}
 								disabled={loading || !user || !profile || !songExists}
 								sx={{ textTransform: 'none' }}
 							>
-								Add Version
+								Add this Jam
 							</Button>
 						)}
-            <Button
+					<Button
 						onClick={handleClose}
 						sx={{ textTransform: 'none' }}
 					>

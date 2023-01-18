@@ -37,7 +37,7 @@ export default async function handler(req, res) {
           }
           res.status(200).send({ titles, location });
         } else {
-          res.status(500).send({message: 'No setlist found'})
+          res.status(500).send({message: 'No setlist found', error: true})
         }
       })
   }

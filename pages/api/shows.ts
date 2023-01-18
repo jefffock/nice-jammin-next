@@ -17,7 +17,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 	fetch(url, options)
 		.then((res) => res.json())
 		.then((json) => {
-			console.log(json);
 			res.status(200).json(json);
 		})
 		.catch((err) => console.error('error:' + err));

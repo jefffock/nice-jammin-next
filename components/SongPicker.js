@@ -98,8 +98,8 @@ export default function SongPicker({
 	if (!setlist || setlist.length === 0) {
 		return (
 			<Box
-				mx={mx ? mx : '0.5em'}
 				my={my ? my : '0.4em'}
+        mx={mx ? mx : '0.4em'}
 				sx={{
 					minWidth: '180px',
 					maxWidth: '240px',
@@ -146,9 +146,11 @@ export default function SongPicker({
 	} else {
 		//setlist is present
 		return (
-			<Box my={my ? my : '0.25em'}>
+			<Box my={my ? my : '0.25em'}
+      mx={mx ? mx : '0.25em'}
+      >
 				<FormControl
-					sx={{ minWidth: 120, mx: '0.25em' }}
+					sx={{ minWidth: 120 }}
 					size={size ? size : 'small'}
 				>
 					<InputLabel id='song-select'>Song</InputLabel>

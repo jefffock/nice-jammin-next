@@ -35,7 +35,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       .eq('name', song)
     if (error || data.length === 0) {
       console.error('error getting songfish songid from supabase', error)
-      // res.status(500).send({message: 'Error getting song id'})
+      res.status(500).send([])
     } else {
       songId = data[0]?.id
       const url = `${baseUrl}/setlists/song_id/${songId}`
@@ -56,11 +56,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
               }
             })
             res.status(200).send(versionsLessData.reverse())
-          }
+          } res.status(500).send([])
         })
     }
     //use songid to get versions from songfish apis
   } catch (error) {
-    res.status(500).send(error)
+    res.status(500).send([])
   }
 }

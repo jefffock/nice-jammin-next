@@ -34,7 +34,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             res.status(200).json({ titles, location })
           } else {
             console.error('no setlist found')
-            res.status(500).send({message: 'no setlist found or error'})
+            res.status(500).send({message: 'no setlist found or error', error: true})
           }
         })
     } catch (error) {

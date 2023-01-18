@@ -483,7 +483,7 @@ export default function RateVersion({
 				<DialogContent>
 					{!user && (
 						<Alert
-							severity='warning'
+							severity='info'
 							sx={{ mb: '1em' }}
 						>
 							Please <Link href='/login'>log in</Link> to rate this jam - thank you!
@@ -509,6 +509,7 @@ export default function RateVersion({
 										<MenuItem value={7}>7</MenuItem>
 										<MenuItem value={6}>6</MenuItem>
 										<MenuItem value={5}>5</MenuItem>
+                    <MenuItem value={4}>4</MenuItem>
                     <MenuItem value={null}>No rating</MenuItem>
 									</Select>
 								</FormControl>

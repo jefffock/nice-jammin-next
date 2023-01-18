@@ -6,7 +6,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 	const body = JSON.parse(req.body);
 	const artist = body.artist;
 	const year = body.year;
-	console.log('body', body);
 	let baseUrl;
 	switch (artist) {
 		case 'Goose':
@@ -24,7 +23,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 	}
 	// const url = `${baseUrl}/shows/show_year/${year}.json?order_by=showdate`
 	const url = `${baseUrl}/shows/show_year/${year}.json?order_by=showdate`;
-	console.log('url in shows', url);
 	try {
 		await fetch(url)
 			.then((data) => data.json())
