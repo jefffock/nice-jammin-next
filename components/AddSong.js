@@ -172,7 +172,7 @@ export default function AddSong({
 							severity='info'
 							sx={{ my: '1em' }}
 						>
-							The band doesn't have to be the original artist, just the band on
+							The band doesn&apos;t have to be the original artist, just the band on
 							NiceJammin that plays it the most.
 						</Alert>
 					)}
