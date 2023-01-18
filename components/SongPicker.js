@@ -18,6 +18,7 @@ export default function SongPicker({
 	size,
 	mx,
 	my,
+	loadingSetlist,
 }) {
 	const [value, setValue] = useState(song || '');
 	const [inputValue, setInputValue] = useState(song || '');
@@ -95,11 +96,11 @@ export default function SongPicker({
 		setSong(event.target.value);
 	};
 
-	if (!setlist || setlist.length === 0) {
+	if (!loadingSetlist && (!setlist || setlist.length === 0)) {
 		return (
 			<Box
 				my={my ? my : '0.4em'}
-        mx={mx ? mx : '0.4em'}
+				mx={mx ? mx : '0.4em'}
 				sx={{
 					minWidth: '180px',
 					maxWidth: '240px',
@@ -143,12 +144,13 @@ export default function SongPicker({
 				/>
 			</Box>
 		);
-	} else {
+	} else if (!loadingSetlist && setlist && setlist.length > 0) {
 		//setlist is present
 		return (
-			<Box my={my ? my : '0.25em'}
-      mx={mx ? mx : '0.25em'}
-      >
+			<Box
+				my={my ? my : '0.25em'}
+				mx={mx ? mx : '0.25em'}
+			>
 				<FormControl
 					sx={{ minWidth: 120 }}
 					size={size ? size : 'small'}

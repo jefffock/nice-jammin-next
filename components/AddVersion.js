@@ -814,7 +814,7 @@ export default function AddVersion({
 						!date && (
 							<Typography>Choose a song or year to view shows</Typography>
 						)}
-					{artist && !song && (date || location) && (
+					{artist && !song && !loadingSetlist && (date || location) && (
 						<Typography>Choose a song</Typography>
 					)}
 					{artist &&
@@ -837,6 +837,7 @@ export default function AddVersion({
 								size={'normal'}
 								mx={'0em'}
 								my={'1em'}
+                loadingSetlist={loadingSetlist}
 							/>
 						)}
 					{artist && song && (

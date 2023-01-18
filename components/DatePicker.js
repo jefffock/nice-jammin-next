@@ -28,7 +28,8 @@ export default function DatePicker({ setDate, my, date }) {
 	});
 
 	const handleDateInputChange = (e) => {
-		let dateInput = e.target.value;
+		setDateInput(e.target.value);
+    let dateInput = e.target.value;
 		let dateInputError = false;
 		let dateErrorText = '';
 		if (dateInput.length === 8) {
