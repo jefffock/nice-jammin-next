@@ -6,10 +6,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const body = JSON.parse(req.body)
   const artist = body.artist
   const date = body.date
-  console.log('date', date)
   const [year, month, day] = date.split('-')
   const transformedDate = [day, month, year].join('-')
-  console.log('transformed date', transformedDate)
   const mbid = serverRuntimeConfig.mbids[artist]
   const url = `https://api.setlist.fm/rest/1.0/search/setlists?artistMbid=${mbid}&date=${transformedDate}`
   let apiKey = process.env.SETLISTFM_API_KEY
@@ -36,7 +34,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             res.status(200).json({ titles, location })
           } else {
             console.error('no setlist found')
-            res.status(500).send({message: 'no setlist found or error'})
+            res.status(500).send({message: 'no setlist found or error', error: true})
           }
         })
     } catch (error) {

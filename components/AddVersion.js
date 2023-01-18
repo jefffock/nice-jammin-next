@@ -24,8 +24,20 @@ import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import RateVersion from './RateVersion';
 import Link from 'next/link';
+import YearPicker from './YearPicker';
+import Stack from '@mui/material/Stack';
+import Image from 'next/image';
+import spinner from '../public/spinner.gif';
 
-export default function AddVersion({ songs, jams, user, profile, setSongs, initialArtist, initialSong }) {
+export default function AddVersion({
+	songs,
+	jams,
+	user,
+	profile,
+	setSongs,
+	initialArtist,
+	initialSong,
+}) {
 	const [artist, setArtist] = useState(initialArtist);
 	const [song, setSong] = useState(initialSong ?? '');
 	const [songObj, setSongObj] = useState(null);
@@ -97,6 +109,9 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 	const [njVersionsDatesOnly, setNjVersionsDatesOnly] = useState(null);
 	const [versionExists, setVersionExists] = useState(false);
 	const [jam, setJam] = useState(null);
+	const [year, setYear] = useState('');
+	const [showLocationInput, setShowLocationInput] = useState(true);
+	const [noSetlistFound, setNoSetlistFound] = useState(false);
 
 	useEffect(() => {
 		if (songs) {
@@ -216,9 +231,10 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 							const setlist = responses[0].titles;
 							const njVersions = responses[1];
 							const location = responses[0].location;
-							if (!setlist || setlist.length === 0) {
+							if (responses.error || !setlist || setlist.length === 0) {
 								setSetlist(null);
-								setLocation(null);
+								setNoSetlistFound(true);
+								setShowLocationInput(true);
 								setLoadingSetlist(false);
 							} else {
 								const comboSetlist = setlist.map((song) => {
@@ -234,6 +250,7 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 								setSetlist(comboSetlist);
 								if (location) {
 									setLocation(location);
+									setShowLocationInput(false);
 								}
 								setLoadingSetlist(false);
 							}
@@ -324,7 +341,9 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 					}
 				}
 			);
-			setShows(showsWithAlreadyAdded);
+			showsWithAlreadyAdded.length > 0
+				? setShows(showsWithAlreadyAdded)
+				: setShows(null);
 		}
 	}, [allShows, njVersionsDatesOnly]);
 
@@ -408,6 +427,17 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 		return true;
 	};
 
+	const clearArtist = () => {
+		setArtist(null);
+		setSong(null);
+		setDate('');
+		setLocation(null);
+		setSetlist(null);
+		setLoadingSetlist(false);
+		setLoadingShows(false);
+		setLoading(false);
+	};
+
 	const clearDate = () => {
 		setDate('');
 		setShow(null);
@@ -423,6 +453,21 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 		setLoadingSetlist(false);
 		setLoadingShows(false);
 		setLoading(false);
+	};
+
+	const clearYear = () => {
+		setLocation(null);
+		setYear(null);
+		setShows(null);
+		setLoadingShows(false);
+		setLoading(false);
+		setSetlist(null);
+		setLoadingSetlist(false);
+		setDate('');
+	};
+
+	const changeLocation = () => {
+		setShowLocationInput(true);
 	};
 
 	const insertVersion = async () => {
@@ -635,30 +680,97 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 					textTransform: 'none',
 				}}
 			>
-				Add a Jam
+				Add a 🔥 Jam
 			</Button>
 			<Dialog
 				open={open}
 				onClose={handleClose}
 				sx={{ minHeight: '50vh' }}
 			>
-				<DialogTitle>Add a Great Jam</DialogTitle>
+				<DialogTitle fontSize={26}>Add a 🔥 Jam</DialogTitle>
 				<DialogContent sx={{ minHeight: '300px', minWidth: '300px' }}>
+					<Typography sx={{ mb: '1em' }}>
+						Thanks for helping this jam reach more ears 🙏 You rock! 🎸
+					</Typography>
 					{!user && (
 						<Alert
-							severity='error'
-							sx={{ mb: '1em' }}
+							severity='info'
+							sx={{ my: '1em' }}
 						>
-							Please <Link href='/login'>log in</Link> to contribute - thank you!
+							Please <Link href='/login'>log in</Link> to contribute - thank
+							you!
 						</Alert>
 					)}
-					{user && (
+					{user && (!artist || artist === 'All Bands') && (
 						<ArtistPicker
 							artist={artist}
 							setArtist={setArtist}
 							size={'normal'}
 							my={'1em'}
 						/>
+					)}
+					{artist && artist !== 'All Bands' && (
+						<Box
+							sx={{
+								display: 'flex',
+								justifyContent: 'space-between',
+							}}
+						>
+							<Typography fontSize={18}>
+								{artist}
+								{artist === 'Phish'
+									? ' 🐟 ⭕'
+									: artist === 'Grateful Dead' ||
+									  artist === 'Dead & Company' ||
+									  artist === "Joe Russo's Almost Dead" ||
+									  artist === 'Phil Lesh & Friends' ||
+									  artist === 'Furthur'
+									? ' ⚡'
+									: artist === 'Lettuce'
+									? ' 🥬'
+									: artist === 'Eggy'
+									? ' 🥚'
+									: artist === 'Lotus'
+									? ' 🪷'
+									: artist === 'Railroad Earth'
+									? ' 🚂🌎'
+									: artist === 'String Cheese Incident'
+									? ' 🧀'
+									: artist === 'Disco Biscuits'
+									? ' 🪩'
+									: artist === 'Ghost Light'
+									? ' 👻'
+									: artist === 'Aqueous'
+									? ' 💧'
+									: artist === 'King Gizzard & the Lizard Wizard'
+									? ' 🦎🧙‍♂️'
+									: artist === 'Billy Strings'
+									? ' 🎻'
+									: artist === 'Greensky Bluegrass'
+									? ' 🪕'
+									: artist === 'My Morning Jacket'
+									? ' 🧥'
+									: artist === 'Neighbor'
+									? ' 🏡'
+									: artist === 'Tedeschi Trucks Band'
+									? ' 🚚 🚛'
+									: artist === 'Squeaky Feet'
+									? ' 🦶🏻'
+									: artist === 'Medeski Martin & Wood'
+									? ' 🪵'
+									: artist === 'Goose'
+									? ' 🦢'
+									: artist === 'Trey Anastasio, TAB'
+									? ' ▫️'
+									: ' ❤️'}
+							</Typography>
+							<Button
+								sx={{ textTransform: 'none' }}
+								onClick={clearArtist}
+							>
+								Change Artist
+							</Button>
+						</Box>
 					)}
 					{artistErrorText && (
 						<Alert
@@ -668,23 +780,112 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 							{artistErrorText}
 						</Alert>
 					)}
-					{loadingSetlist && <Typography>Loading Setlist...</Typography>}
-					{artist && (
-						<SongPicker
-							artist={artist}
-							songs={songs}
-							song={song}
-							setSong={setSong}
-							setlist={setlist}
-							setSetlist={setSetlist}
-							wide={true}
-							size={'normal'}
-							mx={'0.25em'}
-							my={'1em'}
-						/>
+					{loadingSetlist && (
+						<Box
+							sx={{
+								display: 'flex',
+							}}
+						>
+							{/* <img
+								src='/spinner.gif'
+								alt='loading'
+								height={'30px'}
+								width={'30px'}
+							/> */}
+							<Image
+								src='/spinner.gif'
+								alt='loading'
+								height={30}
+								width={30}
+							/>
+							<Typography>Loading Setlist...</Typography>
+						</Box>
 					)}
+					{artist &&
+						!song &&
+						!year &&
+						(artist === 'Goose' ||
+							artist === 'Eggy' ||
+							artist === 'Neighbor' ||
+							artist === "Umphrey's McGee" ||
+							artist === 'Phish' ||
+							artist === 'Trey Anastasio (TAB)') &&
+						!location &&
+						!date && (
+							<Typography>Choose a song or year to view shows</Typography>
+						)}
+					{artist && !song && !loadingSetlist && (date || location) && (
+						<Typography>Choose a song</Typography>
+					)}
+					{artist &&
+						!songExists &&
+						(date ||
+							artist === 'Goose' ||
+							artist === 'Eggy' ||
+							artist === 'Neighbor' ||
+							artist === "Umphrey's McGee" ||
+							artist === 'Phish' ||
+							artist === 'Trey Anastasio (TAB)') && (
+							<SongPicker
+								artist={artist}
+								songs={songs}
+								song={song}
+								setSong={setSong}
+								setlist={setlist}
+								setSetlist={setSetlist}
+								wide={true}
+								size={'normal'}
+								mx={'0em'}
+								my={'1em'}
+                loadingSetlist={loadingSetlist}
+							/>
+						)}
 					{artist && song && (
-						<Button onClick={() => clearSong()}>Clear Song</Button>
+						<Box
+							sx={{
+								display: 'flex',
+								justifyContent: 'space-between',
+							}}
+						>
+							<Typography fontSize={18}>
+								{song}
+								{song === 'Ghost'
+									? ' 👻'
+									: song === 'Deal'
+									? ' 🤝'
+									: song === 'Fire on the Mountain'
+									? ' 🔥⛰️'
+									: song === "Wolfman's Brother"
+									? ' 🐺'
+									: song === 'Tube'
+									? ' 🧪'
+									: song === 'Simple' || song === 'Cities'
+									? ' 🌆'
+									: song === 'The Sloth'
+									? ' 🦥'
+									: song === 'Turtle in the Clouds'
+									? ' 🐢☁️'
+									: song === 'The Lizards'
+									? ' 🦎'
+									: song === 'Bathtub Gin'
+									? ' 🛁🍸'
+									: song === 'Sand'
+									? ' ⏳'
+									: song === 'Waves' ||
+									  song === 'A Wave of Hope' ||
+									  song === 'Ruby Waves'
+									? ' 🌊'
+									: song === 'Split Open and Melt'
+									? ' 🫠'
+									: ''}
+							</Typography>
+							<Button
+								sx={{ textTransform: 'none' }}
+								onClick={clearSong}
+							>
+								Change Song
+							</Button>
+						</Box>
 					)}
 					{!songExists && song && (
 						<>
@@ -692,7 +893,7 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 								severity='warning'
 								sx={{ mb: '1em' }}
 							>
-								{song} hasn&apos;t been added yet.
+								{song} hasn&apos;t been added yet. Can you believe it?
 							</Alert>
 							<AddSong
 								song={song}
@@ -714,30 +915,91 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 							{songErrorText}
 						</Alert>
 					)}
-					{artist && !shows && !loadingShows && (
+					{artist &&
+						!song &&
+						(artist === 'Goose' ||
+							artist === 'Eggy' ||
+							artist === 'Neighbor' ||
+							artist === "Umphrey's McGee" ||
+							artist === 'Phish' ||
+							artist === 'Trey Anastasio (TAB)') && (
+							<YearPicker
+								artist={artist}
+								setShows={setShows}
+								year={year}
+								setYear={setYear}
+								clearYear={clearYear}
+								date={date}
+                setLoadingShows={setLoadingShows}
+							/>
+						)}
+					{loadingShows && (
+						<Box
+							sx={{
+								display: 'flex',
+							}}
+						>
+							{/* <img
+								src='/spinner.gif'
+								alt='loading'
+								height={'30px'}
+								width={'30px'}
+							/> */}
+              <Image
+								src='/spinner.gif'
+								alt='loading'
+								height={30}
+								width={30}
+							/>
+							<Typography>Loading Shows...</Typography>
+						</Box>
+					)}
+					{artist && shows && shows.length > 0 && !location && !date && (
+						<Typography>Choose a show</Typography>
+					)}
+					{artist && shows && shows.length > 0 && (!location || !date) && (
+						<>
+							<ShowPicker
+								show={show}
+								shows={shows}
+								setShow={setShow}
+								setDate={setDate}
+								setLocation={setLocation}
+								setShowLocationInput={setShowLocationInput}
+							/>
+							<Typography>or</Typography>
+						</>
+					)}
+					{artist && !date && (
+						// artist !== 'Goose' &&
+						// artist !== 'Eggy' &&
+						// artist !== 'Neighbor' &&
+						// artist !== "Umphrey's McGee" &&
+						// artist === 'Phish' &&
+						// artist === 'Trey Anastasio (TAB)' &&
 						<DatePicker
 							setDate={setDate}
 							my={'1em'}
 							date={date}
 						/>
 					)}
-					{loadingShows && <Typography>Loading shows...</Typography>}
-					{artist && shows && (
-						<ShowPicker
-							show={show}
-							shows={shows}
-							setShow={setShow}
-							setDate={setDate}
-							setLocation={setLocation}
-						/>
-					)}
-					{date && shows && (
-						<Typography sx={{ mx: '0.25em', my: '1em' }}>
-							Date: {new Date(date + 'T18:00:00Z').toLocaleDateString()}
-						</Typography>
-					)}
-					{artist && date && (
-						<Button onClick={() => clearDate()}>Clear Date</Button>
+					{date && (
+						<Box
+							sx={{
+								display: 'flex',
+								justifyContent: 'space-between',
+							}}
+						>
+							<Typography fontSize={18}>
+								{new Date(date + 'T12:00:00Z').toLocaleDateString()}
+							</Typography>
+							<Button
+								sx={{ textTransform: 'none' }}
+								onClick={() => clearDate()}
+							>
+								Change Date
+							</Button>
+						</Box>
 					)}
 					{dateErrorText && (
 						<Alert
@@ -764,25 +1026,43 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 							/>
 						</Box>
 					)}
-					{!versionExists && ((songExists && artist && date) || location) && (
+					{location && (
 						<Box
-							mx='0.25em'
-							my='1em'
+							sx={{
+								display: 'flex',
+								justifyContent: 'space-between',
+							}}
 						>
-							<TextField
-								autoFocus
-								id='name'
-								label='Location'
-								type='text'
-								fullWidth
-								variant='standard'
-								multiline
-								maxRows={2}
-								value={location}
-								onChange={handleLocationChange}
-							/>
+							<Typography fontSize={18}>{location}</Typography>
+							<Button
+								sx={{ textTransform: 'none' }}
+								onClick={() => changeLocation()}
+							>
+								Change Location
+							</Button>
 						</Box>
 					)}
+					{!versionExists &&
+						((songExists && artist && date) || location || noSetlistFound) &&
+						showLocationInput && (
+							<Box
+								mx='0.25em'
+								my='1em'
+							>
+								<TextField
+									autoFocus
+									id='name'
+									label='Location'
+									type='text'
+									fullWidth
+									variant='standard'
+									multiline
+									maxRows={2}
+									value={location}
+									onChange={handleLocationChange}
+								/>
+							</Box>
+						)}
 					{locationErrorText && (
 						<Alert
 							severity='error'
@@ -798,28 +1078,17 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 						location &&
 						location.length > 2 && (
 							<>
-								<Typography
-									mx='0.25em'
-									my='1em'
-								>
-									Optional:
-								</Typography>
+								<Typography my='1em'>Optional:</Typography>
 								<TagPicker
 									tagsSelected={tags}
 									setTagsSelected={setTags}
 									size={'normal'}
 									my={'1em'}
+									mx={0}
 								/>
-								{tagsText && (
-									<Typography
-										mx='0.25em'
-										my='1em'
-									>
-										{tagsText}
-									</Typography>
-								)}
+								{tagsText && <Typography my='1em'>{tagsText}</Typography>}
 								<TextField
-									sx={{ mb: '1em', mx: '0.25em' }}
+									sx={{ mb: '1em' }}
 									// margin="dense"
 									id='listen_link'
 									label='Link (Relisten, YouTube)'
@@ -830,37 +1099,43 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 									maxRows={2}
 									onChange={(e) => setListenLink(e.target.value)}
 								/>
-								<FormControl sx={{ my: '1em', mx: '0.25em' }}>
-									<InputLabel id='rating-select-label'>Rating</InputLabel>
-									<Select
-										size='normal'
-										labelId='rating-select-label'
-										id='rating-select'
-										value={rating}
-										label='Rating'
-										onChange={handleRatingChange}
-									>
-										<MenuItem value={10}>10</MenuItem>
-										<MenuItem value={9}>9</MenuItem>
-										<MenuItem value={8}>8</MenuItem>
-										<MenuItem value={7}>7</MenuItem>
-										<MenuItem value={6}>6</MenuItem>
-										<MenuItem value={5}>5</MenuItem>
-										<MenuItem value={4}>4</MenuItem>
-										<MenuItem value={3}>3</MenuItem>
-										<MenuItem value={2}>2</MenuItem>
-										<MenuItem value={1}>1</MenuItem>
-									</Select>
-									<TextField
-										sx={{ mt: '1em' }}
-										id='comment'
-										label='Comments'
-										type='text'
-										fullWidth
-										variant='standard'
-										multiline
-										onChange={handleCommentChange}
-									/>
+								<FormControl
+									fullWidth
+									sx={{ my: '1em' }}
+								>
+									<Stack>
+										<InputLabel id='rating-select-label'>Rating</InputLabel>
+										<Select
+											size='normal'
+											sx={{
+												maxWidth: '100px',
+											}}
+											labelId='rating-select-label'
+											id='rating-select'
+											value={rating}
+											label='Rating'
+											onChange={handleRatingChange}
+										>
+											<MenuItem value={10}>10</MenuItem>
+											<MenuItem value={9}>9</MenuItem>
+											<MenuItem value={8}>8</MenuItem>
+											<MenuItem value={7}>7</MenuItem>
+											<MenuItem value={6}>6</MenuItem>
+											<MenuItem value={5}>5</MenuItem>
+											<MenuItem value={4}>4</MenuItem>
+											<MenuItem value={null}>No rating</MenuItem>
+										</Select>
+										<TextField
+											sx={{ mt: '1em', mx: '0.25em' }}
+											id='comment'
+											label='Comments'
+											type='text'
+											fullWidth
+											variant='standard'
+											multiline
+											onChange={handleCommentChange}
+										/>
+									</Stack>
 								</FormControl>
 							</>
 						)}
@@ -874,12 +1149,6 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 					)}
 				</DialogContent>
 				<DialogActions>
-					<Button
-						onClick={handleClose}
-						sx={{ textTransform: 'none' }}
-					>
-						Close
-					</Button>
 					{artist &&
 						song &&
 						date &&
@@ -888,13 +1157,20 @@ export default function AddVersion({ songs, jams, user, profile, setSongs, initi
 						!dateErrorText &&
 						!successAlertText && (
 							<Button
+								variant='contained'
 								onClick={handleSubmit}
 								disabled={loading || !user || !profile || !songExists}
 								sx={{ textTransform: 'none' }}
 							>
-								Add Version
+								Add this Jam
 							</Button>
 						)}
+					<Button
+						onClick={handleClose}
+						sx={{ textTransform: 'none' }}
+					>
+						Close
+					</Button>
 				</DialogActions>
 			</Dialog>
 		</Box>

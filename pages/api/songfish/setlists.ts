@@ -34,6 +34,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           })
           const location = `${setlist.data[0].venuename}, ${setlist.data[0].city}, ${setlist.data[0].country === 'USA' ? setlist.data[0].state : setlist.data[0].country}`
           res.status(200).send({ titles, location })
+        } else {
+          res.status(200).send({ message: 'No setlist found', error: true })
         }
       })
   } catch (error) {

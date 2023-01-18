@@ -35,7 +35,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       .eq('name', song)
     if (error || data.length === 0) {
       console.error('error getting songfish songid from supabase', error)
-      // res.status(500).send({message: 'Error getting song id'})
+      res.status(500).send([])
     } else {
       songId = data[0]?.id
       const url = `${baseUrl}/setlists/song_id/${songId}`
@@ -46,22 +46,21 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             const versionsLessData = versions.data
             .map(version => {
               const date = new Date(version.showdate + 'T18:00:00Z');
+              const location = `${version.venuename}, ${
+                version.city
+              }, ${version.country === "USA" ? version.state : version.country}`
               return {
                 showdate: version.showdate,
-                location: `${version.venuename}, ${
-                  version.city
-                }, ${version.country === "USA" ? version.state : version.country}`,
-                label: `${date.toLocaleDateString()} - ${version.venuename}, ${
-                  version.city
-                }, ${version.country === "USA" ? version.state : version.country}`
+                location: location,
+                label: `${date.toLocaleDateString()} - ${location}`
               }
             })
             res.status(200).send(versionsLessData.reverse())
-          }
+          } res.status(500).send([])
         })
     }
     //use songid to get versions from songfish apis
   } catch (error) {
-    res.status(500).send(error)
+    res.status(500).send([])
   }
 }
