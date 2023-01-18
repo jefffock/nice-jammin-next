@@ -62,6 +62,9 @@ export default function YearPicker({ setShows, artist, year, setYear, clearYear,
 				case 'Neighbor':
           url = '/api/songfish/shows'
           break;
+        case 'Phish':
+          url = '/api/phish/shows'
+          break;
       }
       if (url) {
         const response = await fetch(url, {
@@ -111,10 +114,6 @@ export default function YearPicker({ setShows, artist, year, setYear, clearYear,
             ))}
           </Select>
         </FormControl>
-        <br/>
-        {year &&
-        <Button onClick={clearYear}>Clear Year</Button>
-        }
       </Box>
     );
   }

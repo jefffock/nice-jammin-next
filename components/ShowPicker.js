@@ -14,12 +14,13 @@ export default function ShowPicker({
 	setLocation,
 	size,
 	my,
+  setShowLocationInput,
 }) {
 	const handleChange = (event) => {
-		console.log('event.target.value', event.target.value);
 		setShow(event.target.value);
 		setDate(event.target.value.showdate);
 		setLocation(event.target.value.location);
+    setShowLocationInput(false)
 	};
 
 	return (

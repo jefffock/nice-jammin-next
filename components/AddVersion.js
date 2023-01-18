@@ -25,6 +25,7 @@ import FormControl from '@mui/material/FormControl';
 import RateVersion from './RateVersion';
 import Link from 'next/link';
 import YearPicker from './YearPicker';
+import Stack from '@mui/material/Stack';
 
 export default function AddVersion({
 	songs,
@@ -107,6 +108,7 @@ export default function AddVersion({
 	const [versionExists, setVersionExists] = useState(false);
 	const [jam, setJam] = useState(null);
 	const [year, setYear] = useState('');
+  const [showLocationInput, setShowLocationInput] = useState(true);
 
 	useEffect(() => {
 		if (songs) {
@@ -451,15 +453,19 @@ export default function AddVersion({
 	};
 
 	const clearYear = () => {
-    setLocation(null)
+		setLocation(null);
 		setYear(null);
 		setShows(null);
 		setLoadingShows(false);
 		setLoading(false);
-    setSetlist(null)
-    setLoadingSetlist(false)
-    setDate('')
+		setSetlist(null);
+		setLoadingSetlist(false);
+		setDate('');
 	};
+
+  const changeLocation = () => {
+    setShowLocationInput(true);
+  };
 
 	const insertVersion = async () => {
 		const { data, error } = await supabase.from('versions').insert([
@@ -678,7 +684,7 @@ export default function AddVersion({
 				onClose={handleClose}
 				sx={{ minHeight: '50vh' }}
 			>
-				<DialogTitle fontSize={26}>Add a Great Jam</DialogTitle>
+				<DialogTitle fontSize={26}>Add a Jam</DialogTitle>
 				<DialogContent sx={{ minHeight: '300px', minWidth: '300px' }}>
 					{!user && (
 						<Alert
@@ -698,10 +704,13 @@ export default function AddVersion({
 						/>
 					)}
 					{artist && artist !== 'All Bands' && (
-						<>
+            <Box sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}>
 							<Typography fontSize={22}>{artist}</Typography>
-							<Button onClick={() => clearArtist()}>Clear Artist</Button>
-						</>
+							<Button sx={{ textTransform: 'none'}} onClick={clearArtist}>Change Artist</Button>
+            </Box>
 					)}
 					{artistErrorText && (
 						<Alert
@@ -718,7 +727,9 @@ export default function AddVersion({
 						(artist === 'Goose' ||
 							artist === 'Eggy' ||
 							artist === 'Neighbor' ||
-							artist === "Umphrey's McGee") &&
+							artist === "Umphrey's McGee" ||
+							artist === 'Phish' ||
+							artist === 'Trey Anastasio (TAB)') &&
 						!location &&
 						!date && (
 							<Typography>Choose a song or year to view shows</Typography>
@@ -741,10 +752,13 @@ export default function AddVersion({
 						/>
 					)}
 					{artist && song && (
-						<>
+						<Box sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}>
 							<Typography fontSize={22}>{song}</Typography>
-							<Button onClick={() => clearSong()}>Clear Song</Button>
-						</>
+							<Button sx={{ textTransform: 'none'}} onClick={clearSong}>Change Song</Button>
+						</Box>
 					)}
 					{!songExists && song && (
 						<>
@@ -779,14 +793,16 @@ export default function AddVersion({
 						(artist === 'Goose' ||
 							artist === 'Eggy' ||
 							artist === 'Neighbor' ||
-							artist === "Umphrey's McGee") && (
+							artist === "Umphrey's McGee" ||
+							artist === 'Phish' ||
+							artist === 'Trey Anastasio (TAB)') && (
 							<YearPicker
 								artist={artist}
 								setShows={setShows}
 								year={year}
 								setYear={setYear}
-                clearYear={clearYear}
-                date={date}
+								clearYear={clearYear}
+								date={date}
 							/>
 						)}
 					{artist &&
@@ -795,7 +811,9 @@ export default function AddVersion({
 						artist !== 'Goose' &&
 						artist !== 'Eggy' &&
 						artist !== 'Neighbor' &&
-						artist !== "Umphrey's McGee" && (
+						artist !== "Umphrey's McGee" &&
+						artist === 'Phish' &&
+						artist === 'Trey Anastasio (TAB)' && (
 							<DatePicker
 								setDate={setDate}
 								my={'1em'}
@@ -814,19 +832,22 @@ export default function AddVersion({
 								setShow={setShow}
 								setDate={setDate}
 								setLocation={setLocation}
+                setShowLocationInput={setShowLocationInput}
 							/>
 						</>
 					)}
-					{date && shows && (
+					{date && (
+            <Box sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}>
 						<Typography
 							fontSize={22}
-							// sx={{ mx: '0.25em', my: '1em' }}
 						>
-							{new Date(date + 'T18:00:00Z').toLocaleDateString()}
+							{new Date(date + 'T12:00:00Z').toLocaleDateString()}
 						</Typography>
-					)}
-					{artist && date && shows && (
-						<Button onClick={() => clearDate()}>Clear Date</Button>
+            <Button sx={{textTransform: 'none' }} onClick={() => clearDate()}>Change Date</Button>
+            </Box>
 					)}
 					{dateErrorText && (
 						<Alert
@@ -853,7 +874,16 @@ export default function AddVersion({
 							/>
 						</Box>
 					)}
-					{!versionExists && ((songExists && artist && date) || location) && (
+          {location &&
+            <Box sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}>
+              <Typography fontSize={22}>{location}</Typography>
+              <Button sx={{textTransform: 'none' }} onClick={() => changeLocation()}>Change Location</Button>
+            </Box>
+            }
+					{!versionExists && ((songExists && artist && date) || location) && showLocationInput && (
 						<Box
 							mx='0.25em'
 							my='1em'
@@ -938,7 +968,7 @@ export default function AddVersion({
 										<MenuItem value={4}>4</MenuItem>
 									</Select>
 									<TextField
-										sx={{ mt: '1em' }}
+										sx={{ mt: '1em', mx: '0.25em' }}
 										id='comment'
 										label='Comments'
 										type='text'
@@ -960,12 +990,6 @@ export default function AddVersion({
 					)}
 				</DialogContent>
 				<DialogActions>
-					<Button
-						onClick={handleClose}
-						sx={{ textTransform: 'none' }}
-					>
-						Close
-					</Button>
 					{artist &&
 						song &&
 						date &&
@@ -973,7 +997,7 @@ export default function AddVersion({
 						location.length > 2 &&
 						!dateErrorText &&
 						!successAlertText && (
-							<Button
+							<Button variant='contained'
 								onClick={handleSubmit}
 								disabled={loading || !user || !profile || !songExists}
 								sx={{ textTransform: 'none' }}
@@ -981,6 +1005,12 @@ export default function AddVersion({
 								Add Version
 							</Button>
 						)}
+            <Button
+						onClick={handleClose}
+						sx={{ textTransform: 'none' }}
+					>
+						Close
+					</Button>
 				</DialogActions>
 			</Dialog>
 		</Box>
