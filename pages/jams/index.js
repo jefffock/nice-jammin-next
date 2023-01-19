@@ -1,5 +1,5 @@
-import { supabase } from '../utils/supabaseClient';
-import Home from '../components/Home';
+import { supabase } from '../../utils/supabaseClient';
+import Home from '../../components/Home';
 import Head from 'next/head';
 
 export default function App({
@@ -53,9 +53,7 @@ export default function App({
 export const getStaticProps = async (ctx) => {
 	const orderBy = 'id';
 	const asc = false;
-	const limit = 100;
-	const showListenable = false;
-	const showRatings = false;
+	const limit =  100;
 	let jams = supabase.from('versions').select('*');
 	jams = jams.order(orderBy, { ascending: asc });
 	jams = jams.limit(limit);
@@ -96,10 +94,10 @@ export const getStaticProps = async (ctx) => {
 			initialOrderBy: orderBy,
 			initialOrder: 'desc',
 			initialLimit: limit,
-			initialShowListenable: showListenable,
-			initialShowMoreFilters: false,
-			initialShowRatings: showRatings,
-			fullUrl: '/',
+			initialShowListenable: false,
+			initialShowMoreFilters:  false,
+			initialShowRatings: false,
+			fullUrl: '/jams',
 			urlToShow: null,
 		},
     revalidate: 10, 
