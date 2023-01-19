@@ -113,6 +113,8 @@ export default function AddIdea({ user, profile, setIdeas }) {
       addTenPoints(profile.name);
       let newIdeas = await fetchIdeas();
       setIdeas(newIdeas);
+      // rebuild
+      fetch('https://api.vercel.com/v1/integrations/deploy/prj_KTTGWtEcoRt7VbckE5pwZXH7QL8E/5gZtO7yzjW')
     }
   }
 

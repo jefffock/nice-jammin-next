@@ -287,6 +287,8 @@ export default function RateVersion({
 						'Successfully updated your rating. Thank you for contributing!'
 					);
 				}
+        // rebuild
+      fetch('https://api.vercel.com/v1/integrations/deploy/prj_KTTGWtEcoRt7VbckE5pwZXH7QL8E/5gZtO7yzjW')
 			} else {
 				await rateVersion(
 					jam.id,
@@ -314,6 +316,8 @@ export default function RateVersion({
 						'Successfully added your rating. Thank you for contributing!'
 					);
 				}
+        // rebuild
+      fetch('https://api.vercel.com/v1/integrations/deploy/prj_KTTGWtEcoRt7VbckE5pwZXH7QL8E/5gZtO7yzjW')
 			}
 		}
 		setLoading(false);

@@ -113,18 +113,20 @@ export default function Home({
 					let reducedParams = params
 						.replace('&showMoreFilters=true', '')
 						.replace('showMoreFilters=true', '');
-					if (fullUrl === '/' && reducedParams === '') {
+					if ((fullUrl === '/' || fullUrl === '/jams') && reducedParams === '') {
 						return;
 					}
 					if ('/?' + reducedParams !== fullUrl) {
 						prevParamsRef.current = reducedParams;
 						if (params.length > 0) {
-
-							router.push(`/?${params}`, null, {
-								scroll: fullUrl === '/',
+							router.push({
+                pathname: '/jams/query/[query]',
+                query: { query: reducedParams },
+              }, null, {
+								scroll: fullUrl === '/' || fullUrl === '/jams',
 							});
 						} else {
-							router.push('/');
+							router.push('/jams');
 						}
 					}
 				}
@@ -384,7 +386,7 @@ export default function Home({
 					setUser={setUser}
 					profile={profile}
 				/>
-				{fullUrl === '/' && (
+				{(fullUrl === '/' || fullUrl === '/jams') && (
 					<>
 						<Box
 							my='3em'

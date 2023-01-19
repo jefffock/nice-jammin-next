@@ -553,6 +553,8 @@ export default function AddVersion({
 					`Successfully added ${song} from ${date}. Thank you for contributing! It will be in the table the next time you refresh the page.`
 				);
 			}
+      //rebuild with deploy hooks 
+      fetch('https://api.vercel.com/v1/integrations/deploy/prj_KTTGWtEcoRt7VbckE5pwZXH7QL8E/5gZtO7yzjW')
 		}
 	};
 

@@ -337,12 +337,11 @@ export default function Contributor({
 	);
 }
 
-export const getServerSideProps = async (ctx) => {
-	const supabase = createServerSupabaseClient(ctx);
+export const getStaticProps = async (ctx) => {
+	// const supabase = createServerSupabaseClient(ctx);
 	// const {
 	// 	data: { session },
 	// } = await supabase.auth.getSession();
-  
 	const username = ctx.params.username;
 	const songs = supabase
 		.from('songs')
@@ -421,3 +420,15 @@ export const getServerSideProps = async (ctx) => {
 		},
 	};
 };
+
+export const getStaticPaths = async (ctx) => {
+  // const supabase = createServerSupabaseClient(ctx)
+  const users = await supabase.from('profiles').select('name');
+  const paths = users.data.map((user) => ({
+    params: { username: user.name },
+  }));
+  return {
+    paths,
+    fallback: false,
+  };
+}

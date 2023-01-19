@@ -1,5 +1,5 @@
-import { supabase } from '../../utils/supabaseClient';
-import Home from '../../components/Home';
+import { supabase } from '../../../utils/supabaseClient';
+import Home from '../../../components/Home';
 import Head from 'next/head';
 
 export default function App({
@@ -148,7 +148,14 @@ export const getStaticProps = async (ctx) => {
 			},
       revalidate: 10,
 		};
-	}
+	} else {
+    return {
+      redirect: {
+        destination: "/jams",
+        permanent: false,
+      },
+    }
+  }
 };
 
 export const getStaticPaths = async () => {
