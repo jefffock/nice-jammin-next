@@ -123,11 +123,13 @@ export default function Home({
 						(fullUrl === '/' || fullUrl === '/jams') &&
 						reducedParams === ''
 					) {
+            setLoadingJams(false)
 						return;
 					}
 					if ('/?' + reducedParams !== fullUrl) {
 						prevParamsRef.current = reducedParams;
 						if (params.length > 0) {
+              setLoadingJams(false)
 							router.push(
 								{
 									pathname: '/jams/query/[query]',
@@ -139,6 +141,7 @@ export default function Home({
 								}
 							);
 						} else {
+              setLoadingJams(false)
 							router.push('/jams');
 						}
 					}
@@ -415,7 +418,7 @@ export default function Home({
 								my='1em'
 								fontWeight={300}
 							>
-								Making it easier to find 🔥 jams
+								Making it easier to find jams 🎸
 							</Typography>
 						</Box>
 						<FilterBar
@@ -469,7 +472,8 @@ export default function Home({
 					limit={limit}
 				/>
 				{loadingJams && (
-					<>
+					<Box
+          sx={{display: 'flex'}}>
 						<Image
 							src='/spinner.gif'
 							alt='loading'
@@ -477,7 +481,7 @@ export default function Home({
 							width={30}
 						/>
 						<Typography>Loading jams...</Typography>
-					</>
+					</Box>
 				)}
 				<Suspense
 					fallback={

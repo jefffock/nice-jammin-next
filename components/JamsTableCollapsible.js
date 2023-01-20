@@ -361,7 +361,8 @@ function Row({ row, user, profile, songs, showRatings }) {
 						  song === 'Ruby Waves' ||
 						  song === 'This Old Sea' ||
               song === 'A Song I Heard the Ocean Sing' ||
-              song === 'Drowned'
+              song === 'Drowned' ||
+              song === 'The Squirming Coil'
 						? ' 🌊'
 						: song === 'Split Open and Melt'
 						? ' 🫠'
