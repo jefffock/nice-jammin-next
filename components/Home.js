@@ -123,6 +123,7 @@ export default function Home({
 						(fullUrl === '/' || fullUrl === '/jams') &&
 						reducedParams === ''
 					) {
+            setLoadingJams(false)
 						return;
 					}
 					if ('/?' + reducedParams !== fullUrl) {
