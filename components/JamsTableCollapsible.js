@@ -323,20 +323,182 @@ function Row({ row, user, profile, songs, showRatings }) {
 		}
 	}, [open, comments, row]);
 
+	const artist = row.artist;
+	const song = row.song_name;
+
 	return (
 		<React.Fragment>
 			<TableRow
 				sx={{ '& > *': { borderBottom: 'unset' } }}
 				onClick={() => setOpen(!open)}
 			>
-				<TableCell sx={{ maxWidth: '10px' }}>{row.song_name}</TableCell>
+				<TableCell sx={{ maxWidth: '10px' }}>
+					{song}
+					{song === 'Ghost'
+						? ' 👻'
+						: song === 'Deal'
+						? ' 🤝'
+						: song === 'Fire on the Mountain'
+						? ' 🔥⛰️'
+						: song === "Wolfman's Brother"
+						? ' 🐺'
+						: song === 'Tube'
+						? ' 🧪'
+						: song === 'Simple' || song === 'Cities'
+						? ' 🌆'
+						: song === 'The Sloth'
+						? ' 🦥'
+						: song === 'Turtle in the Clouds'
+						? ' 🐢☁️'
+						: song === 'The Lizards'
+						? ' 🦎'
+						: song === 'Bathtub Gin'
+						? ' 🛁🍸'
+						: song === 'Sand'
+						? ' ⏳'
+						: song === 'Waves' ||
+						  song === 'A Wave of Hope' ||
+						  song === 'Ruby Waves' ||
+						  song === 'This Old Sea' ||
+              song === 'A Song I Heard the Ocean Sing' ||
+              song === 'Drowned'
+						? ' 🌊'
+						: song === 'Split Open and Melt'
+						? ' 🫠'
+						: song === 'Arrow'
+						? ' 🏹'
+						: song === 'Madhuvan'
+						? ' 🌳'
+						: song === 'Tweezer' || song === 'Tweezer Reprise'
+						? ' 🥶'
+						: song === 'Animal'
+						? ' 🐒'
+						: song === 'Back on the Train' ||
+						  song === '555' ||
+						  song === 'Mystery Train'
+						? ' 🚂'
+						: song === 'Arcadia' || song === 'Run Like an Antelope'
+						? ' 🏃'
+						: song === 'Runaway Jim' || song === 'Dogs Stole Things'
+						? ' 🐕'
+						: song === 'Leaves'
+						? ' 🍂'
+						: song === 'A Western Sun'
+						? ' 🌞'
+						: song === 'Flodown'
+						? ' 🤡'
+						: song === 'Hot Tea'
+						? ' ☕'
+						: song === 'Tumble' || song === 'Cavern'
+						? ' 👟'
+						: song === '1999'
+						? ' 🕺'
+						: song === 'Piper'
+						? ' 🪱'
+						: song === 'Roses Are Free' ||
+						  song === 'Echo of a Rose' ||
+						  song === 'Rosewood Heart'
+						? ' 🌹'
+						: song === 'Fee'
+						? ' 🕉️'
+						: song === 'Poor Heart'
+						? ' 💔'
+						: song === 'Eyes of the World'
+						? ' 👀'
+						: song === 'Down with Disease'
+						? ' 🤒'
+						: song === 'You Enjoy Myself'
+						? ' 👦👨🙏💩'
+						: song === 'The Other One' || song === "That's It for the Other One"
+						? ' 🤯'
+						: song === 'The Wheel'
+						? ' ☸️'
+						: song === 'Time to Flee' || song === 'Alligator'
+						? ' 🐊'
+						: song === "Halley's Comet"
+						? ' ☄️'
+						: song === 'Llama'
+						? ' 🦙'
+						: song === 'Divided Sky'
+						? ' 🌅'
+						: song === 'Not Fade Away'
+						? ' ❤️'
+						: song === 'Birds of a Feather'
+						? ' 🐦'
+						: song === 'Blaze On'
+						? ' 🔥'
+						: song === 'Earthling or Alien'
+						? ' 👽'
+						: song === 'Gumbo'
+						? ' 🥘'
+						: song === 'Slave to the Traffic Light'
+						? ' 🚦'
+						: song === 'The Moma Dance' || song === "The Old Man's Boat"
+						? ' ⛵'
+						: song === 'Wilson' || song === 'Prince Caspian'
+						? ' 🤴'
+						: song === 'Reba'
+						? ' 🛍️🏷️'
+						: song === 'Harry Hood'
+						? ' 🥛'
+						: song === 'Possum' || song === 'Windy Mountain'
+						? ' ⛰️'
+						: ''}
+				</TableCell>
 				<TableCell sx={{ maxWidth: '10px' }}>{row.date}</TableCell>
 				{showRatings && (
 					<TableCell sx={{ maxWidth: '10px', textAlign: 'center' }}>
 						{row.avg_rating}
 					</TableCell>
 				)}
-				<TableCell sx={{ maxWidth: '10px' }}>{row.artist}</TableCell>
+				<TableCell sx={{ maxWidth: '10px' }}>
+					{artist}
+					{artist === 'Phish'
+						? ' 🐟'
+						: artist === 'Grateful Dead' ||
+						  artist === 'Dead & Company' ||
+						  artist === "Joe Russo's Almost Dead" ||
+						  artist === 'Phil Lesh & Friends' ||
+						  artist === 'Furthur'
+						? ' ⚡'
+						: artist === 'Lettuce'
+						? ' 🥬'
+						: artist === 'Eggy'
+						? ' 🥚'
+						: artist === 'Lotus'
+						? ' 🪷'
+						: artist === 'Railroad Earth'
+						? ' 🚂🌎'
+						: artist === 'String Cheese Incident'
+						? ' 🧀'
+						: artist === 'Disco Biscuits'
+						? ' 🪩'
+						: artist === 'Ghost Light'
+						? ' 👻'
+						: artist === 'Aqueous'
+						? ' 💧'
+						: artist === 'King Gizzard & the Lizard Wizard'
+						? ' 🦎🧙‍♂️'
+						: artist === 'Billy Strings'
+						? ' 🎻'
+						: artist === 'Greensky Bluegrass'
+						? ' 🪕'
+						: artist === 'My Morning Jacket'
+						? ' 🧥'
+						: artist === 'Neighbor'
+						? ' 🏡'
+						: artist === 'Tedeschi Trucks Band'
+						? ' 🚚 🚛'
+						: artist === 'Squeaky Feet'
+						? ' 🦶🏻'
+						: artist === 'Medeski Martin & Wood'
+						? ' 🪵'
+						: artist === 'Goose'
+						? ' 🦢'
+						: artist === 'Trey Anastasio, TAB'
+						? ' ▫️'
+						: ' ❤️'}
+				</TableCell>
 				<TableCell padding='none'>
 					<IconButton
 						aria-label='expand row'
