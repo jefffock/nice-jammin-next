@@ -70,8 +70,13 @@ export default function YearPicker({
 					url = '/api/songfish/shows';
 					break;
 				case 'Phish':
+        case 'Trey Anastasio, TAB':
 					url = '/api/phish/shows';
 					break;
+        case 'Squeaky Feet':
+          break;
+        default:
+          url = '/api/setlistfm/shows';
 			}
 			if (url) {
 				const response = await fetch(url, {

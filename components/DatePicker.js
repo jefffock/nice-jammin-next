@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 
-export default function DatePicker({ setDate, my, date }) {
+export default function DatePicker({ setDate, my, date, artist }) {
 	const [value, setValue] = useState('');
 	const [dateInput, setDateInput] = useState('');
 	const [dateInputError, setDateInputError] = useState(false);
@@ -38,7 +38,7 @@ export default function DatePicker({ setDate, my, date }) {
 		<Box
 			my={my ? my : '0.5em'}
 		>
-      <Typography>Add a date to see the setlist</Typography>
+      <Typography>Add a date{ artist !== 'Squeaky Feet' ? ' to see the setlist' : ''}</Typography>
 			<Typography fontSize={12}>MMDDYYYY format</Typography>
 			<TextField
 				autoFocus

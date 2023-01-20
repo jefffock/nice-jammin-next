@@ -104,7 +104,7 @@ export default function AddVersion({
 	const [allShows, setAllShows] = useState(null);
 	const [njVersionsDatesOnly, setNjVersionsDatesOnly] = useState(null);
 	const [versionExists, setVersionExists] = useState(false);
-  const [jams, setJams] = useState(null);
+	const [jams, setJams] = useState(null);
 	const [jam, setJam] = useState(null);
 	const [year, setYear] = useState('');
 	const [showLocationInput, setShowLocationInput] = useState(true);
@@ -210,6 +210,7 @@ export default function AddVersion({
 					});
 					break;
 				case 'Squeaky Feet':
+					setNoSetlistFound(true);
 					break;
 				default:
 					fetchSetlist = fetch('/api/setlistfm/setlists', {
@@ -256,6 +257,8 @@ export default function AddVersion({
 					setLoadingSetlist(false);
 					console.error('Error getting setlist', error);
 				}
+			} else {
+				setNoSetlistFound(true);
 			}
 		} else {
 			setSetlist(null);
@@ -305,41 +308,46 @@ export default function AddVersion({
 
 	//when NJ jams list changes, get dates and store them in state
 	useEffect(() => {
-		if (artist && (song || date ) && open) {
-      const body = JSON.stringify({ song, date, artist, fetchFullJams: (song && date) });
-      try {
-        fetch('/api/versions', {
-          method: 'POST',
-          body,
-          })
-          .then((data) => data.json())
-          .then((njVersions) => {
-          setNjVersionsDatesOnly(njVersions);
-            if (date && song) {
-              let index = njVersions.findIndex((njJam) => {
-                return date === njJam.date
-              });
-              if (index !== -1) {
-                setVersionExists(true);
-                setJam(njVersions[index]);
-                setDateErrorText(
-                  `You have good taste: ${song} from ${new Date(
-                    date + 'T18:00:00Z'
-                  ).toDateString()} has already been added. Click the button below to add your rating.`
-                );
-              } else {
-                setVersionExists(false);
-                setDateErrorText(null);
-              }
-            }
-          });
-          if (!date || !song) {
-            setVersionExists(false);
-            setDateErrorText(null);
-          }
-      } catch (error) {
-        console.error(error);
-      }
+		if (artist && (song || date) && open) {
+			const body = JSON.stringify({
+				song,
+				date,
+				artist,
+				fetchFullJams: song && date,
+			});
+			try {
+				fetch('/api/versions', {
+					method: 'POST',
+					body,
+				})
+					.then((data) => data.json())
+					.then((njVersions) => {
+						setNjVersionsDatesOnly(njVersions);
+						if (date && song) {
+							let index = njVersions.findIndex((njJam) => {
+								return date === njJam.date;
+							});
+							if (index !== -1) {
+								setVersionExists(true);
+								setJam(njVersions[index]);
+								setDateErrorText(
+									`You have good taste: ${song} from ${new Date(
+										date + 'T18:00:00Z'
+									).toDateString()} has already been added. Click the button below to add your rating.`
+								);
+							} else {
+								setVersionExists(false);
+								setDateErrorText(null);
+							}
+						}
+					});
+				if (!date || !song) {
+					setVersionExists(false);
+					setDateErrorText(null);
+				}
+			} catch (error) {
+				console.error(error);
+			}
 		}
 	}, [song, date, artist, open]);
 
@@ -579,8 +587,10 @@ export default function AddVersion({
 					`Successfully added ${song} from ${date}. Thank you for contributing! It will be in the table the next time you refresh the page.`
 				);
 			}
-      //rebuild with deploy hooks 
-      fetch('https://api.vercel.com/v1/integrations/deploy/prj_KTTGWtEcoRt7VbckE5pwZXH7QL8E/5gZtO7yzjW')
+			//rebuild with deploy hooks
+			fetch(
+				'https://api.vercel.com/v1/integrations/deploy/prj_KTTGWtEcoRt7VbckE5pwZXH7QL8E/5gZtO7yzjW'
+			);
 		}
 	};
 
@@ -831,7 +841,7 @@ export default function AddVersion({
 							artist === 'Neighbor' ||
 							artist === "Umphrey's McGee" ||
 							artist === 'Phish' ||
-							artist === 'Trey Anastasio (TAB)') &&
+							artist === 'Trey Anastasio, TAB') &&
 						!location &&
 						!date && (
 							<Typography>Choose a song or year to view shows</Typography>
@@ -847,7 +857,7 @@ export default function AddVersion({
 							artist === 'Neighbor' ||
 							artist === "Umphrey's McGee" ||
 							artist === 'Phish' ||
-							artist === 'Trey Anastasio (TAB)') && (
+							artist === 'Trey Anastasio, TAB') && (
 							<SongPicker
 								artist={artist}
 								songs={songs}
@@ -859,7 +869,7 @@ export default function AddVersion({
 								size={'normal'}
 								mx={'0em'}
 								my={'1em'}
-                loadingSetlist={loadingSetlist}
+								loadingSetlist={loadingSetlist}
 							/>
 						)}
 					{artist && song && (
@@ -872,115 +882,116 @@ export default function AddVersion({
 							<Typography fontSize={18}>
 								{song}
 								{song === 'Ghost'
-						? ' 👻'
-						: song === 'Deal'
-						? ' 🤝'
-						: song === 'Fire on the Mountain'
-						? ' 🔥⛰️'
-						: song === "Wolfman's Brother"
-						? ' 🐺'
-						: song === 'Tube'
-						? ' 🧪'
-						: song === 'Simple' || song === 'Cities'
-						? ' 🌆'
-						: song === 'The Sloth'
-						? ' 🦥'
-						: song === 'Turtle in the Clouds'
-						? ' 🐢☁️'
-						: song === 'The Lizards'
-						? ' 🦎'
-						: song === 'Bathtub Gin'
-						? ' 🛁🍸'
-						: song === 'Sand'
-						? ' ⏳'
-						: song === 'Waves' ||
-						  song === 'A Wave of Hope' ||
-						  song === 'Ruby Waves' ||
-						  song === 'This Old Sea' ||
-              song === 'A Song I Heard the Ocean Sing' ||
-              song === 'Drowned'
-						? ' 🌊'
-						: song === 'Split Open and Melt'
-						? ' 🫠'
-						: song === 'Arrow'
-						? ' 🏹'
-						: song === 'Madhuvan'
-						? ' 🌳'
-						: song === 'Tweezer' || song === 'Tweezer Reprise'
-						? ' 🥶'
-						: song === 'Animal'
-						? ' 🐒'
-						: song === 'Back on the Train' ||
-						  song === '555' ||
-						  song === 'Mystery Train'
-						? ' 🚂'
-						: song === 'Arcadia' || song === 'Run Like an Antelope'
-						? ' 🏃'
-						: song === 'Runaway Jim' || song === 'Dogs Stole Things'
-						? ' 🐕'
-						: song === 'Leaves'
-						? ' 🍂'
-						: song === 'A Western Sun'
-						? ' 🌞'
-						: song === 'Flodown'
-						? ' 🤡'
-						: song === 'Hot Tea'
-						? ' ☕'
-						: song === 'Tumble' || song === 'Cavern'
-						? ' 👟'
-						: song === '1999'
-						? ' 🕺'
-						: song === 'Piper'
-						? ' 🪱'
-						: song === 'Roses Are Free' ||
-						  song === 'Echo of a Rose' ||
-						  song === 'Rosewood Heart'
-						? ' 🌹'
-						: song === 'Fee'
-						? ' 🕉️'
-						: song === 'Poor Heart'
-						? ' 💔'
-						: song === 'Eyes of the World'
-						? ' 👀'
-						: song === 'Down with Disease'
-						? ' 🤒'
-						: song === 'You Enjoy Myself'
-						? ' 👦👨🙏💩'
-						: song === 'The Other One' || song === "That's It for the Other One"
-						? ' 🤯'
-						: song === 'The Wheel'
-						? ' ☸️'
-						: song === 'Time to Flee' || song === 'Alligator'
-						? ' 🐊'
-						: song === "Halley's Comet"
-						? ' ☄️'
-						: song === 'Llama'
-						? ' 🦙'
-						: song === 'Divided Sky'
-						? ' 🌅'
-						: song === 'Not Fade Away'
-						? ' ❤️'
-						: song === 'Birds of a Feather'
-						? ' 🐦'
-						: song === 'Blaze On'
-						? ' 🔥'
-						: song === 'Earthling or Alien'
-						? ' 👽'
-						: song === 'Gumbo'
-						? ' 🥘'
-						: song === 'Slave to the Traffic Light'
-						? ' 🚦'
-						: song === 'The Moma Dance' || song === "The Old Man's Boat"
-						? ' ⛵'
-						: song === 'Wilson' || song === 'Prince Caspian'
-						? ' 🤴'
-						: song === 'Reba'
-						? ' 🛍️🏷️'
-						: song === 'Harry Hood'
-						? ' 🥛'
-						: song === 'Possum' || song === 'Windy Mountain'
-						? ' ⛰️'
-						: ''}
+									? ' 👻'
+									: song === 'Deal'
+									? ' 🤝'
+									: song === 'Fire on the Mountain'
+									? ' 🔥⛰️'
+									: song === "Wolfman's Brother"
+									? ' 🐺'
+									: song === 'Tube'
+									? ' 🧪'
+									: song === 'Simple' || song === 'Cities'
+									? ' 🌆'
+									: song === 'The Sloth'
+									? ' 🦥'
+									: song === 'Turtle in the Clouds'
+									? ' 🐢☁️'
+									: song === 'The Lizards'
+									? ' 🦎'
+									: song === 'Bathtub Gin'
+									? ' 🛁🍸'
+									: song === 'Sand'
+									? ' ⏳'
+									: song === 'Waves' ||
+									  song === 'A Wave of Hope' ||
+									  song === 'Ruby Waves' ||
+									  song === 'This Old Sea' ||
+									  song === 'A Song I Heard the Ocean Sing' ||
+									  song === 'Drowned'
+									? ' 🌊'
+									: song === 'Split Open and Melt'
+									? ' 🫠'
+									: song === 'Arrow'
+									? ' 🏹'
+									: song === 'Madhuvan'
+									? ' 🌳'
+									: song === 'Tweezer' || song === 'Tweezer Reprise'
+									? ' 🥶'
+									: song === 'Animal'
+									? ' 🐒'
+									: song === 'Back on the Train' ||
+									  song === '555' ||
+									  song === 'Mystery Train'
+									? ' 🚂'
+									: song === 'Arcadia' || song === 'Run Like an Antelope'
+									? ' 🏃'
+									: song === 'Runaway Jim' || song === 'Dogs Stole Things'
+									? ' 🐕'
+									: song === 'Leaves'
+									? ' 🍂'
+									: song === 'A Western Sun'
+									? ' 🌞'
+									: song === 'Flodown'
+									? ' 🤡'
+									: song === 'Hot Tea'
+									? ' ☕'
+									: song === 'Tumble' || song === 'Cavern'
+									? ' 👟'
+									: song === '1999'
+									? ' 🕺'
+									: song === 'Piper'
+									? ' 🪱'
+									: song === 'Roses Are Free' ||
+									  song === 'Echo of a Rose' ||
+									  song === 'Rosewood Heart'
+									? ' 🌹'
+									: song === 'Fee'
+									? ' 🕉️'
+									: song === 'Poor Heart'
+									? ' 💔'
+									: song === 'Eyes of the World'
+									? ' 👀'
+									: song === 'Down with Disease'
+									? ' 🤒'
+									: song === 'You Enjoy Myself'
+									? ' 👦👨🙏💩'
+									: song === 'The Other One' ||
+									  song === "That's It for the Other One"
+									? ' 🤯'
+									: song === 'The Wheel'
+									? ' ☸️'
+									: song === 'Time to Flee' || song === 'Alligator'
+									? ' 🐊'
+									: song === "Halley's Comet"
+									? ' ☄️'
+									: song === 'Llama'
+									? ' 🦙'
+									: song === 'Divided Sky'
+									? ' 🌅'
+									: song === 'Not Fade Away'
+									? ' ❤️'
+									: song === 'Birds of a Feather'
+									? ' 🐦'
+									: song === 'Blaze On'
+									? ' 🔥'
+									: song === 'Earthling or Alien'
+									? ' 👽'
+									: song === 'Gumbo'
+									? ' 🥘'
+									: song === 'Slave to the Traffic Light'
+									? ' 🚦'
+									: song === 'The Moma Dance' || song === "The Old Man's Boat"
+									? ' ⛵'
+									: song === 'Wilson' || song === 'Prince Caspian'
+									? ' 🤴'
+									: song === 'Reba'
+									? ' 🛍️🏷️'
+									: song === 'Harry Hood'
+									? ' 🥛'
+									: song === 'Possum' || song === 'Windy Mountain'
+									? ' ⛰️'
+									: ''}
 							</Typography>
 							<Button
 								sx={{ textTransform: 'none' }}
@@ -993,7 +1004,7 @@ export default function AddVersion({
 					{!songExists && song && (
 						<>
 							<Alert
-								severity='warning'
+								severity='info'
 								sx={{ mb: '1em' }}
 							>
 								{song} hasn&apos;t been added yet. Can you believe it?
@@ -1018,24 +1029,17 @@ export default function AddVersion({
 							{songErrorText}
 						</Alert>
 					)}
-					{artist &&
-						!song &&
-						(artist === 'Goose' ||
-							artist === 'Eggy' ||
-							artist === 'Neighbor' ||
-							artist === "Umphrey's McGee" ||
-							artist === 'Phish' ||
-							artist === 'Trey Anastasio (TAB)') && (
-							<YearPicker
-								artist={artist}
-								setShows={setShows}
-								year={year}
-								setYear={setYear}
-								clearYear={clearYear}
-								date={date}
-                setLoadingShows={setLoadingShows}
-							/>
-						)}
+					{artist && !song && artist !== 'Squeaky Feet' && (
+						<YearPicker
+							artist={artist}
+							setShows={setShows}
+							year={year}
+							setYear={setYear}
+							clearYear={clearYear}
+							date={date}
+							setLoadingShows={setLoadingShows}
+						/>
+					)}
 					{loadingShows && (
 						<Box
 							sx={{
@@ -1048,7 +1052,7 @@ export default function AddVersion({
 								height={'30px'}
 								width={'30px'}
 							/> */}
-              <Image
+							<Image
 								src='/spinner.gif'
 								alt='loading'
 								height={30}
@@ -1061,30 +1065,25 @@ export default function AddVersion({
 						<Typography>Choose a show</Typography>
 					)}
 					{artist && shows && shows.length > 0 && (!location || !date) && (
-						<>
-							<ShowPicker
-								show={show}
-								shows={shows}
-								setShow={setShow}
-								setDate={setDate}
-								setLocation={setLocation}
-								setShowLocationInput={setShowLocationInput}
-							/>
-							<Typography>or</Typography>
-						</>
+						<ShowPicker
+							show={show}
+							shows={shows}
+							setShow={setShow}
+							setDate={setDate}
+							setLocation={setLocation}
+							setShowLocationInput={setShowLocationInput}
+						/>
 					)}
 					{artist && !date && (
-						// artist !== 'Goose' &&
-						// artist !== 'Eggy' &&
-						// artist !== 'Neighbor' &&
-						// artist !== "Umphrey's McGee" &&
-						// artist === 'Phish' &&
-						// artist === 'Trey Anastasio (TAB)' &&
+            <>
+            <Typography my='1em'>{artist !== 'Squeaky Feet' ? 'Or' : ''}</Typography>
 						<DatePicker
 							setDate={setDate}
 							my={'1em'}
 							date={date}
+							artist={artist}
 						/>
+            </>
 					)}
 					{date && (
 						<Box
