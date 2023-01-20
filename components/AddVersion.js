@@ -1046,12 +1046,6 @@ export default function AddVersion({
 								display: 'flex',
 							}}
 						>
-							{/* <img
-								src='/spinner.gif'
-								alt='loading'
-								height={'30px'}
-								width={'30px'}
-							/> */}
 							<Image
 								src='/spinner.gif'
 								alt='loading'
@@ -1174,6 +1168,7 @@ export default function AddVersion({
 						</Alert>
 					)}
 					{!versionExists &&
+            songExists &&
 						song &&
 						artist &&
 						date &&

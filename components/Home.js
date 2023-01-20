@@ -128,6 +128,7 @@ export default function Home({
 					if ('/?' + reducedParams !== fullUrl) {
 						prevParamsRef.current = reducedParams;
 						if (params.length > 0) {
+              setLoadingJams(false)
 							router.push(
 								{
 									pathname: '/jams/query/[query]',
@@ -139,6 +140,7 @@ export default function Home({
 								}
 							);
 						} else {
+              setLoadingJams(false)
 							router.push('/jams');
 						}
 					}
