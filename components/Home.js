@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import TopBar from '../components/AppBar';
 import dynamic from 'next/dynamic';
 import TableTitle from '../components/TableTitle';
+import Image from 'next/image';
 
 const DynamicContributorsTable = dynamic(
 	() => import('../components/TopContributors'),
@@ -113,18 +114,25 @@ export default function Home({
 					let reducedParams = params
 						.replace('&showMoreFilters=true', '')
 						.replace('showMoreFilters=true', '');
-					if ((fullUrl === '/' || fullUrl === '/jams') && reducedParams === '') {
+					if (
+						(fullUrl === '/' || fullUrl === '/jams') &&
+						reducedParams === ''
+					) {
 						return;
 					}
 					if ('/?' + reducedParams !== fullUrl) {
 						prevParamsRef.current = reducedParams;
 						if (params.length > 0) {
-							router.push({
-                pathname: '/jams/query/[query]',
-                query: { query: reducedParams },
-              }, null, {
-								scroll: fullUrl === '/' || fullUrl === '/jams',
-							});
+							router.push(
+								{
+									pathname: '/jams/query/[query]',
+									query: { query: reducedParams },
+								},
+								null,
+								{
+									scroll: fullUrl === '/' || fullUrl === '/jams',
+								}
+							);
 						} else {
 							router.push('/jams');
 						}
@@ -243,52 +251,52 @@ export default function Home({
 		setShowRatings(e.target.checked);
 	}
 
-  const tagsList = {
-    acoustic: 'Acoustic',
-    ambient: 'Ambient/Space',
-    bliss: 'Bliss',
-    bluesy: 'Bluesy',
-    chaotic: 'Chaotic',
-    crunchy: 'Crunchy',
-    dark: 'Dark',
-    dissonant: 'Dissonant',
-    fast: 'Fast',
-    funky: 'Funky',
-    grimy: 'Grimy',
-    groovy: 'Groovy',
-    guest: 'Guest',
-    happy: 'Happy',
-    heavy: 'Heavy',
-    historic: 'Historic',
-    jazzy: 'Jazzy',
-    long: 'Long',
-    low_key: 'Low-key',
-    mellow: 'Mellow',
-    melodic: 'Melodic',
-    multi_part: 'Multi-part',
-    official_release: 'Official Release',
-    peaks: 'Peaks',
-    reggae: 'Reggae',
-    rocking: 'Rocking',
-    segue: 'Segue',
-    shred: 'Shred',
-    silly: 'Silly',
-    sloppy: 'Sloppy',
-    slow: 'Slow',
-    sludgy: 'Sludgy',
-    soaring: 'Soaring',
-    soulful: 'Soulful',
-    stop_start: 'Stop-start',
-    synthy: 'Synthy',
-    tease: 'Teases',
-    tension_release: 'Tension and Release',
-    that_years_style: "That Year's Style",
-    trance: 'Trance',
-    trippy: 'Trippy',
-    type2: 'Type II',
-    unusual: 'Unusual',
-    upbeat: 'Upbeat',
-  };
+	const tagsList = {
+		acoustic: 'Acoustic',
+		ambient: 'Ambient/Space',
+		bliss: 'Bliss',
+		bluesy: 'Bluesy',
+		chaotic: 'Chaotic',
+		crunchy: 'Crunchy',
+		dark: 'Dark',
+		dissonant: 'Dissonant',
+		fast: 'Fast',
+		funky: 'Funky',
+		grimy: 'Grimy',
+		groovy: 'Groovy',
+		guest: 'Guest',
+		happy: 'Happy',
+		heavy: 'Heavy',
+		historic: 'Historic',
+		jazzy: 'Jazzy',
+		long: 'Long',
+		low_key: 'Low-key',
+		mellow: 'Mellow',
+		melodic: 'Melodic',
+		multi_part: 'Multi-part',
+		official_release: 'Official Release',
+		peaks: 'Peaks',
+		reggae: 'Reggae',
+		rocking: 'Rocking',
+		segue: 'Segue',
+		shred: 'Shred',
+		silly: 'Silly',
+		sloppy: 'Sloppy',
+		slow: 'Slow',
+		sludgy: 'Sludgy',
+		soaring: 'Soaring',
+		soulful: 'Soulful',
+		stop_start: 'Stop-start',
+		synthy: 'Synthy',
+		tease: 'Teases',
+		tension_release: 'Tension and Release',
+		that_years_style: "That Year's Style",
+		trance: 'Trance',
+		trippy: 'Trippy',
+		type2: 'Type II',
+		unusual: 'Unusual',
+		upbeat: 'Upbeat',
+	};
 
 	let title = '';
 	if (initialTags) {
@@ -313,9 +321,9 @@ export default function Home({
 	if (initialAfterDate && !initialBeforeDate) {
 		title += ' from ' + initialAfterDate + ' and after ';
 	}
-  let subtitle = ''
-  let newLimit = initialLimit !== 'null' ? initialLimit : 'All';
-  if (initialOrderBy) {
+	let subtitle = '';
+	let newLimit = initialLimit !== 'null' ? initialLimit : 'All';
+	if (initialOrderBy) {
 		switch (initialOrderBy) {
 			case 'id':
 				subtitle += newLimit + ' recently added';
@@ -345,9 +353,9 @@ export default function Home({
 				break;
 		}
 	}
-  title.trim()
-  subtitle.trim()
-  const fullTitle = title + ': ' + subtitle + ' on NiceJammin - Join Today!'
+	title.trim();
+	subtitle.trim();
+	const fullTitle = title + ': ' + subtitle + ' on NiceJammin - Join Today!';
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -454,7 +462,19 @@ export default function Home({
 					orderBy={orderBy}
 					limit={limit}
 				/>
-				<Suspense fallback={<Typography>Loading jams...</Typography>}>
+				<Suspense
+					fallback={
+						<>
+							<Image
+								src='/spinner.gif'
+								alt='loading'
+								height={30}
+								width={30}
+							/>
+							<Typography>Loading jams...</Typography>
+						</>
+					}
+				>
 					<DynamicJamsTable
 						jams={jams}
 						order={order}
@@ -482,34 +502,34 @@ export default function Home({
 						setSong={setSong}
 						jams={jams && jams.length > 0}
 					/>
-          {fullUrl !== '/' && 
-					<FilterBar
-						setArtist={setArtist}
-						artist={artist}
-						tagsSelected={tagsSelected}
-						setTagsSelected={setTagsSelected}
-						beforeDate={beforeDate}
-						setBeforeDate={setBeforeDate}
-						afterDate={afterDate}
-						setAfterDate={setAfterDate}
-						songs={songs}
-						song={song}
-						setSong={setSong}
-						order={order}
-						orderBy={orderBy}
-						setOrderBy={setOrderBy}
-						setOrder={setOrder}
-						showRatings={showRatings}
-						handleShowRatingsChange={handleShowRatingsChange}
-						jams={jams && jams.length > 0}
-						showMoreFilters={showMoreFilters}
-						showListenable={showListenable}
-						setShowListenable={setShowListenable}
-						limit={limit}
-						setLimit={setLimit}
-						lowerFilterBar={true}
-					/>
-          }
+					{fullUrl !== '/' && (
+						<FilterBar
+							setArtist={setArtist}
+							artist={artist}
+							tagsSelected={tagsSelected}
+							setTagsSelected={setTagsSelected}
+							beforeDate={beforeDate}
+							setBeforeDate={setBeforeDate}
+							afterDate={afterDate}
+							setAfterDate={setAfterDate}
+							songs={songs}
+							song={song}
+							setSong={setSong}
+							order={order}
+							orderBy={orderBy}
+							setOrderBy={setOrderBy}
+							setOrder={setOrder}
+							showRatings={showRatings}
+							handleShowRatingsChange={handleShowRatingsChange}
+							jams={jams && jams.length > 0}
+							showMoreFilters={showMoreFilters}
+							showListenable={showListenable}
+							setShowListenable={setShowListenable}
+							limit={limit}
+							setLimit={setLimit}
+							lowerFilterBar={true}
+						/>
+					)}
 					<br></br>
 					<DynamicAddVersion
 						songs={songs}

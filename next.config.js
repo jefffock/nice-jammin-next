@@ -1,17 +1,12 @@
 /** @type {import('next').NextConfig} */
+
+const shouldAnalyzeBundles = process.env.ANALYZE === "true";
+const withBundleAnalyzer = shouldAnalyzeBundles
+  ? require('@next/bundle-analyzer')({ enabled: true })
+  : (config) => config;
+
 const nextConfig = {
   reactStrictMode: true,
-}
-
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-})
-
-module.exports = withBundleAnalyzer({})
-
-module.exports = nextConfig
-
-module.exports = {
   i18n: {
     locales: ['en'],
     defaultLocale: 'en',
@@ -58,4 +53,18 @@ module.exports = {
       'Widespread Panic': '3797a6d0-7700-44bf-96fb-f44386bc9ab2'
     },
   },
+  // webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+  //   if (ANALYZE) {
+  //    config.plugins.push(
+  //      new BundleAnalyzerPlugin({
+  //        analyzerMode: 'server',
+  //        analyzerPort: isServer ? 8888 : 8889,
+  //        openAnalyzer: true,
+  //      })
+  //    )
+  //   }
+  //   return config
+  // },
 };
+
+module.exports = withBundleAnalyzer(nextConfig)

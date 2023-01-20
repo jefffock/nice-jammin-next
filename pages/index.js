@@ -1,6 +1,5 @@
 import { supabase } from '../utils/supabaseClient';
 import Home from '../components/Home';
-import Head from 'next/head';
 
 export default function App({
 	jams,

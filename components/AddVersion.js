@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabaseClient';
 import { addOnePoint, addTenPoints, rateVersion } from '../utils/dbFunctions';
-import { fetchAllJams } from '../utils/fetchData';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import SongPicker from './SongPicker';
 import ArtistPicker from './ArtistPicker';
@@ -27,7 +25,6 @@ import Link from 'next/link';
 import YearPicker from './YearPicker';
 import Stack from '@mui/material/Stack';
 import Image from 'next/image';
-import spinner from '../public/spinner.gif';
 
 export default function AddVersion({
 	songs,
@@ -817,12 +814,6 @@ export default function AddVersion({
 								display: 'flex',
 							}}
 						>
-							{/* <img
-								src='/spinner.gif'
-								alt='loading'
-								height={'30px'}
-								width={'30px'}
-							/> */}
 							<Image
 								src='/spinner.gif'
 								alt='loading'

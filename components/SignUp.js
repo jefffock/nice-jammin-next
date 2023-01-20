@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -10,21 +9,13 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import TopBar from './AppBar';
 import theme from '../styles/themes';
 import { useRouter } from 'next/router';
 import Alert from '@mui/material/Alert';
 import { supabase } from '../utils/supabaseClient';
 import GoogleButton from 'react-google-button';
-
-// import { createClient } from '@supabase/supabase-js'
-
-// const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-// const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-// export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 export default function SignUp({ setSession }) {
 	const [checked, setChecked] = useState(false);

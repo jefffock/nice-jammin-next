@@ -6,11 +6,8 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Image from 'next/image';
-import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
-import { useEffect } from 'react';
 import { supabase } from '../utils/supabaseClient';
 import Link from 'next/link';
-import { setPriority } from 'os';
 
 export default function TopBar({
 	showButton,
