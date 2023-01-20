@@ -31,7 +31,6 @@ import spinner from '../public/spinner.gif';
 
 export default function AddVersion({
 	songs,
-	jams,
 	user,
 	profile,
 	setSongs,
@@ -108,6 +107,7 @@ export default function AddVersion({
 	const [allShows, setAllShows] = useState(null);
 	const [njVersionsDatesOnly, setNjVersionsDatesOnly] = useState(null);
 	const [versionExists, setVersionExists] = useState(false);
+  const [jams, setJams] = useState(null);
 	const [jam, setJam] = useState(null);
 	const [year, setYear] = useState('');
 	const [showLocationInput, setShowLocationInput] = useState(true);
@@ -308,14 +308,43 @@ export default function AddVersion({
 
 	//when NJ jams list changes, get dates and store them in state
 	useEffect(() => {
-		if (jams) {
-			let datesOnly = [];
-			jams?.forEach((jam) => {
-				datesOnly.push(jam.date);
-			});
-			setNjVersionsDatesOnly(datesOnly);
+		if (artist && (song || date ) && open) {
+      const body = JSON.stringify({ song, date, artist, fetchFullJams: (song && date) });
+      try {
+        fetch('/api/versions', {
+          method: 'POST',
+          body,
+          })
+          .then((data) => data.json())
+          .then((njVersions) => {
+          setNjVersionsDatesOnly(njVersions);
+            if (date && song) {
+              let index = njVersions.findIndex((njJam) => {
+                return date === njJam.date
+              });
+              if (index !== -1) {
+                setVersionExists(true);
+                setJam(njVersions[index]);
+                setDateErrorText(
+                  `You have good taste: ${song} from ${new Date(
+                    date + 'T18:00:00Z'
+                  ).toDateString()} has already been added. Click the button below to add your rating.`
+                );
+              } else {
+                setVersionExists(false);
+                setDateErrorText(null);
+              }
+            }
+          });
+          if (!date || !song) {
+            setVersionExists(false);
+            setDateErrorText(null);
+          }
+      } catch (error) {
+        console.error(error);
+      }
 		}
-	}, [jams]);
+	}, [song, date, artist, open]);
 
 	//when allShows changes, compare it to versions on NJ
 	useEffect(() => {
@@ -1005,7 +1034,7 @@ export default function AddVersion({
 					)}
 					{dateErrorText && (
 						<Alert
-							severity='warning'
+							severity='success'
 							sx={{ my: '1em' }}
 						>
 							{dateErrorText}
