@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,25 +5,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { supabase } from '../utils/supabaseClient';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { fetchLeaders } from '../utils/fetchData';
 import Link from 'next/link';
 
 export default function TopContributors({ leaders }) {
-	// const [leaders, setLeaders] = useState(leaders)
-	const [fetchingLeaders, setFetchingLeaders] = useState(false);
-
-	// useEffect(() => {
-	//   if (!leaders && !fetchingLeaders) {
-	//     setFetchingLeaders(true)
-	//     async function getLeaders() {
-	//       let data = await fetchLeaders()
-	//       setLeaders(data)
-	//     } getLeaders()
-	//   }
-	// }, [])
 
 	return (
 		<Box

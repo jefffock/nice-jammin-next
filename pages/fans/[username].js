@@ -12,7 +12,6 @@ import RateVersion from '../../components/RateVersion';
 import { supabase } from '../../utils/supabaseClient';
 import Stack from '@mui/material/Stack';
 import AddListenLink from '../../components/AddListenLink';
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
 export default function Contributor({
 	ratings,

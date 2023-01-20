@@ -3,7 +3,6 @@ import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 import { supabase } from '../utils/supabaseClient';
 import Box from '@mui/material/Box';
-import { router } from 'next/router';
 import TextField from '@mui/material/TextField';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../styles/themes';
