@@ -41,7 +41,6 @@ export default function DatePicker({ setDate, my, date, artist }) {
       <Typography>Add a date{ artist !== 'Squeaky Feet' ? ' to see the setlist' : ''}</Typography>
 			<Typography fontSize={12}>MMDDYYYY format</Typography>
 			<TextField
-				autoFocus
 				margin='dense'
 				id='date'
 				label='Date'
