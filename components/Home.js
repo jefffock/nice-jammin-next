@@ -418,7 +418,7 @@ export default function Home({
 								my='1em'
 								fontWeight={300}
 							>
-								Making it easier to find 🔥 jams
+								Making it easier to find jams 🎸
 							</Typography>
 						</Box>
 						<FilterBar
@@ -472,7 +472,8 @@ export default function Home({
 					limit={limit}
 				/>
 				{loadingJams && (
-					<>
+					<Box
+          sx={{display: 'flex'}}>
 						<Image
 							src='/spinner.gif'
 							alt='loading'
@@ -480,7 +481,7 @@ export default function Home({
 							width={30}
 						/>
 						<Typography>Loading jams...</Typography>
-					</>
+					</Box>
 				)}
 				<Suspense
 					fallback={

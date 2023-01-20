@@ -718,14 +718,14 @@ export default function AddVersion({
 					textTransform: 'none',
 				}}
 			>
-				Add a 🔥 Jam
+				Add a Jam 🔥
 			</Button>
 			<Dialog
 				open={open}
 				onClose={handleClose}
 				sx={{ minHeight: '50vh' }}
 			>
-				<DialogTitle fontSize={26}>Add a 🔥 Jam</DialogTitle>
+				<DialogTitle fontSize={26}>Add a Jam 🔥</DialogTitle>
 				<DialogContent sx={{ minHeight: '300px', minWidth: '300px' }}>
 					<Typography sx={{ mb: '1em' }}>
 						Thanks for helping this jam reach more ears 🙏 You rock! 🎸
@@ -799,7 +799,7 @@ export default function AddVersion({
 									: artist === 'Goose'
 									? ' 🦢'
 									: artist === 'Trey Anastasio, TAB'
-									? ' ▫️'
+									? ' ◻️'
 									: ' ❤️'}
 							</Typography>
 							<Button
@@ -908,7 +908,8 @@ export default function AddVersion({
 									  song === 'Ruby Waves' ||
 									  song === 'This Old Sea' ||
 									  song === 'A Song I Heard the Ocean Sing' ||
-									  song === 'Drowned'
+									  song === 'Drowned' ||
+                    song === 'The Squirming Coil'
 									? ' 🌊'
 									: song === 'Split Open and Melt'
 									? ' 🫠'
