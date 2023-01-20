@@ -89,15 +89,20 @@ export default function Home({
 	const [showListenable, setShowListenable] = useState(initialShowListenable);
 	const [limit, setLimit] = useState(initialLimit);
 	const prevParamsRef = useRef('/');
+	const [loadingJams, setLoadingJams] = useState(false);
 
 	useEffect(() => {
 		if (isMounted.current) {
 			//check song exists or no song before reloading
 			if (!song || (song && songExists)) {
-				let index = songs.findIndex((item) => {
-					return item.song === song;
-				});
+				let index;
+				if (song && songExists) {
+					index = songs.findIndex((item) => {
+						return item.song === song;
+					});
+				}
 				if ((song && index > -1) || !song) {
+					setLoadingJams(true);
 					let query = {};
 					if (artist) query.artist = artist;
 					if (song) query.song = song;
@@ -139,6 +144,7 @@ export default function Home({
 					}
 				}
 			}
+			setLoadingJams(false);
 		}
 	}, [
 		artist,
@@ -462,6 +468,17 @@ export default function Home({
 					orderBy={orderBy}
 					limit={limit}
 				/>
+				{loadingJams && (
+					<>
+						<Image
+							src='/spinner.gif'
+							alt='loading'
+							height={30}
+							width={30}
+						/>
+						<Typography>Loading jams...</Typography>
+					</>
+				)}
 				<Suspense
 					fallback={
 						<>

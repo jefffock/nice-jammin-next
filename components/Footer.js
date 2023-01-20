@@ -12,8 +12,8 @@ export default function Footer({ profile, user }) {
 		>
 			{profile && profile.points && (
 				<>
-					<Typography>
-						You have {profile.points} points. Thank you 🙏
+					<Typography textAlign={'center'}>
+						Hi {profile.name} 👋<br/>Thank you for contributing 🙏 You have {profile.points} points.
 					</Typography>
 					<Link href={`/fans/${profile.name}`}>View your contributions</Link>
 				</>
