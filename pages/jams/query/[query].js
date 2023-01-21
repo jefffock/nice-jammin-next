@@ -1,6 +1,7 @@
 import { supabase } from '../../../utils/supabaseClient';
 import Home from '../../../components/Home';
-import Head from 'next/head';
+
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 export default function App({
 	jams,
@@ -24,6 +25,9 @@ export default function App({
   initialShowMoreFilters,
   initialShowRatings,
 }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 	return (
 		<Home
 			jams={jams}
@@ -46,6 +50,9 @@ export default function App({
 			urlToShow={urlToShow}
       initialShowMoreFilters={initialShowMoreFilters}
       initialShowRatings={initialShowRatings}
+      router={router}
+      pathname={pathname}
+      searchParams={searchParams}
 		/>
 	);
 }
@@ -60,21 +67,16 @@ export const getStaticProps = async (ctx) => {
   query = query.replace('&showRatings=true', '');
   query = query.replace('&showMoreFilters=true', '');
   const stringParams = JSON.stringify(params); 
-	let urlToShow = '/jams/lists/';
+	let urlToShow = 'needToInsertList'
 	const list = await supabase
 		.from('jams_lists')
 		.select('*')
 		.eq('params', stringParams)
 		.single();
+  console.log('list', list);
 	if (list.data) {
-		urlToShow += list.data.id;
-	} else {
-		let newList = await supabase
-			.from('jams_lists')
-			.insert([{ query, params: JSON.stringify(params) }])
-			.select();
-		urlToShow += newList.data[0].id;
-	}
+		urlToShow = '/jams/lists/' + list.data.id;
+	} 
 	const artist = params?.artist;
 	const song = params?.song;
 	const sounds = params?.sounds;
@@ -155,6 +157,7 @@ export const getStaticProps = async (ctx) => {
 			initialLimit: limit,
 			initialShowListenable: showListenable,
 			fullUrl: query,
+      stringParams: stringParams,
 			urlToShow: urlToShow,
       initialShowMoreFilters: showMoreFilters === 'true',
       initialShowRatings: showRatings === 'true',

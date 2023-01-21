@@ -58,8 +58,12 @@ export default function Home({
 	initialProfile,
 	fullUrl,
 	urlToShow,
-  initialShowMoreFilters,
-  initialShowRatings,
+	initialShowMoreFilters,
+	initialShowRatings,
+	stringParams,
+	// router,
+	// pathname,
+	// searchParams,
 }) {
 	// const [currentJams, setCurrentJams] = useState(jams);
 	const [songs, setSongs] = useState(initialSongs);
@@ -83,7 +87,9 @@ export default function Home({
 	const tagsSelectedString = tagsSelected.join(',');
 	const router = useRouter();
 	const [showRatings, setShowRatings] = useState(initialShowRatings);
-  const [showMoreFilters, setShowMoreFilters] = useState(initialShowMoreFilters);
+	const [showMoreFilters, setShowMoreFilters] = useState(
+		initialShowMoreFilters
+	);
 	const isMounted = useRef(false);
 	const [showListenable, setShowListenable] = useState(initialShowListenable);
 	const [limit, setLimit] = useState(initialLimit);
@@ -113,19 +119,16 @@ export default function Home({
 					if (showListenable) query.showListenable = showListenable;
 					if (limit !== 100) query.limit = limit;
 					let params = new URLSearchParams(query).toString();
-					if (
-						(fullUrl === '/' || fullUrl === '/jams') &&
-						params === ''
-					) {
-            setLoadingJams(false)
+					if ((fullUrl === '/' || fullUrl === '/jams') && params === '') {
+						setLoadingJams(false);
 						return;
 					}
 					if ('/?' + params !== fullUrl) {
 						if (params.length > 0) {
-              if (showRatings) query.showRatings = showRatings;
-              if (showMoreFilters) query.showMoreFilters = showMoreFilters;
-              let fullParams = new URLSearchParams(query).toString();
-              setLoadingJams(false)
+							if (showRatings) query.showRatings = showRatings;
+							if (showMoreFilters) query.showMoreFilters = showMoreFilters;
+							let fullParams = new URLSearchParams(query).toString();
+							setLoadingJams(false);
 							router.push(
 								{
 									pathname: '/jams/query/[query]',
@@ -137,7 +140,7 @@ export default function Home({
 								}
 							);
 						} else {
-              setLoadingJams(false)
+							setLoadingJams(false);
 							router.push('/jams');
 						}
 					}
@@ -184,13 +187,26 @@ export default function Home({
 		setTimeout(() => {
 			isMounted.current = true;
 		}, 1000);
-		if (urlToShow) {
+		if (urlToShow && urlToShow !== 'needToInsertList') {
 			window.history.replaceState(null, null, urlToShow);
 		}
-    const localShowRatings = JSON.parse(window.localStorage.getItem('njShowRatings'))
-    if (!showRatings && localShowRatings) {
-    setShowRatings(localShowRatings)
-    }
+		const localShowRatings = JSON.parse(
+			window.localStorage.getItem('njShowRatings')
+		);
+		if (!showRatings && localShowRatings) {
+			setShowRatings(localShowRatings);
+		}
+		if (urlToShow === 'needToInsertList') {
+			async function insertList(query, params) {
+				let newList = await supabase
+					.from('jams_lists')
+					.insert([{ query, params: JSON.stringify(params) }])
+					.select();
+				if (newList?.data?.length > 0 && newList?.data[0]?.id) {
+					window.history.replaceState(null, null, '/jams/lists/' + newList.data[0].id)
+				}
+			} insertList(fullUrl, stringParams);
+		}
 	}, []);
 
 	useEffect(() => {
@@ -255,8 +271,11 @@ export default function Home({
 	}, [user, profile]);
 
 	function handleShowRatingsChange(e) {
-    window.localStorage.setItem('njShowRatings', JSON.stringify(e.target.checked))
-    setShowRatings(e.target.checked);
+		window.localStorage.setItem(
+			'njShowRatings',
+			JSON.stringify(e.target.checked)
+		);
+		setShowRatings(e.target.checked);
 	}
 
 	const tagsList = {
@@ -443,9 +462,9 @@ export default function Home({
 							setShowListenable={setShowListenable}
 							limit={limit}
 							setLimit={setLimit}
-              fullUrl={fullUrl}
-              showMoreFilters={showMoreFilters}
-              setShowMoreFilters={setShowMoreFilters}
+							fullUrl={fullUrl}
+							showMoreFilters={showMoreFilters}
+							setShowMoreFilters={setShowMoreFilters}
 						/>
 					</>
 				)}
@@ -460,8 +479,7 @@ export default function Home({
 					limit={limit}
 				/>
 				{loadingJams && (
-					<Box
-          sx={{display: 'flex'}}>
+					<Box sx={{ display: 'flex' }}>
 						<Image
 							src='/spinner.gif'
 							alt='loading'
@@ -536,9 +554,9 @@ export default function Home({
 							limit={limit}
 							setLimit={setLimit}
 							lowerFilterBar={true}
-              fullUrl={fullUrl}
-              showMoreFilters={showMoreFilters}
-              setShowMoreFilters={setShowMoreFilters}
+							fullUrl={fullUrl}
+							showMoreFilters={showMoreFilters}
+							setShowMoreFilters={setShowMoreFilters}
 						/>
 					)}
 					<br></br>
