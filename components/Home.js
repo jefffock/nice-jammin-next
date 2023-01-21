@@ -111,22 +111,17 @@ export default function Home({
 					if (afterDate) query.afterDate = afterDate;
 					if (order !== 'desc') query.order = order;
 					if (orderBy !== 'id') query.orderBy = orderBy;
-					if (showMoreFilters.current) query.showMoreFilters = true;
 					if (showListenable) query.showListenable = showListenable;
 					if (limit !== 100) query.limit = limit;
-					if (showRatings) query.showRatings = true;
 					const params = new URLSearchParams(query).toString();
-					let reducedParams = params
-						.replace('&showMoreFilters=true', '')
-						.replace('showMoreFilters=true', '');
 					if (
 						(fullUrl === '/' || fullUrl === '/jams') &&
-						reducedParams === ''
+						params === ''
 					) {
             setLoadingJams(false)
 						return;
 					}
-					if ('/?' + reducedParams !== fullUrl) {
+					if ('/?' + params !== fullUrl) {
 						prevParamsRef.current = reducedParams;
 						if (params.length > 0) {
               setLoadingJams(false)
@@ -190,8 +185,6 @@ export default function Home({
 		}, 1000);
 		if (urlToShow) {
 			window.history.replaceState(null, null, urlToShow);
-			// router.replace('/xyz','/xyz', { shallow: true })
-			// history.replaceState(null, null, urlToShow)
 		}
 	}, []);
 

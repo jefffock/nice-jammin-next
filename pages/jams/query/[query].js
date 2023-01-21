@@ -82,7 +82,6 @@ export const getStaticProps = async (ctx) => {
 	const asc = params?.order === 'asc' ? true : false;
 	const limit = params?.limit ?? 100;
 	const showListenable = params?.showListenable === 'true';
-	const showRatings = params?.showRatings === 'true';
 	let jams = supabase.from('versions').select('*');
 	if (artist) {
 		jams = jams.eq('artist', artist);
@@ -152,8 +151,6 @@ export const getStaticProps = async (ctx) => {
 			initialOrder: asc ? 'asc' : 'desc',
 			initialLimit: limit,
 			initialShowListenable: showListenable,
-			initialShowMoreFilters: false,
-			initialShowRatings: showRatings,
 			fullUrl: query,
 			urlToShow: urlToShow,
 		},

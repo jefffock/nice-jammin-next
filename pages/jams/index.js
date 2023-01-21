@@ -95,8 +95,6 @@ export const getStaticProps = async (ctx) => {
 			initialOrder: 'desc',
 			initialLimit: limit,
 			initialShowListenable: false,
-			initialShowMoreFilters:  false,
-			initialShowRatings: false,
 			fullUrl: '/jams',
 			urlToShow: null,
 		},
