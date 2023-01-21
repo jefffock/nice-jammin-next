@@ -887,7 +887,7 @@ export default function AddVersion({
 									? ' 🤝'
 									: song === 'Fire on the Mountain'
 									? ' 🔥⛰️'
-									: song === "Wolfman's Brother"
+									: song === "Wolfman's Brother" || song === 'Silver Rising'
 									? ' 🐺'
 									: song === 'Tube'
 									? ' 🧪'
@@ -909,9 +909,10 @@ export default function AddVersion({
 									  song === 'This Old Sea' ||
 									  song === 'A Song I Heard the Ocean Sing' ||
 									  song === 'Drowned' ||
-                    song === 'The Squirming Coil'
+									  song === 'The Squirming Coil' ||
+									  song === 'Ya Mar'
 									? ' 🌊'
-									: song === 'Split Open and Melt'
+									: song === 'Split Open and Melt' || song === 'Maze'
 									? ' 🫠'
 									: song === 'Arrow'
 									? ' 🏹'
@@ -940,7 +941,7 @@ export default function AddVersion({
 									: song === 'Tumble' || song === 'Cavern'
 									? ' 👟'
 									: song === '1999'
-									? ' 🕺'
+									? ' 🥳'
 									: song === 'Piper'
 									? ' 🪱'
 									: song === 'Roses Are Free' ||
@@ -982,7 +983,9 @@ export default function AddVersion({
 									? ' 🥘'
 									: song === 'Slave to the Traffic Light'
 									? ' 🚦'
-									: song === 'The Moma Dance' || song === "The Old Man's Boat"
+									: song === 'The Moma Dance' ||
+									  song === "The Old Man's Boat" ||
+									  song === 'Ship of Fools'
 									? ' ⛵'
 									: song === 'Wilson' || song === 'Prince Caspian'
 									? ' 🤴'
@@ -992,6 +995,99 @@ export default function AddVersion({
 									? ' 🥛'
 									: song === 'Possum' || song === 'Windy Mountain'
 									? ' ⛰️'
+									: song === 'Dark Star'
+									? ' 🌌'
+									: song === 'Jack Straw'
+									? ' 👩🍷'
+									: song === 'The Music Never Stopped'
+									? ' 🎶'
+									: song === 'Playing in the Band' || song === 'Roggae'
+									? ' 🌅'
+									: song === "Truckin'"
+									? ' 🚚'
+									: song === 'After Midnight'
+									? ' 🍑🍦'
+									: song === 'Slipknot!'
+									? ' 🪢'
+									: song === 'Scarlet Begonias'
+									? ' 🌺'
+									: song === 'Midnite Moonlite'
+									? ' 🌕'
+									: song === 'Greatest Story Ever Told'
+									? ' 🔧'
+									: song === 'Carini'
+									? ' 😵'
+									: song === 'Space' ||
+									  song === 'Also Sprach Zarathustra (2001)' ||
+									  song === 'Beneath a Sea of Stars Part 1'
+									? ' 🌌'
+									: song === 'Drums'
+									? ' 🥁'
+									: song === 'AC/DC Bag'
+									? ' 👜'
+									: song === 'Brother'
+									? ' 🛁'
+									: song === 'Buried Alive'
+									? ' 🪦'
+									: song === 'Butter Rum'
+									? ' 🧈🥃'
+									: song === 'Candyman'
+									? ' 🍭'
+									: song === 'All I Need'
+									? ' 🗝️'
+									: song === 'Crosseyed and Painless'
+									? ' 👁️👁️'
+									: song === 'Dancing in the Streets' ||
+									  song === "Mike's Song" ||
+									  song === 'Weekapaug Groove' ||
+									  song === "Mike's Groove"
+									? ' 🕺💃'
+									: song === 'Free'
+									? ' 🛳️'
+									: song.includes('Ice')
+									? ' 🧊'
+									: song === 'I Know You Rider'
+									? ' 🏇'
+									: song === 'Suzy Greenberg'
+									? ' 👩‍🎨'
+									: song === 'Stash'
+									? ' 🧄'
+									: song === 'Pancakes'
+									? ' 🥞'
+									: song === 'Hungersite'
+									? ' 🕊️'
+									: song === "No Men In No Man's Land"
+									? ' 😃'
+									: song === 'Backwards Down the Number Line'
+									? ' 🎂'
+									: song === 'The River'
+									? ' 🏞️'
+									: song === "Ain't No Bread in the Breadbox"
+									? ' 🍞'
+									: song === 'All Along the Watchtower'
+									? ' 🏰🏇🏇'
+									: song === 'Yeti'
+									? ' ☃️'
+									: song === 'Wysteria Lane'
+									? ' 🌿' //get hyacinth when supported
+									: song === 'Twist'
+									? ' 🗣️'
+									: song === 'Theme From the Bottom'
+									? ' 🐟'
+									: song === 'The Horse'
+									? ' 🐴'
+									: song === 'Makisupa Policeman'
+									? ' 👮'
+									: song === 'David Bowie'
+									? ' ⚡'
+									: song === 'Watercolor Days'
+									? ' 🖼️'
+									: song === 'Ocelot'
+									? ' 🐈'
+									: song === 'Scents and Subtle Sounds'
+									? ' 🌈'
+									: song === 'Me and My Uncle' || 'El Paso'
+									? ' 🤠'
 									: ''}
 							</Typography>
 							<Button
@@ -1070,15 +1166,17 @@ export default function AddVersion({
 						/>
 					)}
 					{artist && !date && (
-            <>
-            <Typography my='1em'>{artist !== 'Squeaky Feet' ? 'Or' : ''}</Typography>
-						<DatePicker
-							setDate={setDate}
-							my={'1em'}
-							date={date}
-							artist={artist}
-						/>
-            </>
+						<>
+							<Typography my='1em'>
+								{artist !== 'Squeaky Feet' ? 'Or' : ''}
+							</Typography>
+							<DatePicker
+								setDate={setDate}
+								my={'1em'}
+								date={date}
+								artist={artist}
+							/>
+						</>
 					)}
 					{date && (
 						<Box
@@ -1169,7 +1267,7 @@ export default function AddVersion({
 						</Alert>
 					)}
 					{!versionExists &&
-            songExists &&
+						songExists &&
 						song &&
 						artist &&
 						date &&
