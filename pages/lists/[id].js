@@ -17,9 +17,7 @@ export default function App({
 	initialOrder,
 	initialOrderBy,
 	initialLimit,
-	initialShowMoreFilters,
 	initialShowListenable,
-	initialShowRatings,
 	initialProfile,
 	fullUrl,
 	urlToShow,
@@ -40,9 +38,7 @@ export default function App({
 				initialOrder={initialOrder}
 				initialOrderBy={initialOrderBy}
 				initialLimit={initialLimit}
-				initialShowMoreFilters={initialShowMoreFilters}
 				initialShowListenable={initialShowListenable}
-				initialShowRatings={initialShowRatings}
 				initialProfile={initialProfile}
 				fullUrl={fullUrl}
 				urlToShow={urlToShow}

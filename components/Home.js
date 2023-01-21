@@ -54,12 +54,12 @@ export default function Home({
 	initialOrder,
 	initialOrderBy,
 	initialLimit,
-	initialShowMoreFilters,
 	initialShowListenable,
-	initialShowRatings,
 	initialProfile,
 	fullUrl,
 	urlToShow,
+  initialShowMoreFilters,
+  initialShowRatings,
 }) {
 	// const [currentJams, setCurrentJams] = useState(jams);
 	const [songs, setSongs] = useState(initialSongs);
@@ -83,9 +83,8 @@ export default function Home({
 	const tagsSelectedString = tagsSelected.join(',');
 	const router = useRouter();
 	const [showRatings, setShowRatings] = useState(initialShowRatings);
+  const [showMoreFilters, setShowMoreFilters] = useState(initialShowMoreFilters);
 	const isMounted = useRef(false);
-	const newUrls = useRef(0);
-	const showMoreFilters = useRef(initialShowMoreFilters);
 	const [showListenable, setShowListenable] = useState(initialShowListenable);
 	const [limit, setLimit] = useState(initialLimit);
 	const prevParamsRef = useRef('/');
@@ -104,6 +103,7 @@ export default function Home({
 				if ((song && index > -1) || !song) {
 					setLoadingJams(true);
 					let query = {};
+          const showMore = JSON.parse(window.localStorage.getItem('showMore'));
 					if (artist) query.artist = artist;
 					if (song) query.song = song;
 					if (tagsSelected.length > 0) query.sounds = tagsSelected;
@@ -113,7 +113,7 @@ export default function Home({
 					if (orderBy !== 'id') query.orderBy = orderBy;
 					if (showListenable) query.showListenable = showListenable;
 					if (limit !== 100) query.limit = limit;
-					const params = new URLSearchParams(query).toString();
+					let params = new URLSearchParams(query).toString();
 					if (
 						(fullUrl === '/' || fullUrl === '/jams') &&
 						params === ''
@@ -122,13 +122,15 @@ export default function Home({
 						return;
 					}
 					if ('/?' + params !== fullUrl) {
-						prevParamsRef.current = reducedParams;
 						if (params.length > 0) {
+              if (showRatings) query.showRatings = showRatings;
+              if (showMore) query.showMoreFilters = showMoreFilters;
+              params = new URLSearchParams(query).toString();
               setLoadingJams(false)
 							router.push(
 								{
 									pathname: '/jams/query/[query]',
-									query: { query: reducedParams },
+									query: { query: params },
 								},
 								null,
 								{
@@ -186,6 +188,10 @@ export default function Home({
 		if (urlToShow) {
 			window.history.replaceState(null, null, urlToShow);
 		}
+    const localShowRatings = JSON.parse(window.localStorage.getItem('njShowRatings'))
+    if (!showRatings && localShowRatings) {
+    setShowRatings(localShowRatings)
+    }
 	}, []);
 
 	useEffect(() => {
@@ -250,7 +256,8 @@ export default function Home({
 	}, [user, profile]);
 
 	function handleShowRatingsChange(e) {
-		setShowRatings(e.target.checked);
+    window.localStorage.setItem('njShowRatings', JSON.stringify(e.target.checked))
+    setShowRatings(e.target.checked);
 	}
 
 	const tagsList = {
@@ -433,11 +440,13 @@ export default function Home({
 							showRatings={showRatings}
 							handleShowRatingsChange={handleShowRatingsChange}
 							jams={jams && jams.length > 0}
-							showMoreFilters={showMoreFilters}
 							showListenable={showListenable}
 							setShowListenable={setShowListenable}
 							limit={limit}
 							setLimit={setLimit}
+              fullUrl={fullUrl}
+              showMoreFilters={showMoreFilters}
+              setShowMoreFilters={setShowMoreFilters}
 						/>
 						<FilterList
 							artist={artist}
@@ -516,7 +525,7 @@ export default function Home({
 						setSong={setSong}
 						jams={jams && jams.length > 0}
 					/>
-					{fullUrl !== '/' && (
+					{fullUrl !== '/' && fullUrl !== '/jams' && (
 						<FilterBar
 							setArtist={setArtist}
 							artist={artist}
@@ -536,12 +545,14 @@ export default function Home({
 							showRatings={showRatings}
 							handleShowRatingsChange={handleShowRatingsChange}
 							jams={jams && jams.length > 0}
-							showMoreFilters={showMoreFilters}
 							showListenable={showListenable}
 							setShowListenable={setShowListenable}
 							limit={limit}
 							setLimit={setLimit}
 							lowerFilterBar={true}
+              fullUrl={fullUrl}
+              showMoreFilters={showMoreFilters}
+              setShowMoreFilters={setShowMoreFilters}
 						/>
 					)}
 					<br></br>
