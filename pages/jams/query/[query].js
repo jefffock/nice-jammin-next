@@ -22,6 +22,7 @@ export default function App({
 	initialProfile,
 	fullUrl,
 	urlToShow,
+  stringParams,
   initialShowMoreFilters,
   initialShowRatings,
 }) {
@@ -50,6 +51,7 @@ export default function App({
 			urlToShow={urlToShow}
       initialShowMoreFilters={initialShowMoreFilters}
       initialShowRatings={initialShowRatings}
+      stringParams={stringParams}
       router={router}
       pathname={pathname}
       searchParams={searchParams}
@@ -73,7 +75,6 @@ export const getStaticProps = async (ctx) => {
 		.select('*')
 		.eq('params', stringParams)
 		.single();
-  console.log('list', list);
 	if (list.data) {
 		urlToShow = '/jams/lists/' + list.data.id;
 	} 

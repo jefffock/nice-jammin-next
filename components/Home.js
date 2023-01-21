@@ -200,7 +200,7 @@ export default function Home({
 			async function insertList(query, params) {
 				let newList = await supabase
 					.from('jams_lists')
-					.insert([{ query, params: JSON.stringify(params) }])
+					.insert([{ query, params }])
 					.select();
 				if (newList?.data?.length > 0 && newList?.data[0]?.id) {
 					window.history.replaceState(null, null, '/jams/lists/' + newList.data[0].id)
