@@ -6,6 +6,9 @@ const withBundleAnalyzer = shouldAnalyzeBundles
   : (config) => config;
 
 const nextConfig = {
+  // experimental: {
+  //   appDir: true,
+  // },
   reactStrictMode: true,
   i18n: {
     locales: ['en'],
