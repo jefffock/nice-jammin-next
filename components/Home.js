@@ -103,7 +103,6 @@ export default function Home({
 				if ((song && index > -1) || !song) {
 					setLoadingJams(true);
 					let query = {};
-          const showMore = JSON.parse(window.localStorage.getItem('showMore'));
 					if (artist) query.artist = artist;
 					if (song) query.song = song;
 					if (tagsSelected.length > 0) query.sounds = tagsSelected;
@@ -124,13 +123,13 @@ export default function Home({
 					if ('/?' + params !== fullUrl) {
 						if (params.length > 0) {
               if (showRatings) query.showRatings = showRatings;
-              if (showMore) query.showMoreFilters = showMoreFilters;
-              params = new URLSearchParams(query).toString();
+              if (showMoreFilters) query.showMoreFilters = showMoreFilters;
+              let fullParams = new URLSearchParams(query).toString();
               setLoadingJams(false)
 							router.push(
 								{
 									pathname: '/jams/query/[query]',
-									query: { query: params },
+									query: { query: fullParams },
 								},
 								null,
 								{

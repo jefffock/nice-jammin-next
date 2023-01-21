@@ -61,9 +61,9 @@ export default function FilterBar({
 		);
 		setShowMoreFilters(!showMoreFilters);
 	}
-
+  const noFilters = !artist && !song && !tagsSelected.length && !beforeDate && !afterDate;
 	return (
-		<Box sx={{ mx: '0.5em', mt: '1em' }}>
+		<Box sx={{ mx: '0.5em', mt:`${noFilters ? '3.4em' : '1em'}` }}>
 			<Box
 				sx={{
 					bgcolor: 'white',

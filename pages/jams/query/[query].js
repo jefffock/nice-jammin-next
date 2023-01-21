@@ -51,22 +51,20 @@ export default function App({
 }
 
 export const getStaticProps = async (ctx) => {
-  console.log('ctx', ctx)
-	const query = ctx.params.query;
+	let query = ctx.params.query;
   const params = Object.fromEntries(new URLSearchParams(query));
-  console.log('params', params);
-  console.log('query', query);
-  console.log('stringParams', params);
   const showMoreFilters = params?.showMoreFilters;
   const showRatings = params?.showRatings;
   delete params.showMoreFilters;
   delete params.showRatings;
-  console.log('params', params)  
+  query = query.replace('&showRatings=true', '');
+  query = query.replace('&showMoreFilters=true', '');
+  const stringParams = JSON.stringify(params); 
 	let urlToShow = '/jams/lists/';
 	const list = await supabase
 		.from('jams_lists')
 		.select('*')
-		.eq('query', query)
+		.eq('params', stringParams)
 		.single();
 	if (list.data) {
 		urlToShow += list.data.id;
@@ -141,8 +139,6 @@ export const getStaticProps = async (ctx) => {
 			fetchedSongs = songs;
 		}
 	);
-  console.log('showMoreFilters', showMoreFilters)
-  console.log('showRatings', showRatings)
 	return {
 		props: {
 			jams: fetchedJams.data,
@@ -160,8 +156,8 @@ export const getStaticProps = async (ctx) => {
 			initialShowListenable: showListenable,
 			fullUrl: query,
 			urlToShow: urlToShow,
-      initialShowMoreFilters: showMoreFilters ?? false,
-      initialShowRatings: showRatings ?? false,
+      initialShowMoreFilters: showMoreFilters === 'true',
+      initialShowRatings: showRatings === 'true',
 		},
 		revalidate: 10,
 	};
@@ -172,7 +168,6 @@ export const getStaticPaths = async () => {
 	const paths = lists?.data?.map((list) => ({
 		params: { query: list.query },
 	}));
-	console.log('paths', paths);
 	return {
 		paths,
 		fallback: 'blocking',
