@@ -75,7 +75,6 @@ export const getStaticProps = async (ctx) => {
 		.select('*')
 		.eq('params', stringParams)
 		.single();
-  console.log('list', list);
 	if (list.data) {
 		urlToShow = '/jams/lists/' + list.data.id;
 	} 
