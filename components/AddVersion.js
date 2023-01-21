@@ -1086,7 +1086,7 @@ export default function AddVersion({
 									? ' 🐈'
 									: song === 'Scents and Subtle Sounds'
 									? ' 🌈'
-									: song === 'Me and My Uncle' || 'El Paso'
+									: song === 'Me and My Uncle' || song === 'El Paso'
 									? ' 🤠'
 									: ''}
 							</Typography>
