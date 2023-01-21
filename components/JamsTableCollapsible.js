@@ -340,7 +340,7 @@ function Row({ row, user, profile, songs, showRatings }) {
 						? ' 🤝'
 						: song === 'Fire on the Mountain'
 						? ' 🔥⛰️'
-						: song === "Wolfman's Brother"
+						: song === "Wolfman's Brother" || song === 'Silver Rising'
 						? ' 🐺'
 						: song === 'Tube'
 						? ' 🧪'
@@ -360,11 +360,12 @@ function Row({ row, user, profile, songs, showRatings }) {
 						  song === 'A Wave of Hope' ||
 						  song === 'Ruby Waves' ||
 						  song === 'This Old Sea' ||
-              song === 'A Song I Heard the Ocean Sing' ||
-              song === 'Drowned' ||
-              song === 'The Squirming Coil'
+						  song === 'A Song I Heard the Ocean Sing' ||
+						  song === 'Drowned' ||
+						  song === 'The Squirming Coil' ||
+              song === 'Ya Mar'
 						? ' 🌊'
-						: song === 'Split Open and Melt'
+						: song === 'Split Open and Melt' || song === 'Maze'
 						? ' 🫠'
 						: song === 'Arrow'
 						? ' 🏹'
@@ -393,7 +394,7 @@ function Row({ row, user, profile, songs, showRatings }) {
 						: song === 'Tumble' || song === 'Cavern'
 						? ' 👟'
 						: song === '1999'
-						? ' 🕺'
+						? ' 🥳'
 						: song === 'Piper'
 						? ' 🪱'
 						: song === 'Roses Are Free' ||
@@ -434,7 +435,9 @@ function Row({ row, user, profile, songs, showRatings }) {
 						? ' 🥘'
 						: song === 'Slave to the Traffic Light'
 						? ' 🚦'
-						: song === 'The Moma Dance' || song === "The Old Man's Boat"
+						: song === 'The Moma Dance' ||
+						  song === "The Old Man's Boat" ||
+						  song === 'Ship of Fools'
 						? ' ⛵'
 						: song === 'Wilson' || song === 'Prince Caspian'
 						? ' 🤴'
@@ -444,6 +447,96 @@ function Row({ row, user, profile, songs, showRatings }) {
 						? ' 🥛'
 						: song === 'Possum' || song === 'Windy Mountain'
 						? ' ⛰️'
+						: song === 'Dark Star'
+						? ' 🌌'
+						: song === 'Jack Straw'
+						? ' 👩🍷'
+						: song === 'The Music Never Stopped'
+						? ' 🎶'
+						: song === 'Playing in the Band' || song === 'Roggae'
+						? ' 🌅'
+						: song === "Truckin'"
+						? ' 🚚'
+						: song === 'After Midnight'
+						? ' 🍑🍦'
+						: song === 'Slipknot!'
+						? ' 🪢'
+						: song === 'Scarlet Begonias'
+						? ' 🌺'
+						: song === 'Midnite Moonlite'
+						? ' 🌕'
+						: song === 'Greatest Story Ever Told'
+						? ' 🔧'
+						: song === 'Carini'
+						? ' 😵'
+						: song === 'Space' ||
+						  song === 'Also Sprach Zarathustra (2001)' ||
+						  song === 'Beneath a Sea of Stars Part 1'
+						? ' 🌌'
+						: song === 'Drums'
+						? ' 🥁'
+						: song === 'AC/DC Bag'
+						? ' 👜'
+						: song === 'Brother'
+						? ' 🛁'
+						: song === 'Buried Alive'
+						? ' 🪦'
+						: song === 'Butter Rum'
+						? ' 🧈🥃'
+						: song === 'Candyman'
+						? ' 🍭'
+						: song === 'All I Need'
+						? ' 🗝️'
+						: song === 'Crosseyed and Painless'
+						? ' 👁️👁️'
+						: song === 'Dancing in the Streets' || song === "Mike's Song" || song === 'Weekapaug Groove' || song === "Mike's Groove"
+						? ' 🕺💃'
+						: song === 'Free'
+						? ' 🛳️'
+						: song.includes('Ice')
+						? ' 🧊'
+						: song === 'I Know You Rider'
+						? ' 🏇'
+						: song === 'Suzy Greenberg'
+						? ' 👩‍🎨'
+						: song === 'Stash'
+						? ' 🧄'
+						: song === 'Pancakes'
+						? ' 🥞'
+						: song === 'Hungersite'
+						? ' 🕊️'
+						: song === "No Men In No Man's Land"
+						? ' 😃'
+						: song === 'Backwards Down the Number Line'
+						? ' 🎂'
+            : song === 'The River'
+            ? ' 🏞️'
+            : song === "Ain't No Bread in the Breadbox"
+            ? ' 🍞'
+            : song === 'All Along the Watchtower'
+            ? ' 🏰🏇🏇'
+            : song === 'Yeti'
+            ? ' ☃️'
+            : song === 'Wysteria Lane'
+            ? ' 🌿' //get hyacinth when supported
+            : song === 'Twist'
+            ? ' 🗣️'
+            : song === 'Theme From the Bottom'
+            ? ' 🐟'
+            : song === 'The Horse'
+            ? ' 🐴'
+            : song === 'Makisupa Policeman'
+            ? ' 👮'
+            : song === 'David Bowie'
+            ? ' ⚡'
+            : song === 'Watercolor Days'
+            ? ' 🖼️'
+            : song === 'Ocelot'
+            ? ' 🐈'
+            : song === 'Scents and Subtle Sounds'
+            ? ' 🌈'
+            : song === 'Me and My Uncle' || song === 'El Paso' 
+            ? ' 🤠'
 						: ''}
 				</TableCell>
 				<TableCell sx={{ maxWidth: '10px' }}>{row.date}</TableCell>

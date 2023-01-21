@@ -31,23 +31,35 @@ export default function FilterBar({
 	setOrder,
 	showRatings,
 	handleShowRatingsChange,
-	showMoreFilters,
 	jams,
 	showListenable,
 	setShowListenable,
 	limit,
 	setLimit,
 	lowerFilterBar,
+	fullUrl,
+	showMoreFilters,
+	setShowMoreFilters,
 }) {
-	const [showMore, setShowMore] = useState(showMoreFilters.current);
+	useEffect(() => {
+		if (!(fullUrl === '/' || fullUrl === '/jams')) {
+      let showMoreLocal = JSON.parse(window.localStorage.getItem('njShowMoreFilters'))
+			if (!showMoreFilters && showMoreLocal) {
+				setShowMoreFilters(showMoreLocal)
+			}
+		}
+	}, []);
 
 	function handleListenableChange(e) {
 		setShowListenable(e.target.checked);
 	}
 
 	function handleShowMoreChange() {
-		showMoreFilters.current = !showMore;
-		setShowMore(!showMore);
+		window.localStorage.setItem(
+			'njShowMoreFilters',
+			JSON.stringify(!showMoreFilters)
+		);
+		setShowMoreFilters(!showMoreFilters);
 	}
 
 	return (
@@ -109,9 +121,9 @@ export default function FilterBar({
 					}}
 					onClick={handleShowMoreChange}
 				>
-					{showMore ? '✌️ Less' : '⚙️ More'}
+					{showMoreFilters ? '✌️ Less' : '⚙️ More'}
 				</Typography>
-				{showMore && (
+				{showMoreFilters && (
 					<Box
 						sx={{
 							display: 'flex',

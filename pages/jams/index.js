@@ -1,6 +1,5 @@
 import { supabase } from '../../utils/supabaseClient';
 import Home from '../../components/Home';
-import Head from 'next/head';
 
 export default function App({
 	jams,
@@ -17,9 +16,7 @@ export default function App({
 	initialOrder,
 	initialOrderBy,
 	initialLimit,
-	initialShowMoreFilters,
 	initialShowListenable,
-	initialShowRatings,
 	initialProfile,
 	fullUrl,
 	urlToShow,
@@ -40,9 +37,7 @@ export default function App({
 				initialOrder={initialOrder}
 				initialOrderBy={initialOrderBy}
 				initialLimit={initialLimit}
-				initialShowMoreFilters={initialShowMoreFilters}
 				initialShowListenable={initialShowListenable}
-				initialShowRatings={initialShowRatings}
 				initialProfile={initialProfile}
 				fullUrl={fullUrl}
 				urlToShow={urlToShow}
@@ -95,8 +90,6 @@ export const getStaticProps = async (ctx) => {
 			initialOrder: 'desc',
 			initialLimit: limit,
 			initialShowListenable: false,
-			initialShowMoreFilters:  false,
-			initialShowRatings: false,
 			fullUrl: '/jams',
 			urlToShow: null,
 		},

@@ -17,12 +17,12 @@ export default function App({
 	initialOrder,
 	initialOrderBy,
 	initialLimit,
-	initialShowMoreFilters,
 	initialShowListenable,
-	initialShowRatings,
 	initialProfile,
 	fullUrl,
 	urlToShow,
+  initialShowMoreFilters,
+  initialShowRatings,
 }) {
 	return (
 		<Home
@@ -40,12 +40,12 @@ export default function App({
 			initialOrder={initialOrder}
 			initialOrderBy={initialOrderBy}
 			initialLimit={initialLimit}
-			initialShowMoreFilters={initialShowMoreFilters}
 			initialShowListenable={initialShowListenable}
-			initialShowRatings={initialShowRatings}
 			initialProfile={initialProfile}
 			fullUrl={fullUrl}
 			urlToShow={urlToShow}
+      initialShowMoreFilters={initialShowMoreFilters}
+      initialShowRatings={initialShowRatings}
 		/>
 	);
 }
@@ -57,6 +57,11 @@ export const getStaticProps = async (ctx) => {
   console.log('params', params);
   console.log('query', query);
   console.log('stringParams', params);
+  const showMoreFilters = params?.showMoreFilters;
+  const showRatings = params?.showRatings;
+  delete params.showMoreFilters;
+  delete params.showRatings;
+  console.log('params', params)  
 	let urlToShow = '/jams/lists/';
 	const list = await supabase
 		.from('jams_lists')
@@ -82,7 +87,6 @@ export const getStaticProps = async (ctx) => {
 	const asc = params?.order === 'asc' ? true : false;
 	const limit = params?.limit ?? 100;
 	const showListenable = params?.showListenable === 'true';
-	const showRatings = params?.showRatings === 'true';
 	let jams = supabase.from('versions').select('*');
 	if (artist) {
 		jams = jams.eq('artist', artist);
@@ -137,6 +141,8 @@ export const getStaticProps = async (ctx) => {
 			fetchedSongs = songs;
 		}
 	);
+  console.log('showMoreFilters', showMoreFilters)
+  console.log('showRatings', showRatings)
 	return {
 		props: {
 			jams: fetchedJams.data,
@@ -152,10 +158,10 @@ export const getStaticProps = async (ctx) => {
 			initialOrder: asc ? 'asc' : 'desc',
 			initialLimit: limit,
 			initialShowListenable: showListenable,
-			initialShowMoreFilters: false,
-			initialShowRatings: showRatings,
 			fullUrl: query,
 			urlToShow: urlToShow,
+      initialShowMoreFilters: showMoreFilters ?? false,
+      initialShowRatings: showRatings ?? false,
 		},
 		revalidate: 10,
 	};

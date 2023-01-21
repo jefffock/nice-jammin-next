@@ -16,9 +16,7 @@ export default function App({
 	initialOrder,
 	initialOrderBy,
 	initialLimit,
-	initialShowMoreFilters,
 	initialShowListenable,
-	initialShowRatings,
 	initialProfile,
 	fullUrl,
 	urlToShow,
@@ -39,9 +37,7 @@ export default function App({
 				initialOrder={initialOrder}
 				initialOrderBy={initialOrderBy}
 				initialLimit={initialLimit}
-				initialShowMoreFilters={initialShowMoreFilters}
 				initialShowListenable={initialShowListenable}
-				initialShowRatings={initialShowRatings}
 				initialProfile={initialProfile}
 				fullUrl={fullUrl}
 				urlToShow={urlToShow}
@@ -54,7 +50,6 @@ export const getStaticProps = async (ctx) => {
 	const asc = false;
 	const limit = 100;
 	const showListenable = false;
-	const showRatings = false;
 	let jams = supabase.from('versions').select('*');
 	jams = jams.order(orderBy, { ascending: asc });
 	jams = jams.limit(limit);
@@ -96,8 +91,6 @@ export const getStaticProps = async (ctx) => {
 			initialOrder: 'desc',
 			initialLimit: limit,
 			initialShowListenable: showListenable,
-			initialShowMoreFilters: false,
-			initialShowRatings: showRatings,
 			fullUrl: '/',
 			urlToShow: null,
 		},
