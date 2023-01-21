@@ -447,19 +447,6 @@ export default function Home({
               showMoreFilters={showMoreFilters}
               setShowMoreFilters={setShowMoreFilters}
 						/>
-						<FilterList
-							artist={artist}
-							setArtist={setArtist}
-							tagsSelected={tagsSelected}
-							setTagsSelected={setTagsSelected}
-							beforeDate={beforeDate}
-							afterDate={afterDate}
-							setBeforeDate={setBeforeDate}
-							setAfterDate={setAfterDate}
-							song={song}
-							setSong={setSong}
-							jams={jams && jams.length > 0}
-						/>
 					</>
 				)}
 				<TableTitle
