@@ -203,10 +203,28 @@ export default function Home({
 					.insert([{ query, params }])
 					.select();
 				if (newList?.data?.length > 0 && newList?.data[0]?.id) {
-					window.history.replaceState(null, null, '/jams/lists/' + newList.data[0].id)
+					window.history.replaceState(
+						null,
+						null,
+						'/jams/lists/' + newList.data[0].id
+					);
 				}
-			} insertList(fullUrl, stringParams);
+			}
+			insertList(fullUrl, stringParams);
 		}
+		supabase.auth.onAuthStateChange(async (event, session) => {
+			if (event == 'PASSWORD_RECOVERY') {
+				const newPassword = prompt(
+					'What would you like your new password to be?'
+				);
+				const { data, error } = await supabase.auth.updateUser({
+					password: newPassword,
+				});
+
+				if (data) alert('Password updated successfully!');
+				if (error) alert('There was an error updating your password.');
+			}
+		});
 	}, []);
 
 	useEffect(() => {
@@ -382,7 +400,7 @@ export default function Home({
 	}
 	title.trim();
 	subtitle.trim();
-	const fullTitle = title + ': ' + subtitle + ' on NiceJammin - Join Today!';
+	const fullTitle = title + ': ' + subtitle + ' on Jam Fans';
 
 	return (
 		<ThemeProvider theme={theme}>

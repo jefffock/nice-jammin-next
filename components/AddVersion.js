@@ -25,6 +25,8 @@ import Link from 'next/link';
 import YearPicker from './YearPicker';
 import Stack from '@mui/material/Stack';
 import Image from 'next/image';
+import SignIn from './Login';
+import TopBar from './AppBar';
 
 export default function AddVersion({
 	songs,
@@ -728,16 +730,20 @@ export default function AddVersion({
 				<DialogTitle fontSize={26}>Add a Jam 🔥</DialogTitle>
 				<DialogContent sx={{ minHeight: '300px', minWidth: '300px' }}>
 					<Typography sx={{ mb: '1em' }}>
-						Thanks for helping this jam reach more ears 🙏 You rock! 🎸
+						Thanks for helping a jam reach more ears 🙏 You rock! 🎸
 					</Typography>
 					{!user && (
+            <>
 						<Alert
 							severity='info'
 							sx={{ my: '1em' }}
 						>
-							Please <Link href='/login'>log in</Link> to contribute - thank
-							you!
+							Please log in to contribute - thank
+							you! If you don&apos;t have an account, you can
+              you can <Link href='/join'>sign up here!</Link>
 						</Alert>
+            <SignIn showTopBar={false} />
+            </>
 					)}
 					{user && (!artist || artist === 'All Bands') && (
 						<ArtistPicker

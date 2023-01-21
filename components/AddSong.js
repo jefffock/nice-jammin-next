@@ -27,7 +27,6 @@ export default function AddSong({
 	profile,
 	setSongs,
 	artist,
-	setArtist,
 }) {
 	const [open, setOpen] = useState(false);
 	const [songToAdd, setSongToAdd] = useState(song);
@@ -161,19 +160,6 @@ export default function AddSong({
 							sx={{ my: '1em' }}
 						>
 							Please double check for typos. Thank you!
-						</Alert>
-					)}
-					<ArtistPicker
-						setArtist={setArtist}
-						artist={artist}
-					/>
-					{user && !successAlertText && (
-						<Alert
-							severity='info'
-							sx={{ my: '1em' }}
-						>
-							The band doesn&apos;t have to be the original artist, just the band on
-							NiceJammin that plays it the most.
 						</Alert>
 					)}
 					{successAlertText && (

@@ -116,7 +116,7 @@ export default function Welcome({ initialSession, initialUser }) {
 						fontSize={22}
 						my='2em'
 					>
-						Welcome to Nice Jammin!
+						Welcome to Jam Fans!
 					</Typography>
 					<Image
 						alt='Nice Jammin Logo'

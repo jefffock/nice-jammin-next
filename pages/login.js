@@ -6,7 +6,7 @@ export default function Login() {
 
   return (
     <Box sx={{ mt:0, pt:0, width: '100vw', height: '100vh', bgcolor: 'white' }}>
-      <SignIn />
+      <SignIn showTopBar={true}/>
     </Box>
   )
 }

@@ -2,7 +2,7 @@
 
 ## Overview
 
-View live site at [NiceJammin.com](https://nicejammin.com)
+View live site at [jam.fans](https://jam.fans)
 
 A CRUD app using React, NextJS, MaterialUI components, and SupaBase (PostgreSQL).
 

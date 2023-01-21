@@ -28,7 +28,7 @@ export default function Privacy() {
 				>
 					<h1>Privacy Policy</h1>
 					<Typography>
-						At nicejammin.com, we are committed to protecting the privacy of our
+						At Jam Fans, we are committed to protecting the privacy of our
 						users. <br />
 						<br />
 						1. We will not sell, rent, or give away your email address or any other
@@ -49,7 +49,7 @@ export default function Privacy() {
 						any third party. <br />
 						<br />
 						If you have any questions or concerns about our privacy policy,
-						please contact us at nicejammin@nicejammin.com
+						please contact us at hi@jam.fans
 					</Typography>
 				</Box>
 			</Box>
