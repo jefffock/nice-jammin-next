@@ -65,14 +65,14 @@ export default function TopBar({
 								mx: 2,
 								display: { xs: 'flex' },
 								flexGrow: 1,
-								fontWeight: 400,
+								fontWeight: 300,
 								letterSpacing: '.1rem',
 								color: 'inherit',
 								textDecoration: 'none',
 								my: 'auto',
 							}}
 						>
-							Nice Jammin&apos;
+							Jam Fans
 						</Typography>
 					</Stack>
 					{showButton && (

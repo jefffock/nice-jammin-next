@@ -28,7 +28,7 @@ export default function Terms() {
 				>
 					<h1>Terms of Service</h1>
 					<Typography>
-						By using nicejammin.com, you agree to the following terms of
+						By using jam.fans, you agree to the following terms of
 						service: <br />
 						<br />
 						1. Community Resource: This site is a community resource, and we are
@@ -52,7 +52,7 @@ export default function Terms() {
 						5. Data Use: You are free to use the data on the website, including
 						but not limited to the jams and comments, for any purpose. <br />
 						<br />
-						6. Changes to Terms of Service: nicejammin.com reserves the right to
+						6. Changes to Terms of Service: jam.fans reserves the right to
 						update and change these terms of service at any time without notice.
 						<br />
 						<br />
@@ -61,7 +61,7 @@ export default function Terms() {
 						<br />
 						<br />
 						If you have any questions or concerns about these terms of service,
-						please contact us at nicejammin@nicejammin.com
+						please contact us at hi@jam.fans
 					</Typography>
 				</Box>
 			</Box>

@@ -12,8 +12,6 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import StarRateIcon from '@mui/icons-material/StarRate';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
 import RateVersion from './RateVersion';

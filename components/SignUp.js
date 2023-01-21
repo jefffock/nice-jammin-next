@@ -16,6 +16,7 @@ import { useRouter } from 'next/router';
 import Alert from '@mui/material/Alert';
 import { supabase } from '../utils/supabaseClient';
 import GoogleButton from 'react-google-button';
+import Stack from '@mui/material/Stack';
 
 export default function SignUp({ setSession }) {
 	const [checked, setChecked] = useState(false);
@@ -24,6 +25,7 @@ export default function SignUp({ setSession }) {
 	const [passwordErrorText, setPasswordErrorText] = useState('');
 	const [emailErrorText, setEmailErrorText] = useState('');
 	const [successText, setSuccessText] = useState('');
+	const [magicLinkSuccessText, setMagicLinkSuccessText] = useState('');
 	const router = useRouter();
 
 	const handleCheck = () => {
@@ -40,27 +42,22 @@ export default function SignUp({ setSession }) {
 		const data = new FormData(event.currentTarget);
 		const email = data.get('email');
 		const password = data.get('password');
-		const username = data.get('username');
-		const isValid = await validateSignUp(email, password, username);
-		if (isValid) {
-			await signUpWithEmail(email, password, username);
+		let isValid;
+		if (email && !password) {
+			isValid = validateSignUp(email, '123456');
+			if (isValid) {
+				await signInWithEmail(email, password);
+			}
+		} else if (email && password) {
+			isValid = validateSignUp(email, password);
+			if (isValid) {
+				await signUpWithEmail(email);
+			}
 		}
 		setLoading(false);
 	};
 
-	async function validateSignUp(email, password, username) {
-		if (username.length < 1) {
-			setUsernameErrorText(
-				'Although a blank username would be super cool, it needs to be at least 1 character. Thank you for understanding.'
-			);
-			setLoading(false);
-			return false;
-		}
-		if (username.length > 20) {
-			setUsernameErrorText('Maximum username length: 20 characters');
-			setLoading(false);
-			return false;
-		}
+	async function validateSignUp(email, password) {
 		if (!password) {
 			setPasswordErrorText('Password is required');
 			setLoading(false);
@@ -76,25 +73,6 @@ export default function SignUp({ setSession }) {
 			setLoading(false);
 			return false;
 		}
-		const { data, error } = await supabase
-			.from('profiles')
-			.select('name')
-			.eq('name', username);
-		if (error) {
-			console.error(error);
-			setLoading(false);
-			setUsernameErrorText(
-				'Something went wrong, sorry about that! Please refresh the page and try again'
-			);
-			return false;
-		}
-		if (data.length > 0) {
-			setUsernameErrorText(
-				'Someone else already has that username. Please choose another.'
-			);
-			setLoading(false);
-			return false;
-		}
 		return true;
 	}
 
@@ -104,21 +82,27 @@ export default function SignUp({ setSession }) {
 			password: password,
 		});
 		if (error) {
-			console.error('sign up error', error);
+			console.error('Sign up error :( contact hi@jam.fans for help', error);
 		} else {
-			await createProfile(username, user);
+			setSuccessText(
+				`Success! Check ${email} for a confirmation link sent from hi@jam.fans. Welcome to Jam Fans, we're looking forward to your contributions!`
+			);
 		}
 	}
 
-	async function createProfile(username, user) {
-		const { error } = await supabase
-			.from('profiles')
-			.insert([{ name: username, id: user.id }]);
+	async function signInWithEmail(email) {
+		const { data, error } = await supabase.auth.signInWithOtp({
+			email: email,
+		});
 		if (error) {
-			console.error('create profile error', error);
+			console.error(
+				'Sign in error :( contact hi@jam.fans or @jeffphox on Twitter for support',
+				error
+			);
 		} else {
-			setLoading(false);
-			router.push('/');
+			setMagicLinkSuccessText(
+				`Success! Check ${email} for a confirmation link sent from hi@jam.fans. Welcome to Jam Fans, we're looking forward to your contributions!`
+			);
 		}
 	}
 
@@ -126,7 +110,7 @@ export default function SignUp({ setSession }) {
 		const { data, error } = await supabase.auth.signInWithOAuth({
 			provider: 'google',
 			options: {
-				redirectTo: 'https://nicejammin.com/welcome',
+				redirectTo: 'https://www.jam.fans/welcome',
 			},
 		});
 		if (error) {
@@ -144,7 +128,7 @@ export default function SignUp({ setSession }) {
 					width: '100vw',
 					height: '100vh',
 					bgcolor: 'white',
-          overflow: 'scroll'
+					overflow: 'scroll',
 				}}
 			>
 				<TopBar showButton={false} />
@@ -173,105 +157,100 @@ export default function SignUp({ setSession }) {
 					>
 						<GoogleButton onClick={() => signInWithGoogle()} />
 					</Box>
-					<Typography mt={'1em'}>Or</Typography>
-					<Box
+					<Typography>Want to use your email?</Typography>
+					<Stack
 						component='form'
 						noValidate
 						onSubmit={handleSubmit}
-						sx={{ mt: 3 }}
+						sx={{
+							mt: 3,
+							display: 'flex',
+							direction: 'column',
+							alignItems: 'center',
+						}}
 					>
-						<Grid
-							container
-							spacing={2}
-						>
-							<Grid
-								item
-								xs={12}
+						<TextField
+							required
+							fullWidth
+							id='email'
+							label='Email Address'
+							name='email'
+							autoComplete='email'
+						/>
+						{emailErrorText && (
+							<Alert
+								severity='error'
+								sx={{ mt: '0.5em', mb: '1em', mx: 'auto' }}
 							>
-								<TextField
-									required
-									fullWidth
-									id='username'
-									label='Username'
-									name='username'
-									autoComplete='user-name'
-								/>
-							</Grid>
-							{usernameErrorText && (
-								<Alert
-									severity='error'
-									sx={{ mt: '0.5em', mb: '1em', mx: 'auto' }}
-								>
-									{usernameErrorText}
-								</Alert>
-							)}
-							<Grid
-								item
-								xs={12}
-							>
-								<TextField
-									required
-									fullWidth
-									name='password'
-									label='Password'
-									type={checked ? 'text' : 'password'}
-									id='password'
-									autoComplete='new-password'
-								/>
-							</Grid>
-							{passwordErrorText && (
-								<Alert
-									severity='error'
-									sx={{ mt: '0.5em', mb: '1em', mx: 'auto' }}
-								>
-									{passwordErrorText}
-								</Alert>
-							)}
-							<Grid
-								item
-								xs={12}
-							>
-								<TextField
-									required
-									fullWidth
-									id='email'
-									label='Email Address'
-									name='email'
-									autoComplete='email'
-								/>
-							</Grid>
-							{emailErrorText && (
-								<Alert
-									severity='error'
-									sx={{ mt: '0.5em', mb: '1em', mx: 'auto' }}
-								>
-									{emailErrorText}
-								</Alert>
-							)}
-							<Grid
-								item
-								xs={12}
-							>
-								<FormControlLabel
-									control={
-										<Checkbox
-											value={checked}
-											onChange={handleCheck}
-											color='primary'
-										/>
-									}
-									label='Show Password'
-								/>
-							</Grid>
-						</Grid>
+								{emailErrorText}
+							</Alert>
+						)}
 						<Button
 							type='submit'
+							// fullWidth
+							variant='contained'
+							disabled={loading}
+							sx={{
+								mt: 3,
+								mb: 2,
+								borderRadius: '3em',
+								textTransform: 'none',
+							}}
+						>
+							Sign Up with a Magic Link - no password!
+						</Button>
+						{magicLinkSuccessText && (
+							<Alert
+								severity='success'
+								sx={{ mt: '0.5em', mb: '1em', mx: 'auto' }}
+							>
+								{magicLinkSuccessText}
+							</Alert>
+						)}
+						<Typography
+							sx={{
+								textAlign: 'center',
+								mt: '2em',
+								mb: '1em',
+							}}
+						>
+							Want to use a password instead of a magic link?
+						</Typography>
+						<TextField
+							required
 							fullWidth
+							name='password'
+							label='Password'
+							type={checked ? 'text' : 'password'}
+							id='password'
+							autoComplete='new-password'
+						/>
+						{passwordErrorText && (
+							<Alert
+								severity='error'
+								sx={{ mt: '0.5em', mb: '1em', mx: 'auto' }}
+							>
+								{passwordErrorText}
+							</Alert>
+						)}
+						<FormControlLabel
+							control={
+								<Checkbox
+									value={checked}
+									onChange={handleCheck}
+									color='primary'
+								/>
+							}
+							label='Show Password'
+						/>
+						<Button
+							type='submit'
+							// fullWidth
 							variant='contained'
 							disabled={loading}
 							sx={{ mt: 3, mb: 2, borderRadius: '3em', textTransform: 'none' }}
 						>
-							Sign Up
+							Sign Up with Email and Password
 						</Button>
 						{successText && (
 							<Alert
@@ -294,12 +273,14 @@ export default function SignUp({ setSession }) {
 								</Link>
 							</Grid>
 						</Grid>
-            <Box mt='2em'>
-              <Typography>
-                By signing up, you agree to our <Link href='/terms'>Terms of Service</Link> and <Link href='/privacy'>Privacy Policy</Link>
-              </Typography>
-            </Box>
-					</Box>
+						<Box mt='2em'>
+							<Typography>
+								By signing up, you agree to our{' '}
+								<Link href='/terms'>Terms of Service</Link> and{' '}
+								<Link href='/privacy'>Privacy Policy</Link>
+							</Typography>
+						</Box>
+					</Stack>
 				</Box>
 			</Box>
 		</ThemeProvider>

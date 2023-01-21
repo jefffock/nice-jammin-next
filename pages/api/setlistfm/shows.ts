@@ -1,4 +1,3 @@
-import { ConnectWithoutContactOutlined } from '@mui/icons-material';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import getConfig from 'next/config';
 const { serverRuntimeConfig } = getConfig();

@@ -17,6 +17,7 @@ import FormControl from '@mui/material/FormControl';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Link from 'next/link';
+import SignIn from './Login';
 
 export default function RateVersion({
 	song,
@@ -486,12 +487,17 @@ export default function RateVersion({
 				</DialogTitle>
 				<DialogContent>
 					{!user && (
+            <>
 						<Alert
 							severity='info'
 							sx={{ mb: '1em' }}
 						>
-							Please <Link href='/login'>log in</Link> to rate this jam - thank you!
+							Please log in to rate this jam - thank
+							you! If you don&apos;t have an account, you can
+              you can <Link href='/join'>sign up here!</Link>
 						</Alert>
+            <SignIn showTopBar={false} />
+            </>
 					)}
 					{user && (
 						<>
