@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-import Chip from '@mui/material/Chip';
 import FilterChip from './FilterChip';
 import Box from '@mui/material/Box';
 
@@ -38,20 +36,29 @@ export default function FilterList({
 						key={song}
 					></FilterChip>
 				)}
-				{afterDate && (
+				{afterDate && !beforeDate && (
 					<FilterChip
 						afterDate={afterDate}
 						setAfterDate={setAfterDate}
 						key={afterDate}
 					></FilterChip>
 				)}
-				{beforeDate && (
+				{beforeDate && !afterDate && (
 					<FilterChip
 						beforeDate={beforeDate}
 						setBeforeDate={setBeforeDate}
 						key={beforeDate}
 					></FilterChip>
 				)}
+        {beforeDate && afterDate && (
+          <FilterChip
+            beforeDate={beforeDate}
+            afterDate={afterDate}
+            setBeforeDate={setBeforeDate}
+            setAfterDate={setAfterDate}
+            key={beforeDate}
+          ></FilterChip>
+            )}
 				{tagsSelected &&
 					tagsSelected.map((tag) => (
 						<FilterChip

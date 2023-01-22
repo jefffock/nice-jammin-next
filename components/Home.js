@@ -363,7 +363,11 @@ export default function Home({
 		title += ' by ' + initialArtist;
 	}
 	if (initialBeforeDate && initialAfterDate) {
-		title += ' from ' + initialAfterDate + ' to ' + initialBeforeDate;
+    if (initialBeforeDate === initialAfterDate) {
+      title += ' from ' + initialBeforeDate;
+    } else {
+      title += ' from ' + initialAfterDate + ' to ' + initialBeforeDate;
+    }
 	}
 	if (initialBeforeDate && !initialAfterDate) {
 		title += ' from ' + initialBeforeDate + ' and before ';
