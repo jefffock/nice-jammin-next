@@ -259,7 +259,7 @@ export default function RateVersion({
 			return item.song === song;
 		});
 		if (index !== -1) {
-			setSongSubmitter(songs[index].submitter_name);
+			setSongSubmitter(songs[index]?.submitter_name || null);
 		} else {
 			setSongSubmitter(null);
 		}
@@ -297,8 +297,8 @@ export default function RateVersion({
 					profile.name,
 					rating,
 					comment,
-					jam.submitter_name,
-					jam.song_submitter_name ?? songSubmitter,
+					jam?.submitter_name || null,
+					jam?.song_submitter_name || null,
 					user.id
 				);
 				if (newTags.length > 0) {

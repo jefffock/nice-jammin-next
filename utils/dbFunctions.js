@@ -14,8 +14,12 @@ async function rateVersion(versionId, songId, profileName, rating, comment, vers
     console.error('error', error)
     return error
   } else {
-    addOnePoint(versionSubmitterName)
-    addOnePoint(songSubmitterName)
+    if (versionSubmitterName) {
+      addOnePoint(versionSubmitterName)
+    }
+    if (songSubmitterName) {
+      addOnePoint(songSubmitterName)
+    }
     addTenPoints(profileName)
     addRatingCountToSong(songId)
     addRatingCountToVersion(versionId)
