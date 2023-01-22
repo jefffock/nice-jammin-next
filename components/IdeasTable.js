@@ -114,7 +114,11 @@ export default function IdeasTable({ user, profile, ideas }) {
 
 	useEffect(() => {
 		if (!showCompleted && ideas) {
-			const filteredIdeas = ideas?.filter((idea) => !idea.done);
+      console.log('ideas', ideas)
+			const filteredIdeas = ideas?.filter((idea) => {
+        return !idea.done;
+      })
+      console.log('filtered ideas', filteredIdeas)
 			setIdeasToShow(filteredIdeas);
 		} else {
 			setIdeasToShow(ideas);
@@ -195,9 +199,9 @@ export default function IdeasTable({ user, profile, ideas }) {
 								)}
 							</TableRow>
 						</TableHead>
-						{ideas && (
+						{ideasToShow && (
 							<TableBody>
-								{ideas.map((idea) => (
+								{ideasToShow.map((idea) => (
 									<IdeaRow
 										key={idea.id}
 										currentIdea={idea}
