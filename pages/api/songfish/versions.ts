@@ -6,7 +6,8 @@ const { serverRuntimeConfig } = getConfig();
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 	const body = JSON.parse(req.body);
 	const artist = body.artist;
-	const song = body.song;
+	let song = body.song;
+  if (song === 'Echo of a Rose') song = 'Echo Of A Rose'
 	let dbName;
 	let baseUrl;
 	switch (artist) {

@@ -164,10 +164,15 @@ export default function Home({
 	useEffect(() => {
 		if (songs) {
 			let index = songs.findIndex((item) => {
-				return item.song === song;
+				return item?.song?.toLowerCase() === song?.toLowerCase();
 			});
-			index === -1 ? setSongExists(false) : setSongExists(true);
-			setSongObj(songs[index]);
+      if (index === -1) {
+        setSongExists(false)
+      } else {
+        setSongExists(true);
+        setSongObj(songs[index]);
+        setSong(songs[index].song);
+      }
 		}
 	}, [song, songs]);
 
