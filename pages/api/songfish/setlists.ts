@@ -30,6 +30,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           const titles = setlist.data
           .filter(song => song.artist_id === '1')
           .map(({ songname }) => {
+            if (songname === 'Echo Of A Rose') return 'Echo of a Rose'
             return songname
           })
           const location = `${setlist.data[0].venuename}, ${setlist.data[0].city}, ${setlist.data[0].country === 'USA' ? setlist.data[0].state : setlist.data[0].country}`

@@ -76,7 +76,11 @@ export default function TableTitle({
 		title += ' by ' + artist;
 	}
 	if (beforeDate && afterDate) {
-		subtitle += ' from ' + afterDate + ' to ' + beforeDate;
+    if (beforeDate === afterDate) {
+      subtitle += ' from ' + beforeDate;
+    } else {
+      subtitle += ' from ' + afterDate + ' to ' + beforeDate;
+    }
 	}
 	if (beforeDate && !afterDate) {
 		subtitle += ' from ' + beforeDate + ' and before';
