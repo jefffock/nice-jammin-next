@@ -84,9 +84,9 @@ export default function AddSong({
 			handleClose();
 			return false;
 		}
-		if (!user || !profile || !profile.can_write) {
-			return false;
-		}
+		// if (!user || !profile || !profile.can_write) {
+		// 	return false;
+		// }
 		if (!artist) {
 			return false;
 		}
@@ -101,7 +101,7 @@ export default function AddSong({
 		const { error } = await supabase
 			.from('songs')
 			.insert(
-				{ song: songToAdd, submitter_name: profile.name, artist: artist },
+				{ song: songToAdd, submitter_name: profile?.name || null, artist: artist },
 				{ returning: 'minimal' }
 			);
 		if (error) {
@@ -109,7 +109,9 @@ export default function AddSong({
 		} else {
 			setSuccessAlertText(`${songToAdd} added successfully - Thank you!`);
 			setLoading(false);
-			addTenPoints(profile.name);
+      if (profile?.name) {
+        addTenPoints(profile.name);
+      }
 			let newSongs = await fetchSongs();
 			setSongs(newSongs);
 		}
@@ -132,14 +134,14 @@ export default function AddSong({
 			>
 				<DialogTitle>Add {songToAdd}</DialogTitle>
 				<DialogContent>
-					{!user && (
+					{/* {!user && (
 						<Alert
 							severity='info'
 							sx={{ mb: '1em' }}
 						>
 							Please log in to add this song - thank you!
 						</Alert>
-					)}
+					)} */}
 					<FormControl></FormControl>
 					<TextField
 						autoFocus
@@ -154,7 +156,7 @@ export default function AddSong({
 						onChange={handleSongChange}
 						sx={{ mb: '1em' }}
 					/>
-					{user && !successAlertText && (
+					{!successAlertText && (
 						<Alert
 							severity='info'
 							sx={{ my: '1em' }}
@@ -181,9 +183,7 @@ export default function AddSong({
 					{!successAlertText && (
 						<Button
 							onClick={handleSubmit}
-							disabled={
-								loading || !song || !user || !artist || artist === 'All Bands'
-							}
+							disabled={loading || !song}
 							sx={{ textTransform: 'none' }}
 						>
 							Add song

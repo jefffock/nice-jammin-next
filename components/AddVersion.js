@@ -437,7 +437,7 @@ export default function AddVersion({
 			setDateErrorText('Please enter a date');
 			return false;
 		}
-		if (!profile.can_write) {
+		if (profile && !profile.can_write) {
 			return false;
 		}
 		if (location === '') {
@@ -511,9 +511,9 @@ export default function AddVersion({
 			{
 				song_id: songObj.id,
 				song_name: song,
-				user_id: user.id,
-				submitter_name: profile.name,
-				song_submitter_name: songObj.submitter_name,
+				user_id: user?.id ?? null,
+				submitter_name: profile?.name ?? null,
+				song_submitter_name: songObj.submitter_name ?? null,
 				location: location,
 				artist: artist,
 				date: date,
@@ -567,20 +567,25 @@ export default function AddVersion({
 		if (error) {
 			console.error(error);
 		} else {
-			addOnePoint(songObj.submitter_name);
-			addTenPoints(profile.name);
+      if (songObj?.submitter_name) {
+        addOnePoint(songObj.submitter_name);
+      } if(profile?.name) {
+        addTenPoints(profile.name);
+      }
 			if (rating) {
 				rateVersion(
 					data[0].id,
 					songObj.id,
-					profile.name,
+					profile?.name,
 					rating,
 					comment,
-					profile.name,
+					profile?.name,
 					songObj.submitter_name,
 					user.id
 				);
-				addTenPoints(profile.name);
+        if (profile?.name) {
+          addTenPoints(profile.name);
+        }
 				setSuccessAlertText(
 					`Successfully added ${song} from ${date} and your rating. Thank you for contributing! It will be in the table the next time you refresh the page.`
 				);
@@ -732,7 +737,7 @@ export default function AddVersion({
 					<Typography sx={{ mb: '1em' }}>
 						Thanks for helping a jam reach more ears 🙏 You rock! 🎸
 					</Typography>
-					{!user && (
+					{/* {!user && (
             <>
 						<Alert
 							severity='info'
@@ -744,8 +749,8 @@ export default function AddVersion({
 						</Alert>
             <SignIn showTopBar={false} />
             </>
-					)}
-					{user && (!artist || artist === 'All Bands') && (
+					)} */}
+					{(!artist || artist === 'All Bands') && (
 						<ArtistPicker
 							artist={artist}
 							setArtist={setArtist}
@@ -1361,7 +1366,7 @@ export default function AddVersion({
 							<Button
 								variant='contained'
 								onClick={handleSubmit}
-								disabled={loading || !user || !profile || !songExists}
+								disabled={loading || !songExists}
 								sx={{ textTransform: 'none' }}
 							>
 								Add this Jam

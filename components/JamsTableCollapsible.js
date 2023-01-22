@@ -632,7 +632,9 @@ function Row({ row, user, profile, songs, showRatings }) {
 							<Typography>
 								{row.num_ratings} rating{row.num_ratings === 1 ? '' : 's'}
 							</Typography>
+              {row?.submitter_name &&
 							<Typography>Added by {row.submitter_name}. Thank you!</Typography>
+              }
 							<RateVersion
 								song={row.song_name}
 								date={row.date}
