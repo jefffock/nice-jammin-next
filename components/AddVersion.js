@@ -111,6 +111,8 @@ export default function AddVersion({
 	const [year, setYear] = useState('');
 	const [showLocationInput, setShowLocationInput] = useState(true);
 	const [noSetlistFound, setNoSetlistFound] = useState(false);
+	const [setlistUrl, setSetlistUrl] = useState(null);
+  const [showsInYearFromSetlistFM, setShowsInYearFromSetlistFM] = useState(false);
 
 	useEffect(() => {
 		if (songs) {
@@ -172,6 +174,7 @@ export default function AddVersion({
 		setOpen(false);
 		setShows(null);
 		setShow(null);
+		setSetlistUrl(null);
 	};
 
 	useEffect(() => {
@@ -182,6 +185,7 @@ export default function AddVersion({
 			setShows(null);
 			setAllShows(null);
 			setSongErrorText(null);
+			setSetlistUrl(null);
 		}
 	}, [artist]);
 
@@ -236,6 +240,7 @@ export default function AddVersion({
 							const setlist = responses[0].titles;
 							const njVersions = responses[1];
 							const location = responses[0].location;
+							const url = responses[0].url;
 							if (responses.error || !setlist || setlist.length === 0) {
 								setSetlist(null);
 								setNoSetlistFound(true);
@@ -253,6 +258,7 @@ export default function AddVersion({
 									}
 								});
 								setSetlist(comboSetlist);
+								setSetlistUrl(url);
 								if (location) {
 									setLocation(location);
 									setShowLocationInput(false);
@@ -477,16 +483,20 @@ export default function AddVersion({
 		setLoadingSetlist(false);
 		setLoadingShows(false);
 		setLoading(false);
+    setShowsInYearFromSetlistFM(null)
+    setSetlistUrl(null)
 	};
 
 	const clearDate = () => {
 		setDate('');
 		setShow(null);
+		setSetlistUrl(null);
 		setLocation(null);
 		setSetlist(null);
 		setLoadingSetlist(false);
 		setLoadingShows(false);
 		setLoading(false);
+    setSetlistUrl(null)
 	};
 
 	const clearSong = () => {
@@ -505,6 +515,8 @@ export default function AddVersion({
 		setSetlist(null);
 		setLoadingSetlist(false);
 		setDate('');
+    setShowsInYearFromSetlistFM(null)
+    setSetlistUrl(null)
 	};
 
 	const changeLocation = () => {
@@ -720,7 +732,7 @@ export default function AddVersion({
 		<Box
 			display='flex'
 			justifyContent='center'
-      my='auto'
+			my='auto'
 		>
 			<Button
 				variant='contained'
@@ -729,7 +741,7 @@ export default function AddVersion({
 					borderRadius: '50px',
 					bgcolor: 'third.main',
 					mx: 'auto',
-          mb: '3em',
+					mb: '3em',
 					textTransform: 'none',
 				}}
 			>
@@ -1117,6 +1129,28 @@ export default function AddVersion({
 							</Button>
 						</Box>
 					)}
+					{setlistUrl && (
+						<Box
+							sx={{
+								mb: '1em',
+                fontSize: '0.8rem',
+							}}
+						>
+							<Link
+								href={setlistUrl}
+								sx={{
+
+									color: 'text.secondary',
+									textDecoration: 'none',
+									'&:hover': {
+										textDecoration: 'underline',
+									},
+								}}
+							>
+								Setlist on setlist.fm
+							</Link>
+						</Box>
+					)}
 					{!songExists && song && (
 						<>
 							<Alert
@@ -1154,6 +1188,7 @@ export default function AddVersion({
 							clearYear={clearYear}
 							date={date}
 							setLoadingShows={setLoadingShows}
+              setShowsInYearFromSetlistFM={setShowsInYearFromSetlistFM}
 						/>
 					)}
 					{loadingShows && (
@@ -1182,6 +1217,7 @@ export default function AddVersion({
 							setDate={setDate}
 							setLocation={setLocation}
 							setShowLocationInput={setShowLocationInput}
+              showsInYearFromSetlistFM={showsInYearFromSetlistFM}
 						/>
 					)}
 					{artist && !date && (

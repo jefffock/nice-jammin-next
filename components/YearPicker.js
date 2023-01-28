@@ -24,7 +24,8 @@ export default function YearPicker({
 	setYear,
 	clearYear,
 	date,
-  setLoadingShows
+  setLoadingShows,
+  setShowsInYearFromSetlistFM
 }) {
 	const [years, setYears] = useState(null);
 	const [artistStartYear, setArtistStartYear] = useState(1960);
@@ -76,6 +77,7 @@ export default function YearPicker({
         case 'Squeaky Feet':
           break;
         default:
+          setShowsInYearFromSetlistFM(true)
           url = '/api/setlistfm/shows';
 			}
 			if (url) {

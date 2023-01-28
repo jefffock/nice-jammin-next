@@ -5,6 +5,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
+import Link from 'next/link';
 
 export default function ShowPicker({
 	show,
@@ -15,6 +16,7 @@ export default function ShowPicker({
 	size,
 	my,
   setShowLocationInput,
+  showsInYearFromSetlistFM
 }) {
 	const handleChange = (event) => {
 		setShow(event.target.value);
@@ -51,6 +53,14 @@ export default function ShowPicker({
 					})}
 				</Select>
 			</FormControl>
+      {showsInYearFromSetlistFM && 
+      <>
+      <br/>
+      <Box my='1em' sx={{ fontSize: '0.7em'}}>
+      <Link href='https://www.setlist.fm'>Info from setlist.fm</Link>
+      </Box>
+      </>
+      }
 		</Box>
 	);
 }
