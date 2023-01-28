@@ -288,8 +288,10 @@ export default function RateVersion({
 						'Successfully updated your rating. Thank you for contributing!'
 					);
 				}
-        // rebuild
-      fetch('https://api.vercel.com/v1/integrations/deploy/prj_KTTGWtEcoRt7VbckE5pwZXH7QL8E/5gZtO7yzjW')
+				// rebuild
+				fetch(
+					'https://api.vercel.com/v1/integrations/deploy/prj_KTTGWtEcoRt7VbckE5pwZXH7QL8E/5gZtO7yzjW'
+				);
 			} else {
 				await rateVersion(
 					jam.id,
@@ -317,8 +319,10 @@ export default function RateVersion({
 						'Successfully added your rating. Thank you for contributing!'
 					);
 				}
-        // rebuild
-      fetch('https://api.vercel.com/v1/integrations/deploy/prj_KTTGWtEcoRt7VbckE5pwZXH7QL8E/5gZtO7yzjW')
+				// rebuild
+				fetch(
+					'https://api.vercel.com/v1/integrations/deploy/prj_KTTGWtEcoRt7VbckE5pwZXH7QL8E/5gZtO7yzjW'
+				);
 			}
 		}
 		setLoading(false);
@@ -349,9 +353,9 @@ export default function RateVersion({
 					setButtonText('Update');
 				}
 			};
-      if (profile) {
-        checkRated();
-      }
+			if (profile) {
+				checkRated();
+			}
 		}
 	}, [user, profile, jam, open]);
 
@@ -468,6 +472,13 @@ export default function RateVersion({
 		newTags.indexOf('upbeat') !== -1 ? setUpbeat(true) : setUpbeat(false);
 	}, [newTags]);
 
+	if (!profile) {
+		return (
+			<Alert severity='info' sx={{ my: '1em'}}>
+				<Link href='/login'>Login to rate this jam</Link>
+			</Alert>
+		);
+	}
 	return (
 		<div>
 			<Button
@@ -487,17 +498,17 @@ export default function RateVersion({
 				</DialogTitle>
 				<DialogContent>
 					{!user && (
-            <>
-						<Alert
-							severity='info'
-							sx={{ mb: '1em' }}
-						>
-							Please log in to rate this jam - thank
-							you! If you don&apos;t have an account, you can
-              you can <Link href='/join'>sign up here!</Link>
-						</Alert>
-            <SignIn showTopBar={false} />
-            </>
+						<>
+							<Alert
+								severity='info'
+								sx={{ mb: '1em' }}
+							>
+								Please log in to rate this jam - thank you! If you don&apos;t
+								have an account, you can you can{' '}
+								<Link href='/join'>sign up here!</Link>
+							</Alert>
+							<SignIn showTopBar={false} />
+						</>
 					)}
 					{user && (
 						<>
@@ -519,8 +530,8 @@ export default function RateVersion({
 										<MenuItem value={7}>7</MenuItem>
 										<MenuItem value={6}>6</MenuItem>
 										<MenuItem value={5}>5</MenuItem>
-                    <MenuItem value={4}>4</MenuItem>
-                    <MenuItem value={null}>No rating</MenuItem>
+										<MenuItem value={4}>4</MenuItem>
+										<MenuItem value={null}>No rating</MenuItem>
 									</Select>
 								</FormControl>
 								{ratingErrorText && (
@@ -581,7 +592,11 @@ export default function RateVersion({
 					<Button
 						onClick={handleSubmit}
 						disabled={
-							loading || commentWarningText || !user || !profile || (!rating && !comment && newTags?.length === 0)
+							loading ||
+							commentWarningText ||
+							!user ||
+							!profile ||
+							(!rating && !comment && newTags?.length === 0)
 						}
 						sx={{ textTransform: 'none' }}
 						aria-label='submit'
