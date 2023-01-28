@@ -10,6 +10,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const transformedDate = [day, month, year].join('-')
   const mbid = serverRuntimeConfig.mbids[artist]
   const url = `https://api.setlist.fm/rest/1.0/search/setlists?artistMbid=${mbid}&date=${transformedDate}`
+  console.log('url', url)
   let apiKey = process.env.SETLISTFM_API_KEY
   if (mbid && transformedDate) {
     try {
@@ -21,6 +22,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       })
         .then(data => data.json())
         .then(data => {
+          console.log('data', data)
+          const url = data.setlist[0].url
           if (data && data.setlist && data.setlist.length > 0 && data.setlist[0].sets && data.setlist[0].sets.set && data.setlist[0].sets.set.length > 0) {
             const venueInfo = data.setlist[0].venue
             const location = `${venueInfo.name}, ${venueInfo.city.name}, ${venueInfo.city.country.code === 'US' ? venueInfo.city.stateCode : venueInfo.city.country.name}`
@@ -31,7 +34,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 titles.push(setlistInfo[i].song[j].name)
               }
             }
-            res.status(200).json({ titles, location })
+            res.status(200).json({ titles, location, url })
           } else {
             console.error('no setlist found')
             res.status(500).send({message: 'no setlist found or error', error: true})
