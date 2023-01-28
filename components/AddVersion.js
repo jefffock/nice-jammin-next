@@ -720,6 +720,7 @@ export default function AddVersion({
 		<Box
 			display='flex'
 			justifyContent='center'
+      my='auto'
 		>
 			<Button
 				variant='contained'
@@ -728,6 +729,7 @@ export default function AddVersion({
 					borderRadius: '50px',
 					bgcolor: 'third.main',
 					mx: 'auto',
+          mb: '3em',
 					textTransform: 'none',
 				}}
 			>
