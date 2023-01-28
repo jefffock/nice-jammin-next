@@ -89,7 +89,7 @@ function IdeaRow({
 			{/* <TableCell>
 				{idea.artist_idea ? 'Artist' : idea.tag_idea ? 'Tag' : 'Other'}
 			</TableCell> */}
-			<TableCell onClick={handleVote}>
+			{/* <TableCell onClick={handleVote}>
 				{votes ? votes : idea.votes}&nbsp;&nbsp;&nbsp;
 				{
 					<ThumbUpOutlinedIcon
@@ -99,7 +99,7 @@ function IdeaRow({
 						}}
 					/>
 				}
-			</TableCell>
+			</TableCell> */}
 			{showCompleted && <TableCell>{idea.done ? '✔️' : 'To-do'}</TableCell>}
 			{/* <TableCell>{idea.user_name}</TableCell> */}
 		</TableRow>

@@ -118,12 +118,12 @@ export default function AddVersion({
 				return item?.song?.toLowerCase() === song?.toLowerCase();
 			});
 			if (index === -1) {
-        setSongExists(false)
-      } else {
-        setSongExists(true);
-        setSongObj(songs[index]);
-        setSong(songs[index].song);
-      }
+				setSongExists(false);
+			} else {
+				setSongExists(true);
+				setSongObj(songs[index]);
+				setSong(songs[index].song);
+			}
 		}
 	}, [song, songs]);
 
@@ -572,11 +572,12 @@ export default function AddVersion({
 		if (error) {
 			console.error(error);
 		} else {
-      if (songObj?.submitter_name) {
-        addOnePoint(songObj.submitter_name);
-      } if(profile?.name) {
-        addTenPoints(profile.name);
-      }
+			if (songObj?.submitter_name) {
+				addOnePoint(songObj.submitter_name);
+			}
+			if (profile?.name) {
+				addTenPoints(profile.name);
+			}
 			if (rating) {
 				rateVersion(
 					data[0].id,
@@ -588,9 +589,9 @@ export default function AddVersion({
 					songObj.submitter_name,
 					user.id
 				);
-        if (profile?.name) {
-          addTenPoints(profile.name);
-        }
+				if (profile?.name) {
+					addTenPoints(profile.name);
+				}
 				setSuccessAlertText(
 					`Successfully added ${song} from ${date} and your rating. Thank you for contributing! It will be in the table the next time you refresh the page.`
 				);
@@ -1311,45 +1312,70 @@ export default function AddVersion({
 									maxRows={2}
 									onChange={(e) => setListenLink(e.target.value)}
 								/>
-								<FormControl
-									fullWidth
-									sx={{ my: '1em' }}
-								>
-									<Stack>
-										<InputLabel id='rating-select-label'>Rating</InputLabel>
-										<Select
-											size='normal'
-											sx={{
-												maxWidth: '100px',
-											}}
-											labelId='rating-select-label'
-											id='rating-select'
-											value={rating}
-											label='Rating'
-											onChange={handleRatingChange}
-										>
-											<MenuItem value={10}>10</MenuItem>
-											<MenuItem value={9}>9</MenuItem>
-											<MenuItem value={8}>8</MenuItem>
-											<MenuItem value={7}>7</MenuItem>
-											<MenuItem value={6}>6</MenuItem>
-											<MenuItem value={5}>5</MenuItem>
-											<MenuItem value={4}>4</MenuItem>
-											<MenuItem value={null}>No rating</MenuItem>
-										</Select>
-										<TextField
-											sx={{ mt: '1em', mx: '0.25em' }}
-											id='comment'
-											label='Comments'
-											type='text'
-											fullWidth
-											variant='standard'
-											multiline
-											onChange={handleCommentChange}
-										/>
-									</Stack>
-								</FormControl>
 							</>
+						)}
+					{!versionExists &&
+						songExists &&
+						song &&
+						artist &&
+						date &&
+						location &&
+						location.length > 2 &&
+						user &&
+						profile && (
+							<FormControl
+								fullWidth
+								sx={{ my: '1em' }}
+							>
+								<Stack>
+									<InputLabel id='rating-select-label'>Rating</InputLabel>
+									<Select
+										size='normal'
+										sx={{
+											maxWidth: '100px',
+										}}
+										labelId='rating-select-label'
+										id='rating-select'
+										value={rating}
+										label='Rating'
+										onChange={handleRatingChange}
+									>
+										<MenuItem value={10}>10</MenuItem>
+										<MenuItem value={9}>9</MenuItem>
+										<MenuItem value={8}>8</MenuItem>
+										<MenuItem value={7}>7</MenuItem>
+										<MenuItem value={6}>6</MenuItem>
+										<MenuItem value={5}>5</MenuItem>
+										<MenuItem value={4}>4</MenuItem>
+										<MenuItem value={null}>No rating</MenuItem>
+									</Select>
+									<TextField
+										sx={{ mt: '1em', mx: '0.25em' }}
+										id='comment'
+										label='Comments'
+										type='text'
+										fullWidth
+										variant='standard'
+										multiline
+										onChange={handleCommentChange}
+									/>
+								</Stack>
+							</FormControl>
+						)}
+					{!versionExists &&
+						songExists &&
+						song &&
+						artist &&
+						date &&
+						location &&
+						location.length > 2 &&
+						(!user || profile) && (
+							<Alert
+								severity='info'
+								sx={{ my: '1em' }}
+							>
+								<Link href='/login'>Login to rate this jam</Link>
+							</Alert>
 						)}
 					{successAlertText && (
 						<Alert

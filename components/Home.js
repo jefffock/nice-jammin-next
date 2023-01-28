@@ -347,7 +347,6 @@ export default function Home({
 		unusual: 'Unusual',
 		upbeat: 'Upbeat',
 	};
-
 	let title = '';
 	if (initialTags) {
 		for (var i = 0; i < initialTags.length; i++) {
